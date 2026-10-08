@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-08T11:11:33+00:00",
+  "updated_at": "2026-10-08T11:17:55+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -186,7 +186,8 @@
     "docs/audits/cycle-20261008T120000Z-02/audit.json",
     "docs/audits/cycle-20261008T130000Z-03/audit.json",
     "docs/audits/cycle-20261008T104200Z-04/audit.json",
-    "docs/audits/cycle-20261008T111200Z-05/audit.json"
+    "docs/audits/cycle-20261008T111200Z-05/audit.json",
+    "docs/audits/cycle-20261008T112100Z-06/audit.json"
   ],
   "current_focus": null
 }
