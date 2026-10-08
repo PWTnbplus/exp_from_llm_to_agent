@@ -1,0 +1,6 @@
+{
+  "provider": "mock",
+  "model": "mock-provider",
+  "same_base_model_required_for_comparison": true,
+  "real_api_run_requires_explicit_allow_paid": true
+}

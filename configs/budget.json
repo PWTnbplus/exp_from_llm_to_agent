@@ -1,0 +1,9 @@
+{
+  "max_experiments": 6,
+  "max_measurements": 120,
+  "max_api_calls": 20,
+  "max_input_tokens": 100000,
+  "max_output_tokens": 30000,
+  "max_cost_usd": 0.0,
+  "max_runtime_seconds": 3600
+}

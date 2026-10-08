@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: scientific-discovery-experiment
+Version: 0.1.0
+Summary: Controlled LLM-only versus single-agent scientific law discovery experiments
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.24
+Requires-Dist: openai>=1.68.2
+Requires-Dist: requests>=2.25
+Requires-Dist: python-dotenv>=0.19
+Provides-Extra: dev
+Requires-Dist: pytest>=8; extra == "dev"
+Requires-Dist: matplotlib>=3.7; extra == "dev"
