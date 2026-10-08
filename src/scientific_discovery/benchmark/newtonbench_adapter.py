@@ -24,6 +24,76 @@ class ActionValidationError(ValueError):
     pass
 
 
+# These are public apparatus constraints copied from NewtonBench's
+# PARAM_DESCRIPTION metadata.  They describe legal controls only; they do not
+# encode a target law or any hidden parameter.
+PUBLIC_ACTION_RULES: dict[str, dict[str, dict[str, float | bool]]] = {
+    "m0_gravity": {
+        "mass1": {"minimum": 0.0, "exclusiveMinimum": True},
+        "mass2": {"minimum": 0.0, "exclusiveMinimum": True},
+        "distance": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m1_coulomb_force": {
+        "q1": {"minimum": 0.0, "exclusiveMinimum": True},
+        "q2": {"minimum": 0.0, "exclusiveMinimum": True},
+        "distance": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m2_magnetic_force": {
+        "current1": {"minimum": 0.0, "exclusiveMinimum": True},
+        "current2": {"minimum": 0.0, "exclusiveMinimum": True},
+        "distance": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m3_fourier_law": {
+        "k": {"minimum": 0.0, "exclusiveMinimum": True},
+        "A": {"minimum": 0.0, "exclusiveMinimum": True},
+        "delta_T": {"minimum": 0.0, "exclusiveMinimum": True},
+        "d": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m4_snell_law": {
+        "n1": {"minimum": 1.0, "maximum": 1.5},
+        "n2": {"minimum": 1.0, "maximum": 1.5},
+        "angle1": {"minimum": 0.0, "maximum": 90.0},
+    },
+    "m5_radioactive_decay": {
+        "N0": {"minimum": 0.0, "exclusiveMinimum": True},
+        "lambda_constant": {"minimum": 0.0, "exclusiveMinimum": True},
+        "t": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m6_underdamped_harmonic": {
+        "k": {"minimum": 0.0, "exclusiveMinimum": True},
+        "m": {"minimum": 0.0, "exclusiveMinimum": True},
+        "b": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m7_malus_law": {
+        "I_0": {"minimum": 0.0, "exclusiveMinimum": True},
+        "theta": {"minimum": 0.0, "maximum": math.pi / 2},
+    },
+    "m8_sound_speed": {
+        "gamma": {"minimum": 0.0, "exclusiveMinimum": True},
+        "T": {"minimum": 0.0, "exclusiveMinimum": True},
+        "M": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m9_hooke_law": {
+        "x": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m10_be_distribution": {
+        "omega": {"minimum": 0.0, "exclusiveMinimum": True},
+        "T": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+    "m11_heat_transfer": {
+        "m": {"minimum": 0.0, "exclusiveMinimum": True},
+        "c": {"minimum": 0.0, "exclusiveMinimum": True},
+        "delta_T": {"minimum": 0.0, "exclusiveMinimum": True},
+    },
+}
+
+
+def public_action_rules(module_name: str) -> dict[str, dict[str, float | bool]]:
+    """Return a copy of the public input-domain rules for one module."""
+
+    return {key: dict(value) for key, value in PUBLIC_ACTION_RULES.get(module_name, {}).items()}
+
+
 def _function_parameters(module: Any) -> list[str]:
     signature = getattr(module, "FUNCTION_SIGNATURE", "")
     match = re.search(r"discovered_law\((.*?)\)", signature)
@@ -85,8 +155,13 @@ class NewtonBenchOracle:
 
     def get_action_schema(self) -> dict[str, Any]:
         params = _function_parameters(self._module)
+        rules = public_action_rules(self.task.module)
         properties = {
-            name: {"type": "number", "description": "finite numeric experimental control"}
+            name: {
+                "type": "number",
+                "description": "finite numeric experimental control",
+                **rules.get(name, {}),
+            }
             for name in params
         }
         return {
@@ -109,8 +184,16 @@ class NewtonBenchOracle:
             value = float(value)
             if not math.isfinite(value):
                 raise ActionValidationError(f"{key} must be finite")
-            if key in {"mass1", "mass2", "distance", "q1", "q2", "current1", "current2", "k", "m", "b", "N0", "lambda_constant", "T", "M", "gamma", "I_0", "A", "d", "c"} and value <= 0:
-                raise ActionValidationError(f"{key} must be positive")
+            spec = self.get_action_schema()["properties"].get(key, {})
+            minimum = spec.get("minimum")
+            if minimum is not None and (
+                value <= minimum if spec.get("exclusiveMinimum") else value < minimum
+            ):
+                relation = ">" if spec.get("exclusiveMinimum") else ">="
+                raise ActionValidationError(f"{key} must be {relation} {minimum}")
+            maximum = spec.get("maximum")
+            if maximum is not None and value > maximum:
+                raise ActionValidationError(f"{key} must be <= {maximum}")
             clean[key] = value
         return clean
 

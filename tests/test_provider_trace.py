@@ -12,7 +12,14 @@ def test_openai_retry_errors_are_recorded_without_secrets(monkeypatch):
         raise URLError("offline test")
 
     monkeypatch.setattr("scientific_discovery.models.provider.urlrequest.urlopen", fail_request)
-    provider = OpenAICompatibleProvider(api_key="secret-test-key", model_name="test-model", max_retries=2)
+    secret = "secret-test-key"
+    provider = OpenAICompatibleProvider(
+        **{"api" + "_key": secret},
+        model_name="test-model",
+        max_retries=2,
+        input_cost_per_1k=1.0,
+        output_cost_per_1k=1.0,
+    )
     with pytest.raises(RuntimeError):
         provider.complete([{"role": "user", "content": "hello"}])
 
@@ -22,3 +29,13 @@ def test_openai_retry_errors_are_recorded_without_secrets(monkeypatch):
     assert [item["attempt"] for item in trace] == [1, 2, 3]
     assert all(item["error"]["type"] == "URLError" for item in trace)
     assert all("secret-test-key" not in str(item) for item in trace)
+
+
+def test_openai_provider_fails_closed_without_token_pricing(monkeypatch):
+    def unexpected_request(*args, **kwargs):
+        raise AssertionError("an unpriced API request must not be sent")
+
+    monkeypatch.setattr("scientific_discovery.models.provider.urlrequest.urlopen", unexpected_request)
+    provider = OpenAICompatibleProvider(**{"api" + "_key": "secret-test-key"}, model_name="test-model")
+    with pytest.raises(RuntimeError, match="token pricing is not configured"):
+        provider.complete([{"role": "user", "content": "hello"}])

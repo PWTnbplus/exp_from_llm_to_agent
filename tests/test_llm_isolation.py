@@ -1,6 +1,7 @@
 from scientific_discovery.environment.budget import BudgetLedger, BudgetLimits
 from scientific_discovery.models.provider import MockLLMProvider
 from scientific_discovery.runners.llm_only import LLMOnlyRunner
+from scientific_discovery.benchmark.base import Observation
 from .conftest import FakeOracle
 
 
@@ -44,3 +45,18 @@ def test_api_slot_is_checked_before_provider_call():
     result = LLMOnlyRunner(provider, oracle, oracle.budget).run("fake")
     assert result.status == "failed"
     assert provider.calls == []
+
+
+def test_initial_observations_are_preserved_for_planning_and_final_inference():
+    initial = Observation(-1, {"x": 0.25}, "initial-signal", 1)
+    provider = MockLLMProvider([{"experiments": [{"x": 1}]}, _law()])
+    oracle = FakeOracle(
+        [1.0],
+        BudgetLedger(BudgetLimits(max_experiments=1, max_api_calls=4)),
+        initial_observations=[initial],
+    )
+    result = LLMOnlyRunner(provider, oracle, oracle.budget).run("fake")
+    assert result.status == "completed"
+    assert "initial-signal" in provider.calls[0]["messages"][1]["content"]
+    assert "initial-signal" in provider.calls[1]["messages"][1]["content"]
+    assert "1.0" not in provider.calls[0]["messages"][1]["content"]

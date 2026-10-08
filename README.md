@@ -27,7 +27,7 @@ python -m scientific_discovery.cli pilot --manifest task_manifest.json --runner 
 python -m scientific_discovery.cli analyze --input results --output figures
 ```
 
-The smoke test, engineering validation, and the example pilot use a deterministic Mock Provider and are labelled as mock data in both JSON and figures. The engineering validation intentionally submits a zero-law placeholder so that the full 12-task pipeline and negative evaluator path are exercised; these outputs must not be used as formal scientific results. A real run requires environment variables from `.env.example`, `--provider openai`, and the explicit `--allow-paid` flag. `pilot` refuses to overwrite an existing result unless `--resume` is supplied. Formal paid execution is never auto-started.
+The smoke test, engineering validation, and the example pilot use a deterministic Mock Provider and are labelled as mock data in both JSON and figures. The engineering validation intentionally submits a zero-law placeholder so that the full 12-task pipeline and negative evaluator path are exercised; these outputs must not be used as formal scientific results. A real run requires environment variables from `.env.example`, positive input/output token prices, `--provider openai`, and the explicit `--allow-paid` flag. The provider fails closed when pricing is absent. `pilot` refuses to overwrite an existing result unless `--resume` is supplied. Formal paid execution is never auto-started.
 
 ## Output and auditability
 

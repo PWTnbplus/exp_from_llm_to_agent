@@ -6,4 +6,4 @@ LLM-only has three phases: (1) one planning call, (2) frozen-plan batch executio
 
 The single agent repeatedly receives the current public history and may issue exactly one `run_experiment` action per provider call. It can stop with the shared final-law schema. No code execution, browsing, file access, hidden state, or other tools are exposed.
 
-The default experiment budget is six experiments and 120 measurements. API, token, cost, and runtime ceilings are tracked by the same `BudgetLedger`. Formal paid runs are disabled by default and require `--allow-paid`.
+The default experiment budget is six experiments and 120 measurements. API, token, cost, and runtime ceilings are tracked by the same `BudgetLedger`. Formal paid runs are disabled by default and require `--allow-paid`. Validation is numeric-fit-only in this implementation; it must not be reported as structural or mechanistic law recovery.

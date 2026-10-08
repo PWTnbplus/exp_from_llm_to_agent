@@ -8,3 +8,4 @@ figures/*
 !results/.gitkeep
 !figures/.gitkeep
 *.zip
+.skill_extract_20261008/

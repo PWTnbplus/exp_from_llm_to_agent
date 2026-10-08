@@ -111,6 +111,12 @@ class OpenAICompatibleProvider(LLMProvider):
             raise RuntimeError("LLM_API_KEY is not configured")
         if not self.model_name:
             raise RuntimeError("LLM_MODEL is not configured")
+        if self.input_cost_per_1k <= 0 and self.output_cost_per_1k <= 0:
+            raise RuntimeError(
+                "LLM token pricing is not configured; set "
+                "LLM_COST_PER_1K_INPUT_TOKENS and LLM_COST_PER_1K_OUTPUT_TOKENS "
+                "before enabling a real API run"
+            )
         payload: dict[str, Any] = {"model": self.model_name, "messages": messages}
         if tools is not None:
             payload["tools"] = tools

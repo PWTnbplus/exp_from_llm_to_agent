@@ -33,3 +33,11 @@ def test_agent_budget_rejects_extra_experiment():
     result = SingleAgentRunner(provider, oracle, oracle.budget).run("fake")
     assert result.status == "failed"
     assert oracle.budget.experiments == 1
+
+
+def test_agent_rejects_unauthorized_tool_call():
+    provider = MockLLMProvider([{"tool_call": "read_hidden_law", "arguments": {"x": 1}}])
+    oracle = FakeOracle([0.0], BudgetLedger(BudgetLimits(max_experiments=1, max_api_calls=4)))
+    result = SingleAgentRunner(provider, oracle, oracle.budget).run("fake")
+    assert result.status == "failed"
+    assert oracle.actions == []

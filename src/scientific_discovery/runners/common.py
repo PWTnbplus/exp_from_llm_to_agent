@@ -38,7 +38,18 @@ def validate_plan_shape(plan: Any, schema: dict[str, Any], max_experiments: int)
         for key, value in action.items():
             if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(float(value)):
                 raise ProtocolError(f"experiment {index} field {key} must be finite numeric")
-            item[key] = float(value)
+            numeric = float(value)
+            spec = schema.get("properties", {}).get(key, {})
+            minimum = spec.get("minimum")
+            if minimum is not None and (
+                numeric <= minimum if spec.get("exclusiveMinimum") else numeric < minimum
+            ):
+                relation = ">" if spec.get("exclusiveMinimum") else ">="
+                raise ProtocolError(f"experiment {index} field {key} must be {relation} {minimum}")
+            maximum = spec.get("maximum")
+            if maximum is not None and numeric > maximum:
+                raise ProtocolError(f"experiment {index} field {key} must be <= {maximum}")
+            item[key] = numeric
         clean.append(item)
     return clean
 

@@ -15,6 +15,9 @@ def test_independent_validation_accepts_exact_mock_law():
     }, task.task_id)
     result = NewtonBenchLawEvaluator(root, test_points=16).evaluate(task, law)
     assert result["validated_success"] is True
+    assert result["official_numeric_evaluator"] is False
+    assert result["upstream_ground_truth_function_used"] is True
+    assert result["success_definition"] == "numeric_fit_only"
     assert result["symbolic_judge_used"] is False
     assert result["structural_recovery"] is None
     assert result["mechanistic_validity"] == "not_implemented"
@@ -59,3 +62,12 @@ def test_algebraically_equivalent_code_passes_numeric_but_not_mechanistic_claim(
     result = NewtonBenchLawEvaluator(root, test_points=16).evaluate(task, candidate)
     assert result["numeric_fit"] is True
     assert result["mechanistic_validity"] == "not_implemented"
+
+
+def test_validation_points_respect_public_snell_domain():
+    root = Path(__file__).parents[1] / "third_party" / "NewtonBench"
+    task = TaskSpec("newtonbench:m4_snell_law:easy:v0:vanilla_equation", "NewtonBench", "m4_snell_law", "snell_law", "easy", "vanilla_equation", "v0")
+    actions = NewtonBenchLawEvaluator(root, test_points=32)._actions(task, split="validation")
+    assert all(1.0 <= action["n1"] <= 1.5 for action in actions)
+    assert all(1.0 <= action["n2"] <= 1.5 for action in actions)
+    assert all(0.0 <= action["angle1"] <= 90.0 for action in actions)

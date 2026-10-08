@@ -31,15 +31,18 @@ class LLMOnlyRunner:
         self.oracle = oracle
         self.budget = budget
 
-    def _planning_messages(self) -> list[dict[str, str]]:
+    def _planning_messages(self, initial_observations: list[dict[str, Any]]) -> list[dict[str, str]]:
         public = self.oracle.get_public_task_description()
         assert_public_text(public)
+        schema = self.oracle.get_action_schema()
+        assert_public_text(str(schema))
+        assert_public_text(str(initial_observations))
         return [
             {"role": "system", "content": PLAN_SYSTEM},
             {"role": "user", "content": (
                 f"Scientific task:\n{public}\n\n"
-                f"Action schema:\n{self.oracle.get_action_schema()}\n\n"
-                f"Initial observations:\n{[observation_dict(v) for v in self.oracle.get_initial_observations()]}\n\n"
+                f"Action schema:\n{schema}\n\n"
+                f"Initial observations:\n{initial_observations}\n\n"
                 f"Available experiment budget:\n{self.oracle.get_remaining_budget()}\n"
                 "Return the complete frozen plan now."
             )},
@@ -49,10 +52,12 @@ class LLMOnlyRunner:
         plan: list[dict[str, Any]] = []
         plan_hash: str | None = None
         observations = []
+        initial_observations: list[dict[str, Any]] = []
         metadata: dict[str, Any] = {"protocol": "three_phase_open_loop", "intermediate_observations_sent_to_model": False}
         try:
+            initial_observations = [observation_dict(v) for v in self.oracle.get_initial_observations()]
             ensure_provider_call(self.budget)
-            planning = self.provider.complete(self._planning_messages(), tools=None)
+            planning = self.provider.complete(self._planning_messages(initial_observations), tools=None)
             record_provider_call(self.provider, planning, self.budget)
             payload = response_payload(planning)
             plan = validate_plan_shape(payload.get("experiments"), self.oracle.get_action_schema(), self.budget.limits.max_experiments)
@@ -66,12 +71,14 @@ class LLMOnlyRunner:
             final_messages = [
                 {"role": "system", "content": FINAL_SYSTEM},
                 {"role": "user", "content": (
-                    f"Initial observations: {[]}\n"
+                    f"Initial observations: {initial_observations}\n"
                     f"Frozen plan: {plan}\n"
                     f"All batch observations: {[observation_dict(v) for v in observations]}\n"
                     "Submit the final law JSON now."
                 )},
             ]
+            assert_public_text(str(initial_observations))
+            assert_public_text(str([observation_dict(v) for v in observations]))
             ensure_provider_call(self.budget)
             final = self.provider.complete(final_messages, tools=None)
             record_provider_call(self.provider, final, self.budget)

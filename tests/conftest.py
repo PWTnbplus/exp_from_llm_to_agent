@@ -11,6 +11,7 @@ from scientific_discovery.environment.budget import BudgetLedger
 class FakeOracle:
     values: list[float]
     budget: BudgetLedger
+    initial_observations: list[Observation] | None = None
 
     def __post_init__(self):
         self.i = 0
@@ -21,7 +22,7 @@ class FakeOracle:
         return "You are studying an unknown law. Scientific domain: test. Controls: x is a finite number."
 
     def get_initial_observations(self):
-        return []
+        return list(self.initial_observations or [])
 
     def get_action_schema(self):
         return {"type": "object", "properties": {"x": {"type": "number"}}, "required": ["x"], "additionalProperties": False}

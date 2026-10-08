@@ -52,6 +52,7 @@ class SingleAgentRunner:
                            "Return one JSON object: {action: {...}, hypothesis: ...} or {final_law: {...}}.")
                     )},
                 ]
+                assert_public_text(str(history))
                 ensure_provider_call(self.budget)
                 response = self.provider.complete(messages, tools=None if final_only else _tool_schema(schema))
                 record_provider_call(self.provider, response, self.budget)
@@ -62,11 +63,14 @@ class SingleAgentRunner:
                     break
                 if final_only:
                     raise ProtocolError("agent returned an experiment after the budget was exhausted")
+                if payload.get("tool_call") and payload["tool_call"] != "run_experiment":
+                    raise ProtocolError(f"unauthorized tool call: {payload['tool_call']}")
                 action = payload.get("arguments") if payload.get("tool_call") else payload.get("action")
                 if action is None:
                     raise ProtocolError("agent must return an action or final_law")
                 observation = self.oracle.run_experiment(action)
                 observations.append(observation)
+                assert_public_text(str(observation.result))
                 history.append({"action": observation.action, "result": observation.result, "experiment_index": observation.experiment_index})
         except (ProtocolError, ValueError, RuntimeError, BudgetExceeded) as exc:
             metadata["error"] = str(exc)

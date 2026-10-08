@@ -13,6 +13,7 @@ from typing import Any, Callable
 import numpy as np
 
 from ..benchmark.base import TaskSpec
+from ..benchmark.newtonbench_adapter import public_action_rules
 from ..benchmark.task_registry import ensure_upstream_importable
 from ..utils.json_protocol import ProtocolError, parse_json_object
 
@@ -112,9 +113,26 @@ class NewtonBenchLawEvaluator:
     def _actions(self, task: TaskSpec, *, split: str) -> list[dict[str, float]]:
         rng = random.Random((task.seed * 1009) + (17 if split == "validation" else 0))
         _, _, params = _task_module(task, self.repo_root)
+        rules = public_action_rules(task.module)
         actions = []
         for _ in range(self.test_points):
-            values = {name: 10 ** rng.uniform(-0.3, 1.5) for name in params}
+            values: dict[str, float] = {}
+            for name in params:
+                rule = rules.get(name, {})
+                minimum = rule.get("minimum")
+                maximum = rule.get("maximum")
+                if minimum is not None and maximum is not None:
+                    values[name] = rng.uniform(float(minimum), float(maximum))
+                elif minimum is not None and float(minimum) >= 0:
+                    # The public metadata only gives a lower bound for these
+                    # controls.  Keep the existing broad log-scale coverage,
+                    # shifted above a strictly positive lower bound.
+                    low = float(minimum)
+                    if rule.get("exclusiveMinimum"):
+                        low = max(low, 1e-6)
+                    values[name] = low + 10 ** rng.uniform(-0.3, 1.5)
+                else:
+                    values[name] = 10 ** rng.uniform(-0.3, 1.5)
             actions.append(values)
         return actions
 
@@ -123,7 +141,7 @@ class NewtonBenchLawEvaluator:
             module, gt_law, params = _task_module(task, self.repo_root)
             fn = _safe_function(candidate.code, params)
         except Exception as exc:
-            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": False}
+            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": False, "success_definition": "numeric_fit_only"}
 
         actions = self._actions(task, split="validation")
         y_true = np.asarray([gt_law(**action) for action in actions], dtype=float)
@@ -141,9 +159,11 @@ class NewtonBenchLawEvaluator:
                 "rmsle": rmsle,
                 "relative_rmse": relative_rmse,
                 "n_validation_points": len(actions),
-                "official_numeric_evaluator": True,
+                "official_numeric_evaluator": False,
+                "upstream_ground_truth_function_used": True,
+                "success_definition": "numeric_fit_only",
                 "symbolic_judge_used": False,
                 "error": None,
             }
         except Exception as exc:
-            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": True, "symbolic_judge_used": False}
+            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": False, "upstream_ground_truth_function_used": True, "success_definition": "numeric_fit_only", "symbolic_judge_used": False}
