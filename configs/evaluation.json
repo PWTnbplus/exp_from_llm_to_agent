@@ -1,0 +1,12 @@
+{
+  "version": "scoring-v1",
+  "validation_points": 128,
+  "ood_points": 64,
+  "relative_rmse_threshold": 1e-5,
+  "ood_relative_rmse_threshold": 1e-5,
+  "minimum_valid_ood_points": 16,
+  "structural_recovery_required": true,
+  "mechanistic_validity": "structural_recovery AND OOD_relative_RMSE <= threshold",
+  "validated_success": "numeric_fit AND structural_recovery AND OOD_fit",
+  "formal_lock": "Values are frozen before any formal paid evaluation."
+}

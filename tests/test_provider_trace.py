@@ -39,3 +39,20 @@ def test_openai_provider_fails_closed_without_token_pricing(monkeypatch):
     provider = OpenAICompatibleProvider(**{"api" + "_key": "secret-test-key"}, model_name="test-model")
     with pytest.raises(RuntimeError, match="token pricing is not configured"):
         provider.complete([{"role": "user", "content": "hello"}])
+
+
+def test_openai_provider_hard_cost_cap_blocks_before_request(monkeypatch):
+    def unexpected_request(*args, **kwargs):
+        raise AssertionError("request must be blocked by the cap")
+
+    monkeypatch.setattr("scientific_discovery.models.provider.urlrequest.urlopen", unexpected_request)
+    provider = OpenAICompatibleProvider(
+        **{"api" + "_key": "secret-test-key"},
+        model_name="test-model",
+        input_cost_per_1k=1.0,
+        output_cost_per_1k=1.0,
+        max_cost_usd=0.0001,
+        max_output_tokens=2048,
+    )
+    with pytest.raises(RuntimeError, match="hard cost cap"):
+        provider.complete([{"role": "user", "content": "hello"}])

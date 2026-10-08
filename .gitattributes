@@ -1,0 +1,2 @@
+# Preserve user-uploaded specifications byte-for-byte; do not rewrite historical whitespace.
+.agents/skills/scientific-law-autopilot/references/* -whitespace

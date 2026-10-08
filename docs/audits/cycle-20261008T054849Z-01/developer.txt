@@ -1,0 +1,19 @@
+已实现最高优先级的评分修复。
+
+修改内容：
+
+- 在 [scoring.py](E:/master_exp/nature_prj1_cal/from_llm_to_agent/src/scientific_discovery/evaluation/scoring.py:18) 中加入确定性的 AST 结构等价性和 OOD/机制评分。
+- 更新 [law_recovery.py](E:/master_exp/nature_prj1_cal/from_llm_to_agent/src/scientific_discovery/evaluation/law_recovery.py:106) 及失败处理。
+- 在 `configs/evaluation.json` 中加入预注册阈值并完成文档说明。
+- 在 [test_evaluator.py](E:/master_exp/nature_prj1_cal/from_llm_to_agent/tests/test_evaluator.py:77) 中加入评估器对抗测试。
+- 更新 OOD 图表评分及 README/协议文档。
+
+测试：
+
+- 定向测试集：24 项通过。
+- CLI 冒烟测试：通过。
+- 12-task Mock 工程测试：24/24 完成。
+- 完整测试集：46 项通过；另有 2 个无关且预先存在的 recovery-state UTF-8/GBK 失败。
+- 未进行付费实验、提交或推送。
+
+`ISSUE-000000000001` 仍为 `resolved-unverified`，等待独立宿主审查。

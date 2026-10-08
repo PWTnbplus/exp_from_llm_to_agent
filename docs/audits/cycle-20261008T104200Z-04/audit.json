@@ -1,0 +1,49 @@
+{
+  "cycle": "20261008T104200Z-04",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "ISSUE-000000000004",
+        "severity": "P1",
+        "title": "Formal statistical validity is not established",
+        "evidence": "configs/statistical_plan.json declares frozen 12/72 task strata and five repeats per arm, but src/scientific_discovery/cli.py only provides a one-run pilot path, accepts arbitrary manifests and limits, has no formal command, and does not execute repeat loops or assign replicate indices. Analysis also operates only on result files and does not join the registered manifest to synthesize missing task-runs; repeated rows lack persisted replicate identity.",
+        "remediation": "Implement plan-driven pilot/formal execution with exact task counts, frozen manifest SHA-256, five registered replicates per arm, explicit persisted replicate_index, rejection of deviations, and analysis against the frozen manifest multiplied by repeats and arms. Add adversarial tests for unequal/incomplete clusters, failures, repeats, missing files, domain strata and complexity strata."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-000000000004",
+        "verdict": "FIXED_UNVERIFIED",
+        "evidence": "The current plan declares frozen strata/repeats and the source contains deterministic law-family clustering, missing-arm handling, and domain/complexity summary fields. Host tests passed: targeted suite 22 passed and full suite 84 passed.",
+        "reason": "These are partial engineering changes, not evidence of formal statistical validity: runtime repeat/stratum enforcement, replicate matching, complete registered denominators, and formal execution remain unverified."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "verdict": "BLOCKED",
+        "evidence": "Only provider failure-path tests are available; no paid API request was made.",
+        "reason": "A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied."
+      },
+      {
+        "id": "ISSUE-000000000003",
+        "verdict": "BLOCKED",
+        "evidence": "The prior git ls-remote provenance checks failed through the configured proxy and no remote confirmation was available at review time.",
+        "reason": "Remote provenance and delivery require a successful network/credential check and verified push."
+      }
+    ],
+    "verified_commands": [
+      "python -m pytest -q tests/test_statistics.py tests/test_reproducibility.py tests/test_provider_trace.py tests/test_experiment_policy.py tests/test_budget.py tests/test_observability.py tests/test_llm_isolation.py",
+      "python -m pytest -q"
+    ],
+    "summary": "The declarative statistical plan and deterministic cluster helper are useful partial repairs, but formal runtime enforcement and complete frozen-manifest denominators remain unresolved."
+  },
+  "test": {
+    "command": ["python", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "summary": "84 passed"
+  },
+  "scope": {
+    "paid_api_calls": 0,
+    "remote_push_verified": false
+  }
+}

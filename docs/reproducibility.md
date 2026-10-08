@@ -5,6 +5,7 @@
 - Task-selection seed: 42 by default; manifests store the seed.
 - Prompts are versioned under `prompts/`.
 - Every run stores the runner, task ID, frozen plan/hash (when applicable), observations, provider metadata, budget ledger, and validation output.
+- Pilot/formal runs also store the exact frozen task-manifest SHA-256 in each result; `analyze --manifest ... --design ...` verifies that digest and joins only the registered task × arm × replicate grid.
 - `metadata.provider_trace` stores redacted request/response records, tool payloads, model metadata, latency, token usage, and retry/error attempts. API keys are never serialized.
 - Real providers record model, latency, token usage, retry count, and estimated cost. Both token-price variables must be configured with positive values before a request is sent; an unpriced real request fails closed. API keys are read from environment variables and are never serialized.
 - Mock runs are explicitly marked and must not be used as formal scientific results.

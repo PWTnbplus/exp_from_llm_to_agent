@@ -21,7 +21,7 @@ def render_three_panel(rows: list[dict[str, Any]], output_dir: Path, *, mock: bo
     costs = []
     for runner in runners:
         runner_rows = [row for row in rows if row.get("runner") == runner]
-        errors.append(sum(float(row.get("validation", {}).get("relative_rmse", 0.0) or 0.0) for row in runner_rows) / max(1, len(runner_rows)))
+        errors.append(sum(float(row.get("validation", {}).get("ood_relative_rmse", 0.0) or 0.0) for row in runner_rows) / max(1, len(runner_rows)))
         costs.append(sum(float(row.get("result", {}).get("metadata", {}).get("budget", {}).get("used", {}).get("cost_usd", 0.0) or 0.0) for row in runner_rows) / max(1, len(runner_rows)))
 
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.2), constrained_layout=True)

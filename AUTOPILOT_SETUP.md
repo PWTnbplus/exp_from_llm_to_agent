@@ -34,3 +34,7 @@ If a cycle is incomplete or blocked, its audit and code changes still get a `wip
 **Safety:** by default the skill does not run large-scale paid LLM experiments. Change this only after a separate explicit user authorization and spend ceiling. Do not put API keys or any secrets in CLI args, reports or git commits.
 
 **Unattended means for the duration of this local launched process**, not a hosted persistent agent. For recurring execution, configure a trusted external scheduler/runner with bounded runtime and least-privilege GitHub credentials. The GitHub Action in this bundle is a CI verifier, not an AI developer with credentials.
+
+## V2 stateful handoff
+
+The newer skill is `.agents/skills/scientific-law-recovery/SKILL.md`. It contains the complete V1 bundle rather than replacing the original references. Read `RECOVERY_SETUP.md`, run `python scripts/recovery_state.py bootstrap`, and use `python scripts/autopilot.py --resume-only ...` to repair only unresolved issues/missing gates. Issue/verification state is persisted in `docs/state/` for a new agent to inherit without repeating verified work.

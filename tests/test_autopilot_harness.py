@@ -77,7 +77,8 @@ class GitSafetyTests(unittest.TestCase):
 
     def test_commit_without_push(self):
         autopilot.ensure_branch(self.root, autopilot.BRANCH)
-        (self.root / "report.txt").write_text("Evidence\n")
+        (self.root / "docs").mkdir(exist_ok=True)
+        (self.root / "docs" / "report.txt").write_text("Evidence\n")
         r = autopilot.commit_push(self.root, remote="origin", branch=autopilot.BRANCH,
                                   cycle=1, wip=True, push=False)
         self.assertEqual(r["status"], "COMMITTED")
@@ -87,3 +88,23 @@ class GitSafetyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class StageScopeTests(unittest.TestCase):
+    def test_unrelated_file_is_never_committed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            def g(*args):
+                return subprocess.run(['git',*args],cwd=root,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.decode().strip()
+            g('init','-b','main')
+            g('config','user.name','Test')
+            g('config','user.email','test@example.test')
+            g('remote','add','origin',f'https://github.com/{autopilot.REPO}.git')
+            autopilot.ensure_branch(root,autopilot.BRANCH)
+            (root/'src').mkdir()
+            (root/'src/module.py').write_text('x=1\n')
+            (root/'personal_notes.txt').write_text('Do not commit me!\n')
+            output = autopilot.commit_push(root,remote='origin',branch=autopilot.BRANCH,
+                                           cycle=1,wip=True,push=False)
+            self.assertIn('src/module.py',output['files'])
+            self.assertNotIn('personal_notes.txt',output['files'])
+            self.assertNotIn('personal_notes.txt',g('show','--pretty=','--name-only','HEAD'))

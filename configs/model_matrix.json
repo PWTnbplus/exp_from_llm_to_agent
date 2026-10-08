@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": "ctflow",
+  "manifest": "configs/task_manifest.json",
+  "max_parallel_models": 2,
+  "max_experiments_per_task": 6,
+  "max_total_cost_usd": 0.0,
+  "runner_command": [],
+  "runner_supports_budget_enforcement": false,
+  "notes": "Codex must implement and test project CLI adapter before enabling real API runs. The external runner MUST enforce budget and both LLM-only/Agent experiment protocols."
+}

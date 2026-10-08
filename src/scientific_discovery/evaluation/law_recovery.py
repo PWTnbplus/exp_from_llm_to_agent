@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 from dataclasses import asdict, dataclass, field
 import importlib
+import inspect
 import math
 from pathlib import Path
 import random
@@ -16,6 +17,7 @@ from ..benchmark.base import TaskSpec
 from ..benchmark.newtonbench_adapter import public_action_rules
 from ..benchmark.task_registry import ensure_upstream_importable
 from ..utils.json_protocol import ProtocolError, parse_json_object
+from .scoring import SCORING_PROTOCOL, structurally_equivalent
 
 
 @dataclass
@@ -103,15 +105,30 @@ def _task_module(task: TaskSpec, repo_root: Path) -> tuple[Any, Callable[..., fl
 
 
 class NewtonBenchLawEvaluator:
-    """Uses upstream numerical evaluation on a held-out evaluator-only set."""
+    """Evaluate numerical, structural and mechanistic law recovery.
 
-    def __init__(self, repo_root: Path, test_points: int = 128, relative_tolerance: float = 1e-5):
+    All target-law access and OOD interventions remain inside this evaluator;
+    callers receive only aggregate scores after the candidate is submitted.
+    """
+
+    def __init__(
+        self,
+        repo_root: Path,
+        test_points: int = int(SCORING_PROTOCOL["validation_points"]),
+        relative_tolerance: float = float(SCORING_PROTOCOL["relative_rmse_threshold"]),
+        ood_points: int = int(SCORING_PROTOCOL["ood_points"]),
+        ood_relative_tolerance: float = float(SCORING_PROTOCOL["ood_relative_rmse_threshold"]),
+    ):
         self.repo_root = Path(repo_root)
         self.test_points = int(test_points)
         self.relative_tolerance = float(relative_tolerance)
+        self.ood_points = int(ood_points)
+        self.ood_relative_tolerance = float(ood_relative_tolerance)
 
     def _actions(self, task: TaskSpec, *, split: str) -> list[dict[str, float]]:
-        rng = random.Random((task.seed * 1009) + (17 if split == "validation" else 0))
+        if split == "ood":
+            return self._ood_actions(task)
+        rng = random.Random(task.seed * 1009 + 17)
         _, _, params = _task_module(task, self.repo_root)
         rules = public_action_rules(task.module)
         actions = []
@@ -136,34 +153,147 @@ class NewtonBenchLawEvaluator:
             actions.append(values)
         return actions
 
+    def _ood_actions(self, task: TaskSpec) -> list[dict[str, float]]:
+        """Build deterministic distribution-shifted legal interventions.
+
+        OOD here means held-out interventions at apparatus boundaries and
+        extrapolative positive scales, not illegal controls.  This prevents a
+        claim of mechanistic validity from resting only on the validation
+        sampling distribution.
+        """
+
+        _, _, params = _task_module(task, self.repo_root)
+        rules = public_action_rules(task.module)
+        actions: list[dict[str, float]] = []
+        for index in range(self.ood_points):
+            action: dict[str, float] = {}
+            for offset, name in enumerate(params):
+                rule = rules.get(name, {})
+                level = index + offset
+                minimum = rule.get("minimum")
+                maximum = rule.get("maximum")
+                if minimum is not None and maximum is not None:
+                    low = float(minimum)
+                    high = float(maximum)
+                    span = high - low
+                    epsilon = max(span * 1e-6, 1e-8)
+                    lower = low + epsilon if rule.get("exclusiveMinimum") else low
+                    levels = (lower, low + 0.1 * span, low + 0.5 * span, high - 0.1 * span, high)
+                    action[name] = float(levels[level % len(levels)])
+                else:
+                    low = float(minimum) if minimum is not None else 0.0
+                    lower = max(low + (1e-6 if rule.get("exclusiveMinimum") else 0.0), 1e-6)
+                    levels = (lower, lower * 1.01, lower + 0.01, lower + 1.0, lower + 1000.0)
+                    action[name] = float(levels[level % len(levels)])
+            actions.append(action)
+        return actions
+
+    @staticmethod
+    def _score_actions(fn: Callable[..., float], gt_law: Callable[..., float], actions: list[dict[str, float]]) -> dict[str, Any]:
+        valid_actions: list[dict[str, float]] = []
+        y_true: list[float] = []
+        for action in actions:
+            try:
+                value = float(gt_law(**action))
+            except Exception:
+                continue
+            if math.isfinite(value):
+                valid_actions.append(action)
+                y_true.append(value)
+
+        if not valid_actions:
+            return {"relative_rmse": float("nan"), "rmsle": float("nan"), "n_points": 0, "all_predictions_finite": False}
+
+        predictions: list[float] = []
+        for action in valid_actions:
+            try:
+                predictions.append(float(fn(**action)))
+            except Exception:
+                predictions.append(float("nan"))
+        y_true_array = np.asarray(y_true, dtype=float)
+        y_pred_array = np.asarray(predictions, dtype=float)
+        finite = bool(np.all(np.isfinite(y_pred_array)))
+        if not finite:
+            return {
+                "relative_rmse": float("inf"),
+                "rmsle": float("inf"),
+                "n_points": len(valid_actions),
+                "all_predictions_finite": False,
+            }
+        relative_rmse = float(np.sqrt(np.mean(((y_pred_array - y_true_array) / np.maximum(np.abs(y_true_array), 1e-12)) ** 2)))
+        rmsle = float(np.sqrt(np.mean((np.log1p(np.maximum(y_pred_array, 0)) - np.log1p(np.maximum(y_true_array, 0))) ** 2)))
+        return {
+            "relative_rmse": relative_rmse,
+            "rmsle": rmsle,
+            "n_points": len(valid_actions),
+            "all_predictions_finite": True,
+        }
+
+    @staticmethod
+    def _failure(error: str, *, upstream_ground_truth_function_used: bool = False) -> dict[str, Any]:
+        return {
+            "validated_success": False,
+            "numeric_fit": False,
+            "ood_fit": False,
+            "structural_recovery": False,
+            "mechanistic_validity": False,
+            "equivalence_class": "none",
+            "rmsle": float("nan"),
+            "relative_rmse": float("nan"),
+            "ood_rmsle": float("nan"),
+            "ood_relative_rmse": float("nan"),
+            "n_validation_points": 0,
+            "n_ood_points": 0,
+            "error": error,
+            "official_numeric_evaluator": False,
+            "upstream_ground_truth_function_used": upstream_ground_truth_function_used,
+            "success_definition": "numeric_fit_and_structural_recovery_and_ood",
+            "symbolic_judge_used": False,
+            "scoring_protocol_version": SCORING_PROTOCOL["version"],
+        }
+
     def evaluate(self, task: TaskSpec, candidate: LawCandidate) -> dict[str, Any]:
         try:
             module, gt_law, params = _task_module(task, self.repo_root)
             fn = _safe_function(candidate.code, params)
         except Exception as exc:
-            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": False, "success_definition": "numeric_fit_only"}
+            return self._failure(str(exc))
 
-        actions = self._actions(task, split="validation")
-        y_true = np.asarray([gt_law(**action) for action in actions], dtype=float)
         try:
-            y_pred = np.asarray([fn(**action) for action in actions], dtype=float)
-            if not np.all(np.isfinite(y_pred)):
-                raise ValueError("candidate returned non-finite predictions")
-            relative_rmse = float(np.sqrt(np.mean(((y_pred - y_true) / np.maximum(np.abs(y_true), 1e-12)) ** 2)))
-            rmsle = float(np.sqrt(np.mean((np.log1p(np.maximum(y_pred, 0)) - np.log1p(np.maximum(y_true, 0))) ** 2)))
+            validation_score = self._score_actions(fn, gt_law, self._actions(task, split="validation"))
+            ood_score = self._score_actions(fn, gt_law, self._actions(task, split="ood"))
+            numeric_fit = bool(
+                validation_score["all_predictions_finite"]
+                and validation_score["n_points"] > 0
+                and validation_score["relative_rmse"] <= self.relative_tolerance
+            )
+            ood_fit = bool(
+                ood_score["all_predictions_finite"]
+                and ood_score["n_points"] >= int(SCORING_PROTOCOL["minimum_valid_ood_points"])
+                and ood_score["relative_rmse"] <= self.ood_relative_tolerance
+            )
+            structural_recovery = structurally_equivalent(candidate.code, gt_law, params)
+            mechanistic_validity = bool(structural_recovery and ood_fit)
             return {
-                "validated_success": bool(relative_rmse <= self.relative_tolerance),
-                "numeric_fit": bool(relative_rmse <= self.relative_tolerance),
-                "structural_recovery": None,
-                "mechanistic_validity": "not_implemented",
-                "rmsle": rmsle,
-                "relative_rmse": relative_rmse,
-                "n_validation_points": len(actions),
+                "validated_success": bool(numeric_fit and mechanistic_validity),
+                "numeric_fit": numeric_fit,
+                "ood_fit": ood_fit,
+                "structural_recovery": bool(structural_recovery),
+                "mechanistic_validity": mechanistic_validity,
+                "equivalence_class": "canonical_ast" if structural_recovery else "none",
+                "rmsle": validation_score["rmsle"],
+                "relative_rmse": validation_score["relative_rmse"],
+                "ood_rmsle": ood_score["rmsle"],
+                "ood_relative_rmse": ood_score["relative_rmse"],
+                "n_validation_points": validation_score["n_points"],
+                "n_ood_points": ood_score["n_points"],
                 "official_numeric_evaluator": False,
                 "upstream_ground_truth_function_used": True,
-                "success_definition": "numeric_fit_only",
+                "success_definition": "numeric_fit_and_structural_recovery_and_ood",
                 "symbolic_judge_used": False,
+                "scoring_protocol_version": SCORING_PROTOCOL["version"],
                 "error": None,
+                "ground_truth": {"source": inspect.getsource(gt_law), "exposed_to_model": False, "phase": "post_submission_evaluation"},
             }
         except Exception as exc:
-            return {"validated_success": False, "numeric_fit": False, "structural_recovery": None, "mechanistic_validity": "not_implemented", "rmsle": float("nan"), "relative_rmse": float("nan"), "error": str(exc), "official_numeric_evaluator": False, "upstream_ground_truth_function_used": True, "success_definition": "numeric_fit_only", "symbolic_judge_used": False}
+            return self._failure(str(exc), upstream_ground_truth_function_used=True)

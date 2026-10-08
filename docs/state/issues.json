@@ -1,0 +1,192 @@
+{
+  "schema_version": 2,
+  "updated_at": "2026-10-08T11:11:33+00:00",
+  "issues": [
+    {
+      "id": "ISSUE-000000000001",
+      "severity": "P1",
+      "title": "Formal scientific scoring is incomplete",
+      "status": "VERIFIED",
+      "evidence": "Legacy audit 2026-10-08_supervisor_report_autopilot_cycle_01.md records structural_recovery=None and mechanistic_validity=not_implemented.",
+      "remediation": "Define and test deterministic structural/equivalence and mechanistic/OOD criteria, then preregister thresholds before formal runs.",
+      "first_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-08T05:48:38+00:00",
+      "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
+      "attempts": 1,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-08T09:01:24+00:00",
+        "command": "python -m pytest -q",
+        "evidence": "Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-08T05:48:38+00:00",
+          "event": "OPENED",
+          "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md"
+        },
+        {
+          "time": "2026-10-08T05:48:49+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Autopilot cycle 1 selected highest-priority issue",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T07:08:53+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Scoring repair is implemented and host-tested: canonical AST structural equivalence, deterministic legal OOD scoring, mechanistic validity, preregistered scoring-v1 thresholds, and adversarial evaluator tests. Independent read-only review inspected the affected code but timed out before returning a structured verification resolution; keep RESOLVED_UNVERIFIED.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T09:01:24+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure."
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-000000000002",
+      "severity": "P1",
+      "title": "Real-provider pilot and retry/cost behavior are unverified",
+      "status": "BLOCKED",
+      "evidence": "No real API request was launched; only provider failure paths are unit-tested.",
+      "remediation": "With explicit authorization and a hard spend ceiling, run a minimal provider smoke test, archive redacted traces, and rerun the isolation audit.",
+      "first_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-08T05:48:38+00:00",
+      "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
+      "attempts": 1,
+      "blocked_reason": "A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied.",
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-08T05:48:38+00:00",
+          "event": "OPENED",
+          "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md"
+        },
+        {
+          "time": "2026-10-08T10:35:03+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Attempted targeted provider verification; no real API request is authorized because the user has not supplied explicit paid-experiment authorization and a positive hard spend ceiling.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T10:35:12+00:00",
+          "event": "BLOCKED",
+          "reason": "External authorization blocker: the skill prohibits paid scientific API requests without separate explicit user authorization and a hard positive USD spend ceiling. Unlock by providing provider/model, pilot scope, and maximum USD budget; then run the minimal redacted pilot and independent isolation review.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T10:44:26+00:00",
+          "event": "BLOCKED",
+          "reason": "A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied.",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-000000000003",
+      "severity": "P1",
+      "title": "Upstream provenance and GitHub delivery are externally blocked",
+      "status": "BLOCKED",
+      "evidence": "Both git ls-remote commands failed with proxy connection errors; vendored NewtonBench is not a separate Git checkout.",
+      "remediation": "Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.",
+      "first_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-08T05:48:38+00:00",
+      "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
+      "attempts": 1,
+      "blocked_reason": "Remote provenance and delivery require a successful network/credential check and verified push.",
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-08T05:48:38+00:00",
+          "event": "OPENED",
+          "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md"
+        },
+        {
+          "time": "2026-10-08T10:35:22+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Reproduced the external provenance blocker with current read-only checks: git ls-remote to origin and NewtonBench both failed through the configured proxy.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T10:35:27+00:00",
+          "event": "BLOCKED",
+          "reason": "External network/credential blocker reproduced on 2026-10-08: git ls-remote origin and git ls-remote NewtonBench both failed to connect to github.com via 127.0.0.1:443. Unlock by restoring GitHub network and write credentials; then verify upstream SHA/license and push the feature branch, confirming remote state.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-08T10:44:26+00:00",
+          "event": "BLOCKED",
+          "reason": "Remote provenance and delivery require a successful network/credential check and verified push.",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-000000000004",
+      "severity": "P1",
+      "title": "Formal statistical validity is not established",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "configs/statistical_plan.json declares frozen 12/72 task strata and five repeats per arm, but src/scientific_discovery/cli.py only provides a one-run pilot path, accepts arbitrary manifests and limits, has no formal command, and does not execute repeat loops or assign replicate indices. Analysis also operates only on result files and does not join the registered manifest to synthesize missing task-runs; repeated rows lack persisted replicate identity.",
+      "remediation": "Implement plan-driven pilot/formal execution with exact task counts, frozen manifest SHA-256, five registered replicates per arm, explicit persisted replicate_index, rejection of deviations, and analysis against the frozen manifest multiplied by repeats and arms. Add adversarial tests for unequal/incomplete clusters, failures, repeats, missing files, domain strata and complexity strata.",
+      "first_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-08T11:11:33+00:00",
+      "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-08T05:48:38+00:00",
+          "event": "OPENED",
+          "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md"
+        },
+        {
+          "time": "2026-10-08T10:44:26+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "These are partial engineering changes, not evidence of formal statistical validity: runtime repeat/stratum enforcement, replicate matching, complete registered denominators, and formal execution remain unverified.",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-000000000005",
+      "severity": "P2",
+      "title": "Classical baseline is only an extension interface",
+      "status": "OPEN",
+      "evidence": "src/scientific_discovery/evaluation/classical.py retains NotImplementedError.",
+      "remediation": "Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.",
+      "first_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-08T05:48:38+00:00",
+      "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-08T05:48:38+00:00",
+          "event": "OPENED",
+          "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md"
+        }
+      ]
+    }
+  ],
+  "completed_work": [
+    {
+      "name": "G1-G5 execution policy and theory contamination controls",
+      "evidence": "Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.",
+      "verification_command": "python -m pytest -q",
+      "commit": "",
+      "verified_at": "2026-10-08T13:00:00+00:00"
+    }
+  ],
+  "ingested_audits": [
+    "docs/audits/cycle-20261008T120000Z-02/audit.json",
+    "docs/audits/cycle-20261008T130000Z-03/audit.json",
+    "docs/audits/cycle-20261008T104200Z-04/audit.json",
+    "docs/audits/cycle-20261008T111200Z-05/audit.json"
+  ],
+  "current_focus": null
+}

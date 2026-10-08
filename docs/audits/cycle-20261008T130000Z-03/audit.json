@@ -1,0 +1,19 @@
+{
+  "cycle": "20261008T130000Z-03",
+  "review": {
+    "findings": [],
+    "resolutions": [],
+    "notes": "Read-only review inspected G1-G5 policy enforcement, provider retries, theory answer isolation, contamination controls and Trace. Unit/mock evidence is not treated as real-provider or scientific-result evidence."
+  },
+  "test": {
+    "command": ["python", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "summary": "80 passed"
+  },
+  "scope": {
+    "default_theory_tasks": 100,
+    "contamination_strata": {"classical": 40, "structure_transform": 30, "private_dynamic": 30},
+    "paid_api_calls": 0,
+    "remote_push_verified": false
+  }
+}

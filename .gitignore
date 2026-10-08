@@ -1,5 +1,9 @@
 .env
+api_key/
 .venv/
+configs/selected_models.json
+configs/model_preflight.json
+runs/
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -9,3 +13,4 @@ figures/*
 !figures/.gitkeep
 *.zip
 .skill_extract_20261008/
+.skill_recovery_v2_extract_20261008/

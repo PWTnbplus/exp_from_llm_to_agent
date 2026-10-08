@@ -1,0 +1,43 @@
+{
+  "cycle": "20261008T111200Z-05",
+  "review": {
+    "status": "PASS_WITH_LIMITATION",
+    "project_complete": false,
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-000000000004",
+        "verdict": "FIXED_UNVERIFIED",
+        "evidence": "The plan-driven pilot/formal path now requires an existing exact manifest selected from the pinned NewtonBench registry, compares every TaskSpec field against canonical registry records, persists manifest_sha256 and replicate_index in each result, rejects stale/duplicate/out-of-grid/malformed records, requires an explicit manifest for analysis, and binds clustered bootstrap seed/repeats to the statistical plan. Host tests passed: statistics 8 passed and full suite 88 passed. An independent read-only verification passed the mutation-rejection and fail-closed gate probes.",
+        "reason": "Engineering controls are independently checked, but no authorized real-provider formal evaluation has been run; this is not evidence of scientific validity."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "verdict": "BLOCKED",
+        "evidence": "No paid or real-provider request was made; provider, cap, retry and generic-run fail-closed tests are local/mocked only.",
+        "reason": "The skill requires separate explicit paid-experiment authorization and a positive hard USD ceiling, which have not been supplied."
+      },
+      {
+        "id": "ISSUE-000000000003",
+        "verdict": "BLOCKED",
+        "evidence": "No remote push was performed or verified. Earlier git ls-remote checks failed through the configured local proxy/network path.",
+        "reason": "GitHub delivery requires restored network/write credentials followed by verified remote SHA state."
+      }
+    ],
+    "verified_commands": [
+      "python -m pytest tests/test_statistics.py -q",
+      "python -m pytest -q",
+      "Independent read-only manifest mutation and fail-closed gate probes"
+    ],
+    "summary": "The statistical runtime controls are fixed at the engineering level and independently checked. Formal scientific results, real-provider behavior and remote delivery remain unverified or externally blocked."
+  },
+  "test": {
+    "command": ["python", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "summary": "88 passed"
+  },
+  "scope": {
+    "paid_api_calls": 0,
+    "remote_push_verified": false
+  }
+}

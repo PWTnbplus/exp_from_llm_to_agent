@@ -11,4 +11,11 @@ The adapter's public action schema also carries the upstream apparatus bounds. T
 
 Every provider request and response is copied into the result's `metadata.provider_trace` (with no API key). The trace is an audit record, not an additional information channel: the LLM-only runner still passes `tools=None` for both calls. `tests/test_llm_isolation.py` asserts this property.
 
+In the G1-G5 control layer, G1 additionally passes through `PolicyProvider`.
+Its executable policy denies every tool, retrieval, memory operation and
+transport retry before dispatch. `TraceProvider` records the policy check and
+each actual provider attempt. The default OpenAI-compatible provider retry
+count is zero; a provider configured with a higher retry count is rejected at
+construction time for a controlled run.
+
 `tests/test_llm_isolation.py` checks that intermediate observations do not enter planning messages, changing simulated outputs cannot alter a frozen plan, and no tools are passed to either LLM-only call. The Agent test in `tests/test_agent_actions.py` separately checks that an adaptive runner can use feedback.

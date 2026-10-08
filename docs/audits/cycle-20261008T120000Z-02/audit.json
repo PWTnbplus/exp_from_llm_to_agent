@@ -1,0 +1,19 @@
+{
+  "cycle": "20261008T120000Z-02",
+  "review": {
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-000000000001",
+        "verdict": "VERIFIED",
+        "evidence": "Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure."
+      }
+    ],
+    "notes": "The review did not treat the new observability implementation or Mock runs as evidence of a real-provider scientific result. Real-provider pilot, external provenance, and formal statistical freeze remain unresolved in the ledger."
+  },
+  "test": {
+    "command": ["python", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "summary": "70 passed"
+  }
+}

@@ -22,6 +22,10 @@ def assert_public_text(text: str) -> None:
     forbidden = (
         "HIDDEN_CONSTANT",
         "ground_truth_law",
+        "ground_truth",
+        "answer_key",
+        "verification_code",
+        "verification_status",
         "Validation targets",
         "evaluation_results",
         "modules/",

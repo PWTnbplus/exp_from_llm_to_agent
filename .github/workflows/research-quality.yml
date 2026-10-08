@@ -17,6 +17,8 @@ jobs:
           python-version: '3.11'
       - name: Verify autopilot runner without Codex/API keys
         run: python -m unittest discover -s tests -p 'test_autopilot_harness.py' -v
+      - name: Verify V2 recovery/handoff persistence
+        run: python -m unittest discover -s tests -p 'test_recovery_state.py' -v
       - name: Source project quality checks
         shell: bash
         run: |

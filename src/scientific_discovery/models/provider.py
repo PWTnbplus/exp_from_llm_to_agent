@@ -95,14 +95,27 @@ class OpenAICompatibleProvider(LLMProvider):
         max_retries: int | None = None,
         input_cost_per_1k: float | None = None,
         output_cost_per_1k: float | None = None,
+        max_cost_usd: float | None = None,
+        max_output_tokens: int | None = None,
     ):
         self.api_key = api_key or os.getenv("LLM_API_KEY", "")
         self.base_url = (base_url or os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
         self.model_name = model_name or os.getenv("LLM_MODEL", "")
         self.timeout = float(timeout if timeout is not None else os.getenv("LLM_TIMEOUT", "60"))
-        self.max_retries = int(max_retries if max_retries is not None else os.getenv("LLM_MAX_RETRIES", "2"))
+        # Scientific group policies set this explicitly. The safe default is
+        # zero: transport retries are extra model calls and must never be an
+        # invisible source of compute or cost.
+        self.max_retries = int(max_retries if max_retries is not None else os.getenv("LLM_MAX_RETRIES", "0"))
+        if self.max_retries < 0:
+            raise ValueError("max_retries must be non-negative")
         self.input_cost_per_1k = float(input_cost_per_1k if input_cost_per_1k is not None else os.getenv("LLM_COST_PER_1K_INPUT_TOKENS", "0"))
         self.output_cost_per_1k = float(output_cost_per_1k if output_cost_per_1k is not None else os.getenv("LLM_COST_PER_1K_OUTPUT_TOKENS", "0"))
+        configured_cap = os.getenv("LLM_MAX_COST_USD", "")
+        self.max_cost_usd = max_cost_usd if max_cost_usd is not None else (float(configured_cap) if configured_cap else None)
+        self.max_output_tokens = int(max_output_tokens if max_output_tokens is not None else os.getenv("LLM_MAX_OUTPUT_TOKENS", "2048"))
+        if self.max_cost_usd is not None and self.max_cost_usd <= 0:
+            raise ValueError("max_cost_usd must be positive when configured")
+        self._reserved_cost_usd = 0.0
         self.calls: list[dict[str, Any]] = []
         self.traces: list[dict[str, Any]] = []
 
@@ -117,13 +130,18 @@ class OpenAICompatibleProvider(LLMProvider):
                 "LLM_COST_PER_1K_INPUT_TOKENS and LLM_COST_PER_1K_OUTPUT_TOKENS "
                 "before enabling a real API run"
             )
-        payload: dict[str, Any] = {"model": self.model_name, "messages": messages}
+        payload: dict[str, Any] = {"model": self.model_name, "messages": messages, "max_tokens": self.max_output_tokens}
         if tools is not None:
             payload["tools"] = tools
         body = json.dumps(payload).encode("utf-8")
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"}
         last_error: Exception | None = None
         for attempt in range(self.max_retries + 1):
+            estimated_input = _estimate_tokens(json.dumps(messages, ensure_ascii=False))
+            worst_case = (estimated_input / 1000) * self.input_cost_per_1k + (self.max_output_tokens / 1000) * self.output_cost_per_1k
+            if self.max_cost_usd is not None and self._reserved_cost_usd + worst_case > self.max_cost_usd:
+                raise RuntimeError("hard cost cap would be exceeded before provider request")
+            self._reserved_cost_usd += worst_case
             started = time.monotonic()
             try:
                 req = urlrequest.Request(f"{self.base_url}/chat/completions", data=body, headers=headers, method="POST")

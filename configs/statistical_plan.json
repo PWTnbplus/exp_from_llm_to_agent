@@ -1,0 +1,46 @@
+{
+  "version": "statistical-plan-v1",
+  "status": "FROZEN_BEFORE_FORMAL_PAID_EVALUATION",
+  "source": {
+    "benchmark": "NewtonBench",
+    "upstream_commit": "912a4ba5f4356ddd06acc16e44460ca30be4abc2",
+    "split": "test",
+    "supported_system": "vanilla_equation",
+    "selection_seed": 42,
+    "selection_uses_outcomes": false,
+    "pilot_tasks": 12,
+    "formal_tasks": 72,
+    "pilot_stratum": "one direct-measurement task per domain, round-robin selection",
+    "formal_stratum": "six direct-measurement tasks per domain, round-robin selection"
+  },
+  "repeats_per_task_per_arm": {
+    "engineering": 1,
+    "pilot": 5,
+    "formal": 5
+  },
+  "unit_of_analysis": "paired task-run (same task, replicate index, model and budget)",
+  "law_family_cluster": {
+    "key": "NewtonBench module name",
+    "implementation": "scientific_discovery.evaluation.statistics.law_family_key",
+    "reason": "law variants within a module are not independent natural law families"
+  },
+  "primary_endpoint": "validated_success",
+  "paired_effect": "agent_minus_llm_only",
+  "uncertainty": {
+    "method": "paired cluster bootstrap over law-family means",
+    "seed": 20261008,
+    "repeats": 10000
+  },
+  "denominator": {
+    "include_all_registered_task_runs": true,
+    "provider_or_parse_or_budget_failure_counts_as_failure": true,
+    "missing_arm_is_not_silently_dropped": true,
+    "outcome_based_task_removal": false
+  },
+  "formal_lock_requirements": [
+    "frozen task manifest and SHA-256",
+    "frozen prompts and scoring-v1 thresholds",
+    "real provider authorization and positive hard cost ceiling",
+    "all task-run failures retained in result files"
+  ]
+}

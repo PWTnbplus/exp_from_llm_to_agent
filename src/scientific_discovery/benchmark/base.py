@@ -66,4 +66,5 @@ class RunResult:
     plan: list[dict[str, Any]] = field(default_factory=list)
     plan_hash: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
-
+    run_id: str | None = None
+    trace_path: str | None = None

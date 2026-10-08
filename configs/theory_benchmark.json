@@ -1,0 +1,14 @@
+{
+  "version": "theory-benchmark-v1",
+  "public_tasks": "data/theory_benchmark_v1/public_tasks.json",
+  "answer_key": "data/theory_benchmark_v1/answer_key.json",
+  "manifest": "data/theory_benchmark_v1/manifest.json",
+  "legacy_versions": ["theory-benchmark-v2", "theory-benchmark-v3"],
+  "groups": ["G1", "G2", "G3", "G4", "G5"],
+  "modes": ["G1", "G2", "G3", "G4", "G5", "llm_only", "llm_tools", "iterative_reflection", "agent"],
+  "default_seed": 42,
+  "numeric_tolerance": 1e-6,
+  "formal_paid_runs_require": ["explicit_allow_paid", "positive_max_cost_usd", "token_prices", "frozen_task_version"],
+  "contamination_controls": ["classical", "structure_transform", "private_dynamic"],
+  "scientific_caveat": "数值 checker 不能替代数学证明；合成模型不能冒充真实经验规律；公开题目表现不等于无训练污染。"
+}

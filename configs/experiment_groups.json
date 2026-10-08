@@ -1,0 +1,12 @@
+{
+  "version": "g1-g5-control-v1",
+  "shared_token_budget": {"max_input_tokens": 100000, "max_output_tokens": 30000},
+  "groups": {
+    "G1": {"name": "llm_only", "model_calls": 2, "tools": [], "planning": "one_shot", "memory": false, "retrieval": false, "transport_retries": 0},
+    "G2": {"name": "llm_with_fixed_tools", "model_calls": 2, "tools": ["calculate_expression"], "compute_steps": 4, "planning": "fixed_tool_assist", "memory": false, "retrieval": false, "transport_retries": 0},
+    "G3": {"name": "llm_with_reflection", "model_calls": 2, "tools": [], "planning": "fixed_reflection", "memory": false, "retrieval": false, "transport_retries": 0},
+    "G4": {"name": "single_agent", "model_calls": 8, "tools": ["run_experiment", "calculate_expression"], "experiments": 6, "planning": "adaptive", "memory": false, "retrieval": false, "transport_retries": 0},
+    "G5": {"name": "single_agent_with_bounded_memory", "model_calls": 10, "tools": ["run_experiment", "calculate_expression"], "experiments": 6, "memory_items": 32, "planning": "adaptive_memory", "memory": true, "retrieval": false, "transport_retries": 0}
+  },
+  "scientific_note": "G1-G5 isolate model calls, fixed computation, reflection, adaptive tool use and bounded run-local memory. No group has external retrieval."
+}
