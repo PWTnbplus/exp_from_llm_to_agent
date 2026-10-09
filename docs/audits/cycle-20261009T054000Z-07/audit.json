@@ -31,7 +31,8 @@
       "scripts/run_deepseek_theory_batch.py"
     ],
     "paid_api_calls": 0,
-    "remote_push_verified": false,
-    "remote_push_status": "pending; prior git ls-remote was blocked by the configured proxy"
+    "commit": "1985895df1b303057f4feebc1d572f71337aa6e2",
+    "remote_push_verified": true,
+    "remote_push_status": "verified with git -c http.proxy= ls-remote; origin branch resolves to the committed SHA"
   }
 }
