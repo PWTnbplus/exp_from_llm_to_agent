@@ -1,0 +1,21 @@
+{
+  "version": "theory-benchmark-v3",
+  "counts": {
+    "total": 300,
+    "by_level": {
+      "1": 100,
+      "2": 100,
+      "3": 100
+    },
+    "by_domain": {
+      "Theoretical Chemistry": 300,
+      "Theoretical Biology": 0
+    }
+  },
+  "balanced_cell_size": 100,
+  "answer_separation": true,
+  "legacy_versions": [
+    "theory-benchmark-v1",
+    "theory-benchmark-v2"
+  ]
+}

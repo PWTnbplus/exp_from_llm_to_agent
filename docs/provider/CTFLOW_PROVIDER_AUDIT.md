@@ -4,6 +4,10 @@
 审计范围：模型目录鉴权、精确模型兼容性预检和科学矩阵安全门禁。
 密钥处理：仅从本地文件读取到当前进程环境；未写入报告、配置、日志或 Git。
 
+## 官方文档核验（2026-10-09，Asia/Hong_Kong）
+
+用户提供的文档页面 `https://token.ctflow.cn/tokendocs` 已通过 HTTPS 无凭据读取。页面明确说明该服务提供 OpenAI 兼容接口，基础地址为 `https://token.ctflow.cn/v1`，聊天接口为 `/chat/completions`，模型目录为 `/models`，认证头为 `Authorization: Bearer sk-...`。文档示例模型为 `deepseek-chat`；实际运行仍必须使用 `/models` 返回的精确模型 ID，不以示例别名替代。文档未给出本实验所需的可引用单价、速率限制、上下文限制、重试语义或成本上限合同，因此这些属性仍未验证。
+
 ## 已验证的运行时证据
 
 | 检查项 | 结果 |

@@ -12,5 +12,6 @@ figures/*
 !results/.gitkeep
 !figures/.gitkeep
 *.zip
+data/**/answer_key.json
 .skill_extract_20261008/
 .skill_recovery_v2_extract_20261008/

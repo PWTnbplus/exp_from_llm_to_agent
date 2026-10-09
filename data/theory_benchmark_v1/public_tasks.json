@@ -1,0 +1,2962 @@
+[
+  {
+    "task_id": "TC-L1-001",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "一级反应积分律",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 一级反应积分律 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dA/dt=-kA\n\n已知参数：{\"A0\": 2.5, \"k\": 0.4}\n\n任务：求 A(t)、半衰期，并判断半衰期是否依赖 A0。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dA/dt=-kA",
+    "given_parameters": {
+      "A0": 2.5,
+      "k": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "一级反应积分律；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-002",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "二级反应积分律",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 二级反应积分律 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dA/dt=-kA^2\n\n已知参数：{\"A0\": 1.2, \"k\": 0.3}\n\n任务：给出 1/A(t) 和半衰期。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dA/dt=-kA^2",
+    "given_parameters": {
+      "A0": 1.2,
+      "k": 0.3
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二级反应积分律；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-003",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "零级反应积分律",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 零级反应积分律 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dA/dt=-k\n\n已知参数：{\"A0\": 2.4, \"k\": 0.15}\n\n任务：求 A(t) 及完全耗尽时间，并说明模型适用到何时。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dA/dt=-k",
+    "given_parameters": {
+      "A0": 2.4,
+      "k": 0.15
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "零级反应积分律；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-004",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "Arrhenius 温度比",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 Arrhenius 温度比 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：k(T)=A exp(-Ea/(RT))\n\n已知参数：{\"Ea_J_per_mol\": 50000, \"R\": 8.314, \"T1\": 300, \"T2\": 330}\n\n任务：求 k(T2)/k(T1)，不要单独估计未知的 A。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "k(T)=A exp(-Ea/(RT))",
+    "given_parameters": {
+      "Ea_J_per_mol": 50000,
+      "R": 8.314,
+      "T1": 300,
+      "T2": 330
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Arrhenius 温度比；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-005",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "化学平衡",
+    "theory_name": "标准 Gibbs 能与平衡常数",
+    "theoretical_background": "本题属于Theoretical Chemistry的化学平衡。模型 标准 Gibbs 能与平衡常数 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：DeltaG°=-RT ln K\n\n已知参数：{\"DeltaG_J_per_mol\": -5000, \"R\": 8.314, \"T\": 298}\n\n任务：计算 K，并说明 DeltaG°<0 的含义。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "DeltaG°=-RT ln K",
+    "given_parameters": {
+      "DeltaG_J_per_mol": -5000,
+      "R": 8.314,
+      "T": 298
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "标准 Gibbs 能与平衡常数；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-006",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "化学平衡",
+    "theory_name": "van't Hoff 关系",
+    "theoretical_background": "本题属于Theoretical Chemistry的化学平衡。模型 van't Hoff 关系 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：d ln K/dT=DeltaH°/(RT^2)\n\n已知参数：{\"DeltaH_J_per_mol\": 40000, \"K1\": 2.0, \"R\": 8.314, \"T1\": 300, \"T2\": 330}\n\n任务：在 DeltaH° 视为常数时计算 K2。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "d ln K/dT=DeltaH°/(RT^2)",
+    "given_parameters": {
+      "DeltaH_J_per_mol": 40000,
+      "R": 8.314,
+      "T1": 300,
+      "T2": 330,
+      "K1": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "van't Hoff 关系；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-007",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "统计热力学",
+    "theory_name": "二能级配分函数",
+    "theoretical_background": "本题属于Theoretical Chemistry的统计热力学。模型 二能级配分函数 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：Z=1+exp(-epsilon/(RT))\n\n已知参数：{\"epsilon_over_RT\": 2.0}\n\n任务：求激发态概率和平均能量（用 epsilon 表示）。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "Z=1+exp(-epsilon/(RT))",
+    "given_parameters": {
+      "epsilon_over_RT": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二能级配分函数；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-008",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "统计热力学",
+    "theory_name": "二能级热容",
+    "theoretical_background": "本题属于Theoretical Chemistry的统计热力学。模型 二能级热容 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：C_V/R=x^2 exp(x)/(1+exp(x))^2\n\n已知参数：{\"x\": 1.5}\n\n任务：计算无量纲热容 C_V/R，并说明 x 很大时的趋势。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "C_V/R=x^2 exp(x)/(1+exp(x))^2",
+    "given_parameters": {
+      "x": 1.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二能级热容；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-009",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "平行一级反应分流",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 平行一级反应分流 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A -> B (kB), A -> C (kC)\n\n已知参数：{\"kB\": 0.3, \"kC\": 0.2}\n\n任务：求 B/C 的最终生成比以及 A 分流到 B 的比例。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A -> B (kB), A -> C (kC)",
+    "given_parameters": {
+      "kB": 0.3,
+      "kC": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "平行一级反应分流；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-010",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "拟一级近似",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 拟一级近似 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A+B -> products, rate=k[A][B]\n\n已知参数：{\"B_fixed\": 5.0, \"k\": 0.8}\n\n任务：当 B 过量且近似恒定时，求 k_obs 与 A 的半衰期。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A+B -> products, rate=k[A][B]",
+    "given_parameters": {
+      "k": 0.8,
+      "B_fixed": 5.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "拟一级近似；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-011",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酸碱平衡",
+    "theory_name": "Henderson-Hasselbalch 关系",
+    "theoretical_background": "本题属于Theoretical Chemistry的酸碱平衡。模型 Henderson-Hasselbalch 关系 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：pH=pKa+log10([A-]/[HA])\n\n已知参数：{\"pKa\": 4.76, \"ratio\": 3.2}\n\n任务：求 pH，并说明该近似依赖的主要条件。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "pH=pKa+log10([A-]/[HA])",
+    "given_parameters": {
+      "pKa": 4.76,
+      "ratio": 3.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Henderson-Hasselbalch 关系；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-012",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酶动力学",
+    "theory_name": "Michaelis-Menten 初速",
+    "theoretical_background": "本题属于Theoretical Chemistry的酶动力学。模型 Michaelis-Menten 初速 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：v=Vmax*S/(Km+S)\n\n已知参数：{\"Km\": 0.6, \"S\": 0.9, \"Vmax\": 2.4}\n\n任务：计算初始速率及 S=Km 时的速率分数。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "v=Vmax*S/(Km+S)",
+    "given_parameters": {
+      "Vmax": 2.4,
+      "Km": 0.6,
+      "S": 0.9
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Michaelis-Menten 初速；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-013",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酸碱平衡",
+    "theory_name": "缓冲容量",
+    "theoretical_background": "本题属于Theoretical Chemistry的酸碱平衡。模型 缓冲容量 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：beta=2.303 C Ka H/(Ka+H)^2\n\n已知参数：{\"C\": 0.1, \"pH_equals_pKa\": true}\n\n任务：在 pH=pKa 时求 beta，并说明该点为何达到最大。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "beta=2.303 C Ka H/(Ka+H)^2",
+    "given_parameters": {
+      "C": 0.1,
+      "pH_equals_pKa": true
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "缓冲容量；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-014",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "化学平衡",
+    "theory_name": "二聚化平衡物料衡算",
+    "theoretical_background": "本题属于Theoretical Chemistry的化学平衡。模型 二聚化平衡物料衡算 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：2M <-> D, K=[D]/[M]^2\n\n已知参数：{\"K\": 10.0, \"M_total\": 0.5}\n\n任务：求平衡时 D 的物质浓度，取满足自由单体非负的根。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "2M <-> D, K=[D]/[M]^2",
+    "given_parameters": {
+      "K": 10.0,
+      "M_total": 0.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二聚化平衡物料衡算；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-015",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应计量",
+    "theory_name": "反应进度变量",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应计量。模型 反应进度变量 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A+B -> C\n\n已知参数：{\"A0\": 0.7, \"B0\": 0.4}\n\n任务：求最大反应进度 xi、终态 A 和 C。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A+B -> C",
+    "given_parameters": {
+      "A0": 0.7,
+      "B0": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "反应进度变量；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-016",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "随机反应网络",
+    "theory_name": "二状态详细平衡",
+    "theoretical_background": "本题属于Theoretical Chemistry的随机反应网络。模型 二状态详细平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：1 <-> 2, p1 k12=p2 k21\n\n已知参数：{\"k12\": 0.7, \"k21\": 1.4}\n\n任务：求平衡概率 p1、p2。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "1 <-> 2, p1 k12=p2 k21",
+    "given_parameters": {
+      "k12": 0.7,
+      "k21": 1.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二状态详细平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L1-017",
+    "difficulty_level": 1,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应动力学",
+    "theory_name": "速率方程量纲",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应动力学。模型 速率方程量纲 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：rate=k[A]^2[B]\n\n已知参数：{\"concentration_unit\": \"mol L^-1\", \"time_unit\": \"s\"}\n\n任务：判断总反应级数和 k 的单位。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "rate=k[A]^2[B]",
+    "given_parameters": {
+      "concentration_unit": "mol L^-1",
+      "time_unit": "s"
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "速率方程量纲；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-018",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "连续反应",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 连续反应 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A -> B -> C\n\n已知参数：{\"A0\": 1.0, \"k1\": 0.5, \"k2\": 0.2}\n\n任务：写出 B(t)，并求 B 达到最大值的时间。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A -> B -> C",
+    "given_parameters": {
+      "A0": 1.0,
+      "k1": 0.5,
+      "k2": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "连续反应；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-019",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "可逆一级反应",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 可逆一级反应 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A <-> B\n\n已知参数：{\"kf\": 0.4, \"kr\": 0.6, \"total\": 1.0}\n\n任务：求平衡 A、B 及非零动力学特征值。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A <-> B",
+    "given_parameters": {
+      "kf": 0.4,
+      "kr": 0.6,
+      "total": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "可逆一级反应；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-020",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "带产物衰减的平行路径",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 带产物衰减的平行路径 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A -> B, A -> C; B/C 可分别衰减\n\n已知参数：{\"dB\": 0.05, \"dC\": 0.02, \"kB\": 0.3, \"kC\": 0.1, \"t\": 5.0}\n\n任务：在 A0=1 时求 B(t)/C(t)，其中 A 的消耗率为 (kB+kC)A。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A -> B, A -> C; B/C 可分别衰减",
+    "given_parameters": {
+      "kB": 0.3,
+      "kC": 0.1,
+      "dB": 0.05,
+      "dC": 0.02,
+      "t": 5.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "带产物衰减的平行路径；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-021",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "中间体准稳态",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 中间体准稳态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dX/dt=kf A B-kr X\n\n已知参数：{\"A\": 0.8, \"B\": 1.2, \"kf\": 2.0, \"kr\": 5.0}\n\n任务：用准稳态近似求 X，并判断该近似需要的时间尺度条件。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dX/dt=kf A B-kr X",
+    "given_parameters": {
+      "kf": 2.0,
+      "kr": 5.0,
+      "A": 0.8,
+      "B": 1.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "中间体准稳态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-022",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酶动力学",
+    "theory_name": "Briggs-Haldane 近似",
+    "theoretical_background": "本题属于Theoretical Chemistry的酶动力学。模型 Briggs-Haldane 近似 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：E+S <-> ES -> E+P\n\n已知参数：{\"E_total\": 0.1, \"k1\": 2.0, \"k2\": 0.5, \"kminus1\": 1.0}\n\n任务：求 Km、Vmax，并写出速率式。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "E+S <-> ES -> E+P",
+    "given_parameters": {
+      "k1": 2.0,
+      "kminus1": 1.0,
+      "k2": 0.5,
+      "E_total": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Briggs-Haldane 近似；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-023",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酶动力学",
+    "theory_name": "Hill 协同性",
+    "theoretical_background": "本题属于Theoretical Chemistry的酶动力学。模型 Hill 协同性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：theta=S^n/(K^n+S^n)\n\n已知参数：{\"K\": 0.4, \"S\": 0.8, \"n\": 2}\n\n任务：求占据率，并解释 n>1 的数学含义。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "theta=S^n/(K^n+S^n)",
+    "given_parameters": {
+      "n": 2,
+      "K": 0.4,
+      "S": 0.8
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Hill 协同性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-024",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "酶动力学",
+    "theory_name": "竞争性抑制",
+    "theoretical_background": "本题属于Theoretical Chemistry的酶动力学。模型 竞争性抑制 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：v=Vmax S/(Km(1+I/Ki)+S)\n\n已知参数：{\"I\": 0.3, \"Ki\": 0.1, \"Km\": 0.2, \"S\": 0.4, \"Vmax\": 1.5}\n\n任务：求抑制条件下的 v，并说明 Vmax 是否改变。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "v=Vmax S/(Km(1+I/Ki)+S)",
+    "given_parameters": {
+      "Vmax": 1.5,
+      "Km": 0.2,
+      "S": 0.4,
+      "I": 0.3,
+      "Ki": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "竞争性抑制；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-025",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "统计热力学",
+    "theory_name": "三能级配分函数",
+    "theoretical_background": "本题属于Theoretical Chemistry的统计热力学。模型 三能级配分函数 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：Z=1+e^-1+e^-2\n\n已知参数：{\"energies_over_RT\": [0, 1, 2]}\n\n任务：求三个能级的概率和平均能量（以 RT 为单位）。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "Z=1+e^-1+e^-2",
+    "given_parameters": {
+      "energies_over_RT": [
+        0,
+        1,
+        2
+      ]
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "三能级配分函数；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-026",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "统计热力学",
+    "theory_name": "理想混合物化学势",
+    "theoretical_background": "本题属于Theoretical Chemistry的统计热力学。模型 理想混合物化学势 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：mu_A=mu_A°+RT ln x_A\n\n已知参数：{\"R\": 8.314, \"T\": 298, \"x_A\": 0.2}\n\n任务：求 mu_A-mu_A°，并说明 x_A->0 时的数学趋势。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "mu_A=mu_A°+RT ln x_A",
+    "given_parameters": {
+      "R": 8.314,
+      "T": 298,
+      "x_A": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "理想混合物化学势；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-027",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性反应网络",
+    "theory_name": "Brusselator 均匀稳态",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性反应网络。模型 Brusselator 均匀稳态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx/dt=A-(B+1)x+x^2y; dy/dt=Bx-x^2y\n\n已知参数：{\"A\": 1.2, \"B\": 2.4}\n\n任务：求均匀稳态 (x*,y*)。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx/dt=A-(B+1)x+x^2y; dy/dt=Bx-x^2y",
+    "given_parameters": {
+      "A": 1.2,
+      "B": 2.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Brusselator 均匀稳态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-028",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性动力系统",
+    "theory_name": "Brusselator 局部稳定性",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性动力系统。模型 Brusselator 局部稳定性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：J*= [[B-1,A^2],[-B,-A^2]]\n\n已知参数：{\"A\": 1.5, \"B\": 2.0}\n\n任务：计算 trace、determinant，并判定局部稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "J*= [[B-1,A^2],[-B,-A^2]]",
+    "given_parameters": {
+      "A": 1.5,
+      "B": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Brusselator 局部稳定性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-029",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应扩散",
+    "theory_name": "单组分扩散模态",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应扩散。模型 单组分扩散模态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：lambda_n=f'-D(n*pi/L)^2\n\n已知参数：{\"D\": 0.1, \"L\": 1.0, \"boundary\": \"Neumann\", \"f_prime\": 0.4, \"n\": 1}\n\n任务：求 n=1 模态增长率并判断该模态是否增长。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "lambda_n=f'-D(n*pi/L)^2",
+    "given_parameters": {
+      "f_prime": 0.4,
+      "D": 0.1,
+      "n": 1,
+      "L": 1.0,
+      "boundary": "Neumann"
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "单组分扩散模态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-030",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "随机反应网络",
+    "theory_name": "线性出生死亡过程",
+    "theoretical_background": "本题属于Theoretical Chemistry的随机反应网络。模型 线性出生死亡过程 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：birth=lambda, death=mu X\n\n已知参数：{\"lambda\": 4.0, \"mu\": 1.0}\n\n任务：求稳态均值和方差，并说明其分布类型。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "birth=lambda, death=mu X",
+    "given_parameters": {
+      "lambda": 4.0,
+      "mu": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "线性出生死亡过程；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-031",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "参数辨识",
+    "theory_name": "双指数退化的不可辨识性",
+    "theoretical_background": "本题属于Theoretical Chemistry的参数辨识。模型 双指数退化的不可辨识性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：y=a exp(-k1 t)+b exp(-k2 t)\n\n已知参数：{\"case\": \"k1=k2\"}\n\n任务：当 k1=k2 时，判断哪些参数仍可由 y(t) 唯一确定。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "y=a exp(-k1 t)+b exp(-k2 t)",
+    "given_parameters": {
+      "case": "k1=k2"
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "双指数退化的不可辨识性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-032",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性动力系统",
+    "theory_name": "势能 Hessian 稳定性",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性动力系统。模型 势能 Hessian 稳定性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：U(x)=a x^2/2+b x^4/4\n\n已知参数：{\"a\": -1.0, \"b\": 1.0}\n\n任务：求平衡点并按势能局部极小/极大分类。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "U(x)=a x^2/2+b x^4/4",
+    "given_parameters": {
+      "a": -1.0,
+      "b": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "势能 Hessian 稳定性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-033",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性动力系统",
+    "theory_name": "受恒定移除的 logistic 双平衡",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性动力系统。模型 受恒定移除的 logistic 双平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=kx(1-x/K)-h\n\n已知参数：{\"K\": 4.0, \"h\": 0.75, \"k\": 1.0}\n\n任务：求两个平衡点并判断其稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=kx(1-x/K)-h",
+    "given_parameters": {
+      "k": 1.0,
+      "K": 4.0,
+      "h": 0.75
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "受恒定移除的 logistic 双平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L2-034",
+    "difficulty_level": 2,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非平衡热力学",
+    "theory_name": "双状态熵产生",
+    "theoretical_background": "本题属于Theoretical Chemistry的非平衡热力学。模型 双状态熵产生 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：sigma=J ln((k12 p1)/(k21 p2))\n\n已知参数：{\"k12\": 0.2, \"k21\": 0.1, \"p1\": 0.7, \"p2\": 0.3}\n\n任务：计算净流 J、亲和力和熵产生率，并判断符号。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "sigma=J ln((k12 p1)/(k21 p2))",
+    "given_parameters": {
+      "k12": 0.2,
+      "k21": 0.1,
+      "p1": 0.7,
+      "p2": 0.3
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "双状态熵产生；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-035",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性反应网络",
+    "theory_name": "Brusselator Hopf 阈值",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性反应网络。模型 Brusselator Hopf 阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：trace=B-1-A^2, det=A^2\n\n已知参数：{\"A\": 1.2, \"B\": 2.5}\n\n任务：求 Hopf 阈值 B_c，判断给定 B 是否跨过线性 Hopf 条件，并给出振荡频率。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "trace=B-1-A^2, det=A^2",
+    "given_parameters": {
+      "A": 1.2,
+      "B": 2.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Brusselator Hopf 阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-036",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性反应网络",
+    "theory_name": "Schlögl 型三稳态判别",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性反应网络。模型 Schlögl 型三稳态判别 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：f(x)=-(x-1)(x-2)(x-3)\n\n已知参数：{}\n\n任务：求正平衡点并按一维动力学稳定性分类。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "f(x)=-(x-1)(x-2)(x-3)",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Schlögl 型三稳态判别；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-037",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应扩散",
+    "theory_name": "扩散驱动不稳定性",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应扩散。模型 扩散驱动不稳定性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：J=[[1,1],[-2,-1.5]], D=diag(0.01,1)\n\n已知参数：{\"q\": 1.0}\n\n任务：验证无扩散 ODE 稳定，但 q=1 扩散模态不稳定。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "J=[[1,1],[-2,-1.5]], D=diag(0.01,1)",
+    "given_parameters": {
+      "q": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 6,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "扩散驱动不稳定性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-038",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "机制可辨识性",
+    "theory_name": "饱和机制区分设计",
+    "theoretical_background": "本题属于Theoretical Chemistry的机制可辨识性。模型 饱和机制区分设计 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：H1=y=kx; H2=y=kx/(1+x/K)\n\n已知参数：{\"K\": 1.0, \"diagnostic_x\": 1.0, \"k\": 2.0, \"low_x\": [0.1, 0.2]}\n\n任务：解释低 x 数据为何难以区分机制，并给出 x=K 时两模型的预测。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "H1=y=kx; H2=y=kx/(1+x/K)",
+    "given_parameters": {
+      "k": 2.0,
+      "K": 1.0,
+      "low_x": [
+        0.1,
+        0.2
+      ],
+      "diagnostic_x": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "饱和机制区分设计；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-039",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "随机动力学",
+    "theory_name": "Kramers 越障率比",
+    "theoretical_background": "本题属于Theoretical Chemistry的随机动力学。模型 Kramers 越障率比 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：rate proportional to exp(-DeltaU/D)\n\n已知参数：{\"D\": 0.1, \"DeltaU\": 2.0}\n\n任务：计算指数因子，并说明升高噪声强度的方向性影响。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "rate proportional to exp(-DeltaU/D)",
+    "given_parameters": {
+      "DeltaU": 2.0,
+      "D": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Kramers 越障率比；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-040",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "化学主方程",
+    "theory_name": "非线性矩闭合",
+    "theoretical_background": "本题属于Theoretical Chemistry的化学主方程。模型 非线性矩闭合 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dimerization: 2X -> product at rate c X(X-1)\n\n已知参数：{}\n\n任务：判断一阶矩方程是否闭合，并指出出现的高阶矩。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dimerization: 2X -> product at rate c X(X-1)",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "非线性矩闭合；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-041",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非平衡热力学",
+    "theory_name": "反应循环详细平衡",
+    "theoretical_background": "本题属于Theoretical Chemistry的非平衡热力学。模型 反应循环详细平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：affinity=ln(prod(k_forward)/prod(k_reverse))\n\n已知参数：{\"forward_rates\": [2, 3, 1], \"reverse_rates\": [1, 1, 6]}\n\n任务：计算循环亲和力，并判断在详细平衡下是否允许持续净循环流。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "affinity=ln(prod(k_forward)/prod(k_reverse))",
+    "given_parameters": {
+      "forward_rates": [
+        2,
+        3,
+        1
+      ],
+      "reverse_rates": [
+        1,
+        1,
+        6
+      ]
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "反应循环详细平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-042",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性动力系统",
+    "theory_name": "pitchfork 正规形",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性动力系统。模型 pitchfork 正规形 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx/dt=mu*x-x^3\n\n已知参数：{\"mu\": 0.25}\n\n任务：求所有平衡点并判断稳定性，说明分岔类型。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx/dt=mu*x-x^3",
+    "given_parameters": {
+      "mu": 0.25
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "pitchfork 正规形；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-043",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "参数辨识",
+    "theory_name": "非线性反问题",
+    "theoretical_background": "本题属于Theoretical Chemistry的参数辨识。模型 非线性反问题 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：y=theta/(1+theta*x)\n\n已知参数：{\"observations\": [[1.0, 0.5], [2.0, 0.3333333333333333]]}\n\n任务：求 theta，并检查两条观测是否相容。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "y=theta/(1+theta*x)",
+    "given_parameters": {
+      "observations": [
+        [
+          1.0,
+          0.5
+        ],
+        [
+          2.0,
+          0.3333333333333333
+        ]
+      ]
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "非线性反问题；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-044",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应扩散",
+    "theory_name": "Fisher-KPP 前沿速度",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应扩散。模型 Fisher-KPP 前沿速度 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：ut=D uxx+r u(1-u/K)\n\n已知参数：{\"D\": 0.25, \"r\": 1.0}\n\n任务：求 pulled front 的最小线性传播速度，并说明这不是任意初值的完整解。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "ut=D uxx+r u(1-u/K)",
+    "given_parameters": {
+      "D": 0.25,
+      "r": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Fisher-KPP 前沿速度；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-045",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非理想化学平衡",
+    "theory_name": "活度修正",
+    "theoretical_background": "本题属于Theoretical Chemistry的非理想化学平衡。模型 活度修正 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：mu=mu°+RT ln(gamma*x)\n\n已知参数：{\"gamma\": 2.0, \"x\": 0.25}\n\n任务：求相对于 mu° 的无量纲对数项，并说明若误用 x 代替活度会造成什么方向的偏差。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "mu=mu°+RT ln(gamma*x)",
+    "given_parameters": {
+      "gamma": 2.0,
+      "x": 0.25
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "活度修正；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-046",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非线性动力系统",
+    "theory_name": "鞍结正规形",
+    "theoretical_background": "本题属于Theoretical Chemistry的非线性动力系统。模型 鞍结正规形 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx/dt=mu-x^2\n\n已知参数：{\"mu\": 4.0}\n\n任务：求平衡点、稳定性，并说明 μ 穿过零时发生什么。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx/dt=mu-x^2",
+    "given_parameters": {
+      "mu": 4.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "鞍结正规形；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-047",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "准稳态误差尺度",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 准稳态误差尺度 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：epsilon=k_form/k_decay\n\n已知参数：{\"k_decay\": 10.0, \"k_form\": 0.2}\n\n任务：计算时间尺度比 epsilon，并给出准稳态误差的阶数判断。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "epsilon=k_form/k_decay",
+    "given_parameters": {
+      "k_form": 0.2,
+      "k_decay": 10.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "准稳态误差尺度；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-048",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "参数辨识",
+    "theory_name": "指数衰减 Fisher 信息",
+    "theoretical_background": "本题属于Theoretical Chemistry的参数辨识。模型 指数衰减 Fisher 信息 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：y=A exp(-k t), Gaussian noise sigma\n\n已知参数：{\"A\": 2.0, \"k\": 0.5, \"sigma\": 0.1, \"times\": [0, 1]}\n\n任务：求关于 k 的 Fisher 信息 I_kk。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "y=A exp(-k t), Gaussian noise sigma",
+    "given_parameters": {
+      "A": 2.0,
+      "k": 0.5,
+      "times": [
+        0,
+        1
+      ],
+      "sigma": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "指数衰减 Fisher 信息；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-049",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "非平衡热力学",
+    "theory_name": "循环熵产生",
+    "theoretical_background": "本题属于Theoretical Chemistry的非平衡热力学。模型 循环熵产生 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：sigma=J*A, A=ln(product ratio)\n\n已知参数：{\"J\": 0.1, \"product_ratio\": 3.0}\n\n任务：求亲和力和熵产生率，判断第二定律符号。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "sigma=J*A, A=ln(product ratio)",
+    "given_parameters": {
+      "J": 0.1,
+      "product_ratio": 3.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "循环熵产生；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TC-L3-050",
+    "difficulty_level": 3,
+    "domain": "Theoretical Chemistry",
+    "subdomain": "反应网络",
+    "theory_name": "化学计量守恒量",
+    "theoretical_background": "本题属于Theoretical Chemistry的反应网络。模型 化学计量守恒量 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：A+B <-> C, stoich=(-1,-1,+1)\n\n已知参数：{}\n\n任务：求两个线性守恒量并说明如何降低系统维数。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "A+B <-> C, stoich=(-1,-1,+1)",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "化学计量守恒量；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-001",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "种群动力学",
+    "theory_name": "指数增长",
+    "theoretical_background": "本题属于Theoretical Biology的种群动力学。模型 指数增长 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dN/dt=rN\n\n已知参数：{\"N0\": 100, \"r\": 0.2, \"t\": 5}\n\n任务：求 N(t) 和倍增时间。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dN/dt=rN",
+    "given_parameters": {
+      "N0": 100,
+      "r": 0.2,
+      "t": 5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "指数增长；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-002",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "种群动力学",
+    "theory_name": "Logistic 平衡",
+    "theoretical_background": "本题属于Theoretical Biology的种群动力学。模型 Logistic 平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dN/dt=rN(1-N/K)\n\n已知参数：{\"K\": 100, \"r\": 0.5}\n\n任务：求平衡点和局部稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dN/dt=rN(1-N/K)",
+    "given_parameters": {
+      "r": 0.5,
+      "K": 100
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Logistic 平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-003",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "种群动力学",
+    "theory_name": "持续捕获 Logistic",
+    "theoretical_background": "本题属于Theoretical Biology的种群动力学。模型 持续捕获 Logistic 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dN/dt=rN(1-N/K)-h\n\n已知参数：{\"K\": 100, \"h\": 5, \"r\": 0.4}\n\n任务：求两个正平衡点并判断稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dN/dt=rN(1-N/K)-h",
+    "given_parameters": {
+      "r": 0.4,
+      "K": 100,
+      "h": 5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "持续捕获 Logistic；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-004",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病动力学",
+    "theory_name": "SIR 基本再生数",
+    "theoretical_background": "本题属于Theoretical Biology的流行病动力学。模型 SIR 基本再生数 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dS/dt=-beta SI, dI/dt=beta SI-gamma I\n\n已知参数：{\"beta\": 0.3, \"gamma\": 0.1}\n\n任务：求 R0 并判断无病平衡对感染入侵的局部稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dS/dt=-beta SI, dI/dt=beta SI-gamma I",
+    "given_parameters": {
+      "beta": 0.3,
+      "gamma": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "SIR 基本再生数；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-005",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "酶动力学",
+    "theory_name": "底物抑制速率",
+    "theoretical_background": "本题属于Theoretical Biology的酶动力学。模型 底物抑制速率 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：v=Vmax*S/(Km+S+S^2/Ki)\n\n已知参数：{\"Ki\": 2.0, \"Km\": 0.2, \"S\": 0.6, \"Vmax\": 0.8}\n\n任务：计算 v，并说明高底物极限为何不再趋于 Vmax。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "v=Vmax*S/(Km+S+S^2/Ki)",
+    "given_parameters": {
+      "Vmax": 0.8,
+      "Km": 0.2,
+      "Ki": 2.0,
+      "S": 0.6
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "底物抑制速率；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-006",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "生化调控",
+    "theory_name": "Langmuir 受体占据",
+    "theoretical_background": "本题属于Theoretical Biology的生化调控。模型 Langmuir 受体占据 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：theta=S/(K+S)\n\n已知参数：{\"K\": 0.5, \"S\": 1.0}\n\n任务：求受体占据率以及 S=K 时的占据率。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "theta=S/(K+S)",
+    "given_parameters": {
+      "K": 0.5,
+      "S": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Langmuir 受体占据；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-007",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "Lotka-Volterra 共存平衡",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 Lotka-Volterra 共存平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=ax-bxy, dy=-cy+dxy\n\n已知参数：{\"a\": 1.0, \"b\": 0.2, \"c\": 2.0, \"d\": 0.5}\n\n任务：求正共存平衡点。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=ax-bxy, dy=-cy+dxy",
+    "given_parameters": {
+      "a": 1.0,
+      "b": 0.2,
+      "c": 2.0,
+      "d": 0.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Lotka-Volterra 共存平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-008",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因调控",
+    "theory_name": "线性蛋白表达",
+    "theoretical_background": "本题属于Theoretical Biology的基因调控。模型 线性蛋白表达 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dP/dt=alpha-delta P\n\n已知参数：{\"alpha\": 3.0, \"delta\": 0.5}\n\n任务：求稳态蛋白水平和弛豫时间。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dP/dt=alpha-delta P",
+    "given_parameters": {
+      "alpha": 3.0,
+      "delta": 0.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "线性蛋白表达；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-009",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因调控",
+    "theory_name": "两态启动子占据",
+    "theoretical_background": "本题属于Theoretical Biology的基因调控。模型 两态启动子占据 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：p_on=kon/(kon+koff)\n\n已知参数：{\"koff\": 0.3, \"kon\": 0.2}\n\n任务：求稳态开启概率。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "p_on=kon/(kon+koff)",
+    "given_parameters": {
+      "kon": 0.2,
+      "koff": 0.3
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "两态启动子占据；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-010",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "群体遗传",
+    "theory_name": "突变选择平衡近似",
+    "theoretical_background": "本题属于Theoretical Biology的群体遗传。模型 突变选择平衡近似 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：q*=mu/s for recessive deleterious allele\n\n已知参数：{\"mu\": 0.001, \"s\": 0.1}\n\n任务：在给定小突变率和选择系数下计算近似 q*，并说明适用条件。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "q*=mu/s for recessive deleterious allele",
+    "given_parameters": {
+      "mu": 0.001,
+      "s": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "突变选择平衡近似；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-011",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "微生物生长",
+    "theory_name": "Chemostat 入侵条件",
+    "theoretical_background": "本题属于Theoretical Biology的微生物生长。模型 Chemostat 入侵条件 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：mu(S)=mumax*S/(Ks+S), dN=(mu-D)N\n\n已知参数：{\"D\": 0.5, \"Ks\": 0.1, \"S\": 0.5, \"mumax\": 1.0}\n\n任务：求 μ(S) 并判断种群能否在稀释率 D 下增长。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "mu(S)=mumax*S/(Ks+S), dN=(mu-D)N",
+    "given_parameters": {
+      "mumax": 1.0,
+      "Ks": 0.1,
+      "S": 0.5,
+      "D": 0.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Chemostat 入侵条件；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-012",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "捕食者入侵",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 捕食者入侵 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dy/dt=y(-c+d x)\n\n已知参数：{\"c\": 1.0, \"d\": 0.2, \"resident_prey\": 10.0}\n\n任务：在无捕食者的猎物平衡点 x=10 附近判断捕食者能否入侵。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dy/dt=y(-c+d x)",
+    "given_parameters": {
+      "resident_prey": 10.0,
+      "c": 1.0,
+      "d": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "捕食者入侵；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-013",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "群体动力学",
+    "theory_name": "两策略复制子",
+    "theoretical_background": "本题属于Theoretical Biology的群体动力学。模型 两策略复制子 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=x(1-x)(1-2x)\n\n已知参数：{}\n\n任务：求三个平衡点并判断稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=x(1-x)(1-2x)",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "两策略复制子；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-014",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "随机种群动力学",
+    "theory_name": "免疫-死亡过程均值方差",
+    "theoretical_background": "本题属于Theoretical Biology的随机种群动力学。模型 免疫-死亡过程均值方差 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：immigration lambda, death mu X\n\n已知参数：{\"X0\": 0, \"lambda\": 4.0, \"mu\": 1.0, \"t\": 2.0}\n\n任务：求时刻 t 的均值和方差。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "immigration lambda, death mu X",
+    "given_parameters": {
+      "lambda": 4.0,
+      "mu": 1.0,
+      "t": 2.0,
+      "X0": 0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "免疫-死亡过程均值方差；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-015",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "空间生态学",
+    "theory_name": "扩散种群线性模态",
+    "theoretical_background": "本题属于Theoretical Biology的空间生态学。模型 扩散种群线性模态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：du/dt=D uxx+r u\n\n已知参数：{\"D\": 0.25, \"L\": 1.0, \"n\": 1, \"r\": 0.36}\n\n任务：在 Dirichlet 区间上求 n=1 模态增长率并判断其是否增长。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "du/dt=D uxx+r u",
+    "given_parameters": {
+      "D": 0.25,
+      "r": 0.36,
+      "n": 1,
+      "L": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "扩散种群线性模态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-016",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "群体遗传",
+    "theory_name": "Hardy-Weinberg 组成",
+    "theoretical_background": "本题属于Theoretical Biology的群体遗传。模型 Hardy-Weinberg 组成 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：genotype frequencies p^2, 2pq, q^2\n\n已知参数：{\"p\": 0.7, \"q\": 0.3}\n\n任务：求三种基因型频率并检查总和。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "genotype frequencies p^2, 2pq, q^2",
+    "given_parameters": {
+      "p": 0.7,
+      "q": 0.3
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 2,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Hardy-Weinberg 组成；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L1-017",
+    "difficulty_level": 1,
+    "domain": "Theoretical Biology",
+    "subdomain": "资源竞争",
+    "theory_name": "Chemostat R*",
+    "theoretical_background": "本题属于Theoretical Biology的资源竞争。模型 Chemostat R* 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：mu=mumax*R/(Ks+R)=D\n\n已知参数：{\"D\": 0.4, \"Ks\": 0.2, \"mumax\": 1.0}\n\n任务：求维持种群所需的 R*。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "mu=mumax*R/(Ks+R)=D",
+    "given_parameters": {
+      "mumax": 1.0,
+      "Ks": 0.2,
+      "D": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "基础单模型、少量步骤且答案可直接独立核验。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Chemostat R*；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-018",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "Lotka-Volterra 局部线性化",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 Lotka-Volterra 局部线性化 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：J*=[[0,-b x*],[d y*,0]]\n\n已知参数：{\"b\": 0.2, \"d\": 0.5, \"x_star\": 4.0, \"y_star\": 5.0}\n\n任务：求 Jacobian 和特征值，并区分线性中心与渐近稳定。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "J*=[[0,-b x*],[d y*,0]]",
+    "given_parameters": {
+      "b": 0.2,
+      "d": 0.5,
+      "x_star": 4.0,
+      "y_star": 5.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Lotka-Volterra 局部线性化；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-019",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病动力学",
+    "theory_name": "SIR 最终规模",
+    "theoretical_background": "本题属于Theoretical Biology的流行病动力学。模型 SIR 最终规模 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：ln(s_inf/s0)=-R0(1-s_inf)\n\n已知参数：{\"R0\": 2.0, \"s0\": 0.99}\n\n任务：给出最终易感比例的隐式方程，并计算其数值根。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "ln(s_inf/s0)=-R0(1-s_inf)",
+    "given_parameters": {
+      "s0": 0.99,
+      "R0": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "SIR 最终规模；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-020",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病动力学",
+    "theory_name": "SEIR 早期增长率",
+    "theoretical_background": "本题属于Theoretical Biology的流行病动力学。模型 SEIR 早期增长率 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：(r+sigma)(r+gamma)=sigma*gamma*R0\n\n已知参数：{\"R0\": 2.0, \"gamma\": 0.2, \"sigma\": 0.5}\n\n任务：求正的早期指数增长率 r。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "(r+sigma)(r+gamma)=sigma*gamma*R0",
+    "given_parameters": {
+      "sigma": 0.5,
+      "gamma": 0.2,
+      "R0": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "SEIR 早期增长率；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-021",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "微生物生长",
+    "theory_name": "Chemostat 洗脱 Jacobian",
+    "theoretical_background": "本题属于Theoretical Biology的微生物生长。模型 Chemostat 洗脱 Jacobian 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dN=(mu(S)-D)N; dS=D(Sin-S)-mu(S)N/Y\n\n已知参数：{\"D\": 0.9, \"Ks\": 0.1, \"Sin\": 0.5, \"Y\": 1.0, \"mumax\": 1.0}\n\n任务：在 N=0、S=Sin 的洗脱平衡处给出 Jacobian 对角增长率并判断稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dN=(mu(S)-D)N; dS=D(Sin-S)-mu(S)N/Y",
+    "given_parameters": {
+      "mumax": 1.0,
+      "Ks": 0.1,
+      "Sin": 0.5,
+      "D": 0.9,
+      "Y": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Chemostat 洗脱 Jacobian；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-022",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因调控",
+    "theory_name": "对称 toggle 的均匀平衡",
+    "theoretical_background": "本题属于Theoretical Biology的基因调控。模型 对称 toggle 的均匀平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：x=alpha/(1+y^n), y=alpha/(1+x^n)\n\n已知参数：{\"alpha\": 4.0, \"n\": 2}\n\n任务：求对称平衡 x=y 的正根（给出方程和数值）。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "x=alpha/(1+y^n), y=alpha/(1+x^n)",
+    "given_parameters": {
+      "alpha": 4.0,
+      "n": 2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "对称 toggle 的均匀平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-023",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因表达",
+    "theory_name": "mRNA-蛋白线性系统",
+    "theoretical_background": "本题属于Theoretical Biology的基因表达。模型 mRNA-蛋白线性系统 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dm=alpha-gamma_m m; dp=beta m-gamma_p p\n\n已知参数：{\"gamma_m\": 0.5, \"gamma_p\": 0.1}\n\n任务：求齐次系统的两个特征值并解释时间尺度。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dm=alpha-gamma_m m; dp=beta m-gamma_p p",
+    "given_parameters": {
+      "gamma_m": 0.5,
+      "gamma_p": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "mRNA-蛋白线性系统；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-024",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "Logistic 猎物-捕食者共存可行性",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 Logistic 猎物-捕食者共存可行性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=r x(1-x/K)-a x y; dy=y(-c+d a x)\n\n已知参数：{\"K\": 10.0, \"a\": 0.1, \"c\": 0.5, \"d\": 0.2, \"r\": 1.0}\n\n任务：求由捕食者零增长得到的猎物平衡，并判断其是否落在 (0,K) 内。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=r x(1-x/K)-a x y; dy=y(-c+d a x)",
+    "given_parameters": {
+      "r": 1.0,
+      "K": 10.0,
+      "a": 0.1,
+      "c": 0.5,
+      "d": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Logistic 猎物-捕食者共存可行性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-025",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "空间生态学",
+    "theory_name": "两斑块迁移模态",
+    "theoretical_background": "本题属于Theoretical Biology的空间生态学。模型 两斑块迁移模态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx1=r x1-m(x1-x2), dx2=r x2+m(x1-x2)\n\n已知参数：{\"m\": 0.2, \"r\": 0.1}\n\n任务：求两个线性模态特征值并解释同步/差异模态。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx1=r x1-m(x1-x2), dx2=r x2+m(x1-x2)",
+    "given_parameters": {
+      "r": 0.1,
+      "m": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "两斑块迁移模态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-026",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病动力学",
+    "theory_name": "疫苗覆盖阈值",
+    "theoretical_background": "本题属于Theoretical Biology的流行病动力学。模型 疫苗覆盖阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：R_eff=R0(1-v)\n\n已知参数：{\"R0\": 5.0}\n\n任务：求使 R_eff<1 所需的最小覆盖率阈值。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "R_eff=R0(1-v)",
+    "given_parameters": {
+      "R0": 5.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "疫苗覆盖阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-027",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "年龄结构",
+    "theory_name": "二类 Leslie 矩阵",
+    "theoretical_background": "本题属于Theoretical Biology的年龄结构。模型 二类 Leslie 矩阵 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：L=[[1,2],[0.5,0]]\n\n已知参数：{}\n\n任务：求主特征值并判断渐近增长趋势。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "L=[[1,2],[0.5,0]]",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "二类 Leslie 矩阵；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-028",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "适应度动力学",
+    "theory_name": "竞争入侵适合度",
+    "theoretical_background": "本题属于Theoretical Biology的适应度动力学。模型 竞争入侵适合度 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：f_inv=r_inv(1-alpha*K_res/K_inv)\n\n已知参数：{\"K_inv\": 10.0, \"K_res\": 10.0, \"alpha\": 1.2, \"r_inv\": 0.4}\n\n任务：计算入侵者在居民环境中的初始增长率，并判断是否可入侵。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "f_inv=r_inv(1-alpha*K_res/K_inv)",
+    "given_parameters": {
+      "r_inv": 0.4,
+      "alpha": 1.2,
+      "K_res": 10.0,
+      "K_inv": 10.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "竞争入侵适合度；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-029",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "空间基因调控",
+    "theory_name": "生物 Turing 模态",
+    "theoretical_background": "本题属于Theoretical Biology的空间基因调控。模型 生物 Turing 模态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：J=[[1,-1.5],[1,-1.4]], D=diag(0.1,10)\n\n已知参数：{\"q\": 0.1}\n\n任务：验证均匀 ODE 稳定而 q=.1 扩散模态不稳定。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "J=[[1,-1.5],[1,-1.4]], D=diag(0.1,10)",
+    "given_parameters": {
+      "q": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 6,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "生物 Turing 模态；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-030",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "随机种群动力学",
+    "theory_name": "Logistic 平衡附近 OU 方差",
+    "theoretical_background": "本题属于Theoretical Biology的随机种群动力学。模型 Logistic 平衡附近 OU 方差 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dX=-k(X-mu)dt+sigma dW\n\n已知参数：{\"k\": 0.5, \"mu\": 2.0, \"sigma\": 0.4}\n\n任务：求平稳均值和方差，并说明这是线性化近似。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dX=-k(X-mu)dt+sigma dW",
+    "given_parameters": {
+      "k": 0.5,
+      "sigma": 0.4,
+      "mu": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 3,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Logistic 平衡附近 OU 方差；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-031",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "酶动力学",
+    "theory_name": "Hill 与 Michaelis-Menten 可辨识性",
+    "theoretical_background": "本题属于Theoretical Biology的酶动力学。模型 Hill 与 Michaelis-Menten 可辨识性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：H1=S/(1+S), H2=S^2/(1+S^2)\n\n已知参数：{\"S_diagnostic\": 2.0, \"S_match\": 1.0}\n\n任务：验证两模型在 S=1 相同，但在 S=2 可区分。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "H1=S/(1+S), H2=S^2/(1+S^2)",
+    "given_parameters": {
+      "S_match": 1.0,
+      "S_diagnostic": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Hill 与 Michaelis-Menten 可辨识性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-032",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病参数辨识",
+    "theory_name": "早期增长组合参数",
+    "theoretical_background": "本题属于Theoretical Biology的流行病参数辨识。模型 早期增长组合参数 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：i'(0)/i(0)=beta*S0-gamma\n\n已知参数：{\"S0\": 1.0, \"pairs\": [[0.3, 0.1], [0.4, 0.2]]}\n\n任务：判断两组 (beta,gamma) 是否由同一早期增长率区分。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "i'(0)/i(0)=beta*S0-gamma",
+    "given_parameters": {
+      "pairs": [
+        [
+          0.3,
+          0.1
+        ],
+        [
+          0.4,
+          0.2
+        ]
+      ],
+      "S0": 1.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "早期增长组合参数；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L2-033",
+    "difficulty_level": 2,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "两物种竞争可行性",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 两物种竞争可行性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=x(1-x-alpha*y), dy=y(1-y-beta*x)\n\n已知参数：{\"alpha\": 1.5, \"beta\": 0.5}\n\n任务：求形式上的内部平衡，并判断其是否为正。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=x(1-x-alpha*y), dy=y(1-y-beta*x)",
+    "given_parameters": {
+      "alpha": 1.5,
+      "beta": 0.5
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含耦合关系、特殊条件或机制判断，需要多步推理。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "两物种竞争可行性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-034",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因调控",
+    "theory_name": "toggle 对称破缺阈值",
+    "theoretical_background": "本题属于Theoretical Biology的基因调控。模型 toggle 对称破缺阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：x=alpha/(1+x^n), n=2\n\n已知参数：{}\n\n任务：求对称 toggle 的对称破缺临界点 (x,alpha)，并指出它是对称性分岔而非简单单变量鞍结。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "x=alpha/(1+x^n), n=2",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "toggle 对称破缺阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-035",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "基因调控",
+    "theory_name": "三节点负反馈 Hopf 阈值",
+    "theoretical_background": "本题属于Theoretical Biology的基因调控。模型 三节点负反馈 Hopf 阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：(lambda+1)^3+g=0\n\n已知参数：{\"g\": 8.0}\n\n任务：求特征根并判断是否处于 Hopf 临界。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "(lambda+1)^3+g=0",
+    "given_parameters": {
+      "g": 8.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "三节点负反馈 Hopf 阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-036",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "空间基因调控",
+    "theory_name": "扩散驱动不稳定性",
+    "theoretical_background": "本题属于Theoretical Biology的空间基因调控。模型 扩散驱动不稳定性 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：J=[[-1,2],[-1.5,1.2]], D=diag(0.1,10)\n\n已知参数：{\"q\": 0.1}\n\n任务：判断无扩散均匀系统和 q=.1 模态的稳定性。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "J=[[-1,2],[-1.5,1.2]], D=diag(0.1,10)",
+    "given_parameters": {
+      "q": 0.1
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "扩散驱动不稳定性；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-037",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "空间生态学",
+    "theory_name": "Allee 效应三平衡",
+    "theoretical_background": "本题属于Theoretical Biology的空间生态学。模型 Allee 效应三平衡 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=x(1-x)(x-A)\n\n已知参数：{\"A\": 0.2}\n\n任务：求 0、A、1 的稳定性并解释阈值含义。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=x(1-x)(x-A)",
+    "given_parameters": {
+      "A": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Allee 效应三平衡；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-038",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "随机种群动力学",
+    "theory_name": "分枝过程灭绝概率",
+    "theoretical_background": "本题属于Theoretical Biology的随机种群动力学。模型 分枝过程灭绝概率 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：Poisson offspring mean m\n\n已知参数：{\"m\": 0.8}\n\n任务：判断最终灭绝概率。若 m>1，说明应求哪个方程的最小根。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "Poisson offspring mean m",
+    "given_parameters": {
+      "m": 0.8
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "分枝过程灭绝概率；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-039",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "微生物生长",
+    "theory_name": "底物抑制与双正根",
+    "theoretical_background": "本题属于Theoretical Biology的微生物生长。模型 底物抑制与双正根 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：mu(S)=mumax*S/(Ks+S+S^2/Ki)\n\n已知参数：{\"D\": 0.4, \"Ki\": 1.0, \"Ks\": 0.1, \"mumax\": 1.0}\n\n任务：求 μ(S)=D 的两个正根，并判断增长区间。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "mu(S)=mumax*S/(Ks+S+S^2/Ki)",
+    "given_parameters": {
+      "mumax": 1.0,
+      "Ks": 0.1,
+      "Ki": 1.0,
+      "D": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "底物抑制与双正根；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-040",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "替代稳定态与阈值",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 替代稳定态与阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=-x(x-1)(x-0.3)\n\n已知参数：{\"threshold\": 0.3}\n\n任务：求三个平衡及稳定性，并说明初值低于阈值的长期状态。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=-x(x-1)(x-0.3)",
+    "given_parameters": {
+      "threshold": 0.3
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "替代稳定态与阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-041",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病参数辨识",
+    "theory_name": "未知初始易感比例",
+    "theoretical_background": "本题属于Theoretical Biology的流行病参数辨识。模型 未知初始易感比例 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：early_growth=beta*S0-gamma\n\n已知参数：{\"observed_growth\": 0.2}\n\n任务：判断只观测早期增长率时哪些参数不可辨识。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "early_growth=beta*S0-gamma",
+    "given_parameters": {
+      "observed_growth": 0.2
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "未知初始易感比例；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-042",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "中性中心的耗散扰动",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 中性中心的耗散扰动 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：LV center plus -epsilon*x^2,-epsilon*y^2\n\n已知参数：{\"epsilon\": 0.05}\n\n任务：说明理想 Lotka-Volterra 中心加入正的自限性后，局部轨道的定性变化。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "LV center plus -epsilon*x^2,-epsilon*y^2",
+    "given_parameters": {
+      "epsilon": 0.05
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "中性中心的耗散扰动；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-043",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "群体调控",
+    "theory_name": "合成 quorum-sensing 双稳态",
+    "theoretical_background": "本题属于Theoretical Biology的群体调控。模型 合成 quorum-sensing 双稳态 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=-(x-0.5)(x-1.5)(x-3)\n\n已知参数：{}\n\n任务：求三个平衡点并判断稳定性，说明中间点的分隔作用。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=-(x-0.5)(x-1.5)(x-3)",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Synthetic Mathematical Model: benchmark-defined quorum-sensing normal form."
+  },
+  {
+    "task_id": "TB-L3-044",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "理论生态学",
+    "theory_name": "Fisher-KPP 速度判别",
+    "theoretical_background": "本题属于Theoretical Biology的理论生态学。模型 Fisher-KPP 速度判别 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：c*=2 sqrt(D r)\n\n已知参数：{\"D\": 0.5, \"r\": 0.2, \"tested_speeds\": [0.5, 0.8]}\n\n任务：计算 c*，判断速度 .5 与 .8 哪个满足 pulled-front 线性判据。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "c*=2 sqrt(D r)",
+    "given_parameters": {
+      "D": 0.5,
+      "r": 0.2,
+      "tested_speeds": [
+        0.5,
+        0.8
+      ]
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "Fisher-KPP 速度判别；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-045",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "多尺度生物化学",
+    "theory_name": "快中间体有效速率",
+    "theoretical_background": "本题属于Theoretical Biology的多尺度生物化学。模型 快中间体有效速率 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：k1 X <-> kminus1 Y -> k2 Z\n\n已知参数：{\"k1\": 2.0, \"k2\": 0.4, \"kminus1\": 8.0}\n\n任务：在 Y 快速准稳态下求 X->Z 的有效速率常数，并给出尺度比。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "k1 X <-> kminus1 Y -> k2 Z",
+    "given_parameters": {
+      "k1": 2.0,
+      "kminus1": 8.0,
+      "k2": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "快中间体有效速率；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-046",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "流行病网络",
+    "theory_name": "下一代矩阵阈值",
+    "theoretical_background": "本题属于Theoretical Biology的流行病网络。模型 下一代矩阵阈值 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：K=[[0.4,0.2],[0.1,0.5]]\n\n已知参数：{}\n\n任务：求谱半径并判断无病状态的线性入侵条件。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "K=[[0.4,0.2],[0.1,0.5]]",
+    "given_parameters": {},
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "下一代矩阵阈值；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-047",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "适应动力学",
+    "theory_name": "演化分支判据",
+    "theoretical_background": "本题属于Theoretical Biology的适应动力学。模型 演化分支判据 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：fitness s(y,x)=(y-x)^2+c(y-x)^3\n\n已知参数：{\"second_derivative_at_singular\": 2.0, \"singular_strategy\": 0.0}\n\n任务：给定奇异点的二阶适合度曲率为正，判断其是否满足分支所需的 disruptive-selection 方向；不要宣称仅凭此即可证明全局分支。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "fitness s(y,x)=(y-x)^2+c(y-x)^3",
+    "given_parameters": {
+      "singular_strategy": 0.0,
+      "second_derivative_at_singular": 2.0
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "演化分支判据；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-048",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "随机基因调控",
+    "theory_name": "噪声基因电路平稳分布",
+    "theoretical_background": "本题属于Theoretical Biology的随机基因调控。模型 噪声基因电路平稳分布 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=-k(x-mu)dt+sigma dW\n\n已知参数：{\"k\": 0.5, \"mu\": 2.0, \"sigma\": 0.4}\n\n任务：求平稳均值、方差，并写出平稳分布的类型。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=-k(x-mu)dt+sigma dW",
+    "given_parameters": {
+      "k": 0.5,
+      "mu": 2.0,
+      "sigma": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "噪声基因电路平稳分布；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-049",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "资源竞争",
+    "theory_name": "单资源 R* 排斥原则",
+    "theoretical_background": "本题属于Theoretical Biology的资源竞争。模型 单资源 R* 排斥原则 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：species i survives if R_supply>R*_i\n\n已知参数：{\"R_star_1\": 0.2, \"R_star_2\": 0.4}\n\n任务：在只有一个限制性资源且无其他维持机制时判断长期共存。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "species i survives if R_supply>R*_i",
+    "given_parameters": {
+      "R_star_1": 0.2,
+      "R_star_2": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 4,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "单资源 R* 排斥原则；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  },
+  {
+    "task_id": "TB-L3-050",
+    "difficulty_level": 3,
+    "domain": "Theoretical Biology",
+    "subdomain": "生态系统建模",
+    "theory_name": "竞争模型的共存对照",
+    "theoretical_background": "本题属于Theoretical Biology的生态系统建模。模型 竞争模型的共存对照 被作为封闭的数学对象处理；题目只要求在给定假设下推导和验证，不把模型内推导解释为真实经验定律的证明。",
+    "assumptions": [
+      "所有参数均为实数且处于题面给定的适用范围。",
+      "仅使用题面公开的模型、初值、边界条件和观测量。",
+      "数值结论的精度由 checker 中的绝对/相对容差确定。"
+    ],
+    "problem_statement": "给定数学模型：dx=x(1-x-y); dy=y(0.8-0.4x-y)\n\n已知参数：{\"alpha_12\": 1.0, \"alpha_21\": 0.4}\n\n任务：求内部平衡，判断其正性，并说明它与排斥型竞争的差别。\n请返回结构化 JSON 的 final_answer，并同时给出推导、适用条件和验证说明。",
+    "mathematical_model": "dx=x(1-x-y); dy=y(0.8-0.4x-y)",
+    "given_parameters": {
+      "alpha_12": 1.0,
+      "alpha_21": 0.4
+    },
+    "expected_reasoning": [
+      "识别模型中的状态量、参数和适用条件。",
+      "按题目要求完成符号推导或确定性数值计算。",
+      "检查边界条件、稳定性、守恒关系或可辨识性。",
+      "区分模型内结论、数值证据和未被证明的经验主张。"
+    ],
+    "difficulty_justification": "包含非线性、稳定性、可辨识性、反例或多机制判别，需进行结构化分析。",
+    "estimated_reasoning_steps": 5,
+    "source_type": "Synthetic Mathematical Model",
+    "source_reference": "竞争模型的共存对照；本任务参数由 benchmark 明确给定，不声称使用外部实验数据或新增文献结果。"
+  }
+]
