@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the six local DeepSeek G1 batches concurrently.
+"""Run the six local DeepSeek theory-benchmark batches concurrently.
 
 Keys are read only into child-process environments.  They are never placed in
 argv, output files, or the process status report.
@@ -35,6 +35,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-output-tokens", type=int, default=512)
     parser.add_argument("--input-price-usd-per-1k", type=float, default=0.005)
     parser.add_argument("--output-price-usd-per-1k", type=float, default=0.015)
+    parser.add_argument("--mode", choices=("G1", "G4"), default="G1")
     parser.add_argument("--level", type=int, choices=(1, 2, 3), default=1)
     parser.add_argument("--limit", type=int, default=100)
     return parser.parse_args()
@@ -80,7 +81,7 @@ def main() -> int:
             "--limit",
             str(args.limit),
             "--mode",
-            "G1",
+            args.mode,
             "--provider",
             "openai",
             "--allow-paid",
@@ -119,6 +120,7 @@ def main() -> int:
         results.append(
             {
                 "model_id": model_id,
+                "mode": args.mode,
                 "pid": process.pid,
                 "exit_code": process.returncode,
                 "output_dir": str(Path("models") / model_id),
@@ -129,6 +131,7 @@ def main() -> int:
         "started_at_utc": started,
         "finished_at_utc": finished,
         "parallel": True,
+        "mode": args.mode,
         "models": results,
         "all_processes_exit_zero": all(row["exit_code"] == 0 for row in results),
     }

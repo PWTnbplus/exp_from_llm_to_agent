@@ -40,6 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--level", type=int, choices=(1, 2, 3), required=True)
     parser.add_argument("--reference-run-dir", type=Path)
+    parser.add_argument("--mode", choices=("G1", "G4"), default="G1")
     parser.add_argument("--max-cost-usd", type=float, default=2.0)
     parser.add_argument("--max-output-tokens", type=int, default=2048)
     parser.add_argument("--input-price-usd-per-1k", type=float, default=0.001)
@@ -78,15 +79,16 @@ def main() -> int:
         if source_preflight.is_dir():
             shutil.copytree(source_preflight, run_dir / "preflight")
 
+    is_agent = args.mode == "G4"
     manifest = {
         "run_id": args.run_id,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "benchmark": "theory_benchmark_v2",
         "difficulty_level": args.level,
         "difficulty_label": {1: "easy", 2: "mid", 3: "diff"}[args.level],
-        "mode": "G1",
-        "group": "G1",
-        "runner": "llm_only",
+        "mode": args.mode,
+        "group": args.mode,
+        "runner": "single_agent" if is_agent else "llm_only",
         "provider": "openai-compatible",
         "base_url": "https://token.ctflow.cn/v1",
         "models": list(MODELS),
@@ -98,7 +100,9 @@ def main() -> int:
         "input_price_usd_per_1k_proxy": args.input_price_usd_per_1k,
         "output_price_usd_per_1k_proxy": args.output_price_usd_per_1k,
         "transport_retries": 0,
-        "tools_enabled": False,
+        "tools_enabled": is_agent,
+        "allowed_tools": ["calculate_expression"] if is_agent else [],
+        "max_model_calls_per_task": 8 if is_agent else 1,
         "answer_key_copied": False,
         "prompt_provenance": prompt_records,
         "benchmark_provenance": copied_data,

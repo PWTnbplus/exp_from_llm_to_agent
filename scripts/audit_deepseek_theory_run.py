@@ -31,6 +31,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--level", type=int, choices=(1, 2, 3), required=True)
+    parser.add_argument("--mode", choices=("G1", "G4"), default="G1")
     parser.add_argument("--expected-tasks", type=int, default=100)
     return parser.parse_args()
 
@@ -48,8 +49,8 @@ def add_usage(total: dict[str, float], result: dict[str, Any]) -> None:
             total["cost_usd"] += value
 
 
-def audit_model(model_dir: Path, level: int, expected: int) -> dict[str, Any]:
-    files = sorted(model_dir.glob("G1__*.json"))
+def audit_model(model_dir: Path, level: int, mode: str, expected: int) -> dict[str, Any]:
+    files = sorted(model_dir.glob(f"{mode}__*.json"))
     statuses: Counter[str] = Counter()
     validation_statuses: Counter[str] = Counter()
     errors: Counter[str] = Counter()
@@ -71,6 +72,8 @@ def audit_model(model_dir: Path, level: int, expected: int) -> dict[str, Any]:
         if isinstance(task_id, str):
             task_ids.append(task_id)
         statuses[str(result.get("status"))] += 1
+        if result.get("group") != mode:
+            errors["wrong_group"] += 1
         validation = result.get("validation") or {}
         validation_statuses[str(validation.get("status"))] += 1
         for error in validation.get("errors") or []:
@@ -93,6 +96,7 @@ def audit_model(model_dir: Path, level: int, expected: int) -> dict[str, Any]:
         and not missing_traces
         and not wrong_level
         and key_hits == 0
+        and errors.get("wrong_group", 0) == 0
     )
     return {
         "model_id": model_dir.name,
@@ -114,7 +118,7 @@ def audit_model(model_dir: Path, level: int, expected: int) -> dict[str, Any]:
 def main() -> int:
     args = parse_args()
     run_dir = args.run_dir.resolve()
-    models = [audit_model(run_dir / "models" / model, args.level, args.expected_tasks) for model in MODELS]
+    models = [audit_model(run_dir / "models" / model, args.level, args.mode, args.expected_tasks) for model in MODELS]
     total = {
         "result_files": sum(row["result_files"] for row in models),
         "expected_result_files": len(MODELS) * args.expected_tasks,
@@ -127,7 +131,7 @@ def main() -> int:
         "run_dir": str(run_dir),
         "benchmark": "theory_benchmark_v2",
         "level": args.level,
-        "mode": "G1",
+        "mode": args.mode,
         "answer_key_read": False,
         "cost_interpretation": "Recorded provider usage cost_usd using the run's local input/output proxy; CTFlow billing was not available in the provider catalog.",
         "models": models,
