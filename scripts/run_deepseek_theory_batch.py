@@ -33,6 +33,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--key-dir", type=Path, default=root / "api_key" / "deepseek")
     parser.add_argument("--max-cost-usd", type=float, default=2.0)
     parser.add_argument("--max-output-tokens", type=int, default=512)
+    parser.add_argument("--input-price-usd-per-1k", type=float, default=0.005)
+    parser.add_argument("--output-price-usd-per-1k", type=float, default=0.015)
+    parser.add_argument("--limit", type=int, default=100)
     return parser.parse_args()
 
 
@@ -57,8 +60,8 @@ def main() -> int:
                 "LLM_BASE_URL": "https://token.ctflow.cn/v1",
                 "LLM_MODEL": model_id,
                 "LLM_MAX_RETRIES": "0",
-                "LLM_COST_PER_1K_INPUT_TOKENS": "0.005",
-                "LLM_COST_PER_1K_OUTPUT_TOKENS": "0.015",
+                "LLM_COST_PER_1K_INPUT_TOKENS": str(args.input_price_usd_per_1k),
+                "LLM_COST_PER_1K_OUTPUT_TOKENS": str(args.output_price_usd_per_1k),
                 "LLM_MAX_OUTPUT_TOKENS": str(args.max_output_tokens),
                 "PYTHONPATH": str(root / "src"),
                 "PYTHONUTF8": "1",
@@ -74,7 +77,7 @@ def main() -> int:
             "--level",
             "1",
             "--limit",
-            "100",
+            str(args.limit),
             "--mode",
             "G1",
             "--provider",
