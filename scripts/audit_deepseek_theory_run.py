@@ -33,6 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--level", type=int, choices=(1, 2, 3), required=True)
     parser.add_argument("--mode", choices=("G1", "G4"), default="G1")
     parser.add_argument("--expected-tasks", type=int, default=100)
+    parser.add_argument("--models", nargs="+", help="model IDs; defaults to run_manifest.json or the DeepSeek compatibility list")
     return parser.parse_args()
 
 
@@ -118,10 +119,19 @@ def audit_model(model_dir: Path, level: int, mode: str, expected: int) -> dict[s
 def main() -> int:
     args = parse_args()
     run_dir = args.run_dir.resolve()
-    models = [audit_model(run_dir / "models" / model, args.level, args.mode, args.expected_tasks) for model in MODELS]
+    model_ids = args.models
+    if not model_ids:
+        manifest = run_dir / "run_manifest.json"
+        if manifest.is_file():
+            try:
+                model_ids = [str(x) for x in json.loads(manifest.read_text(encoding="utf-8")).get("models", [])]
+            except (OSError, json.JSONDecodeError):
+                model_ids = None
+    model_ids = model_ids or list(MODELS)
+    models = [audit_model(run_dir / "models" / model, args.level, args.mode, args.expected_tasks) for model in model_ids]
     total = {
         "result_files": sum(row["result_files"] for row in models),
-        "expected_result_files": len(MODELS) * args.expected_tasks,
+        "expected_result_files": len(model_ids) * args.expected_tasks,
         "input_tokens": sum(row["usage_totals"]["input_tokens"] for row in models),
         "output_tokens": sum(row["usage_totals"]["output_tokens"] for row in models),
         "cost_usd_proxy": sum(row["usage_totals"]["cost_usd"] for row in models),

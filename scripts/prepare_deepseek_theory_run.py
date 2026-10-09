@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare a provenance-safe output directory for one DeepSeek difficulty run."""
+"""Prepare a provenance-safe output directory for one CTFlow difficulty run."""
 from __future__ import annotations
 
 import argparse
@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+from typing import Any
 
 
 MODELS = (
@@ -46,7 +47,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input-price-usd-per-1k", type=float, default=0.001)
     parser.add_argument("--output-price-usd-per-1k", type=float, default=0.003)
     parser.add_argument("--data-dir", type=Path, default=root / "data" / "theory_benchmark_v2")
+    parser.add_argument("--model-config", type=Path, help="JSON model matrix containing provider groups and key-file mappings")
+    parser.add_argument("--provider-group", help="provider group in --model-config")
+    parser.add_argument("--base-url", default="https://token.ctflow.cn/v1")
     return parser.parse_args()
+
+
+def load_models(root: Path, config_path: Path | None, group: str | None) -> tuple[list[str], str, str]:
+    if config_path is None:
+        return list(MODELS), "deepseek", "deepseek"
+    payload: dict[str, Any] = json.loads(config_path.read_text(encoding="utf-8"))
+    groups = payload.get("groups") or {}
+    if not group or group not in groups:
+        raise ValueError(f"model config requires an existing --provider-group; available={sorted(groups)}")
+    models = [str(row["model_id"]) for row in groups[group].get("models") or []]
+    if not models:
+        raise ValueError(f"no models configured for provider group {group}")
+    return models, group, str(groups[group].get("key_dir", group))
 
 
 def main() -> int:
@@ -54,6 +71,7 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     run_dir = (args.target_dir / args.run_id).resolve()
     run_dir.mkdir(parents=True, exist_ok=False)
+    models, provider_group, key_dir_name = load_models(root, args.model_config.resolve() if args.model_config else None, args.provider_group)
     provenance = run_dir / "provenance"
     provenance.mkdir()
 
@@ -90,8 +108,9 @@ def main() -> int:
         "group": args.mode,
         "runner": "single_agent" if is_agent else "llm_only",
         "provider": "openai-compatible",
-        "base_url": "https://token.ctflow.cn/v1",
-        "models": list(MODELS),
+        "base_url": args.base_url,
+        "provider_group": provider_group,
+        "models": models,
         "tasks_expected_per_model": 100,
         "concurrent_models": True,
         "max_output_tokens": args.max_output_tokens,
@@ -106,7 +125,7 @@ def main() -> int:
         "answer_key_copied": False,
         "prompt_provenance": prompt_records,
         "benchmark_provenance": copied_data,
-        "local_key_directory": "api_key/deepseek (keys read only into child process environment)",
+        "local_key_directory": f"api_key/{key_dir_name} (keys read only into child process environment)",
     }
     (run_dir / "run_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

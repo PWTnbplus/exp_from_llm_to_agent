@@ -23,7 +23,7 @@ from .experiment.recorder import ResultRecorder
 from .experiment.runner import run_one
 from .models.provider import MockLLMProvider, OpenAICompatibleProvider
 from .theory_benchmark.analysis import analyze as analyze_theory
-from .theory_benchmark.runner import MODES as THEORY_MODES, run_task as run_theory_task
+from .theory_benchmark.runner import MODE_TO_GROUP, MODES as THEORY_MODES, run_task as run_theory_task
 from .theory_benchmark.contamination import contamination_manifest, generate_private_dynamic_cases
 from .theory_benchmark.schema import DATA_DIR, load_benchmark, load_public_benchmark, validate_benchmark
 from .theory_benchmark.verification import verify_candidate
@@ -254,6 +254,7 @@ def _build_parser() -> argparse.ArgumentParser:
     theory_batch.add_argument("--limit", type=int)
     theory_batch.add_argument("--output", type=Path, default=Path("results/theory_batch"))
     theory_batch.add_argument("--data-dir", type=Path, default=DATA_DIR)
+    theory_batch.add_argument("--resume", action="store_true", help="resume a partially completed batch without duplicating valid task results")
     theory_analyze = sub.add_parser("theory-analyze")
     theory_analyze.add_argument("--input", type=Path, default=Path("results/theory"))
     theory_analyze.add_argument("--output", type=Path, default=Path("figures/theory"))
@@ -417,8 +418,38 @@ def main(argv: list[str] | None = None) -> int:
         if not tasks:
             raise SystemExit("theory batch filter selected no tasks")
         rows = []
-        per_task_cap = args.max_cost_usd / len(tasks) if args.provider == "openai" and args.max_cost_usd is not None else None
-        for task in tasks:
+        resumed = 0
+        existing_cost = 0.0
+        pending_tasks = list(tasks) if not args.resume else []
+        if args.resume:
+            quarantine = args.output / "resume_quarantine"
+            for task in tasks:
+                prefix = f"{args.mode}__{task['task_id'].replace(':', '__')}__"
+                candidates = sorted(args.output.glob(f"{prefix}*.json"))
+                valid = False
+                for candidate in candidates:
+                    try:
+                        saved = json.loads(candidate.read_text(encoding="utf-8"))
+                    except (OSError, json.JSONDecodeError):
+                        quarantine.mkdir(parents=True, exist_ok=True)
+                        candidate.replace(quarantine / candidate.name)
+                        continue
+                    if saved.get("task_id") != task["task_id"] or saved.get("group") != MODE_TO_GROUP.get(args.mode, args.mode.upper()):
+                        continue
+                    usage = (saved.get("metadata") or {}).get("budget", {}).get("used", {})
+                    try:
+                        existing_cost += max(0.0, float(usage.get("cost_usd", 0.0)))
+                    except (TypeError, ValueError):
+                        pass
+                    valid = True
+                    break
+                if valid:
+                    resumed += 1
+                else:
+                    pending_tasks.append(task)
+        remaining_cost = max(0.0, float(args.max_cost_usd or 0.0) - existing_cost)
+        per_task_cap = remaining_cost / len(pending_tasks) if args.provider == "openai" and pending_tasks else None
+        for task in pending_tasks:
             if args.provider == "mock":
                 responses = [{"task_id": task["task_id"], "final_answer": {}}]
                 if args.mode in ("G3", "g3", "iterative_reflection"):
@@ -427,7 +458,7 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 provider = OpenAICompatibleProvider(max_cost_usd=per_task_cap, max_output_tokens=args.max_output_tokens)
             rows.append(run_theory_task(task["task_id"], provider, args.mode, data_dir=args.data_dir, output_dir=args.output))
-        summary = {"n": len(rows), "mode": args.mode, "provider": args.provider, "completed": sum(row["status"] == "COMPLETED" for row in rows), "correct": sum(row.get("validation", {}).get("answer_correct", False) for row in rows), "output": str(args.output)}
+        summary = {"n": len(rows), "resumed": resumed, "mode": args.mode, "provider": args.provider, "completed": sum(row["status"] == "COMPLETED" for row in rows), "correct": sum(row.get("validation", {}).get("answer_correct", False) for row in rows), "output": str(args.output)}
         print(json.dumps(summary, ensure_ascii=False, indent=2))
         return 0
     if args.command == "theory-analyze":

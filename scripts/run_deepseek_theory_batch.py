@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the six local DeepSeek theory-benchmark batches concurrently.
+"""Run local CTFlow theory-benchmark batches concurrently.
 
 Keys are read only into child-process environments.  They are never placed in
 argv, output files, or the process status report.
@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+from typing import Any
 
 
 MODELS = (
@@ -23,6 +24,20 @@ MODELS = (
     ("exp1-deepseek-r1-distill-qwen-32b.txt", "deepseek-r1-distill-qwen-32b"),
     ("exp1-deepseek-r1-distill-qwen-7b.txt", "deepseek-r1-distill-qwen-7b"),
 )
+
+
+def load_models(root: Path, config_path: Path | None, group: str | None) -> tuple[tuple[str, str], str]:
+    if config_path is None:
+        return MODELS, "deepseek"
+    payload: dict[str, Any] = json.loads(config_path.read_text(encoding="utf-8"))
+    groups = payload.get("groups") or {}
+    if not group or group not in groups:
+        raise ValueError(f"model config requires an existing --provider-group; available={sorted(groups)}")
+    rows = groups[group].get("models") or []
+    models = tuple((str(row["key_file"]), str(row["model_id"])) for row in rows)
+    if not models:
+        raise ValueError(f"no models configured for provider group {group}")
+    return models, group
 
 
 def parse_args() -> argparse.Namespace:
@@ -38,6 +53,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mode", choices=("G1", "G4"), default="G1")
     parser.add_argument("--level", type=int, choices=(1, 2, 3), default=1)
     parser.add_argument("--limit", type=int, default=100)
+    parser.add_argument("--resume", action="store_true", help="skip valid task results already present in the run directory")
+    parser.add_argument("--model-config", type=Path, help="JSON model matrix containing provider groups and key-file mappings")
+    parser.add_argument("--provider-group", help="provider group in --model-config")
+    parser.add_argument("--base-url", default="https://token.ctflow.cn/v1")
     return parser.parse_args()
 
 
@@ -47,9 +66,10 @@ def main() -> int:
     run_dir = args.run_dir.resolve()
     data_dir = args.data_dir.resolve()
     key_dir = args.key_dir.resolve()
+    models, provider_group = load_models(root, args.model_config.resolve() if args.model_config else None, args.provider_group)
     processes: list[tuple[str, subprocess.Popen[str], object, object]] = []
     started = datetime.now(timezone.utc).isoformat()
-    for key_name, model_id in MODELS:
+    for key_name, model_id in models:
         output_dir = run_dir / "models" / model_id
         output_dir.mkdir(parents=True, exist_ok=True)
         key = (key_dir / key_name).read_text(encoding="utf-8").strip()
@@ -59,7 +79,7 @@ def main() -> int:
         env.update(
             {
                 "LLM_API_KEY": key,
-                "LLM_BASE_URL": "https://token.ctflow.cn/v1",
+                "LLM_BASE_URL": args.base_url,
                 "LLM_MODEL": model_id,
                 "LLM_MAX_RETRIES": "0",
                 "LLM_COST_PER_1K_INPUT_TOKENS": str(args.input_price_usd_per_1k),
@@ -92,6 +112,8 @@ def main() -> int:
             "--output",
             str(output_dir),
         ]
+        if args.resume:
+            argv.append("--resume")
         stdout_handle = (output_dir / "host_stdout.log").open("w", encoding="utf-8")
         stderr_handle = (output_dir / "host_stderr.log").open("w", encoding="utf-8")
         process = subprocess.Popen(
@@ -132,6 +154,7 @@ def main() -> int:
         "finished_at_utc": finished,
         "parallel": True,
         "mode": args.mode,
+        "provider_group": provider_group,
         "models": results,
         "all_processes_exit_zero": all(row["exit_code"] == 0 for row in results),
     }

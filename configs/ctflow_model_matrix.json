@@ -1,0 +1,62 @@
+{
+  "base_url": "https://token.ctflow.cn/v1",
+  "groups": {
+    "deepseek": {
+      "key_dir": "deepseek",
+      "models": [
+        {"model_id": "deepseek-r1-distill-qwen-1.5b", "key_file": "deepseek-r1-distill-qwen-1.5b.txt"},
+        {"model_id": "deepseek-v3.2", "key_file": "deepseek-v3point2.txt"},
+        {"model_id": "deepseek-v4.1-flash", "key_file": "deepseek-v4.1-flash.txt"},
+        {"model_id": "deepseek-r1-distill-qwen-14b", "key_file": "exp1-deepseek-r1-distill-qwen-14b.txt"},
+        {"model_id": "deepseek-r1-distill-qwen-32b", "key_file": "exp1-deepseek-r1-distill-qwen-32b.txt"},
+        {"model_id": "deepseek-r1-distill-qwen-7b", "key_file": "exp1-deepseek-r1-distill-qwen-7b.txt"}
+      ]
+    },
+    "glm": {
+      "key_dir": "glm",
+      "models": [
+        {"model_id": "glm-4.7", "key_file": "glm-4.7.txt"},
+        {"model_id": "glm-5.1", "key_file": "glm-5.1.txt"},
+        {"model_id": "glm-5.2-fast-preview", "key_file": "glm-5.2-fast-preview.txt"},
+        {"model_id": "glm-5.2", "key_file": "glm-5.2.txt"},
+        {"model_id": "glm-5.3", "key_file": "glm-5.3.txt"},
+        {"model_id": "glm-5", "key_file": "glm-5.txt"}
+      ]
+    },
+    "kimi": {
+      "key_dir": "kimi",
+      "models": [
+        {"model_id": "kimi-k2-thinking", "key_file": "kimi-k2-thinking.txt"},
+        {"model_id": "kimi-k2.5", "key_file": "kimi-k2.5.txt"},
+        {"model_id": "kimi-k2.6", "key_file": "kimi-k2.6.txt"},
+        {"model_id": "kimi-k2.7-code-highspeed", "key_file": "kimi-k2.7-code-highspeed.txt"},
+        {"model_id": "kimi-k2.7-code", "key_file": "kimi-k2.7-code.txt"},
+        {"model_id": "kimi-k3", "key_file": "exp1-kimi-k3.txt"}
+      ]
+    },
+    "minimax": {
+      "key_dir": "MiniMax",
+      "models": [
+        {"model_id": "MiniMax-M2.1", "key_file": "MiniMax-M2.1.txt"},
+        {"model_id": "MiniMax-M2.5", "key_file": "MiniMax-M2.5.txt"}
+      ]
+    },
+    "qwen": {
+      "key_dir": "qwen",
+      "models": [
+        {"model_id": "qwen-coder-plus", "key_file": "qwen-coder-plus.txt"},
+        {"model_id": "qwen-deep-research-2025-12-15", "key_file": "qwen-deep-research-2025-12-15.txt"}
+      ]
+    }
+  },
+  "excluded_key_files": [
+    {"key_dir": "MiniMax", "key_file": "MiniMax-02-hd.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "MiniMax", "key_file": "MiniMax-02-turbo.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "MiniMax", "key_file": "MiniMax-2.8-turbo.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "qwen", "key_file": "qwen-1.8b-chat.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "qwen", "key_file": "qwen-14b-chat.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "qwen", "key_file": "qwen-72b-chat.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "qwen", "key_file": "qwen-audio-3.0-asr-flash.txt", "reason": "exact model ID not present in CTFlow /models"},
+    {"key_dir": "MiniMax", "key_file": "MiniMax-M3.txt", "reason": "minimal chat preflight returned HTTP 503"}
+  ]
+}
