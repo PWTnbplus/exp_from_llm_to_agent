@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the six local DeepSeek Level-1 G1 batches concurrently.
+"""Run the six local DeepSeek G1 batches concurrently.
 
 Keys are read only into child-process environments.  They are never placed in
 argv, output files, or the process status report.
@@ -35,6 +35,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-output-tokens", type=int, default=512)
     parser.add_argument("--input-price-usd-per-1k", type=float, default=0.005)
     parser.add_argument("--output-price-usd-per-1k", type=float, default=0.015)
+    parser.add_argument("--level", type=int, choices=(1, 2, 3), default=1)
     parser.add_argument("--limit", type=int, default=100)
     return parser.parse_args()
 
@@ -75,7 +76,7 @@ def main() -> int:
             "--data-dir",
             str(data_dir),
             "--level",
-            "1",
+            str(args.level),
             "--limit",
             str(args.limit),
             "--mode",
