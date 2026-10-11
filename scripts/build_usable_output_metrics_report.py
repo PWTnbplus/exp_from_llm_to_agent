@@ -98,6 +98,20 @@ def classify_exclusion(raw: dict[str, Any], selected: dict[str, Any], raw_class:
     return "no_output_or_other_error"
 
 
+def response_presence(result: dict[str, Any]) -> tuple[int, int]:
+    """Return provider calls and calls with non-empty visible response content."""
+    traces = (result.get("metadata") or {}).get("provider_trace") or []
+    calls = [item for item in traces if isinstance(item, dict)]
+    nonempty = 0
+    for call in calls:
+        response = call.get("response") or {}
+        content = response.get("content")
+        tool_calls = response.get("tool_calls")
+        if (isinstance(content, str) and content.strip()) or tool_calls:
+            nonempty += 1
+    return len(calls), nonempty
+
+
 def group_stat(records: list[dict[str, Any]], keys: tuple[str, ...]) -> list[dict[str, Any]]:
     groups: dict[tuple[Any, ...], Counter[str]] = defaultdict(Counter)
     for record in records:
@@ -135,6 +149,7 @@ def build_records(root: Path) -> tuple[list[dict[str, Any]], int, int]:
         selected_path = recovery_path if recovery_path and recovery_path.exists() else Path(row.get("selected_result_path") or raw_path)
         selected = load(selected_path) if selected_path.exists() else raw
         actual, extraction = _recover_final_output(selected)
+        selected_provider_calls, selected_nonempty_responses = response_presence(selected)
         raw_class = classify(raw)
         selected_class = classify(selected)
         exclusion = classify_exclusion(raw, selected, raw_class, selected_class, actual)
@@ -159,6 +174,9 @@ def build_records(root: Path) -> tuple[list[dict[str, Any]], int, int]:
                 "extraction": extraction,
                 "raw_class": raw_class,
                 "selected_class": selected_class,
+                "selected_provider_calls": selected_provider_calls,
+                "selected_nonempty_responses": selected_nonempty_responses,
+                "selected_has_nonempty_response": selected_nonempty_responses > 0,
                 "raw_format_failure": raw_class.startswith("format_"),
                 "exclusion": exclusion,
                 "usable": usable,
@@ -179,6 +197,9 @@ def render(root: Path, output: Path, records: list[dict[str, Any]], total: int, 
     strict_correct = sum(record["strict_correct"] for record in usable)
     clean = sum(not record["raw_format_failure"] for record in usable)
     recovered = len(usable) - clean
+    no_response_records = sum(not record["selected_has_nonempty_response"] for record in records)
+    no_response_excluded = sum(not record["selected_has_nonempty_response"] and not record["usable"] for record in records)
+    no_response_with_stored_output = sum(not record["selected_has_nonempty_response"] and record["usable"] for record in records)
     lengths = [len(json.dumps(record["output"], ensure_ascii=False, separators=(",", ":"))) for record in usable]
     leaf_counts = [len(flatten(record["output"])) for record in usable]
     lengths.sort()
@@ -214,7 +235,12 @@ def render(root: Path, output: Path, records: list[dict[str, Any]], total: int, 
             ["排除：policy violation", exclusion_counts["policy_violation"], pct(exclusion_counts["policy_violation"], total)],
             ["排除：格式/schema 错误且无可用 output", exclusion_counts["unusable_format_or_schema"], pct(exclusion_counts["unusable_format_or_schema"], total)],
             ["排除：无 output 或其他错误", exclusion_counts["no_output_or_other_error"], pct(exclusion_counts["no_output_or_other_error"], total)],
+            ["没有非空 provider response/content", no_response_records, pct(no_response_records, total)],
+            ["其中因无响应排除", no_response_excluded, pct(no_response_excluded, total)],
+            ["无 provider response 但有 stored/recovered output", no_response_with_stored_output, pct(no_response_with_stored_output, len(usable))],
         ]),
+        "",
+        "说明：前面的排除类别按优先级互斥；“没有非空 provider response/content”是额外诊断指标，可能与超时、403、provider/API 或 policy violation 重叠，不应再次相加。",
         "",
         f"补入旧索引的直接 run：{unindexed_runs} 个；总记录数保持为 {total:,}。",
         "",
