@@ -50,6 +50,14 @@ def add_usage(total: dict[str, float], result: dict[str, Any]) -> None:
             total["cost_usd"] += value
 
 
+def counter_rows(values: Counter[str]) -> list[dict[str, Any]]:
+    """Use list records so strict case-insensitive JSON parsers accept reports."""
+    return [
+        {"key": key, "count": count}
+        for key, count in sorted(values.items(), key=lambda item: item[0])
+    ]
+
+
 def audit_model(model_dir: Path, level: int, mode: str, expected: int) -> dict[str, Any]:
     files = sorted(model_dir.glob(f"{mode}__*.json"))
     statuses: Counter[str] = Counter()
@@ -107,9 +115,9 @@ def audit_model(model_dir: Path, level: int, mode: str, expected: int) -> dict[s
         "wrong_level_task_ids": wrong_level,
         "malformed_result_files": malformed,
         "missing_trace_files": missing_traces,
-        "status_counts": dict(statuses),
-        "validation_status_counts": dict(validation_statuses),
-        "validation_error_counts": dict(errors),
+        "status_counts": counter_rows(statuses),
+        "validation_status_counts": counter_rows(validation_statuses),
+        "validation_error_counts": counter_rows(errors),
         "usage_totals": usage,
         "credential_pattern_hits": key_hits,
         "complete_structurally": complete,

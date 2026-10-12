@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 
+from scripts.audit_theory_matrix import counter_rows
 from scripts.audit_and_complete_theory_matrix import inspect_run
 
 
@@ -66,3 +68,9 @@ def test_trace_escape_is_reported_without_following_external_path(tmp_path: Path
     model = report["models"][0]
     assert model["raw_io_complete"] is False
     assert any(item["error"] == "trace_path_escapes_model_directory" for item in model["trace_read_errors"])
+
+
+def test_counter_rows_preserves_case_distinct_errors_without_json_key_collisions() -> None:
+    rows = counter_rows(Counter({"x_star": 1, "X_star": 2}))
+
+    assert rows == [{"key": "X_star", "count": 2}, {"key": "x_star", "count": 1}]
