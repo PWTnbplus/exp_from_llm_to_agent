@@ -64,7 +64,8 @@
     "provider_requests": 0,
     "branch": "autopilot/scientific-law-discovery",
     "remote_push_verified_before_cycle": true,
-    "remote_push_status": "no push needed for this audit-only cycle",
+    "remote_push_status": "attempted_after_commit_failed_network_unreachable",
+    "remote_push_error": "git push origin autopilot/scientific-law-discovery failed: unable to access github.com:443 via configured proxy",
     "next_blocker": "Need independent mathematical oracle verification for selected G5 proof graphs, a verified model snapshot, positive hard model/tool/token/USD limits, and explicit paid-run authorization before G6 real execution."
   }
 }
