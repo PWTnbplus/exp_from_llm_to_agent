@@ -124,6 +124,7 @@ def main() -> int:
     g5_report = read_optional(g5_report_path or Path("__missing__"), {})
     usable_report = root.parent / "VALID_RESPONSE_OUTPUT_METRICS_REPORT.md"
     matrix = matrix_rows(root)
+    failure_reconciliation = read_optional(organized / "failure_recovery_20261012" / "failure_reconciliation_summary.json", {})
 
     standard = compact_standard_audit(standard_audit if isinstance(standard_audit, dict) else {})
     local_recovery = {
@@ -148,6 +149,15 @@ def main() -> int:
             "raw_records_not_modified", "private_answer_key_read",
         )
     } if isinstance(g5_report, dict) else {}
+    failure_summary = {
+        "path": str(organized / "failure_recovery_20261012"),
+        "exists": isinstance(failure_reconciliation, dict) and bool(failure_reconciliation),
+        "row_count": failure_reconciliation.get("row_count", 0) if isinstance(failure_reconciliation, dict) else 0,
+        "by_group": failure_reconciliation.get("by_group", {}) if isinstance(failure_reconciliation, dict) else {},
+        "provider_requests_made": failure_reconciliation.get("provider_requests_made", 0) if isinstance(failure_reconciliation, dict) else 0,
+        "raw_results_modified": failure_reconciliation.get("raw_results_modified", False) if isinstance(failure_reconciliation, dict) else False,
+        "synthetic_results_created": failure_reconciliation.get("synthetic_results_created", False) if isinstance(failure_reconciliation, dict) else False,
+    }
     provenance = {}
     for label, path in (("whole_pros.zip", args.whole_skill_zip), ("whole_pros_g5.zip", args.g5_skill_zip)):
         provenance[label] = {"path": str(path.resolve()), "exists": path.is_file(), "sha256": sha256(path.resolve()) if path.is_file() else None}
@@ -155,13 +165,14 @@ def main() -> int:
     summary = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "benchmark_root": str(root),
-        "answer_key_read": False,
+        "answer_key_read": bool(failure_summary.get("exists") and failure_summary.get("provider_requests_made") == 0),
         "raw_results_modified": False,
         "synthetic_results_created": False,
         "skill_provenance": provenance,
         "g1_g4_structural": standard,
         "g1_g4_local_recovery": local_recovery,
         "g2_g3_matrix": matrix,
+        "g2_g3_failure_reconciliation": failure_summary,
         "g5_answer_given": g5,
         "usable_output_report": {
             "path": str(usable_report),
@@ -177,7 +188,7 @@ def main() -> int:
     lines = [
         "# Benchmark 有效数据与本地修复核对报告",
         "",
-        f"> 生成时间：{summary['generated_at_utc']}。本报告只整理已有运行、trace、恢复目录和审计产物；不读取私有答案键，不调用 provider，不修改 raw 结果。",
+        f"> 生成时间：{summary['generated_at_utc']}。本报告只整理已有运行、trace、恢复目录和审计产物；失败 reconciliation 仅使用本地 evaluator 读取私有答案键生成 PASS/MODEL_ERROR，不输出答案键、不调用 provider、不修改 raw 结果。",
         "",
         "## 1. 口径和隔离",
         "",
@@ -213,19 +224,36 @@ def main() -> int:
         "",
         "G2/G3 的 `RECORDED_RESULT` 只表示存在原始 result artifact；`RECORDED_FAILURE` 和 `MISSING_RAW_RESULT` 不应当被当作正确答案。G3 的 launcher/完成状态若未全通过，正式比较应标为 `PARTIAL`，不能因为每个子进程退出码或索引存在而宣称完整实验。",
         "",
-        "## 5. G5 answer-given 修复结果",
+        "## 5. G2/G3 failure reconciliation (failure is not wrong)",
+        "",
+        "This derived layer treats FAILED, provider/access errors, timeouts, policy/budget violations, parse failures, and missing raw artifacts as failures rather than wrong answers. The runner's default answer_correct=false is not used for those rows. Only a completed row with a real payload and an independent MODEL_ERROR is counted as ANSWER_WRONG.",
+        "",
+        table(["group", "rows", "correct", "wrong (completed only)", "failed/unproven", "missing raw", "failed -> recovered correct", "failed payload wrong (not counted)"], [
+            [group, (failure_summary.get("by_group", {}).get(group, {}) or {}).get("row_count", 0),
+             ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).get("ANSWER_CORRECT", 0),
+             ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).get("ANSWER_WRONG", 0),
+             sum(value for key, value in ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).items() if str(key).startswith("FAILED")),
+             ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).get("MISSING_RAW_RESULT", 0),
+             ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).get("FAILED_RECOVERED_CORRECT", 0),
+             ((failure_summary.get("by_group", {}).get(group, {}) or {}).get("failure_class_counts", {}) or {}).get("FAILED_WITH_PAYLOAD_EVALUATED_WRONG_NOT_COUNTED", 0)]
+            for group in ("G2", "G3")
+        ]),
+        "",
+        f"Machine-readable reconciliation: `{organized / 'failure_recovery_20261012'}`. Provider requests made: `{failure_summary.get('provider_requests_made', 0)}`; raw results modified: `{failure_summary.get('raw_results_modified', False)}`.",
+        "",
+        "## 6. G5 answer-given 修复结果",
         "",
         table(["指标", "值"], [[key, value] for key, value in g5.items()]),
         "",
         "G5 本轮本地修复选择同一 task/model 下最新的、已有 attempt 中可通过 G5 final-package schema 的 observable package。恢复记录仍保留当前最终 attempt 的 provider error/status 和 source attempt lineage，因此不能写成当前请求成功。剩余 `UNPROVEN_INVALID_SUBMISSION` 只有不完整模型输出，无法凭空补齐。",
         "",
-        "## 6. 可交付与阻塞",
+        "## 7. 可交付与阻塞",
         "",
         "- 可交付：普通组 canonical 结构审计、已有 format/provider/timeout recovery 的选中视图、G2/G3 completion ledger 与 I/O integrity、G5 strict compliance layer，以及本报告 JSON/Markdown。",
         "- 未做：新的真实 provider/API 重试。当前没有本次重试的明确模型、调用数、美元硬上限和授权，因此按 skill 记为 `BLOCKED_EXTERNAL_RETRIAL`，避免产生未预算的付费数据。",
         "- 不可恢复数据不会被删除；raw 日志、失败记录、orphan attempt 和恢复失败仍在原目录中备查。",
         "",
-        "## 7. 备查路径",
+        "## 8. 备查路径",
         "",
         f"- 普通组结构审计：`{organized / 'g1_g4_data_audit.json'}`",
         f"- 普通组组织索引：`{organized / 'summary.json'}`、`{organized / 'format_failures'}`",
