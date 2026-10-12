@@ -154,6 +154,145 @@ def expected_task_ids(data_dir: Path, manifest: dict[str, Any]) -> list[str]:
     return values
 
 
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _type_ok(value: Any, expected: str) -> bool:
+    if expected == "string":
+        return isinstance(value, str) and bool(value.strip())
+    if expected == "string_or_null":
+        return value is None or (isinstance(value, str) and bool(value.strip()))
+    if expected == "bool":
+        return isinstance(value, bool)
+    if expected == "object":
+        return isinstance(value, dict)
+    if expected == "list":
+        return isinstance(value, list)
+    if expected == "int":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected == "number":
+        return _is_number(value)
+    if expected == "any":
+        return True
+    raise ValueError(f"unsupported field type: {expected}")
+
+
+def derive_task_id_from_filename(path: Path, mode: str, expected_task_ids: list[str]) -> str | None:
+    """Return a task ID only when the registered filename encoding is unique."""
+    stem = path.stem
+    prefix = f"{mode}__"
+    matches = [
+        task_id
+        for task_id in expected_task_ids
+        if stem.startswith(f"{prefix}{task_id.replace(':', '__')}__")
+    ]
+    return matches[0] if len(matches) == 1 else None
+
+
+def audit_result_fields(
+    result: dict[str, Any],
+    *,
+    mode: str,
+    model_id: str,
+    expected_task_id: str | None,
+) -> dict[str, Any]:
+    """Check the runner result contract without reading any answer key."""
+    required: dict[str, str] = {
+        "task_id": "string",
+        "runner": "string",
+        "mode": "string",
+        "group": "string",
+        "model_id": "string",
+        "status": "string",
+        "protocol_valid": "bool",
+        "evaluator_valid": "bool",
+        "mock": "bool",
+        "answer": "any",
+        "task": "object",
+        "validation": "object",
+        "run_id": "string",
+        "trace_path": "string_or_null",
+        "metadata": "object",
+    }
+    validation_fields = {
+        "status": "string",
+        "task_id": "string",
+        "answer_correct": "bool",
+        "errors": "list",
+    }
+    metadata_fields = {
+        "started_at": "string",
+        "provider_calls": "int",
+        "provider_trace": "list",
+        "policy": "object",
+        "budget": "object",
+    }
+    budget_fields = {"input_tokens": "number", "output_tokens": "number", "cost_usd": "number"}
+    issues: list[dict[str, Any]] = []
+    repairs: list[dict[str, Any]] = []
+
+    def check(container: dict[str, Any], field: str, expected: str, prefix: str) -> None:
+        if field not in container:
+            issues.append({"field": f"{prefix}{field}", "code": "MISSING", "expected": expected})
+        elif not _type_ok(container[field], expected):
+            issues.append(
+                {
+                    "field": f"{prefix}{field}",
+                    "code": "TYPE_INVALID",
+                    "expected": expected,
+                    "actual": type(container[field]).__name__,
+                }
+            )
+
+    for field, expected in required.items():
+        check(result, field, expected, "")
+
+    validation = result.get("validation")
+    if isinstance(validation, dict):
+        for field, expected in validation_fields.items():
+            check(validation, field, expected, "validation.")
+    metadata = result.get("metadata")
+    if isinstance(metadata, dict):
+        for field, expected in metadata_fields.items():
+            check(metadata, field, expected, "metadata.")
+        budget = metadata.get("budget")
+        if isinstance(budget, dict):
+            used = budget.get("used")
+            if not isinstance(used, dict):
+                issues.append({"field": "metadata.budget.used", "code": "MISSING_OR_INVALID", "expected": "object"})
+            else:
+                for field, expected in budget_fields.items():
+                    check(used, field, expected, "metadata.budget.used.")
+
+    def add_repair(field: str, value: Any, source: str) -> None:
+        repairs.append({"field": field, "derived_value": value, "source": source, "raw_unchanged": True})
+
+    # These values are uniquely fixed by the registered run context.  They are
+    # reported as a repair plan, never inserted into the raw result.
+    if "task_id" not in result and expected_task_id is not None:
+        add_repair("task_id", expected_task_id, "registered_filename")
+    if "runner" not in result:
+        add_repair("runner", mode, "manifest.mode")
+    if "mode" not in result:
+        add_repair("mode", mode, "manifest.mode")
+    if "group" not in result:
+        add_repair("group", mode, "manifest.mode")
+    if "model_id" not in result:
+        add_repair("model_id", model_id, "manifest.model_directory")
+    if isinstance(validation, dict) and "task_id" not in validation and expected_task_id is not None:
+        add_repair("validation.task_id", expected_task_id, "registered_filename")
+
+    issue_codes = Counter(issue["code"] for issue in issues)
+    return {
+        "complete": not issues,
+        "issues": issues,
+        "issue_counts": [{"key": key, "count": issue_codes[key]} for key in sorted(issue_codes)],
+        "repairable_fields": repairs,
+        "repairable_field_count": len(repairs),
+    }
+
+
 def summary_exit_codes(run_dir: Path) -> dict[str, Any]:
     path = run_dir / "parallel_launcher_summary.json"
     payload, error = parse_json_file(path)
@@ -199,6 +338,9 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
         trace_errors: list[dict[str, Any]] = []
         wrong_mode: list[str] = []
         wrong_group: list[str] = []
+        field_issue_counts: Counter[str] = Counter()
+        field_issue_files: list[dict[str, Any]] = []
+        field_repair_rows: list[dict[str, Any]] = []
         credential_hits = 0
         for path in result_paths:
             raw, read_error = read_utf8(path)
@@ -215,8 +357,45 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
                 continue
             serialized = json.dumps(result, ensure_ascii=False)
             credential_hits += serialized.lower().count("sk-")
-            task_id = str(result.get("task_id"))
-            entry = {"path": str(path), "name": path.name, "result": result}
+            raw_task_id = result.get("task_id")
+            derived_task_id = derive_task_id_from_filename(path, mode, task_ids)
+            task_id = (
+                str(raw_task_id)
+                if isinstance(raw_task_id, str) and raw_task_id.strip()
+                else derived_task_id or f"__UNIDENTIFIED__{path.name}"
+            )
+            field_audit = audit_result_fields(
+                result,
+                mode=mode,
+                model_id=model_id,
+                expected_task_id=derived_task_id,
+            )
+            for issue in field_audit["issues"]:
+                field_issue_counts[issue["code"]] += 1
+            if field_audit["issues"]:
+                field_issue_files.append(
+                    {
+                        "file": path.name,
+                        "task_id": derived_task_id or raw_task_id,
+                        "issues": field_audit["issues"],
+                    }
+                )
+            for repair in field_audit["repairable_fields"]:
+                field_repair_rows.append(
+                    {
+                        "model_id": model_id,
+                        "task_id": derived_task_id or raw_task_id,
+                        "raw_result_path": str(path),
+                        **repair,
+                    }
+                )
+            entry = {
+                "path": str(path),
+                "name": path.name,
+                "result": result,
+                "field_audit": field_audit,
+                "derived_task_id": derived_task_id,
+            }
             parsed_by_task.setdefault(task_id, []).append(entry)
             if result.get("mode") != mode:
                 wrong_mode.append(path.name)
@@ -246,6 +425,14 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
                 "wrong_mode_files": wrong_mode,
                 "wrong_group_files": wrong_group,
                 "credential_marker_hits": credential_hits,
+                "field_issue_counts": [
+                    {"key": key, "count": field_issue_counts[key]}
+                    for key in sorted(field_issue_counts)
+                ],
+                "field_issue_file_count": len(field_issue_files),
+                "field_issue_files": field_issue_files,
+                "field_repair_count": len(field_repair_rows),
+                "field_schema_complete": not field_issue_files,
                 "task_ids_recorded": len(set(parsed_by_task) & expected_set),
                 "missing_task_ids": missing,
                 "unexpected_task_ids": unexpected,
@@ -261,6 +448,7 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
                     and not trace_errors
                     and not wrong_mode
                     and not wrong_group
+                    and not field_issue_files
                 ),
             }
         )
@@ -293,15 +481,23 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
             else:
                 result = candidates[0]["result"]
                 raw_status = result.get("status")
+                field_audit = candidates[0]["field_audit"]
                 row = {
                     "model_id": model_id,
                     "task_id": task_id,
-                    "state": "RECORDED_FAILURE" if raw_status != "COMPLETED" else "RECORDED_RESULT",
+                    "state": (
+                        "SCHEMA_INCOMPLETE"
+                        if not field_audit["complete"]
+                        else "RECORDED_FAILURE" if raw_status != "COMPLETED" else "RECORDED_RESULT"
+                    ),
                     "raw_result_path": candidates[0]["path"],
                     "raw_status": raw_status,
                     "validation_status": (result.get("validation") or {}).get("status"),
                     "reason": "raw_result_preserved",
                 }
+                if not field_audit["complete"]:
+                    row["field_issues"] = field_audit["issues"]
+                    row["repairable_fields"] = field_audit["repairable_fields"]
             ledger_rows.append(row)
 
     counts = Counter(row["state"] for row in ledger_rows)
@@ -321,12 +517,19 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
         "expected_task_model_rows": len(task_ids) * len(model_ids),
         "completion_state_counts": dict(counts),
         "models": model_reports,
+        "field_repair_ledger": field_repair_rows,
+        "field_repair_ledger_complete": all(
+            row.get("raw_unchanged") is True for row in field_repair_rows
+        ),
+        "field_schema_complete": all(row["field_schema_complete"] for row in model_reports),
         "all_model_directories_writable": all(row["directory_probe"].get("writable") for row in model_reports),
         "all_model_raw_io_complete": all(row["raw_io_complete"] for row in model_reports),
         "derived_completion_ledger_complete": len(ledger_rows) == len(task_ids) * len(model_ids),
         "repair_scope": [
             "validated UTF-8 and JSON readability",
             "validated trace path containment and JSONL readability",
+            "validated the runner result, validation, metadata, and budget field contract",
+            "recorded only context-derived field repair plans; no raw result was rewritten",
             "probed run/model directory writeability with temporary files",
             "wrote a complete denominator ledger without fabricating results",
         ],
@@ -343,9 +546,14 @@ def inspect_run(run_dir: Path, data_dir: Path, write_derived: bool) -> tuple[dic
         "expected_task_ids": task_ids,
         "model_ids": model_ids,
         "rows": ledger_rows,
+        "field_repair_ledger": field_repair_rows,
+        "field_repair_ledger_complete": all(
+            row.get("raw_unchanged") is True for row in field_repair_rows
+        ),
         "state_definitions": {
             "RECORDED_RESULT": "A readable raw result with status COMPLETED.",
             "RECORDED_FAILURE": "A readable raw result whose recorded status is not COMPLETED.",
+            "SCHEMA_INCOMPLETE": "A readable raw result whose required result/validation/metadata field contract is incomplete or has invalid types.",
             "MISSING_RAW_RESULT": "No raw result was recorded for the registered task/model pair.",
             "DUPLICATE_RAW_RESULTS": "More than one raw result was recorded for the registered task/model pair.",
         },
