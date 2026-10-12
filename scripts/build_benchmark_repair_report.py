@@ -125,6 +125,7 @@ def main() -> int:
     usable_report = root.parent / "VALID_RESPONSE_OUTPUT_METRICS_REPORT.md"
     matrix = matrix_rows(root)
     failure_reconciliation = read_optional(organized / "failure_recovery_20261012" / "failure_reconciliation_summary.json", {})
+    exhaustive_recovery = read_optional(organized / "exhaustive_local_recovery_20261012" / "exhaustive_local_recovery_summary.json", {})
 
     standard = compact_standard_audit(standard_audit if isinstance(standard_audit, dict) else {})
     local_recovery = {
@@ -158,6 +159,25 @@ def main() -> int:
         "raw_results_modified": failure_reconciliation.get("raw_results_modified", False) if isinstance(failure_reconciliation, dict) else False,
         "synthetic_results_created": failure_reconciliation.get("synthetic_results_created", False) if isinstance(failure_reconciliation, dict) else False,
     }
+    exhaustive_summary = {
+        "path": str(organized / "exhaustive_local_recovery_20261012"),
+        "exists": isinstance(exhaustive_recovery, dict) and bool(exhaustive_recovery),
+        "failed_artifacts_scanned": exhaustive_recovery.get("failed_artifacts_scanned", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "retry8_excluded_artifact_count": exhaustive_recovery.get("retry8_excluded_artifact_count", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "retry8_parseable_key_count": exhaustive_recovery.get("retry8_parseable_key_count", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "retry8_recovered_correct_count": exhaustive_recovery.get("retry8_recovered_correct_count", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "retry8_recovered_correct_already_covered": exhaustive_recovery.get("retry8_recovered_correct_already_covered", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "retry8_recovered_correct_not_covered": exhaustive_recovery.get("retry8_recovered_correct_not_covered", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "canonical_key_count": exhaustive_recovery.get("canonical_key_count", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "canonical_parseable_key_count": exhaustive_recovery.get("canonical_parseable_key_count", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "canonical_recovered_correct": exhaustive_recovery.get("canonical_recovered_correct", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "recovered_correct_already_covered": exhaustive_recovery.get("recovered_correct_already_covered", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "recovered_correct_not_covered": exhaustive_recovery.get("recovered_correct_not_covered", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "canonical_classification_counts": exhaustive_recovery.get("canonical_classification_counts", {}) if isinstance(exhaustive_recovery, dict) else {},
+        "by_group": exhaustive_recovery.get("by_group", {}) if isinstance(exhaustive_recovery, dict) else {},
+        "provider_requests_made": exhaustive_recovery.get("provider_requests_made", 0) if isinstance(exhaustive_recovery, dict) else 0,
+        "raw_results_modified": exhaustive_recovery.get("raw_results_modified", False) if isinstance(exhaustive_recovery, dict) else False,
+    }
     provenance = {}
     for label, path in (("whole_pros.zip", args.whole_skill_zip), ("whole_pros_g5.zip", args.g5_skill_zip)):
         provenance[label] = {"path": str(path.resolve()), "exists": path.is_file(), "sha256": sha256(path.resolve()) if path.is_file() else None}
@@ -173,6 +193,7 @@ def main() -> int:
         "g1_g4_local_recovery": local_recovery,
         "g2_g3_matrix": matrix,
         "g2_g3_failure_reconciliation": failure_summary,
+        "exhaustive_local_recovery": exhaustive_summary,
         "g5_answer_given": g5,
         "usable_output_report": {
             "path": str(usable_report),
@@ -241,25 +262,39 @@ def main() -> int:
         "",
         f"Machine-readable reconciliation: `{organized / 'failure_recovery_20261012'}`. Provider requests made: `{failure_summary.get('provider_requests_made', 0)}`; raw results modified: `{failure_summary.get('raw_results_modified', False)}`.",
         "",
-        "## 6. G5 answer-given 修复结果",
+        "## 6. Exhaustive local recovery",
+        "",
+        "This pass scans persisted failed recovery/matrix artifacts with the existing deterministic JSON parser. It may identify a separately reportable recovered failure, but it does not rewrite the ordinary completed-answer denominator. A parseable mismatch remains a failed payload, not a wrong answer.",
+        "",
+        table(["指标", "值"], [[key, value] for key, value in exhaustive_summary.items() if key not in {"path", "by_group", "canonical_classification_counts"}]),
+        "",
+        table(["group", "failed artifacts", "canonical keys", "recovered correct", "payload wrong (not counted)"], [
+            [group, item.get("failed_artifacts_scanned", 0), item.get("canonical_keys", 0), item.get("recovered_correct", 0), item.get("payload_wrong_not_counted", 0)]
+            for group, item in sorted((exhaustive_summary.get("by_group") or {}).items())
+        ]),
+        "",
+        f"Machine-readable exhaustive audit: `{organized / 'exhaustive_local_recovery_20261012'}`. New recovered-correct keys not already covered: `{exhaustive_summary.get('recovered_correct_not_covered', 0)}`.",
+        "",
+        "## 7. G5 answer-given 修复结果",
         "",
         table(["指标", "值"], [[key, value] for key, value in g5.items()]),
         "",
         "G5 本轮本地修复选择同一 task/model 下最新的、已有 attempt 中可通过 G5 final-package schema 的 observable package。恢复记录仍保留当前最终 attempt 的 provider error/status 和 source attempt lineage，因此不能写成当前请求成功。剩余 `UNPROVEN_INVALID_SUBMISSION` 只有不完整模型输出，无法凭空补齐。",
         "",
-        "## 7. 可交付与阻塞",
+        "## 8. 可交付与阻塞",
         "",
         "- 可交付：普通组 canonical 结构审计、已有 format/provider/timeout recovery 的选中视图、G2/G3 completion ledger 与 I/O integrity、G5 strict compliance layer，以及本报告 JSON/Markdown。",
         "- 未做：新的真实 provider/API 重试。当前没有本次重试的明确模型、调用数、美元硬上限和授权，因此按 skill 记为 `BLOCKED_EXTERNAL_RETRIAL`，避免产生未预算的付费数据。",
         "- 不可恢复数据不会被删除；raw 日志、失败记录、orphan attempt 和恢复失败仍在原目录中备查。",
         "",
-        "## 8. 备查路径",
+        "## 9. 备查路径",
         "",
         f"- 普通组结构审计：`{organized / 'g1_g4_data_audit.json'}`",
         f"- 普通组组织索引：`{organized / 'summary.json'}`、`{organized / 'format_failures'}`",
         f"- G2/G3 integrity：`{root / 'G2'}`、`{root / 'G3'}` 下的 `matrix_completion_ledger.json` 和 `matrix_io_integrity_report.json`",
         f"- G5 strict layer：`{root / 'g5_answer_given'}` 下对应 run 的 `strict_compliance`",
         f"- 本报告机器可读摘要：`{output / 'benchmark_repair_summary.json'}`",
+        f"- 全量失败恢复审计：`{organized / 'exhaustive_local_recovery_20261012'}`",
     ]
     (output / "BENCHMARK_REPAIR_AUDIT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     checksum_lines = []
