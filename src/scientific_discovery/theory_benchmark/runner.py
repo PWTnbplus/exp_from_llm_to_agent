@@ -81,13 +81,14 @@ def _tool_result(arguments: Any) -> str:
         return json.dumps({"error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False)
 
 
-def _complete_agent(provider: LLMProvider, messages: list[dict[str, Any]], *, controller: PolicyController, max_calls: int, trace: TraceRecorder | NullTraceRecorder, memory: BoundedMemory | None = None) -> tuple[dict[str, Any], int]:
+def _complete_agent(provider: LLMProvider, messages: list[dict[str, Any]], *, controller: PolicyController, max_calls: int, trace: TraceRecorder | NullTraceRecorder, memory: BoundedMemory | None = None, force_final_no_tools: bool = False) -> tuple[dict[str, Any], int]:
     """Run a bounded tool loop; every model and compute step passes a gate."""
 
     calls = 0
-    for _ in range(max_calls):
+    for call_index in range(max_calls):
         calls += 1
-        response = provider.complete(messages, tools=_CALCULATOR)
+        request_tools = None if force_final_no_tools and call_index == max_calls - 1 else _CALCULATOR
+        response = provider.complete(messages, tools=request_tools)
         if response.tool_calls:
             messages.append({"role": "assistant", "content": response.content, "tool_calls": response.tool_calls})
             for tool_call in response.tool_calls:
@@ -146,7 +147,7 @@ def run_task(task_id: str, provider: LLMProvider, mode: str, *, data_dir: Path |
             payload = _json_content(response.content)
         elif group_id == "G2":
             limit = min(max_calls or policy.max_model_calls, policy.max_model_calls)
-            payload, calls = _complete_agent(traced_provider, messages, controller=controller, max_calls=limit, trace=trace)
+            payload, calls = _complete_agent(traced_provider, messages, controller=controller, max_calls=limit, trace=trace, force_final_no_tools=True)
         elif group_id == "G3":
             ledger.ensure_api_slot()
             draft = traced_provider.complete(messages, tools=None)

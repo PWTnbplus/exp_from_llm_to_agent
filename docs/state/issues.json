@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-10T07:10:30+00:00",
+  "updated_at": "2026-10-12T10:18:16+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -194,7 +194,10 @@
     "docs/audits/cycle-20261008T104200Z-04/audit.json",
     "docs/audits/cycle-20261008T111200Z-05/audit.json",
     "docs/audits/cycle-20261008T112100Z-06/audit.json",
-    "docs/audits/cycle-20261009T054000Z-07/audit.json"
+    "docs/audits/cycle-20261009T054000Z-07/audit.json",
+    "docs/audits/cycle-20261012T083300Z-08/audit.json",
+    "docs/audits/cycle-20261012T084500Z-09/audit.json",
+    "docs/audits/cycle-20261012T101719Z-10/audit.json"
   ],
   "current_focus": null
 }

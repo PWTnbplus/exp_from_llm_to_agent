@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Second attempt only for format-recovery requests that timed out or hit 429."""
+"""Targeted retries for format failures, transport failures, and provider errors."""
 
 from __future__ import annotations
 
@@ -17,14 +17,14 @@ from retry_format_failures import _cost, _load, _mode, _model_index, _price, _pr
 from retry_timeout_tasks import _is_transport_timeout
 
 
-def _transient_429(result_path: Path) -> bool:
+def _transient_http_error(result_path: Path, codes: tuple[str, ...] = ("429", "503")) -> bool:
     try:
         result = _load(result_path)
     except (OSError, json.JSONDecodeError):
         return False
     for trace in ((result.get("metadata") or {}).get("provider_trace") or []):
         error = trace.get("error") if isinstance(trace, dict) else None
-        if isinstance(error, dict) and "429" in str(error.get("message", "")):
+        if isinstance(error, dict) and any(code in str(error.get("message", "")) for code in codes):
             return True
     return False
 
@@ -74,13 +74,22 @@ def main() -> int:
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--max-workers", type=int, default=4)
     parser.add_argument("--timeout-seconds", type=float, default=240.0)
-    parser.add_argument("--selection", choices=("unstable", "remaining_format"), default="unstable")
+    parser.add_argument("--selection", choices=("unstable", "transient", "remaining_format", "provider_error"), default="unstable")
+    parser.add_argument("--model-allowlist", type=Path, help="Optional JSON list (or {models: [...]}) of currently usable model IDs")
     parser.add_argument("--output-stage", default="format_recovery_retry2")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
     organized = args.organized_dir.resolve()
     config = _load(args.model_config.resolve())
+    allowed_models: set[str] | None = None
+    if args.model_allowlist:
+        raw_allowlist = _load(args.model_allowlist.resolve())
+        if isinstance(raw_allowlist, dict):
+            raw_allowlist = raw_allowlist.get("models", [])
+        if not isinstance(raw_allowlist, list):
+            raise ValueError("model allowlist must be a JSON list or an object with a models list")
+        allowed_models = {str(model_id) for model_id in raw_allowlist}
     selected_path = organized / "format_failures" / "selected_format_failures.jsonl"
     recovery_path = organized / "format_failures" / "format_recovery_results.jsonl"
     selected = {}
@@ -94,13 +103,18 @@ def main() -> int:
         if not line.strip():
             continue
         retry_row = json.loads(line)
-        if args.selection == "unstable":
+        if allowed_models is not None and str(retry_row["model_id"]) not in allowed_models:
+            continue
+        if args.selection in {"unstable", "transient"}:
             if retry_row["recovery_classification"] not in {"transport_timeout", "provider_error"}:
                 continue
-        elif not retry_row["recovery_classification"].startswith("format_"):
+        elif args.selection == "remaining_format":
+            if not retry_row["recovery_classification"].startswith("format_"):
+                continue
+        elif retry_row["recovery_classification"] != "provider_error":
             continue
         result_path = Path(retry_row["format_recovery_result_path"])
-        if args.selection == "unstable" and retry_row["recovery_classification"] == "provider_error" and not _transient_429(result_path):
+        if args.selection in {"unstable", "transient"} and retry_row["recovery_classification"] == "provider_error" and not _transient_http_error(result_path):
             continue
         key = (str(Path(retry_row["run_dir"])), str(retry_row["model_id"]), str(retry_row["task_id"]))
         row = selected[key]

@@ -441,8 +441,18 @@ def main(argv: list[str] | None = None) -> int:
                         existing_cost += max(0.0, float(usage.get("cost_usd", 0.0)))
                     except (TypeError, ValueError):
                         pass
-                    valid = True
-                    break
+                    # A resumable row must be a genuine completed, protocol-
+                    # valid result.  Historical FAILED/MODEL_ERROR rows are
+                    # preserved in quarantine and must be requested again;
+                    # otherwise --resume silently treated failures as done.
+                    if saved.get("status") == "COMPLETED" and saved.get("protocol_valid") is True and saved.get("evaluator_valid") is True:
+                        valid = True
+                        break
+                    quarantine.mkdir(parents=True, exist_ok=True)
+                    target = quarantine / candidate.name
+                    if target.exists():
+                        target = quarantine / f"{candidate.stem}-{uuid.uuid4().hex[:8]}{candidate.suffix}"
+                    candidate.replace(target)
                 if valid:
                     resumed += 1
                 else:

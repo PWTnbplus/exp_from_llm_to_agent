@@ -1,0 +1,19 @@
+{
+  "generated_from_ctflow_chat_preflight": "2026-10-11",
+  "models": [
+    "deepseek-r1-distill-qwen-1.5b",
+    "deepseek-v4.1-flash",
+    "glm-5.1",
+    "glm-5.2-fast-preview",
+    "glm-5.2",
+    "glm-5.3",
+    "glm-5",
+    "kimi-k2.5",
+    "kimi-k2.6",
+    "kimi-k2.7-code-highspeed",
+    "kimi-k2.7-code",
+    "kimi-k3",
+    "MiniMax-M2.5",
+    "qwen-deep-research-2025-12-15"
+  ]
+}

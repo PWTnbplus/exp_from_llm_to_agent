@@ -167,7 +167,30 @@ class OpenAICompatibleProvider(LLMProvider):
                     "content": content, "tool_calls": tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata,
                 }})
                 return response
-            except (HTTPError, URLError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
+            except HTTPError as exc:
+                # Preserve a bounded, non-secret provider diagnostic.  The
+                # status alone is not enough to distinguish unsupported tool
+                # calling from a malformed request, which is essential when
+                # auditing paid recovery attempts.
+                try:
+                    body_text = exc.read().decode("utf-8", errors="replace")[:2000]
+                except Exception:
+                    body_text = ""
+                detail = f"HTTP {exc.code} {exc.reason}"
+                if body_text:
+                    detail += f": {body_text}"
+                last_error = RuntimeError(detail)
+                self.traces.append({
+                    "call_index": len(self.traces),
+                    "model": self.model_name,
+                    "request": {"messages": messages, "tools": tools},
+                    "attempt": attempt + 1,
+                    "error": {"type": type(exc).__name__, "message": detail, "status_code": exc.code},
+                    "latency_seconds": time.monotonic() - started,
+                })
+                if attempt >= self.max_retries:
+                    break
+            except (URLError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
                 last_error = exc
                 self.traces.append({
                     "call_index": len(self.traces),

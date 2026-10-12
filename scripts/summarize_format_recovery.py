@@ -33,6 +33,38 @@ def _write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> None:
             handle.write(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")
 
 
+_RECOVERY_STAGES = (
+    "format_recovery",
+    "format_recovery_retry2",
+    "format_recovery_retry3",
+    "format_recovery_retry4",
+    "provider_recovery_retry1",
+    "provider_recovery_retry2",
+    "format_recovery_retry5",
+    "provider_recovery_retry3",
+    "format_recovery_retry6",
+    "provider_recovery_retry4",
+    "format_recovery_retry7",
+    "provider_recovery_retry5",
+)
+
+# A later retry is only preferred when it is at least as useful as the
+# existing candidate.  In particular, a retry that hits a 401/403/503 must
+# not hide an already parseable structured response.  Ties prefer the later
+# retry so that a successful repair is still selected over an earlier one.
+_RECOVERY_CLASSIFICATION_RANK = {
+    "answer_correct": 0,
+    "answer_incorrect_structured": 1,
+    "policy_violation": 2,
+    "format_schema_or_missing_field": 3,
+    "format_json_parse": 4,
+    "transport_timeout": 5,
+    "provider_error": 6,
+    "model_error_or_no_answer": 7,
+    "record_missing": 8,
+}
+
+
 def _resolution(classification: str) -> str:
     return {
         "answer_correct": "recovered_answer_correct",
@@ -51,9 +83,10 @@ def _recovery_index(run_dirs: set[Path]) -> tuple[dict[tuple[Path, str, str], tu
     index: dict[tuple[Path, str, str], tuple[Path, dict[str, Any]]] = {}
     invalid: list[dict[str, Any]] = []
     for run_dir in sorted(run_dirs):
-        # Later retry stages have higher priority and are the final recovery
-        # candidate for a task.  Keep raw benchmark records untouched.
-        for stage in ("format_recovery", "format_recovery_retry2", "format_recovery_retry3"):
+        # Keep raw benchmark records untouched.  Candidate selection is
+        # quality-aware: later transport/provider failures cannot replace a
+        # parseable candidate, while a later candidate of equal quality wins.
+        for stage_index, stage in enumerate(_RECOVERY_STAGES):
             root = run_dir / stage / "models"
             for path in sorted(root.glob("*/*.json")) if root.exists() else []:
                 try:
@@ -67,11 +100,23 @@ def _recovery_index(run_dirs: set[Path]) -> tuple[dict[tuple[Path, str, str], tu
                     invalid.append({"run_dir": str(run_dir), "path": str(path), "error": "missing_task_id"})
                     continue
                 key = (run_dir, model_id, task_id)
-                if key in index:
-                    if stage in {"format_recovery_retry2", "format_recovery_retry3"}:
-                        index[key] = (path, result)
+                candidate = (path, result)
+                if key not in index:
+                    index[key] = candidate
                     continue
-                index[key] = (path, result)
+                previous_path, previous_result = index[key]
+                previous_stage = previous_path.parent.parent.parent.name
+                previous_stage_index = _RECOVERY_STAGES.index(previous_stage)
+                candidate_key = (
+                    _RECOVERY_CLASSIFICATION_RANK.get(classify(result), 99),
+                    -stage_index,
+                )
+                previous_key = (
+                    _RECOVERY_CLASSIFICATION_RANK.get(classify(previous_result), 99),
+                    -previous_stage_index,
+                )
+                if candidate_key < previous_key:
+                    index[key] = candidate
     return index, invalid
 
 
@@ -175,6 +220,19 @@ def main() -> int:
     first_attempt_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery" / "models").glob("*/*.json")]
     retry2_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry2" / "models").glob("*/*.json")]
     retry3_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry3" / "models").glob("*/*.json")]
+    retry4_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry4" / "models").glob("*/*.json")]
+    provider_retry1_paths = [path for run_dir in run_dirs for path in (run_dir / "provider_recovery_retry1" / "models").glob("*/*.json")]
+    provider_retry2_paths = [path for run_dir in run_dirs for path in (run_dir / "provider_recovery_retry2" / "models").glob("*/*.json")]
+    retry5_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry5" / "models").glob("*/*.json")]
+    provider_retry3_paths = [path for run_dir in run_dirs for path in (run_dir / "provider_recovery_retry3" / "models").glob("*/*.json")]
+    retry6_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry6" / "models").glob("*/*.json")]
+    provider_retry4_paths = [path for run_dir in run_dirs for path in (run_dir / "provider_recovery_retry4" / "models").glob("*/*.json")]
+    retry7_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry7" / "models").glob("*/*.json")]
+    provider_retry5_paths = [path for run_dir in run_dirs for path in (run_dir / "provider_recovery_retry5" / "models").glob("*/*.json")]
+    # retry8 was intentionally interrupted after a deterministic policy
+    # violation was confirmed.  Count its files and cost for auditability,
+    # but do not use this incomplete stage as a final candidate.
+    retry8_paths = [path for run_dir in run_dirs for path in (run_dir / "format_recovery_retry8" / "models").glob("*/*.json")]
     def _paths_cost(paths: list[Path]) -> float:
         total = 0.0
         for path in paths:
@@ -187,6 +245,16 @@ def main() -> int:
     first_attempt_cost = _paths_cost(first_attempt_paths)
     retry2_cost = _paths_cost(retry2_paths)
     retry3_cost = _paths_cost(retry3_paths)
+    retry4_cost = _paths_cost(retry4_paths)
+    provider_retry1_cost = _paths_cost(provider_retry1_paths)
+    provider_retry2_cost = _paths_cost(provider_retry2_paths)
+    retry5_cost = _paths_cost(retry5_paths)
+    provider_retry3_cost = _paths_cost(provider_retry3_paths)
+    retry6_cost = _paths_cost(retry6_paths)
+    provider_retry4_cost = _paths_cost(provider_retry4_paths)
+    retry7_cost = _paths_cost(retry7_paths)
+    provider_retry5_cost = _paths_cost(provider_retry5_paths)
+    retry8_cost = _paths_cost(retry8_paths)
     trace_error_counts: Counter[str] = Counter()
     trace_error_by_provider: dict[str, Counter[str]] = defaultdict(Counter)
     for row in rows:
@@ -211,13 +279,34 @@ def main() -> int:
         "first_attempt_result_file_count": len(first_attempt_paths),
         "retry2_result_file_count": len(retry2_paths),
         "retry3_result_file_count": len(retry3_paths),
+        "retry4_result_file_count": len(retry4_paths),
+        "provider_retry1_result_file_count": len(provider_retry1_paths),
+        "provider_retry2_result_file_count": len(provider_retry2_paths),
+        "retry5_result_file_count": len(retry5_paths),
+        "provider_retry3_result_file_count": len(provider_retry3_paths),
+        "retry6_result_file_count": len(retry6_paths),
+        "provider_retry4_result_file_count": len(provider_retry4_paths),
+        "retry7_result_file_count": len(retry7_paths),
+        "provider_retry5_result_file_count": len(provider_retry5_paths),
+        "retry8_result_file_count": len(retry8_paths),
+        "retry8_incomplete": bool(retry8_paths),
         "recovery_classification_counts": dict(sorted(Counter(row["recovery_classification"] for row in rows).items())),
         "resolution_counts": dict(sorted(Counter(row["resolution"] for row in rows).items())),
         "final_selected_recovery_cost_usd": round(sum(float(row["recovery_cost_usd"] or 0.0) for row in rows), 8),
         "first_attempt_cost_usd": first_attempt_cost,
         "retry2_cost_usd": retry2_cost,
         "retry3_cost_usd": retry3_cost,
-        "all_recovery_attempts_cost_usd": round(first_attempt_cost + retry2_cost + retry3_cost, 8),
+        "retry4_cost_usd": retry4_cost,
+        "provider_retry1_cost_usd": provider_retry1_cost,
+        "provider_retry2_cost_usd": provider_retry2_cost,
+        "retry5_cost_usd": retry5_cost,
+        "provider_retry3_cost_usd": provider_retry3_cost,
+        "retry6_cost_usd": retry6_cost,
+        "provider_retry4_cost_usd": provider_retry4_cost,
+        "retry7_cost_usd": retry7_cost,
+        "provider_retry5_cost_usd": provider_retry5_cost,
+        "retry8_cost_usd": retry8_cost,
+        "all_recovery_attempts_cost_usd": round(first_attempt_cost + retry2_cost + retry3_cost + retry4_cost + provider_retry1_cost + provider_retry2_cost + retry5_cost + provider_retry3_cost + retry6_cost + provider_retry4_cost + retry7_cost + provider_retry5_cost + retry8_cost, 8),
         "final_provider_trace_error_counts": dict(sorted(trace_error_counts.items())),
         "final_provider_trace_errors_by_provider": {
             key: dict(sorted(value.items())) for key, value in sorted(trace_error_by_provider.items())
