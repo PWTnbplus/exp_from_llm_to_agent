@@ -1,0 +1,61 @@
+{
+  "cycle": "20261012T152926Z-15",
+  "experiment": "g6_counterfactual",
+  "status": "BLOCKED_REAL_RUN",
+  "review": {
+    "findings": [
+      {
+        "id": "G6-BLOCKED-G5-MATH-VERIFICATION",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "remediation": "Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.",
+        "evidence": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth."
+      },
+      {
+        "id": "G6-BLOCKED-REAL-PROVIDER-GATE",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "remediation": "Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.",
+        "evidence": "G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests."
+      }
+    ],
+    "resolutions": [
+      "Re-ran V2 recovery bootstrap; no target G6 process is active and no unseen prior audit was skipped.",
+      "CTFlow no-credential probe returned HTTP 401; no CTFLOW_API_KEY is present in the current process environment and no local .env file is present in the repository.",
+      "The CTFlow model-matrix dry-run reports runner_integrated=false, runner_command empty, and max_total_cost_usd=0.0; it made no model calls.",
+      "The G6 offline plan/mock path remains synthetic infrastructure only and cannot be promoted to formal scientific evidence."
+    ],
+    "reviewed_issue_ids": ["ISSUE-000000000002", "ISSUE-ff97c7c89112", "ISSUE-ad61f025976a"],
+    "notes": "The user requested the full G6 experiment. Strict execution therefore stops before any real request because the G6 package requires an independently verified oracle, an integrated runner, positive hard limits, and explicit provider authorization. No result, score, or G7 handoff is fabricated."
+  },
+  "evidence": {
+    "g6_preflight_status": "BLOCKED_REAL_RUN",
+    "g6_preflight_blocker_count": 10,
+    "g6_real_plan_created": false,
+    "g6_real_responses_created": false,
+    "g6_real_scores_created": false,
+    "ctflow_probe": "HTTP_401_NO_CREDENTIALS",
+    "ctflow_matrix_runner_integrated": false,
+    "ctflow_matrix_cost_cap_usd": 0.0,
+    "g5_proof_graph_count": 1309,
+    "g5_graphs_with_expected_siblings": 1309,
+    "g5_audit_status": "FOUND_REQUIRES_MATH_VERIFICATION",
+    "host_tests": "99 passed"
+  },
+  "scope": {
+    "raw_g5_results_modified": false,
+    "private_answer_key_read": false,
+    "provider_requests": 0,
+    "paid_api_calls": 0,
+    "synthetic_demo_only": true,
+    "branch": "autopilot/scientific-law-discovery",
+    "remote_push_status": "attempted_failed_network_unreachable",
+    "remote_push_error": "git push origin autopilot/scientific-law-discovery failed: unable to access github.com:443 via configured proxy",
+    "next_action_requires_user_supplied_or_authorized": [
+      "exact verified model ID/snapshot",
+      "positive hard maxima for model calls, tool calls, total tokens, and USD",
+      "independent G5 mathematical-oracle evidence",
+      "explicit authorization for the bounded provider run"
+    ]
+  }
+}

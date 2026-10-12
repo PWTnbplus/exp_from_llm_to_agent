@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-12T15:07:31+00:00",
+  "updated_at": "2026-10-12T15:30:43+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -186,7 +186,7 @@
       "evidence": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth.",
       "remediation": "Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.",
       "first_seen": "2026-10-12T15:07:31+00:00",
-      "last_seen": "2026-10-12T15:07:31+00:00",
+      "last_seen": "2026-10-12T15:30:43+00:00",
       "source": "docs/audits/cycle-20261012T150331Z-14/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -207,7 +207,7 @@
       "evidence": "G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests.",
       "remediation": "Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.",
       "first_seen": "2026-10-12T15:07:31+00:00",
-      "last_seen": "2026-10-12T15:07:31+00:00",
+      "last_seen": "2026-10-12T15:30:43+00:00",
       "source": "docs/audits/cycle-20261012T150331Z-14/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -243,7 +243,8 @@
     "docs/audits/cycle-20261012T134500Z-11/audit.json",
     "docs/audits/cycle-20261012T140900Z-12/audit.json",
     "docs/audits/cycle-20261012T143000Z-13/audit.json",
-    "docs/audits/cycle-20261012T150331Z-14/audit.json"
+    "docs/audits/cycle-20261012T150331Z-14/audit.json",
+    "docs/audits/cycle-20261012T152926Z-15/audit.json"
   ],
   "current_focus": null
 }
