@@ -1,0 +1,70 @@
+{
+  "cycle": "20261012T150331Z-14",
+  "experiment": "g6_counterfactual",
+  "status": "BLOCKED_REAL_RUN",
+  "review": {
+    "findings": [
+      {
+        "id": "G6-BLOCKED-G5-MATH-VERIFICATION",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "remediation": "Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.",
+        "evidence": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth."
+      },
+      {
+        "id": "G6-BLOCKED-REAL-PROVIDER-GATE",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "remediation": "Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.",
+        "evidence": "G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests."
+      }
+    ],
+    "resolutions": [
+      "Verified the G6 package provenance and source ZIP hashes against the supplied g0-g4.zip and whole_pros_g5.zip.",
+      "Ran G6 doctor, selfcheck, source verification, and the 13-package unit-test suite successfully.",
+      "Audited the latest real G5 run without reading a private answer key and preserved the raw G5 run unchanged.",
+      "Confirmed that the existing G5 strict-compliance layer has 1200/1200 observed records, 1195 COMPLIANT, 3 RECOVERED_PRIOR_ATTEMPT, 2 UNPROVEN_INVALID_SUBMISSION, and 4 orphan interrupted attempts."
+    ],
+    "reviewed_issue_ids": ["ISSUE-000000000002", "ISSUE-000000000004"],
+    "notes": "The G6 offline demo/mock path is synthetic infrastructure validation only. No G6 real cases, private oracle, frozen formal plan, model responses, scores, or G7 handoff were created from the real G5 artifacts."
+  },
+  "g6_source_provenance": {
+    "g6_skill_zip_sha256": "74d0eccdbaefd3da987dcb65c506436d5f460bc13ee600187c724dc81100ee25",
+    "g0_g4_zip_sha256": "cf2aa3edb09d71460efaa65f63d69a71a39c159335665bf83ba83b434de8817c",
+    "whole_pros_g5_zip_sha256": "8010c9f59c4c8ed990c9116fe3615038aa26308b770bb56bf2161aa2801bdb12",
+    "source_verification": "PASS"
+  },
+  "evidence": {
+    "g6_doctor_exit": 0,
+    "g6_selfcheck_exit": 0,
+    "g6_source_verify_exit": 0,
+    "g6_unit_tests": "13 passed",
+    "g5_run_id": "g5-answer-given-20261011T084147Z-be8875a4",
+    "g5_proof_graph_count": 1309,
+    "g5_graphs_with_expected_siblings": 1309,
+    "g5_audit_status": "FOUND_REQUIRES_MATH_VERIFICATION",
+    "g5_strict_expected_records": 1200,
+    "g5_strict_observed_records": 1200,
+    "g5_strict_status_counts": {
+      "COMPLIANT": 1195,
+      "RECOVERED_PRIOR_ATTEMPT": 3,
+      "UNPROVEN_INVALID_SUBMISSION": 2
+    },
+    "g5_orphan_interrupted_attempts": 4,
+    "preflight_status": "BLOCKED_REAL_RUN",
+    "preflight_blocker_count": 10
+  },
+  "scope": {
+    "raw_g5_results_modified": false,
+    "real_g6_responses_created": false,
+    "real_g6_scores_created": false,
+    "synthetic_demo_only": true,
+    "private_answer_key_read": false,
+    "paid_api_calls": 0,
+    "provider_requests": 0,
+    "branch": "autopilot/scientific-law-discovery",
+    "remote_push_verified_before_cycle": true,
+    "remote_push_status": "no push needed for this audit-only cycle",
+    "next_blocker": "Need independent mathematical oracle verification for selected G5 proof graphs, a verified model snapshot, positive hard model/tool/token/USD limits, and explicit paid-run authorization before G6 real execution."
+  }
+}

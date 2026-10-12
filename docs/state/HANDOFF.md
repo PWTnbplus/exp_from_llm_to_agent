@@ -10,14 +10,16 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-000000000002 / P1 / Real-provider pilot and retry/cost behavior are unverified
+**下一问题（Next issue:）：** ISSUE-ff97c7c89112 / P1 / G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
 
 ## 当前状态摘要
 
-开放/未验证：4。已验证：1。
+开放/未验证：6。已验证：1。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
+- ISSUE-ff97c7c89112 P1 OPEN 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.
+- ISSUE-ad61f025976a P1 OPEN 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.
 - ISSUE-000000000002 P1 BLOCKED 尝试次数=1：Real-provider pilot and retry/cost behavior are unverified；修复=With explicit authorization and a hard spend ceiling, run a minimal provider smoke test, archive redacted traces, and rerun the isolation audit.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Implement plan-driven pilot/formal execution with exact task counts, frozen manifest SHA-256, five registered replicates per arm, explicit persisted replicate_index, rejection of deviations, and analysis against the froz

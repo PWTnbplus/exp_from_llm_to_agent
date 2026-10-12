@@ -1,13 +1,29 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-12T14:31:17+00:00
+生成时间（UTC）：2026-10-12T15:07:31+00:00
 
-- 开放/阻塞/未验证：**4**
+- 开放/阻塞/未验证：**6**
 - 已验证修复：**1**
 - 已验证完成里程碑：**1**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
 
 ## 未解决和阻塞问题
+
+### ISSUE-ff97c7c89112 — P1 — OPEN
+- 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
+- 证据：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth.
+- 必需修复：Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-ad61f025976a — P1 — OPEN
+- 描述：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-ora
+- 证据：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests.
+- 必需修复：Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
+- 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
