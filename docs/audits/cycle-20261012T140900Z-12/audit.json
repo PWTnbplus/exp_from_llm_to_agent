@@ -41,7 +41,7 @@
     "provider_requests": 0,
     "branch": "autopilot/scientific-law-discovery",
     "remote_push_verified": false,
-    "remote_push_status": "not attempted in this repair cycle; previous push remains blocked by configured proxy/network",
+    "remote_push_status": "failed: git push origin autopilot/scientific-law-discovery could not connect to github.com port 443 via 127.0.0.1 after 2055 ms; local commit 9fd5c40d4e162e200014394368f92bb4419925be remains unverified remotely",
     "next_blocker": "Remaining failures without persisted locally verifiable payloads cannot be repaired without explicit provider/model/scope authorization and a positive hard USD ceiling."
   }
 }
