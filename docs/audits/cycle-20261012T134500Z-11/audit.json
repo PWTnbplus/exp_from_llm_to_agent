@@ -39,7 +39,7 @@
     "provider_requests": 0,
     "branch": "autopilot/scientific-law-discovery",
     "remote_push_verified": false,
-    "remote_push_status": "pending after commit; only source/report tooling is in scope",
+    "remote_push_status": "failed: git push could not connect to github.com:443 through the configured proxy; local commit a7a40f067a8731214ed953bae07837ed7e22930a remains unverified remotely",
     "next_blocker": "Provider/API failures cannot be retried until the user explicitly authorizes the provider/model, retry scope, and a positive hard USD ceiling."
   }
 }
