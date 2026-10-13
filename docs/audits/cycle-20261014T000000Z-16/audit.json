@@ -1,0 +1,162 @@
+{
+  "cycle": "20261014T000000Z-16",
+  "experiment": "g6_counterfactual",
+  "status": "PARTIAL_REAL_EXECUTION_SCIENTIFIC_GATE_OPEN",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-ff97c7c89112",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G5 mathematical truth is not independently verified",
+        "evidence": "The formal G6 run used 24 G5-derived families and a grade-C controlled-intervention oracle. The official G5 audit remains FOUND_REQUIRES_MATH_VERIFICATION; the G6 trace audit explicitly does not upgrade this to independent domain-grade A/B truth.",
+        "remediation": "Independently verify the original claim, quantifier, and evidence for every included G5 proof graph, persist the verifier evidence and grade, and rerun or formally release only the verified subset."
+      },
+      {
+        "id": "ISSUE-ad61f025976a",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G6 formal acceptance preflight still lacks independent verifier and model-snapshot attestations",
+        "evidence": "The official project_preflight.py run against the generated G6_MANIFEST.json returned BLOCKED_REAL_RUN with 21 prescribed attestation blockers. The actual runner did record positive limits and isolation evidence, but there is no verified provider model snapshot and no independent G5 mathematical-verifier entry in the formal manifest.",
+        "remediation": "Add a truthful project preflight manifest with existing adapter paths, verified model snapshot, independent verifier entry, and executed permission/trace attestations; do not mark RUN_COMPLETE until every required check passes."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "Real-provider G6 execution is now locally evidenced, but billing/snapshot verification remains external",
+        "evidence": "The real run produced 2,201 MODEL_REQUEST events, 1,657 MODEL_RESPONSE events, 1,424 tool calls, 560 provider-error events, 576 completed canonical runs, 3,312,518 recorded tokens, and 6.124516 recorded USD under the configured accounting. The canonical trace audit and 99-test host suite passed; provider billing and immutable model snapshot were not independently verified.",
+        "remediation": "Retain the raw provider receipts or an independently verifiable billing export and immutable model snapshot, then rerun the final acceptance review."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "G6 score is complete by frozen denominator but formal clustered statistical validity remains unverified",
+        "evidence": "The frozen 576-run plan has 576/576 canonical responses and complete G3/G4 arms. score_report_audited.json labels Wilson intervals exploratory/not clustered, and the grade-C oracle is not an independent domain-grade truth source.",
+        "remediation": "Have an independent reviewer verify the oracle and run the preregistered paired-family/cluster analysis before making inferential claims."
+      },
+      {
+        "id": "ISSUE-6b3a9e1d4f20",
+        "severity": "P2",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "Raw G6 traces contain noncanonical retry segments that require a derived audit view",
+        "evidence": "The append-only raw trace directory contains 576 files, 378 with nonmonotonic sequence histories and 8 intermediate starts without RUN_END. No raw line was overwritten; repair_g6_trace_views.py selected the last complete successful segment and produced 576 canonical audited traces with failures=[] .",
+        "remediation": "Keep raw history immutable, use only the hashed canonical trace view for scoring, and fix the runner's resume/sequence protocol before the next formal batch."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-000000000002",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "A real-provider run and locally auditable cost/trace evidence now exist, but external billing and immutable model-snapshot verification are still absent."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The exact formal denominator and score are present, but formal clustered inference and independent oracle verification remain outstanding."
+      },
+      {
+        "id": "ISSUE-6b3a9e1d4f20",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "A non-mutating canonical repair view is complete and hashed; raw historical noncanonical segments remain preserved by design."
+      }
+    ],
+    "reviewed_issue_ids": [
+      "ISSUE-ff97c7c89112",
+      "ISSUE-ad61f025976a",
+      "ISSUE-000000000002",
+      "ISSUE-000000000004",
+      "ISSUE-6b3a9e1d4f20"
+    ],
+    "notes": "Execution coverage is complete for the frozen G6 plan, but the G6 skill's scientific acceptance gate is not complete. This report deliberately distinguishes real provider execution from independent mathematical truth and does not label the study RUN_COMPLETE."
+  },
+  "evidence": {
+    "frozen_plan": {
+      "planned_runs": 576,
+      "canonical_responses": 576,
+      "missing_run_ids": [],
+      "plan_sha256": "757bbe375ca2af474a0dcf3a009a889265d6ce2ba62ff488d37427cedb426c30",
+      "public_sha256": "14724d44df832dfb836bf6e493fb880886c2695cdc593accd7fea9943dfcf953",
+      "private_oracle_sha256": "32c8f47c9897d9630e146af315672fc3f9ecee81d498ab893b734c23a3d1cafd",
+      "canonical_responses_sha256": "bddb0981ae795b6e1faf9b8b8151852afa03dcc820299963ca4c1126a3c81c0b"
+    },
+    "official_validation": "PASS: 96 public cases and 24 paired families",
+    "official_score": "score_report_audited.json; evidence_status=IMPORTED_RESPONSES_REQUIRE_TRACE_AUDIT",
+    "trace_audit": {
+      "pass": true,
+      "canonical_trace_count": 576,
+      "model_requests": 1489,
+      "model_responses": 1489,
+      "tool_calls": 1223,
+      "tool_results": 1223,
+      "tokens": 2983281,
+      "recorded_cost_usd": 5.572381,
+      "revision_audit_count": 144,
+      "strict_revision_valid_count": 0,
+      "raw_nonmonotonic_trace_count": 378
+    },
+    "raw_usage_conservative": {
+      "model_requests": 2201,
+      "tool_calls": 1424,
+      "tokens": 3312518,
+      "recorded_cost_usd": 6.124516,
+      "completed_final_segments": 576,
+      "provider_error_segments": 560,
+      "configured_hard_limits": {
+        "max_model_calls": 4608,
+        "max_tool_calls": 3456,
+        "max_total_tokens": 4608000,
+        "max_cost_usd": 200.0
+      }
+    },
+    "scores": {
+      "G3_completion": 1.0,
+      "G4_completion": 1.0,
+      "G3_decision_accuracy": 0.6944,
+      "G4_decision_accuracy": 0.6736,
+      "G3_original_claim_status_accuracy": 0.8229,
+      "G4_original_claim_status_accuracy": 0.8056,
+      "G3_CF3_strict_verified_revision_rate": 0.0,
+      "G4_CF3_strict_verified_revision_rate": 0.0
+    },
+    "official_preflight": {
+      "status": "BLOCKED_REAL_RUN",
+      "blocker_count": 21,
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/g6_project_preflight.json"
+    },
+    "host_tests": {
+      "pytest": "99 passed",
+      "g6_official_unittest": "13 passed",
+      "g6_official_selfcheck": "PASS",
+      "g6_official_doctor": "PASS (generic project status remains NOT TESTED)"
+    },
+    "source_integrity": {
+      "selected_g5_graphs": 24,
+      "g5_source_hash_mismatches": 0,
+      "raw_g5_modified": false,
+      "private_oracle_exposed_to_runner": false
+    }
+  },
+  "scope": {
+    "real_provider": "glm-5 at https://token.ctflow.cn/v1",
+    "parallelism": 16,
+    "raw_g5_results_modified": false,
+    "private_answer_key_read_by_runner": false,
+    "remote_push": "not performed in this review cycle; no claim of remote success",
+    "next_required_before_RUN_COMPLETE": [
+      "independent mathematical verification of the 24 included G5 proof graphs",
+      "verified immutable provider model snapshot",
+      "truthful project preflight attestations for adapter/verifier/trace gates",
+      "independent review of provider billing and formal paired-family statistics"
+    ]
+  },
+  "tests": [
+    {"command": "python -m pytest -q", "exit_code": 0, "result": "99 passed"},
+    {"command": "python -m unittest discover -s <G6_SKILL>/tests -v", "exit_code": 0, "result": "13 passed"},
+    {"command": "g6_offline.py validate --public public_cases.jsonl --private private_oracle.jsonl", "exit_code": 0, "result": "96 cases, 24 paired families"},
+    {"command": "g6_offline.py selfcheck", "exit_code": 0, "result": "PASS"},
+    {"command": "project_preflight.py --manifest G6_MANIFEST.json --out g6_project_preflight.json", "exit_code": 2, "result": "BLOCKED_REAL_RUN; 21 blockers"},
+    {"command": "python scripts/review_g6_release.py --out results/g6_counterfactual/formal-20261013T000000Z --report results/g6_counterfactual/formal-20261013T000000Z/independent_release_review.json", "exit_code": 0, "result": "structural_review_pass=true; scientific_release_allowed=false"}
+  ]
+}

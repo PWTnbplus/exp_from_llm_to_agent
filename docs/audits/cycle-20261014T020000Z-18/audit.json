@@ -1,0 +1,116 @@
+{
+  "cycle": "20261014T020000Z-18",
+  "experiment": "g6_counterfactual",
+  "status": "CORRECTED_VERIFIED_SUBSET_ANALYZED_PENDING_EXTERNAL_RELEASE",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-ad61f025976a",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "G6 corrected-subset project preflight and provider identity evidence are now persisted",
+        "evidence": "The official project_preflight.py run on configs/g6_project_preflight_verified23.json completed with 0 blockers and status READY_FOR_CONTROLLED_PILOT_NOT_RUN. The provider metadata endpoint returned HTTP 200 for glm-5 and its canonical metadata hash is persisted. The evidence is only model identity/creation metadata: the gateway supplied no immutable weight fingerprint, and no external billing receipt is present.",
+        "remediation": "Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "Corrected paired-family cluster analysis is now persisted",
+        "evidence": "The 23-family corrected release has 552 matched rows and a deterministic paired-family bootstrap/McNemar analysis. Pooled G4-minus-G3 accuracy difference is -0.01811594202898551 with family-bootstrap 95% CI [-0.07608695652173915, 0.043478260869565216] and exact matched McNemar p=0.6353076420876663. CF3 is a prespecified exploratory stratum with difference -0.2753623188405797 and exact p=0.0005461. The analysis remains pending independent statistical review and does not justify causal or superiority claims.",
+        "remediation": "Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "Real-provider accounting is locally auditable but externally unverified",
+        "evidence": "The original raw run retains provider-error history and the corrected trace audit passes. Provider model identity metadata is now recorded, but no billing export or immutable weight snapshot is available for independent verification.",
+        "remediation": "Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-ad61f025976a",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "Official corrected-subset preflight has zero blockers and provider identity metadata is persisted; immutable weights and external billing remain unresolved."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "Corrected paired-family clustered analysis is reproducibly persisted; independent statistical review remains required."
+      }
+    ],
+    "reviewed_issue_ids": ["ISSUE-ad61f025976a", "ISSUE-000000000004", "ISSUE-000000000002"],
+    "notes": "This cycle completes the local corrected-subset evidence chain without fabricating the excluded family or overclaiming model immutability. The original 576-row handoff remains intact; the 23-family release is the only scientifically eligible analyzed subset."
+  },
+  "evidence": {
+    "source_only_verification": {
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/g5_independent_verification.json",
+      "sha256": "08f33ebd717ee06952c888ff54d255f39bcf334872580d9b952bfe9fa9d6a799",
+      "verified_families": 23,
+      "excluded_families": ["TB-L1-010"],
+      "private_inputs_read": false,
+      "answer_key_read": false
+    },
+    "corrected_subset": {
+      "plan": 552,
+      "responses": 552,
+      "g3": 276,
+      "g4": 276,
+      "completion_g3": 1.0,
+      "completion_g4": 1.0,
+      "trace_audit_pass": true,
+      "plan_sha256": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+      "response_sha256": "4951c8a8d2bf6c88b91429582dd1c48323b49ccc675e2682002a4e08451dc34b",
+      "trace_audit_sha256": "0fc2f8d533f654daa7de6fc7bc5764cbabd86f14490283952a5489d1f1b5b853",
+      "score_sha256": "6d81c3638f9ca43584e22d151b0dd316424f5144da94dfced57296f3ac3680c5"
+    },
+    "preflight": {
+      "manifest": "configs/g6_project_preflight_verified23.json",
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/g6_project_preflight_verified23.json",
+      "report_sha256": "e5ce89c6add203781b82ff2d35832202204d5e1601d7916e5572edb9a3bfcc8b",
+      "status": "READY_FOR_CONTROLLED_PILOT_NOT_RUN",
+      "blocker_count": 0,
+      "scope": "manifest/path attestation; no API call made by project_preflight.py"
+    },
+    "provider_identity": {
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/provider_model_metadata.json",
+      "report_sha256": "9d88229e6290f4968fc5f6a0d12284e3ee96499633cf5e905cb5f345f066e5f4",
+      "http_status": 200,
+      "model": "glm-5",
+      "gateway_weight_fingerprint_provided": false
+    },
+    "clustered_statistics": {
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/clustered_analysis_verified23.json",
+      "report_sha256": "d0886be732aca345bc85a39502dee65e2176d192650801c38d2c57d5400c2535",
+      "families": 23,
+      "pooled_g4_minus_g3": -0.01811594202898551,
+      "family_bootstrap_95_ci": [-0.07608695652173915, 0.043478260869565216],
+      "mcnemar_exact_two_sided_p": 0.6353076420876663,
+      "status": "ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW"
+    },
+    "original_artifacts": {
+      "plan": 576,
+      "handoff": 576,
+      "raw_modified": false,
+      "excluded_family_not_synthesized": true
+    },
+    "tests": [
+      "source-only G5 verifier: PASS",
+      "official G6 validate on corrected subset: PASS, 92 cases and 23 paired families",
+      "official G6 score on corrected subset: PASS",
+      "corrected trace audit: PASS, failures=[]",
+      "official project_preflight on corrected manifest: PASS, 0 blockers",
+      "paired-family clustered analysis: PASS, status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW",
+      "full 576 score rerun to restore original handoff: PASS"
+    ]
+  },
+  "scope": {
+    "provider_calls_this_cycle": 1,
+    "provider_call_scope": "non-billing GET /v1/models/glm-5 metadata only; no experiment rerun",
+    "synthetic_results_created": false,
+    "raw_g5_results_modified": false,
+    "remote_push": "not performed in this review cycle; no remote success claimed"
+  }
+}

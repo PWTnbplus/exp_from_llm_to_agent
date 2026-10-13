@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-12T15:30:43+00:00",
+  "updated_at": "2026-10-13T17:19:38+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -50,14 +50,14 @@
       "id": "ISSUE-000000000002",
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
-      "status": "BLOCKED",
-      "evidence": "No real API request was launched; only provider failure paths are unit-tested.",
-      "remediation": "With explicit authorization and a hard spend ceiling, run a minimal provider smoke test, archive redacted traces, and rerun the isolation audit.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "The original raw run retains provider-error history and the corrected trace audit passes. Provider model identity metadata is now recorded, but no billing export or immutable weight snapshot is available for independent verification.",
+      "remediation": "Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-08T05:48:38+00:00",
+      "last_seen": "2026-10-13T17:19:31+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied.",
+      "blocked_reason": null,
       "verification": null,
       "history": [
         {
@@ -81,6 +81,12 @@
           "time": "2026-10-08T10:44:26+00:00",
           "event": "BLOCKED",
           "reason": "A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-13T17:06:46+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Real-provider G6 requests, hard-limit accounting, canonical trace audit, and provider-error history are now locally persisted; external billing and immutable snapshot verification remain unavailable.",
           "evidence": ""
         }
       ]
@@ -135,10 +141,10 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "RESOLVED_UNVERIFIED",
-      "evidence": "configs/statistical_plan.json declares frozen 12/72 task strata and five repeats per arm, but src/scientific_discovery/cli.py only provides a one-run pilot path, accepts arbitrary manifests and limits, has no formal command, and does not execute repeat loops or assign replicate indices. Analysis also operates only on result files and does not join the registered manifest to synthesize missing task-runs; repeated rows lack persisted replicate identity.",
-      "remediation": "Implement plan-driven pilot/formal execution with exact task counts, frozen manifest SHA-256, five registered replicates per arm, explicit persisted replicate_index, rejection of deviations, and analysis against the frozen manifest multiplied by repeats and arms. Add adversarial tests for unequal/incomplete clusters, failures, repeats, missing files, domain strata and complexity strata.",
+      "evidence": "The 23-family corrected release has 552 matched rows and a deterministic paired-family bootstrap/McNemar analysis. Pooled G4-minus-G3 accuracy difference is -0.01811594202898551 with family-bootstrap 95% CI [-0.07608695652173915, 0.043478260869565216] and exact matched McNemar p=0.6353076420876663. CF3 is a prespecified exploratory stratum with difference -0.2753623188405797 and exact p=0.0005461. The analysis remains pending independent statistical review and does not justify causal or superiority claims.",
+      "remediation": "Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-08T11:11:33+00:00",
+      "last_seen": "2026-10-13T17:19:31+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 0,
       "blocked_reason": null,
@@ -153,6 +159,12 @@
           "time": "2026-10-08T10:44:26+00:00",
           "event": "RESOLVED_UNVERIFIED",
           "reason": "These are partial engineering changes, not evidence of formal statistical validity: runtime repeat/stratum enforcement, replicate matching, complete registered denominators, and formal execution remain unverified.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-13T17:06:46+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Frozen G6 denominator and complete score are now persisted; independent oracle and clustered inferential review remain outstanding.",
           "evidence": ""
         }
       ]
@@ -182,11 +194,11 @@
       "id": "ISSUE-ff97c7c89112",
       "severity": "P1",
       "title": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep",
-      "status": "OPEN",
-      "evidence": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth.",
-      "remediation": "Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "scripts/verify_g5_g6_inputs.py independently checked the public model/parameters and selected proof graphs without reading answer_key or private_oracle: 23/24 families passed grade-B analytic/numeric checks; TB-L1-010 was explicitly excluded because its recessive mutation-selection formula is inconsistent and its graph contains an unresolved validity node. The 23-family corrected release has 552/552 completed responses, official validation, official score, and trace_audit.pass=true.",
+      "remediation": "Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.",
       "first_seen": "2026-10-12T15:07:31+00:00",
-      "last_seen": "2026-10-12T15:30:43+00:00",
+      "last_seen": "2026-10-13T17:13:56+00:00",
       "source": "docs/audits/cycle-20261012T150331Z-14/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -196,6 +208,12 @@
           "time": "2026-10-12T15:07:31+00:00",
           "event": "OPENED",
           "source": "docs/audits/cycle-20261012T150331Z-14/audit.json"
+        },
+        {
+          "time": "2026-10-13T17:13:57+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Independent source-only verifier now restricts the scientific release to 23 grade-B families and explicitly excludes TB-L1-010; external mathematical review remains required.",
+          "evidence": ""
         }
       ]
     },
@@ -203,11 +221,11 @@
       "id": "ISSUE-ad61f025976a",
       "severity": "P1",
       "title": "G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-ora",
-      "status": "OPEN",
-      "evidence": "G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests.",
-      "remediation": "Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "The official project_preflight.py run on configs/g6_project_preflight_verified23.json completed with 0 blockers and status READY_FOR_CONTROLLED_PILOT_NOT_RUN. The provider metadata endpoint returned HTTP 200 for glm-5 and its canonical metadata hash is persisted. The evidence is only model identity/creation metadata: the gateway supplied no immutable weight fingerprint, and no external billing receipt is present.",
+      "remediation": "Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.",
       "first_seen": "2026-10-12T15:07:31+00:00",
-      "last_seen": "2026-10-12T15:30:43+00:00",
+      "last_seen": "2026-10-13T17:19:31+00:00",
       "source": "docs/audits/cycle-20261012T150331Z-14/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -217,6 +235,39 @@
           "time": "2026-10-12T15:07:31+00:00",
           "event": "OPENED",
           "source": "docs/audits/cycle-20261012T150331Z-14/audit.json"
+        },
+        {
+          "time": "2026-10-13T17:19:38+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Official corrected-subset project_preflight now returns 0 blockers with truthful attestations, and provider glm-5 identity metadata plus hash is persisted. This is RESOLVED_UNVERIFIED only: the gateway supplies no immutable weight fingerprint, billing evidence is absent, and preflight itself does not run the experiment.",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-6b3a9e1d4f20",
+      "severity": "P2",
+      "title": "Raw G6 traces contain noncanonical retry segments that require a derived audit view",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "The append-only raw trace directory contains 576 files, 378 with nonmonotonic sequence histories and 8 intermediate starts without RUN_END. No raw line was overwritten; repair_g6_trace_views.py selected the last complete successful segment and produced 576 canonical audited traces with failures=[] .",
+      "remediation": "Keep raw history immutable, use only the hashed canonical trace view for scoring, and fix the runner's resume/sequence protocol before the next formal batch.",
+      "first_seen": "2026-10-13T17:06:46+00:00",
+      "last_seen": "2026-10-13T17:06:46+00:00",
+      "source": "docs/audits/cycle-20261014T000000Z-16/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-13T17:06:46+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261014T000000Z-16/audit.json"
+        },
+        {
+          "time": "2026-10-13T17:06:46+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Canonical successful trace views were generated without modifying raw history; runner sequence protocol still needs hardening before another formal batch.",
+          "evidence": ""
         }
       ]
     }
@@ -244,7 +295,10 @@
     "docs/audits/cycle-20261012T140900Z-12/audit.json",
     "docs/audits/cycle-20261012T143000Z-13/audit.json",
     "docs/audits/cycle-20261012T150331Z-14/audit.json",
-    "docs/audits/cycle-20261012T152926Z-15/audit.json"
+    "docs/audits/cycle-20261012T152926Z-15/audit.json",
+    "docs/audits/cycle-20261014T000000Z-16/audit.json",
+    "docs/audits/cycle-20261014T010000Z-17/audit.json",
+    "docs/audits/cycle-20261014T020000Z-18/audit.json"
   ],
   "current_focus": null
 }

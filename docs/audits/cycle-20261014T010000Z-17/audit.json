@@ -1,0 +1,69 @@
+{
+  "cycle": "20261014T010000Z-17",
+  "experiment": "g6_counterfactual",
+  "status": "CORRECTED_VERIFIED_SUBSET_ANALYZED_PENDING_EXTERNAL_RELEASE",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-ff97c7c89112",
+        "severity": "P1",
+        "status": "RESOLVED_UNVERIFIED",
+        "title": "G5 mathematical truth gate was repaired by source-only verified subset selection",
+        "evidence": "scripts/verify_g5_g6_inputs.py independently checked the public model/parameters and selected proof graphs without reading answer_key or private_oracle: 23/24 families passed grade-B analytic/numeric checks; TB-L1-010 was explicitly excluded because its recessive mutation-selection formula is inconsistent and its graph contains an unresolved validity node. The 23-family corrected release has 552/552 completed responses, official validation, official score, and trace_audit.pass=true.",
+        "remediation": "Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator."
+      },
+      {
+        "id": "ISSUE-ad61f025976a",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G6 formal acceptance still lacks immutable model snapshot and complete project attestations",
+        "evidence": "The corrected subset proves source-family eligibility, but the provider traces still identify only model=glm-5 without an immutable snapshot/fingerprint, and the official project_preflight manifest remains BLOCKED_REAL_RUN. No external billing receipt or formal paired-family review has been added.",
+        "remediation": "Persist a provider-verifiable immutable model snapshot/fingerprint and billing evidence, complete truthful adapter/verifier/trace preflight attestations, and obtain independent clustered statistical review before RUN_COMPLETE."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-ff97c7c89112",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The formal release is now restricted to the 23 source-only independently checked families; the invalid family is retained as excluded evidence. External review is still required."
+      }
+    ],
+    "reviewed_issue_ids": ["ISSUE-ff97c7c89112", "ISSUE-ad61f025976a"],
+    "notes": "This cycle repaired the outstanding G5 input problem by exclusion and corrected-denominator analysis. It does not claim external scientific sign-off, model snapshot verification, or confirmatory inference."
+  },
+  "evidence": {
+    "independent_verifier": {
+      "report": "results/g6_counterfactual/formal-20261013T000000Z/g5_independent_verification.json",
+      "sha256": "08f33ebd717ee06952c888ff54d255f39bcf334872580d9b952bfe9fa9d6a799",
+      "verified_families": 23,
+      "excluded_families": ["TB-L1-010"],
+      "private_inputs_read": false,
+      "answer_key_read": false
+    },
+    "corrected_subset": {
+      "plan": 552,
+      "responses": 552,
+      "g3": 276,
+      "g4": 276,
+      "completion_g3": 1.0,
+      "completion_g4": 1.0,
+      "trace_audit_pass": true,
+      "plan_sha256": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+      "response_sha256": "4951c8a8d2bf6c88b91429582dd1c48323b49ccc675e2682002a4e08451dc34b",
+      "score_sha256": "6d81c3638f9ca43584e22d151b0dd316424f5144da94dfced57296f3ac3680c5"
+    },
+    "original_artifacts": {"plan": 576, "handoff": 576, "raw_modified": false},
+    "tests": [
+      "g6_offline.py validate --public public_cases_verified23.jsonl --private private_oracle_verified23.jsonl: PASS",
+      "g6_offline.py score on corrected subset: PASS",
+      "audit_g6_counterfactual.py corrected subset: PASS, failures=[]",
+      "full 576 score rerun to restore original handoff: PASS"
+    ]
+  },
+  "scope": {
+    "provider_calls_this_cycle": 0,
+    "synthetic_results_created": false,
+    "raw_g5_results_modified": false,
+    "remote_push": "not performed in this review cycle; no remote success claimed"
+  }
+}

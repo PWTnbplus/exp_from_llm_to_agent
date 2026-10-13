@@ -1,37 +1,21 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-12T15:30:43+00:00
+生成时间（UTC）：2026-10-13T17:19:38+00:00
 
-- 开放/阻塞/未验证：**6**
+- 开放/阻塞/未验证：**7**
 - 已验证修复：**1**
 - 已验证完成里程碑：**1**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
 
 ## 未解决和阻塞问题
 
-### ISSUE-ff97c7c89112 — P1 — OPEN
-- 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
-- 证据：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly reports FOUND_REQUIRES_MATH_VERIFICATION and does not establish mathematical truth.
-- 必需修复：Select G5 proof graphs only after an independent domain verifier confirms the original claim, quantifier, and evidence; then persist grade A/B/C oracle records.
-- 尝试次数：0
-- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
-- 阻塞原因：未记录
-
-### ISSUE-ad61f025976a — P1 — OPEN
-- 描述：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-ora
-- 证据：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-oracle isolation attestation, missing permission tests, missing paid-run authorization, missing independent G5 oracle verification, and missing full provider/tool trace tests.
-- 必需修复：Supply a verified model snapshot, positive hard model/tool/token/USD limits, private-oracle isolation and trace test evidence, and explicit paid-run authorization before creating any real G6 responses.
-- 尝试次数：0
-- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
-- 阻塞原因：未记录
-
-### ISSUE-000000000002 — P1 — BLOCKED
+### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：No real API request was launched; only provider failure paths are unit-tested.
-- 必需修复：With explicit authorization and a hard spend ceiling, run a minimal provider smoke test, archive redacted traces, and rerun the isolation audit.
+- 证据：The original raw run retains provider-error history and the corrected trace audit passes. Provider model identity metadata is now recorded, but no billing export or immutable weight snapshot is available for independent verification.
+- 必需修复：Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：A real-provider pilot requires explicit authorization and a positive hard cost ceiling; no such pilot parameters were supplied.
+- 阻塞原因：未记录
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
@@ -43,10 +27,26 @@
 
 ### ISSUE-000000000004 — P1 — RESOLVED_UNVERIFIED
 - 描述：Formal statistical validity is not established
-- 证据：configs/statistical_plan.json declares frozen 12/72 task strata and five repeats per arm, but src/scientific_discovery/cli.py only provides a one-run pilot path, accepts arbitrary manifests and limits, has no formal command, and does not execute repeat loops or assign replicate indices. Analysis also operates only on result files and does not join the registered manifest to synthesize missing task-runs; repeated rows lack persisted replicate identity.
-- 必需修复：Implement plan-driven pilot/formal execution with exact task counts, frozen manifest SHA-256, five registered replicates per arm, explicit persisted replicate_index, rejection of deviations, and analysis against the frozen manifest multiplied by repeats and arms. Add adversarial tests for unequal/incomplete clusters, failures, repeats, missing files, domain strata and complexity strata.
+- 证据：The 23-family corrected release has 552 matched rows and a deterministic paired-family bootstrap/McNemar analysis. Pooled G4-minus-G3 accuracy difference is -0.01811594202898551 with family-bootstrap 95% CI [-0.07608695652173915, 0.043478260869565216] and exact matched McNemar p=0.6353076420876663. CF3 is a prespecified exploratory stratum with difference -0.2753623188405797 and exact p=0.0005461. The analysis remains pending independent statistical review and does not justify causal or superiority claims.
+- 必需修复：Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
+- 阻塞原因：未记录
+
+### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
+- 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
+- 证据：scripts/verify_g5_g6_inputs.py independently checked the public model/parameters and selected proof graphs without reading answer_key or private_oracle: 23/24 families passed grade-B analytic/numeric checks; TB-L1-010 was explicitly excluded because its recessive mutation-selection formula is inconsistent and its graph contains an unresolved validity node. The 23-family corrected release has 552/552 completed responses, official validation, official score, and trace_audit.pass=true.
+- 必需修复：Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-ad61f025976a — P1 — RESOLVED_UNVERIFIED
+- 描述：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-ora
+- 证据：The official project_preflight.py run on configs/g6_project_preflight_verified23.json completed with 0 blockers and status READY_FOR_CONTROLLED_PILOT_NOT_RUN. The provider metadata endpoint returned HTTP 200 for glm-5 and its canonical metadata hash is persisted. The evidence is only model identity/creation metadata: the gateway supplied no immutable weight fingerprint, and no external billing receipt is present.
+- 必需修复：Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000005 — P2 — OPEN
@@ -55,6 +55,14 @@
 - 必需修复：Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
+- 阻塞原因：未记录
+
+### ISSUE-6b3a9e1d4f20 — P2 — RESOLVED_UNVERIFIED
+- 描述：Raw G6 traces contain noncanonical retry segments that require a derived audit view
+- 证据：The append-only raw trace directory contains 576 files, 378 with nonmonotonic sequence histories and 8 intermediate starts without RUN_END. No raw line was overwritten; repair_g6_trace_views.py selected the last complete successful segment and produced 576 canonical audited traces with failures=[] .
+- 必需修复：Keep raw history immutable, use only the hashed canonical trace view for scoring, and fix the runner's resume/sequence protocol before the next formal batch.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261014T000000Z-16/audit.json
 - 阻塞原因：未记录
 
 ## 已验证解决的问题

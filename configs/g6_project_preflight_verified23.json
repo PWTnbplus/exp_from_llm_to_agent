@@ -1,0 +1,25 @@
+{
+  "project_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent",
+  "g5_root": "D:\\硕士\\prj1_ai_cal\\exp\\exp1_from_llm_to_agent\\benchmark\\g5_answer_given\\g5-answer-given-20261011T084147Z-be8875a4",
+  "g3_runner_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\scripts\\run_g6_counterfactual.py",
+  "g4_runner_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\scripts\\run_g6_counterfactual.py",
+  "provider_adapter_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\src\\scientific_discovery\\models\\provider.py",
+  "tool_dispatcher_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\scripts\\run_g6_counterfactual.py",
+  "policy_enforcer_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\src\\scientific_discovery\\experiment\\policy.py",
+  "trace_writer_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\src\\scientific_discovery\\observability\\trace.py",
+  "independent_verifier_entry": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\scripts\\verify_g5_g6_inputs.py",
+  "verified_model_snapshot": "results/g6_counterfactual/formal-20261013T000000Z/provider_model_metadata.json#sha256=3508217b79d8ca0dd9244782d45ee28b99461692e14f3f1accb991a6651f5f8f; gateway_weight_fingerprint=false",
+  "hard_limits": {
+    "max_model_calls": 4608,
+    "max_tool_calls": 3456,
+    "max_total_tokens": 4608000,
+    "max_cost_usd": 200.0
+  },
+  "source_g0_to_g5_read_only": true,
+  "enforce_private_oracle_isolation_in_code": true,
+  "model_and_tools_permission_tests_passed": true,
+  "approved_paid_api_execution": true,
+  "verified_g5_proofs_by_independent_oracle": true,
+  "full_provider_and_tool_trace_tests_passed": true,
+  "scope_note": "The independent verifier admits 23 families and excludes TB-L1-010; the preflight is for the corrected verified23 G6 release, not for all 1309 historical G5 graphs."
+}
