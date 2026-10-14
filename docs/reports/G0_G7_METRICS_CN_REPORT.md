@@ -321,4 +321,3 @@ Q invalid 的主要原因是 terminal/missing state 和严格 verdict 审计失�
 - `results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_q_audit.jsonl`
 - `results/g7_failure_localization/formal-20261014T030000Z-16workers/g8_handoff.json`
 - `docs/audits/cycle-20261014T163000Z-20/audit.json`
-
