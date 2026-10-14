@@ -1,8 +1,8 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-14T16:32:19+00:00
+生成时间（UTC）：2026-10-14T17:18:23+00:00
 
-- 开放/阻塞/未验证：**9**
+- 开放/阻塞/未验证：**10**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
@@ -11,10 +11,18 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — OPEN
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The canonical 16-worker merge contains all 1288 planned fork IDs and all 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed; 295 fork rows and 31 checkpoint rows are terminal provider/checkpoint failures. Independent Q audit is 3 valid and 1285 invalid. These rows remain explicit failures in the canonical state views.
-- 必需修复：Do not impute or relabel terminal failures. If confirmatory precision is required, run a separately frozen retry/replicate plan after diagnosing provider timeout/parse failure causes, with independent trace and Q review; do not pool it silently with this run.
+- 证据：The canonical G7 run retains all 1288 fork IDs and 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed. Independent Q audit has 3 valid and 1285 invalid rows.
+- 必需修复：Keep terminal failures and Q invalidity unchanged. Before confirmatory G8 use, diagnose provider failures and obtain independent trace/Q review or run a separately frozen retry plan.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261014T163000Z-20/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-f9171bb760b1 — P1 — OPEN
+- 描述：No frozen, auditable G8 real/sham/off/extra adapter is present
+- 证据：Repository inspection found G6/G7 runners but no G8 implementation exposing M_real, M_sham, M_off and generic_extra_thinking with the required mechanism events and hard per-call budgets. The G8 example config still contains placeholder model snapshot text.
+- 必需修复：After G7 selection=GO, implement and independently review the real adapter, freeze its operation contract/version hash, public checkpoint mapping, model snapshot, hard limits, sham construction and G4 removal semantics before any paid run.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261015T000000Z-21/audit.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
@@ -59,8 +67,8 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：The final G7 input audit covers 92 cases and 23 theory families with no mock/demo inputs. The independently generated local-label audit reports edge_count_distribution={0:92} and eligible_u_cases=0; the final G7 run therefore contains no invented dependency edges and does not claim complete L-edge or U localization.
-- 必需修复：Obtain an independently audited replacement proof-graph edge dataset with source hashes before enabling edge-level L/U claims; keep the present edge-free labels and G7 results as diagnostic-only evidence.
+- 证据：The final G7 V/L/U audit covers 92 public cases and reports edge_count_distribution={0:92} with eligible_u_cases=0. The G7-to-G8 handoff has mechanisms=[] and selection=REQUIRES_EXTERNAL_TRACE_AND_SCIENTIFIC_REVIEW.
+- 必需修复：Obtain an independent scientific/trace review and, if L or U is proposed, an independently audited replacement edge/state-transition dataset with source hashes. Do not auto-select L or invent edges.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.

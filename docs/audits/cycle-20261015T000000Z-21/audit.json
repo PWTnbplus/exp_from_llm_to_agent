@@ -1,0 +1,81 @@
+{
+  "cycle": "20261015T000000Z-21",
+  "experiment": "g8_causal_mechanism",
+  "status": "BLOCKED_G7_HANDOFF",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "title": "G7 has no independently audited dependency edges, so L/U mechanism selection is not eligible",
+        "evidence": "The final G7 V/L/U audit covers 92 public cases and reports edge_count_distribution={0:92} with eligible_u_cases=0. The G7-to-G8 handoff has mechanisms=[] and selection=REQUIRES_EXTERNAL_TRACE_AND_SCIENTIFIC_REVIEW.",
+        "remediation": "Obtain an independent scientific/trace review and, if L or U is proposed, an independently audited replacement edge/state-transition dataset with source hashes. Do not auto-select L or invent edges."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G7 provider failures and low independent Q coverage block a clean G8 mechanism handoff",
+        "evidence": "The canonical G7 run retains all 1288 fork IDs and 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed. Independent Q audit has 3 valid and 1285 invalid rows.",
+        "remediation": "Keep terminal failures and Q invalidity unchanged. Before confirmatory G8 use, diagnose provider failures and obtain independent trace/Q review or run a separately frozen retry plan."
+      },
+      {
+        "id": "G8-REAL-ADAPTER-MISSING-20261015",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "title": "No frozen, auditable G8 real/sham/off/extra adapter is present",
+        "evidence": "Repository inspection found G6/G7 runners but no G8 implementation exposing M_real, M_sham, M_off and generic_extra_thinking with the required mechanism events and hard per-call budgets. The G8 example config still contains placeholder model snapshot text.",
+        "remediation": "After G7 selection=GO, implement and independently review the real adapter, freeze its operation contract/version hash, public checkpoint mapping, model snapshot, hard limits, sham construction and G4 removal semantics before any paid run."
+      }
+    ],
+    "positive_checks": [
+      "G8 SKILL.md and references 01-06 were read completely from the supplied ZIP.",
+      "G8 doctor passed.",
+      "G8 package tests passed 8/8 after isolating and repairing a Windows shlex adapter-path parsing defect in the temporary review copy; the supplied ZIP itself was not modified.",
+      "A real-input audit attempt was correctly rejected by the G8 selection gate with G7 handoff not GO; no demo result was promoted to science.",
+      "G7 final input audit reports 92 cases, 23 families, 552 handoff rows and has_demo_or_mock=false.",
+      "G7 score reports 1288 planned/provided states, 993 completed states, 295 terminal failures and 1288 independent Q rows with only 3 valid.",
+      "No G8 paid provider call, six-arm plan, raw run, score or causal claim was created after the gate failure."
+    ]
+  },
+  "evidence": {
+    "g8_skill_zip": "D:/硕士/prj1_ai_cal/exp/exp1_from_llm_to_agent/prompt/G8_Causal_Mechanism_Skill.zip",
+    "g8_skill_zip_sha256": "4086360f393b8b3232ec700105a87738246438a16e4e97daad1de8a5e3a09bb2",
+    "g7_root": "results/g7_failure_localization/formal-20261014T030000Z-16workers",
+    "g7_handoff": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g8_handoff.json",
+    "g7_handoff_sha256": "53185fd16687abae372b697f90c03fdde4788f3e4469ccf787ebe820abbd60c3",
+    "g7_handoff_selection": "REQUIRES_EXTERNAL_TRACE_AND_SCIENTIFIC_REVIEW",
+    "g7_handoff_mechanisms": [],
+    "g7_evidence_status": "IMPORTED_REQUIRE_CHECKPOINT_PROVIDER_ORACLE_TRACE_AUDIT",
+    "g7_public_cases": 92,
+    "g7_theory_families": 23,
+    "g7_handoff_runs": 552,
+    "g7_public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "g7_checkpoints": 184,
+    "g7_checkpoints_sha256": "28cbfead349cc35682141df3ac99841d3ebbecdde08280d2849738645b201932",
+    "g7_score_sha256": "060e5a59fc52caaed6bdc773c0fe4252cc732f5d66e8b837f5740c14095da43e",
+    "g7_q_rows": 1288,
+    "g7_q_valid": 3,
+    "g7_q_invalid": 1285,
+    "g7_edge_count_distribution": {"0": 92},
+    "g7_eligible_u_cases": 0,
+    "g8_planned_rows": 0,
+    "g8_completed_rows": 0,
+    "g8_paid_provider_calls": 0
+  },
+  "scope": {
+    "user_paid_experiment_authorization": true,
+    "g8_workers_requested": 16,
+    "real_experiment_started": false,
+    "demo_results_used_as_science": false,
+    "old_g0_g7_artifacts_modified": false,
+    "remote_push": "not attempted"
+  },
+  "scientific_caveats": [
+    "G7 diagnostic D/V/L/U interventions are information interventions, not proof of an executable endogenous mechanism.",
+    "G8 cannot choose L merely because L appears in G7 diagnostic labels; selection must be externally reviewed and frozen.",
+    "A blocked G8 gate is not a zero-effect result and must not be reported as a causal null.",
+    "The six-arm G8 design remains unexecuted; no GO, REVISE or STOP causal conclusion is available beyond the pre-run BLOCKED status."
+  ]
+}
