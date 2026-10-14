@@ -30,6 +30,95 @@ def main() -> int:
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
     root = args.out
+
+    # The repaired G6 protocol is an append-only, two-worker run and does not
+    # reuse the historical 576-row release bundle.  Review it from its own
+    # manifests and post-run audits; retain the legacy branch below for the
+    # previously published artifact layout.
+    corrected_audit_path = root / "g6_audit" / "audit.json"
+    corrected_manifests = sorted(root.glob("runner_manifest*.json"))
+    if corrected_manifests and corrected_audit_path.is_file():
+        failures: list[str] = []
+        plan = read_jsonl(root / "run_plan.jsonl")
+        responses = read_jsonl(root / "responses_audited.jsonl")
+        public = read_jsonl(root / "public_cases.jsonl")
+        private = read_jsonl(root / "private_oracle.jsonl")
+        handoff = read_jsonl(root / "g6_to_g7_handoff.jsonl")
+        audit = read_json(corrected_audit_path)
+        trace_repair = read_json(root / "trace_repair_manifest.json")
+        merge_manifest = read_json(root / "responses_merge_manifest.json")
+        manifests = [read_json(path) for path in corrected_manifests]
+
+        expected = {
+            "plan": 552,
+            "public": 92,
+            "private": 92,
+            "handoff": 552,
+        }
+        counts = {
+            "plan": len(plan),
+            "responses": len(responses),
+            "public": len(public),
+            "private": len(private),
+            "handoff": len(handoff),
+        }
+        for name, value in expected.items():
+            if counts[name] != value:
+                failures.append(f"{name}_count:{counts[name]}:{value}")
+        if len({row.get("run_id") for row in plan}) != expected["plan"]:
+            failures.append("plan_run_id_uniqueness")
+        if len({row.get("run_id") for row in responses}) != expected["plan"]:
+            failures.append("response_run_id_uniqueness")
+        if {row.get("run_id") for row in plan} != {row.get("run_id") for row in responses}:
+            failures.append("response_plan_bijection")
+        if len({row.get("case_id") for row in public}) != expected["public"]:
+            failures.append("public_case_id_uniqueness")
+        if len({row.get("case_id") for row in private}) != expected["private"]:
+            failures.append("private_case_id_uniqueness")
+        if any(row.get("status") != "completed" for row in responses):
+            failures.append("non_completed_canonical_response")
+        if audit.get("pass") is not True or audit.get("plan_count") != expected["plan"] or audit.get("trace_count") != expected["plan"]:
+            failures.append("g6_audit")
+        if trace_repair.get("audited_response_count") != expected["plan"] or trace_repair.get("failed_to_extract_successful_attempt"):
+            failures.append("trace_repair")
+        if merge_manifest.get("selected_completed_rows") != expected["plan"] or merge_manifest.get("missing_run_ids"):
+            failures.append("response_merge")
+        profiles = {manifest.get("protocol_profile") for manifest in manifests}
+        workers = {manifest.get("worker_count") for manifest in manifests}
+        if profiles != {"g6_protocol_g3_tools_iteration"}:
+            failures.append(f"protocol_profile:{sorted(profiles)}")
+        if workers != {2}:
+            failures.append(f"worker_count:{sorted(workers)}")
+        for manifest in manifests:
+            if manifest.get("model_id") != "glm-5" or manifest.get("base_url") != "https://token.ctflow.cn/v1":
+                failures.append("manifest_model_or_base_url")
+            if manifest.get("oracle_loaded") is not False or manifest.get("allow_paid") is not True:
+                failures.append("manifest_isolation_or_paid_flag")
+
+        actual_hashes = {
+            rel: digest(root / rel)
+            for rel in ("run_plan.jsonl", "public_cases.jsonl", "private_oracle.jsonl", "responses_audited.jsonl", "g6_to_g7_handoff.jsonl")
+        }
+        result = {
+            "review": "independent_g6_release_review",
+            "artifact_root": str(root.resolve()),
+            "protocol_layout": "corrected_g6_protocol_g3_tools_iteration",
+            "structural_review_pass": not failures,
+            "scientific_release_allowed": False,
+            "failures": failures,
+            "counts": counts,
+            "hashes": actual_hashes,
+            "protocol_profile": sorted(profiles),
+            "worker_counts": sorted(workers),
+            "g6_audit_pass": audit.get("pass"),
+            "revision_valid_count": audit.get("revision_valid_count"),
+            "note": "Structural completeness does not override the G5 independent-math, upstream provenance, or verified-model-snapshot blockers.",
+        }
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(result, ensure_ascii=False))
+        return 0 if not failures else 2
+
     failures: list[str] = []
     required = [
         "manifest.json", "G6_MANIFEST.json", "G6_SOURCE_INDEX.json",

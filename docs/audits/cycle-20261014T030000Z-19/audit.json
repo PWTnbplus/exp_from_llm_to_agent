@@ -1,0 +1,55 @@
+{
+  "cycle": "20261014T030000Z-19",
+  "experiment": "g6_g7_transition",
+  "status": "BLOCKED_PENDING_PROTOCOL_REPAIR_AND_BUDGET",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-7e3d4a91c2f0",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G6 A arm execution semantics do not match the G6/G7 protocol",
+        "evidence": "The G6 protocol defines G6_A_G3_GIVEN as the derived G3 Tools+Iteration arm. The frozen project runner scripts/run_g6_counterfactual.py instead gives G3 no tools, exactly two fixed-reflection model calls, and rejects G3 tool calls; docs/experiment_groups.md and configs/experiment_groups.json confirm the same implementation. The existing 552-row corrected subset therefore cannot be treated as a verified G6 Tools+Iteration run.",
+        "remediation": "Keep the historical G6 artifacts immutable. Freeze an explicit corrected G3 Tools+Iteration adapter, run it against the verified 23-family denominator with the same public inputs, matched G4 controls, hard limits, raw traces, and 2 workers; re-audit and use only the corrected handoff for G7.",
+        "verification_command": "Select-String -Path scripts/run_g6_counterfactual.py,docs/experiment_groups.md,configs/experiment_groups.json -Pattern 'G3|reflection|Tools|Iteration'"
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
+        "evidence": "The 92 public cases in results/g6_counterfactual/formal-20261013T000000Z/public_cases_verified23.jsonl have 0 edges in every public_proof_graph. The corresponding 299 G5 proof_graph.json files also have 0 edges. G7 requires independently audited V/L/U labels and treats L as affected claim IDs plus dependency edges; the current artifacts do not supply observable dependency edges, so no edges may be invented for a formal G7 run.",
+        "remediation": "Preserve the old G5/G6 files unchanged. Either obtain an independently audited replacement proof-graph edge dataset with source hashes, or explicitly mark L-edge and U-injection analyses ineligible and run only the protocol-supported diagnostic subset; do not fabricate graph relations or claim complete failure localization.",
+        "verification_command": "E:/resources/python/python.exe -c <read-only edge-count audit for verified23 public cases and G5 proof graphs>"
+      }
+    ],
+    "reviewed_scope": [
+      "G0-G6 state documents and issue ledger",
+      "G6 corrected 23-family artifacts and raw/canonical trace audits",
+      "G6 runner and group configuration",
+      "G7 skill, schemas, preflight, offline CLI, and tests",
+      "G7 preflight against the existing flat G6 result layout"
+    ],
+    "positive_checks": [
+      "G6 official verifier: PASS, 23 verified families and TB-L1-010 excluded",
+      "G6 official release review: structural PASS, scientific release still blocked by existing gates",
+      "G6 official trace/score audits: PASS on the corrected subset",
+      "G6 skill tests: PASS, 13 tests",
+      "Host suite: PASS, 99 tests",
+      "G7 skill tests: PASS, 8 tests",
+      "G7 doctor: PASS for offline-only package self-check"
+    ],
+    "g7_preflight": {
+      "status": "BLOCKED_REAL_RUN",
+      "reason": "The provided preflight expects nested dataset/ and results/ imports; the existing G6 run is a flat historical layout. A read-only imported staging layout is required after protocol repair.",
+      "report": "C:/Users/pwt/AppData/Local/Temp/g7_preflight_20261014.json"
+    }
+  },
+  "scope": {
+    "paid_calls": 0,
+    "workers_used": 0,
+    "old_g5_g6_modified": false,
+    "synthetic_results_used_as_science": false,
+    "remote_push": "not attempted"
+  }
+}

@@ -120,8 +120,10 @@ def public_math_tool(arguments: dict[str, Any]) -> dict[str, Any]:
     return {"expression": str(expr), "value": value}
 
 
-def make_system(arm: str) -> str:
-    if arm == "G6_A_G3_GIVEN":
+def make_system(arm: str, protocol_profile: str = "legacy_project") -> str:
+    if arm == "G6_A_G3_GIVEN" and protocol_profile == "g6_protocol_g3_tools_iteration":
+        capability = "You are the frozen G3 Tools+Iteration arm. You may use only the listed bounded public-expression tools during the fixed two-pass workflow. The second pass is a fixed synthesis/reflection pass; do not access hidden answers or adapt the workflow beyond the bounded tool calls."
+    elif arm == "G6_A_G3_GIVEN":
         capability = "You are the fixed-reflection G3 arm. You have no tools. Make one analysis pass and one fixed reflection pass."
     else:
         capability = "You are the adaptive G4 arm. You may use only the listed bounded public-expression tools and may condition later actions on their observable outputs."
@@ -242,21 +244,22 @@ def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAICompatibleProvider, limits: Limits, out: Path, request_delay: float = 0.0) -> dict[str, Any]:
+def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAICompatibleProvider, limits: Limits, out: Path, request_delay: float = 0.0, protocol_profile: str = "legacy_project") -> dict[str, Any]:
     run_id = plan_row["run_id"]
     run_dir = out / "traces" / run_id
     event_path = run_dir / "events.jsonl"
     case_id = case["case_id"]
     arm = plan_row["arm_id"]
-    messages: list[dict[str, Any]] = [{"role": "system", "content": make_system(arm)}, {"role": "user", "content": case_prompt(case)}]
+    messages: list[dict[str, Any]] = [{"role": "system", "content": make_system(arm, protocol_profile)}, {"role": "user", "content": case_prompt(case)}]
     # A Ctrl+C or transport failure can leave a partial trace.  Continue its
     # sequence rather than creating duplicate seq=1 records on resume.
     seq = existing_event_seq(event_path)
     started = time.monotonic()
     try:
-        seq = emit_event(event_path, seq, run_id, "RUN_START", status="RUNNING", payload={"case_id": case_id, "arm_id": arm, "group_id": plan_row["group_id"], "model_id": provider.model_name})
-        call_limit = 2 if plan_row["group_id"] == "G3" else 8
-        tools = None if plan_row["group_id"] == "G3" else TOOLS
+        seq = emit_event(event_path, seq, run_id, "RUN_START", status="RUNNING", payload={"case_id": case_id, "arm_id": arm, "group_id": plan_row["group_id"], "model_id": provider.model_name, "protocol_profile": protocol_profile})
+        protocol_g3 = protocol_profile == "g6_protocol_g3_tools_iteration" and plan_row["group_id"] == "G3"
+        call_limit = 8 if protocol_g3 else (2 if plan_row["group_id"] == "G3" else 8)
+        tools = TOOLS if (plan_row["group_id"] == "G4" or protocol_g3) else None
         final_payload: dict[str, Any] | None = None
         for call_index in range(call_limit):
             if plan_row["group_id"] == "G3" and call_index == 1:
@@ -269,8 +272,8 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
             limits.consume(response)
             seq = emit_event(event_path, seq, run_id, "MODEL_RESPONSE", status="COMPLETED", payload={"call_index": call_index + 1, "content": response.content, "tool_calls": response.tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata})
             if response.tool_calls:
-                if plan_row["group_id"] != "G4":
-                    raise RuntimeError("G3 returned a tool call")
+                if plan_row["group_id"] != "G4" and not protocol_g3:
+                    raise RuntimeError("legacy G3 returned a tool call")
                 messages.append({"role": "assistant", "content": response.content, "tool_calls": response.tool_calls})
                 for tool_call in response.tool_calls:
                     fn = tool_call.get("function", tool_call)
@@ -290,6 +293,8 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
             parsed = extract_json(response.content)
             if parsed is not None:
                 final_payload = normalize_payload(parsed)
+                if protocol_g3 and call_index == 0:
+                    continue
                 if plan_row["group_id"] == "G3" or call_index >= 1:
                     break
         if final_payload is None:
@@ -326,6 +331,9 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="bounded real smoke-run prefix; omit for the full frozen plan")
     parser.add_argument("--worker-index", type=int, default=0, help="zero-based disjoint plan shard for safe multi-key recovery")
     parser.add_argument("--worker-count", type=int, default=1, help="number of disjoint plan shards running concurrently")
+    parser.add_argument("--protocol-profile", choices=("legacy_project", "g6_protocol_g3_tools_iteration"), default="legacy_project", help="legacy preserves historical semantics; the protocol profile is a new immutable-output correction")
+    parser.add_argument("--expected-case-count", type=int, default=96)
+    parser.add_argument("--expected-plan-rows", type=int, default=576)
     args = parser.parse_args()
     if not args.allow_paid:
         raise SystemExit("real G6 requires --allow-paid")
@@ -339,13 +347,15 @@ def main() -> int:
         raise SystemExit("request delay must be between 0 and 10 seconds")
     if args.worker_count <= 0 or not 0 <= args.worker_index < args.worker_count:
         raise SystemExit("worker index/count must define a valid zero-based shard")
+    if args.worker_count > 2:
+        raise SystemExit("this controlled run permits at most 2 workers")
     key = args.key_file.read_text(encoding="utf-8").strip()
     if not key.startswith("sk-"):
         raise SystemExit("local key file is not a valid provider key format")
     cases = {row["case_id"]: row for row in read_jsonl(args.public_cases)}
     plan = read_jsonl(args.plan)
-    if len(cases) != 96 or len(plan) != 576:
-        raise SystemExit(f"formal G6 requires 96 cases and 576 plan rows, got {len(cases)} and {len(plan)}")
+    if len(cases) != args.expected_case_count or len(plan) != args.expected_plan_rows:
+        raise SystemExit(f"G6 input contract requires {args.expected_case_count} cases and {args.expected_plan_rows} plan rows, got {len(cases)} and {len(plan)}")
     args.out.mkdir(parents=True, exist_ok=True)
     response_path = args.out / ("responses.jsonl" if args.worker_count == 1 else f"responses.worker-{args.worker_count}-{args.worker_index}.jsonl")
     # Only a completed, schema-valid response satisfies a plan row.  Earlier
@@ -370,14 +380,14 @@ def main() -> int:
     # measured usage restored in Limits above.
     provider._reserved_cost_usd = float(prior["reserved_cost_usd"])
     manifest_path = args.out / ("runner_manifest.json" if args.worker_count == 1 else f"runner_manifest.worker-{args.worker_count}-{args.worker_index}.json")
-    atomic_json(manifest_path, {"experiment_id": "g6_counterfactual", "model_id": args.model_id, "base_url": args.base_url, "public_cases": str(args.public_cases), "oracle_loaded": False, "allow_paid": True, "provider_retries": args.provider_retries, "provider_timeout": args.provider_timeout, "request_delay": args.request_delay, "worker_index": args.worker_index, "worker_count": args.worker_count, "response_path": str(response_path), "hard_limits": {"max_model_calls": args.max_model_calls, "max_tool_calls": args.max_tool_calls, "max_total_tokens": args.max_total_tokens, "max_cost_usd": args.max_cost_usd}, "resume_baseline": prior, "retry_invalid_records": True, "started_at_utc": utc_now()})
+    atomic_json(manifest_path, {"experiment_id": "g6_counterfactual", "model_id": args.model_id, "base_url": args.base_url, "public_cases": str(args.public_cases), "oracle_loaded": False, "allow_paid": True, "protocol_profile": args.protocol_profile, "provider_retries": args.provider_retries, "provider_timeout": args.provider_timeout, "request_delay": args.request_delay, "worker_index": args.worker_index, "worker_count": args.worker_count, "response_path": str(response_path), "hard_limits": {"max_model_calls": args.max_model_calls, "max_tool_calls": args.max_tool_calls, "max_total_tokens": args.max_total_tokens, "max_cost_usd": args.max_cost_usd}, "resume_baseline": prior, "retry_invalid_records": True, "started_at_utc": utc_now()})
     run_plan = plan if args.limit <= 0 else plan[:args.limit]
     if args.worker_count > 1:
         run_plan = [row for position, row in enumerate(run_plan) if position % args.worker_count == args.worker_index]
     for index, row in enumerate(run_plan, 1):
         if row["run_id"] in completed:
             continue
-        result = run_one(cases[row["case_id"]], row, provider, limits, args.out, args.request_delay)
+        result = run_one(cases[row["case_id"]], row, provider, limits, args.out, args.request_delay, args.protocol_profile)
         append_jsonl(response_path, result)
         if index % 10 == 0 or result["status"] != "completed":
             print(f"G6 progress {index}/{len(plan)}: {result['status']} calls={limits.model_calls} tools={limits.tool_calls} tokens={limits.total_tokens}", flush=True)

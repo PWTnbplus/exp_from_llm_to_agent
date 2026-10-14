@@ -1,0 +1,108 @@
+{
+  "cycle": "20261014T163000Z-20",
+  "experiment": "g0_g7_scientific_law_recovery",
+  "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "title": "Dependency-edge data are absent, so complete L/U localization is ineligible",
+        "evidence": "The final G7 input audit covers 92 cases and 23 theory families with no mock/demo inputs. The independently generated local-label audit reports edge_count_distribution={0:92} and eligible_u_cases=0; the final G7 run therefore contains no invented dependency edges and does not claim complete L-edge or U localization.",
+        "remediation": "Obtain an independently audited replacement proof-graph edge dataset with source hashes before enabling edge-level L/U claims; keep the present edge-free labels and G7 results as diagnostic-only evidence."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
+        "evidence": "The canonical 16-worker merge contains all 1288 planned fork IDs and all 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed; 295 fork rows and 31 checkpoint rows are terminal provider/checkpoint failures. Independent Q audit is 3 valid and 1285 invalid. These rows remain explicit failures in the canonical state views.",
+        "remediation": "Do not impute or relabel terminal failures. If confirmatory precision is required, run a separately frozen retry/replicate plan after diagnosing provider timeout/parse failure causes, with independent trace and Q review; do not pool it silently with this run."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-7e3d4a91c2f0",
+        "verdict": "VERIFIED",
+        "evidence": "The corrected G6 runner profile g6_protocol_g3_tools_iteration was executed with exactly 2 workers on the verified 23-family denominator. The final G6 audit passes with 552/552 plan/response/trace rows, 1826 model requests, 1796 tool calls, no audit failures, and worker_counts=[2]; the independent release review is structurally passing and the corrected handoff is the only G7 input handoff.",
+        "reason": "Independent host tests and read-only G6 audit/release review verify the protocol repair; scientific release gates remain separate and blocked."
+      }
+    ],
+    "reviewed_scope": [
+      "docs/state/G6_HANDOFF_NEXT_AGENT.md and recovery issue ledger",
+      "G0-G5 inherited verified artifacts and release blockers",
+      "corrected G6 23-family protocol-g3tools-v2 run, append-only traces, merge, repair, audit, and release review",
+      "G7 skill ZIP, schemas, offline doctor, input audit, frozen 1288-row plan, 16-worker provider run, canonical merge, independent Q audit, score, and G8 handoff template"
+    ],
+    "positive_checks": [
+      "G5/G6 public verifier: 23 VERIFIED_INDEPENDENT_B families; TB-L1-010 explicitly excluded; private_inputs_read=false and answer_key_read=false",
+      "G6 corrected audit: PASS; plan=552, responses=552, traces=552, failures=[]; protocol_profile=g6_protocol_g3_tools_iteration; workers=[2]",
+      "G6 trace repair: 552 audited responses, raw_nonmonotonic_trace_count=0, failed_to_extract_successful_attempt=[]",
+      "G6 release review: structural_review_pass=true; scientific_release_allowed=false because independent-math, upstream-provenance, model-snapshot, billing, and statistical gates remain unresolved",
+      "G7 final strict-real input audit: PASS; cases=92, theory_families=23, handoff_runs=552, has_demo_or_mock=false",
+      "G7 canonical merge: 1288/1288 fork IDs and 184/184 checkpoint IDs present; no missing IDs",
+      "G7 independent Q audit: 1288 rows retained; valid=3, invalid=1285",
+      "G7 offline doctor: standalone stdlib/no-network self-check PASS",
+      "G6 package tests: 13 passed; G7 package tests: 8 passed; host suite: 99 passed; py_compile PASS"
+    ]
+  },
+  "evidence": {
+    "g6_root": "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z",
+    "g6_audit": "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z/g6_audit/audit_final.json",
+    "g6_release_review": "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z/g6_release_review_final.json",
+    "g6_plan_rows": 552,
+    "g6_completed_rows": 552,
+    "g6_workers": 2,
+    "g6_cost_usd_from_response_audit": 6.057783,
+    "g7_root": "results/g7_failure_localization/formal-20261014T030000Z-16workers",
+    "g7_model": "glm-5",
+    "g7_workers": 16,
+    "g7_plan_rows": 1288,
+    "g7_selected_state_rows": 1288,
+    "g7_completed_state_rows": 993,
+    "g7_terminal_state_rows": 295,
+    "g7_checkpoint_rows": 184,
+    "g7_completed_checkpoint_rows": 153,
+    "g7_q_rows": 1288,
+    "g7_q_valid_rows": 3,
+    "g7_q_invalid_rows": 1285,
+    "g7_repeat_per_arm": 1,
+    "g7_edge_count_distribution": {"0": 92},
+    "g7_eligible_u_cases": 0,
+    "g7_score_evidence_status": "IMPORTED_REQUIRE_CHECKPOINT_PROVIDER_ORACLE_TRACE_AUDIT",
+    "g7_g8_mechanisms_auto_selected": 0,
+    "hashes": {
+      "g6_plan": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+      "g6_responses": "97022fa9ac84dad61c24c98fbc1fee2ba2b357ee853eccd9614cc348da8312fa",
+      "g6_handoff": "ec51c3114b84da9f818d0f6407794e42454cbe87565aa0baaf60081c61602c02",
+      "g7_plan": "549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3",
+      "g7_states": "714e53654e070a74bc026c11c7396fc243b8e4b72a45e3ed4e9025d8fe66efef",
+      "g7_checkpoints": "28cbfead349cc35682141df3ac99841d3ebbecdde08280d2849738645b201932",
+      "g7_q_audit": "7090520110215c742259dc5598d0c37dc14a155dfd93dc165d011a3e460d27ff",
+      "g7_score": "060e5a59fc52caaed6bdc773c0fe4252cc732f5d66e8b837f5740c14095da43e",
+      "g8_handoff": "53185fd16687abae372b697f90c03fdde4788f3e4469ccf787ebe820abbd60c3"
+    }
+  },
+  "scope": {
+    "paid_calls_authorized": true,
+    "g6_worker_count": 2,
+    "g7_worker_count": 16,
+    "g7_caps_per_worker": {
+      "max_model_calls": 100000,
+      "max_tool_calls": 100000,
+      "max_total_tokens": 100000000,
+      "max_cost_usd": 1000.0
+    },
+    "synthetic_results_used_as_science": false,
+    "old_g5_g6_artifacts_modified": false,
+    "remote_push": "not attempted in this continuation"
+  },
+  "scientific_caveats": [
+    "G6/G7 completion here means the prescribed execution, merging, auditing, and handoff artifacts were produced; it does not mean every provider row succeeded.",
+    "G7 diagnostic local-oracle interventions are not endogenous causal mechanisms and cannot support superiority claims.",
+    "All 92 cases have zero independently verified dependency edges and U is ineligible; no edges were fabricated.",
+    "G7 repeats=1 and terminal failures make the score exploratory rather than high-precision confirmatory evidence.",
+    "G8 selects no mechanism automatically; external trace, math, provenance, model snapshot, billing, and statistical review remain required."
+  ]
+}

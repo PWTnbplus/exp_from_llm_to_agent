@@ -14,6 +14,7 @@ DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
 ALLOWED_TOOLS = {"calculate_expression", "run_experiment"}
 PRIVATE_VALUE_FIELDS = ("correct_revised_claim", "counterexample", "oracle_reason")
 REVISION_REF = "g6_private_oracle_grade_c_postrun_revision_rubric_v1"
+SUPPORTED_PROTOCOL_PROFILES = {"legacy_project", "g6_protocol_g3_tools_iteration"}
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -99,6 +100,12 @@ def main() -> int:
     response_by_run = {row["run_id"]: row for row in responses}
     failures: list[str] = []
     checks = Counter()
+    manifests, manifest_failures = load_manifests(args.out)
+    failures.extend(manifest_failures)
+    profiles = {str(manifest.get("protocol_profile")) for manifest in manifests}
+    if profiles - SUPPORTED_PROTOCOL_PROFILES or len(profiles) != 1:
+        failures.append(f"protocol_profile:{sorted(profiles)}")
+    protocol_profile = next(iter(profiles), "legacy_project")
 
     if len(plan) != args.expected_plan_count or len(plan_by_run) != args.expected_plan_count:
         failures.append(f"plan_count:{len(plan)}:{len(plan_by_run)}")
@@ -201,22 +208,20 @@ def main() -> int:
             elif event_type == "TOOL_CALL":
                 tool_call_count += 1
                 name = (payload.get("tool_name") or "")
-                if plan_row["group_id"] == "G3":
+                if plan_row["group_id"] == "G3" and protocol_profile == "legacy_project":
                     failures.append(f"g3_tool_call:{run_id}")
                 if name not in ALLOWED_TOOLS:
                     failures.append(f"unauthorized_tool:{run_id}:{name}")
             elif event_type == "TOOL_RESULT":
                 tool_result_count += 1
 
-    manifests, manifest_failures = load_manifests(args.out)
-    failures.extend(manifest_failures)
     for manifest in manifests:
         if manifest.get("model_id") != "glm-5" or manifest.get("base_url") != "https://token.ctflow.cn/v1":
             failures.append("manifest_model_or_base_url")
         if manifest.get("oracle_loaded") is not False:
             failures.append("manifest_oracle_loaded")
-    if not any(manifest.get("worker_count") == 16 for manifest in manifests):
-        failures.append("no_16_way_manifest")
+        if int(manifest.get("worker_count", 0)) != 2:
+            failures.append(f"worker_count_not_two:{manifest.get('worker_count')}")
 
     revision_rows: list[dict[str, Any]] = []
     for plan_row in plan:
@@ -250,6 +255,8 @@ def main() -> int:
         "private_oracle_sha256": sha256(args.private),
         "canonical_responses_sha256": sha256(args.responses),
         "manifest_count": len(manifests),
+        "protocol_profile": protocol_profile,
+        "worker_counts": sorted({manifest.get("worker_count") for manifest in manifests}),
         "failures": failures,
         "pass": not failures and trace_count == len(plan) and len(revision_rows) == args.expected_cf3_count,
         "scientific_caveat": "The private oracle is grade C controlled-intervention evidence; this audit does not upgrade it to independent domain-grade A/B truth.",

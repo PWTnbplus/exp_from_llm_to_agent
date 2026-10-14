@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-13T17:19:38+00:00",
+  "updated_at": "2026-10-14T16:32:19+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -270,6 +270,86 @@
           "evidence": ""
         }
       ]
+    },
+    {
+      "id": "ISSUE-7e3d4a91c2f0",
+      "severity": "P1",
+      "title": "G6 A arm execution semantics do not match the G6/G7 protocol",
+      "status": "VERIFIED",
+      "evidence": "The G6 protocol defines G6_A_G3_GIVEN as the derived G3 Tools+Iteration arm. The frozen project runner scripts/run_g6_counterfactual.py instead gives G3 no tools, exactly two fixed-reflection model calls, and rejects G3 tool calls; docs/experiment_groups.md and configs/experiment_groups.json confirm the same implementation. The existing 552-row corrected subset therefore cannot be treated as a verified G6 Tools+Iteration run.",
+      "remediation": "Keep the historical G6 artifacts immutable. Freeze an explicit corrected G3 Tools+Iteration adapter, run it against the verified 23-family denominator with the same public inputs, matched G4 controls, hard limits, raw traces, and 2 workers; re-audit and use only the corrected handoff for G7.",
+      "first_seen": "2026-10-13T17:46:23+00:00",
+      "last_seen": "2026-10-13T17:46:23+00:00",
+      "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-14T16:31:47+00:00",
+        "command": "E:/resources/python/python.exe -m pytest -q",
+        "evidence": "Corrected G6 protocol profile executed with exactly 2 workers on the verified 23-family denominator; final audit passes 552/552 plan/response/trace rows with no failures; independent release review structural_pass=true and corrected handoff is used by G7.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-13T17:46:23+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261014T030000Z-19/audit.json"
+        },
+        {
+          "time": "2026-10-14T16:31:47+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "Corrected G6 protocol profile executed with exactly 2 workers on the verified 23-family denominator; final audit passes 552/552 plan/response/trace rows with no failures; independent release review structural_pass=true and corrected handoff is used by G7."
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-1f8c2b6a4d90",
+      "severity": "P1",
+      "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
+      "status": "BLOCKED",
+      "evidence": "The final G7 input audit covers 92 cases and 23 theory families with no mock/demo inputs. The independently generated local-label audit reports edge_count_distribution={0:92} and eligible_u_cases=0; the final G7 run therefore contains no invented dependency edges and does not claim complete L-edge or U localization.",
+      "remediation": "Obtain an independently audited replacement proof-graph edge dataset with source hashes before enabling edge-level L/U claims; keep the present edge-free labels and G7 results as diagnostic-only evidence.",
+      "first_seen": "2026-10-13T17:46:23+00:00",
+      "last_seen": "2026-10-14T16:31:46+00:00",
+      "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
+      "attempts": 0,
+      "blocked_reason": "G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.",
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-13T17:46:23+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261014T030000Z-19/audit.json"
+        },
+        {
+          "time": "2026-10-14T16:31:47+00:00",
+          "event": "BLOCKED",
+          "reason": "G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.",
+          "evidence": ""
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-3d7a9c1e5b20",
+      "severity": "P1",
+      "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
+      "status": "OPEN",
+      "evidence": "The canonical 16-worker merge contains all 1288 planned fork IDs and all 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed; 295 fork rows and 31 checkpoint rows are terminal provider/checkpoint failures. Independent Q audit is 3 valid and 1285 invalid. These rows remain explicit failures in the canonical state views.",
+      "remediation": "Do not impute or relabel terminal failures. If confirmatory precision is required, run a separately frozen retry/replicate plan after diagnosing provider timeout/parse failure causes, with independent trace and Q review; do not pool it silently with this run.",
+      "first_seen": "2026-10-14T16:31:46+00:00",
+      "last_seen": "2026-10-14T16:31:46+00:00",
+      "source": "docs/audits/cycle-20261014T163000Z-20/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-14T16:31:46+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261014T163000Z-20/audit.json"
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -279,6 +359,13 @@
       "verification_command": "python -m pytest -q",
       "commit": "",
       "verified_at": "2026-10-08T13:00:00+00:00"
+    },
+    {
+      "name": "Corrected G6 protocol and audited G7 failure-localization execution",
+      "evidence": "G6 corrected 23-family run and G7 16-worker run have canonical merge, independent audits, hashes, and explicit terminal-failure accounting; host suite and package tests pass. Scientific release remains blocked by recorded external/math/provenance/statistical/provider gates.",
+      "verification_command": "E:/resources/python/python.exe -m pytest -q",
+      "commit": "",
+      "verified_at": "2026-10-14T16:32:19+00:00"
     }
   ],
   "ingested_audits": [
@@ -298,7 +385,9 @@
     "docs/audits/cycle-20261012T152926Z-15/audit.json",
     "docs/audits/cycle-20261014T000000Z-16/audit.json",
     "docs/audits/cycle-20261014T010000Z-17/audit.json",
-    "docs/audits/cycle-20261014T020000Z-18/audit.json"
+    "docs/audits/cycle-20261014T020000Z-18/audit.json",
+    "docs/audits/cycle-20261014T030000Z-19/audit.json",
+    "docs/audits/cycle-20261014T163000Z-20/audit.json"
   ],
   "current_focus": null
 }

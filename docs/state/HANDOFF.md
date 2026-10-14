@@ -10,23 +10,26 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-000000000002 / P1 / Real-provider pilot and retry/cost behavior are unverified
+**下一问题（Next issue:）：** ISSUE-3d7a9c1e5b20 / P1 / G7 provider execution has terminal failures and low independently valid Q coverage
 
 ## 当前状态摘要
 
-开放/未验证：7。已验证：1。
+开放/未验证：9。已验证：2。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
+- ISSUE-3d7a9c1e5b20 P1 OPEN 尝试次数=0：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Do not impute or relabel terminal failures. If confirmatory precision is required, run a separately frozen retry/replicate plan after diagnosing provider timeout/parse failure causes, with independent trace and Q review;
 - ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=1：Real-provider pilot and retry/cost behavior are unverified；修复=Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.
 - ISSUE-ad61f025976a P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
+- ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=0：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Obtain an independently audited replacement proof-graph edge dataset with source hashes before enabling edge-level L/U claims; keep the present edge-free labels and G7 results as diagnostic-only evidence.
 - ISSUE-000000000005 P2 OPEN 尝试次数=0：Classical baseline is only an extension interface；修复=Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
 - ISSUE-6b3a9e1d4f20 P2 RESOLVED_UNVERIFIED 尝试次数=0：Raw G6 traces contain noncanonical retry segments that require a derived audit view；修复=Keep raw history immutable, use only the hashed canonical trace view for scoring, and fix the runner's resume/sequence protocol before the next formal batch.
 已验证的已完成工作（避免重复）：
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.
+- Corrected G6 protocol and audited G7 failure-localization execution：G6 corrected 23-family run and G7 16-worker run have canonical merge, independent audits, hashes, and explicit terminal-failure accounting; host suite and package tests pass. Scien
 
 ## 权威参考
 
