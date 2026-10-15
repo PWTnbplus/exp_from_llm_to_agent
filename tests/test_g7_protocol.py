@@ -7,6 +7,7 @@ import pytest
 
 from src.scientific_discovery.models.provider import MockLLMProvider
 from scripts.run_g7_failure_localization import (
+    FORMAT_RETRY_INSTRUCTION,
     Limits,
     case_prompt,
     normalize_stages,
@@ -64,6 +65,8 @@ def test_g7_format_retry_is_bounded_and_audited(tmp_path: Path) -> None:
     assert len(provider.calls) == 3
     assert any(event["event_type"] == "FORMAT_RETRY_SCHEDULED" for event in events)
     assert any(event["event_type"] == "MODEL_REQUEST" and event["payload"]["format_retry"] for event in events)
+    assert "top-level stages field" in FORMAT_RETRY_INSTRUCTION
+    assert "stages.Q" in FORMAT_RETRY_INSTRUCTION
 
 
 def test_g7_persisted_budget_is_scoped_to_worker_trace_ids(tmp_path: Path) -> None:

@@ -1,0 +1,65 @@
+{
+  "cycle": "20261015T083400Z-28",
+  "scope": "G7 terminal provider retry protocol-v2, G0-G8 read-only integrity review, regression tests",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot",
+    "G7_Failure_Localization_Skill"
+  ],
+  "repair": {
+    "source": "scripts/run_g7_failure_localization.py::FORMAT_RETRY_INSTRUCTION",
+    "change": "Format recovery now explicitly requires top-level stages.V/L/U/Q and states that supporting_evidence is not a substitute.",
+    "historical_raw_artifacts_modified": false,
+    "adversarial_regression": "tests/test_g7_protocol.py::test_g7_format_retry_is_bounded_and_audited"
+  },
+  "targeted_retry": {
+    "root": "results/g7_failure_localization/formal-20261015T090000Z-terminal-retry4-format-v2-2workers",
+    "status": "FROZEN_PRE_PROVIDER_CALL",
+    "plan_rows": 3,
+    "unique_source_runs": 3,
+    "unique_source_checkpoints": 2,
+    "worker_count": 2,
+    "source_plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+    "retry_plan_sha256": "f1d67efca12952d75d5af80a6f85f7cf5214655a1232d673f53f77fbbcd5b6c7",
+    "protocol_version": "g7-public-case-format-retry-v2",
+    "preflight": {
+      "provider_calls_made": false,
+      "formal_run_allowed_by_protocol": true,
+      "routing_metadata_model_prompt_hits": {},
+      "forbidden_model_prompt_hits": {},
+      "duplicate_run_ids": 0,
+      "missing_cases": 0,
+      "missing_labels": 0,
+      "unique_checkpoint_ids": 2,
+      "artifact": "results/g7_failure_localization/formal-20261015T090000Z-terminal-retry4-format-v2-2workers/g7_targeted_protocol_preflight.json"
+    },
+    "execution_blocker": "No usable CTFlow key file or key environment variable is present in the current execution environment; no provider output was fabricated."
+  },
+  "diagnosis": {
+    "failed_source_rows": 3,
+    "failure_class": "strict format contract failure after one bounded format retry",
+    "evidence": "The persisted final responses put V/L/U/Q under supporting_evidence or omit top-level stages, and the strict validator recorded missing stages object/missing stage Q; no network, budget, private-oracle, or routing-key evidence was used to reinterpret them as success.",
+    "issue_ids": ["ISSUE-3d7a9c1e5b20", "ISSUE-0f2cb195c681"]
+  },
+  "audits": {
+    "g7_failure_taxonomy": "docs/audits/cycle-20261015T083400Z-28/g7_failure_taxonomy.json",
+    "g0_g8_integrity": "docs/audits/cycle-20261015T083400Z-28/g0_g8_integrity.json",
+    "targeted_preflight": "results/g7_failure_localization/formal-20261015T090000Z-terminal-retry4-format-v2-2workers/g7_targeted_protocol_preflight.json"
+  },
+  "tests": {
+    "command": "E:/resources/python/python.exe -m pytest -q",
+    "result": "108 passed in 33.22s"
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-3d7a9c1e5b20",
+    "status_after_cycle": "IN_PROGRESS",
+    "attempt_recorded": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "push_required": true,
+    "remote_update_verified": false
+  }
+}

@@ -33,7 +33,9 @@ from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
 FORMAT_RETRY_INSTRUCTION = (
     "The previous response failed the required JSON contract. Return only one JSON object with the required fields; "
-    "do not call tools, do not add hidden information, and use empty arrays for genuinely empty L/U fields."
+    "do not call tools or add hidden information. For a diagnostic fork, put V, L, U, and Q as objects in the "
+    "top-level stages field (not inside supporting_evidence): stages must contain stages.V={verdict}, "
+    "L={nodes,edges}, U={node_changes}, and stages.Q={verdict,reason}; use empty arrays for genuinely empty L/U fields."
 )
 
 

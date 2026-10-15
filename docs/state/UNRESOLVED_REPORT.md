@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T08:19:35+00:00
+生成时间（UTC）：2026-10-15T08:35:44+00:00
 
 - 开放/阻塞/未验证：**11**
 - 已验证修复：**2**
@@ -13,7 +13,7 @@
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
 - 证据：Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). The protocol-corrected full retry completed 1285/1288 canonical states with 3 retained provider_error rows, all 184 checkpoints completed, and 20/1288 independently valid Q rows; its preflight and taxonomy audit found zero routing/private model-prompt hits, and format retries were fixed and bounded. Retry manifests, source mappings, canonical merges, and hashes remain separate; terminal failures and low Q remain unresolved.
 - 必需修复：Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.
-- 尝试次数：3
+- 尝试次数：4
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

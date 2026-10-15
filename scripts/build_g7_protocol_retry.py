@@ -26,10 +26,19 @@ def main() -> int:
     parser.add_argument("--source-plan", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--source-run-id", action="append", default=[],
+                        help="Restrict the frozen retry to these source run IDs; repeat for multiple IDs.")
     args = parser.parse_args()
     source = readl(args.source_plan)
     if not source:
         raise SystemExit("source plan is required")
+    if args.source_run_id:
+        wanted = set(args.source_run_id)
+        source = [row for row in source if row.get("run_id") in wanted]
+        if set(args.source_run_id) != {row.get("run_id") for row in source}:
+            raise SystemExit("one or more --source-run-id values were not found in source plan")
+        if not source:
+            raise SystemExit("source-run-id filter selected no rows")
     source_runs = {row["run_id"] for row in source}
     source_checkpoints = {row["checkpoint_id"] for row in source}
     if len(source_runs) != len(source) or len(source_checkpoints) > len(source):
@@ -41,14 +50,16 @@ def main() -> int:
         retry["checkpoint_id"] = stable_id("g7fullcp", row["checkpoint_id"])
         retry["source_run_id"] = row["run_id"]
         retry["source_checkpoint_id"] = row["checkpoint_id"]
-        retry["retry_scope"] = "all_original_rows_protocol_corrected"
+        retry["retry_scope"] = ("all_original_rows_protocol_corrected" if not args.source_run_id
+                                 else "terminal_provider_error_rows_protocol_corrected")
         retry["retry_protocol"] = "separate_frozen_retry_not_pooled"
-        retry["protocol_version"] = "g7-public-case-format-retry-v1"
+        retry["protocol_version"] = ("g7-public-case-format-retry-v1" if not args.source_run_id
+                                      else "g7-public-case-format-retry-v2")
         rows.append(retry)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("".join(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n" for row in rows), encoding="utf-8")
     manifest = {
-        "kind": "g7_full_protocol_corrected_retry_plan",
+        "kind": "g7_full_protocol_corrected_retry_plan" if not args.source_run_id else "g7_targeted_protocol_corrected_retry_plan",
         "status": "FROZEN_SEPARATE_RETRY",
         "source_plan": str(args.source_plan),
         "source_plan_sha256": sha256(args.source_plan),
@@ -58,11 +69,13 @@ def main() -> int:
         "retry_unique_source_runs": len({row["source_run_id"] for row in rows}),
         "retry_unique_source_checkpoints": len({row["source_checkpoint_id"] for row in rows}),
         "pooling_prohibited": True,
+        "source_run_ids": sorted(row["source_run_id"] for row in rows),
         "format_retry_protocol": {
-            "version": "g7-public-case-format-retry-v1",
+            "version": "g7-public-case-format-retry-v1" if not args.source_run_id else "g7-public-case-format-retry-v2",
             "max_format_retries_per_workflow": 1,
             "new_scientific_observation_added": False,
             "repair_message_is_fixed": True,
+            "requires_top_level_stages_q": True,
         },
     }
     args.manifest.parent.mkdir(parents=True, exist_ok=True)
