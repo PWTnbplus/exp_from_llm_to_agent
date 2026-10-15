@@ -99,6 +99,7 @@ def main() -> int:
     retry = root / "results/g7_failure_localization/formal-20261015T060000Z-terminal-retry"
     retry2 = root / "results/g7_failure_localization/formal-20261015T073000Z-terminal-retry2"
     retry3 = root / "results/g7_failure_localization/formal-20261015T080000Z-terminal-retry3"
+    protocol = root / "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers"
     g8 = root / "results/g8_causal_mechanism/formal-20261015T030000Z-16workers"
 
     issues = json.loads((root / "docs/state/issues.json").read_text(encoding="utf-8"))
@@ -196,6 +197,9 @@ def main() -> int:
             summarize_retry(retry3, "g7_retry3_plan.jsonl", "g7_retry3_states.jsonl", "g7_retry3_q_audit.jsonl",
                             "retry3_manifest.json", "g7_merge_manifest.json"),
         ],
+        "g7_protocol_corrected_retry": summarize_retry(
+            protocol, "g7_full_retry_plan.jsonl", "g7_full_retry_states.jsonl", "g7_full_retry_q_audit.jsonl",
+            "g7_full_retry_manifest.json", "g7_merge_manifest.json"),
         "g8": {
             "plan_rows": len(g8_plan),
             "result_files": len(g8_result_files),
@@ -210,6 +214,7 @@ def main() -> int:
             "Original G7 terminal failures and low Q validity remain present; the retry is separate and is not pooled.",
             "G7 terminal retries 1-3 are separately canonicalized; terminal rows remain failures and no retry is pooled into the original run.",
             "The G7 runner protocol was repaired so cf_type and theory_family_id are no longer model-facing hints for future runs.",
+            "The protocol-corrected G7 retry is separately canonicalized with 1288 plan rows, 184 checkpoints, and retained terminal provider failures.",
             "G8 independent audit retains all 324 planned rows and does not load private oracle or decide scientific truth.",
         ],
     }

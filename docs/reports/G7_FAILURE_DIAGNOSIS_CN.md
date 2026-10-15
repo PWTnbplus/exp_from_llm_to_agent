@@ -30,3 +30,23 @@
 - provider 终端失败与独立 Q 无效性仍未解除；任何后续 formal run 必须先通过 prompt preflight，并继续保留失败项。
 
 证据文件：[cycle-20261015T051500Z-25/audit.json](../audits/cycle-20261015T051500Z-25/audit.json)。
+
+## 协议修正版 G7 全量恢复（独立、不与原始运行合并）
+
+| 指标 | 结果 |
+|---|---:|
+| 计划 fork 行数 | 1288 |
+| 唯一 checkpoint | 184 |
+| canonical state | 1288/1288 |
+| completed | 1285 |
+| provider_error（保留） | 3 |
+| checkpoint completed | 184/184 |
+| 独立 Q 审计有效 | 20/1288 |
+| FORMAT_RETRY_SCHEDULED | 302 |
+| format-retry MODEL_REQUEST | 302 |
+| 模型请求中的 routing metadata 命中 | 0 |
+| 模型请求中的 forbidden private key 命中 | 0 |
+
+本轮使用固定的 public-case prompt 和每个 workflow 最多一次的格式重试；重试只要求输出协议 JSON，不新增科学观测。原始 G7 运行仍保持不可变，所有 retry 均未与原始运行 pooling。3 条 provider_error 和独立 Q 无效项继续保留，不能宣称 G7 已达到确证性发布标准。
+
+审计证据：`docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json`、`docs/audits/cycle-20261015T081700Z-27/g7_protocol_corrected_preflight.json`、`results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_merge_manifest.json`。

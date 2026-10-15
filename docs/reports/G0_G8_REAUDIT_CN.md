@@ -46,3 +46,18 @@
 | G7 L/U | 92/92 proof graph 无 dependency edge，U eligible=0；没有独立替代边数据 |
 | G6/G8 provider 真实性 | 无 immutable gateway weight fingerprint 与外部 billing receipt |
 | G5 数学审查、统计审查、upstream provenance | 仍需外部/独立审查或网络凭据，不能由本地 pytest 代替 |
+
+## 协议修正版 G7 全量结果
+
+| 指标 | 结果 |
+|---|---:|
+| plan / checkpoint | 1288 / 184 |
+| canonical states | 1288/1288（1285 completed，3 provider_error） |
+| canonical checkpoints | 184/184 completed |
+| 独立 Q 有效 | 20/1288 |
+| 格式重试事件 / 请求 | 302 / 302 |
+| routing metadata / private-key prompt 命中 | 0 / 0 |
+
+该运行是独立的 frozen retry，未与原始 G7 pooling；原始 G7 的 2960 次 `cf_type` 和 2960 次 `theory_family_id` 命中保持不可变并继续作为 P1 隔离问题。3 条 provider_error、低 Q 有效覆盖、G7 L/U 图结构限制，以及 G6/G8 外部凭据限制均保留。
+
+新增审计：`docs/audits/cycle-20261015T081700Z-27/g0_g8_integrity.json`、`docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json`。

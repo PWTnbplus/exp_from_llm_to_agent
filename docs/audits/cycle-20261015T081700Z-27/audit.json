@@ -1,0 +1,72 @@
+{
+  "cycle": "20261015T081700Z-27",
+  "scope": "G0-G7 skill execution, protocol-corrected G7 retry, independent audits, and repository verification",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot",
+    "G7_Failure_Localization_Skill"
+  ],
+  "g6": {
+    "artifact": "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z",
+    "plan_rows": 552,
+    "responses": 552,
+    "handoff_rows": 552,
+    "worker_count": 2,
+    "structural_review_pass": true,
+    "scientific_release_allowed": false
+  },
+  "g7_original_immutable": {
+    "plan_rows": 1288,
+    "completed": 993,
+    "checkpoint_missing": 217,
+    "provider_error": 78,
+    "q_valid": "3/1288",
+    "routing_metadata_hits": {
+      "cf_type": 2960,
+      "theory_family_id": 2960
+    },
+    "pooled_with_retry": false
+  },
+  "g7_protocol_corrected_retry": {
+    "artifact": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers",
+    "workers": 16,
+    "plan_rows": 1288,
+    "unique_checkpoints": 184,
+    "canonical_state_rows": 1288,
+    "completed": 1285,
+    "provider_error": 3,
+    "missing_state_ids": 0,
+    "completed_checkpoints": 184,
+    "q_valid": "20/1288",
+    "format_retry_scheduled_events": 302,
+    "format_retry_model_requests": 302,
+    "routing_metadata_model_request_hits": 0,
+    "forbidden_private_key_model_request_hits": 0,
+    "pooling_with_original": false,
+    "new_scientific_observation_added_by_format_retry": false,
+    "observed_resource_usage": {
+      "model_calls": 3774,
+      "tool_calls": 2356,
+      "total_tokens": 8147109,
+      "observed_cost_usd": 13.009913
+    }
+  },
+  "g0_g8_integrity": "docs/audits/cycle-20261015T081700Z-27/g0_g8_integrity.json",
+  "independent_failure_taxonomy": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
+  "protocol_preflight": "docs/audits/cycle-20261015T081700Z-27/g7_protocol_corrected_preflight.json",
+  "tests": {
+    "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+    "result": "108 passed"
+  },
+  "ledger": {
+    "unresolved_p1": [
+      "ISSUE-3d7a9c1e5b20",
+      "ISSUE-0f2cb195c681"
+    ],
+    "reason": "Terminal provider failures, low independent Q coverage, and immutable original prompt contamination remain recorded."
+  },
+  "git": {
+    "push_status": "PENDING"
+  }
+}

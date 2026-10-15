@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T05:32:28+00:00
+生成时间（UTC）：2026-10-15T08:19:35+00:00
 
 - 开放/阻塞/未验证：**11**
 - 已验证修复：**2**
@@ -11,18 +11,18 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). Retry manifests, source mappings, canonical merges, and hashes are recorded under results/g7_failure_localization/formal-20261015T060000Z-terminal-retry, formal-20261015T073000Z-terminal-retry2, and formal-20261015T080000Z-terminal-retry3; terminal failures and low Q remain unresolved.
+- 证据：Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). The protocol-corrected full retry completed 1285/1288 canonical states with 3 retained provider_error rows, all 184 checkpoints completed, and 20/1288 independently valid Q rows; its preflight and taxonomy audit found zero routing/private model-prompt hits, and format retries were fixed and bounded. Retry manifests, source mappings, canonical merges, and hashes remain separate; terminal failures and low Q remain unresolved.
 - 必需修复：Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.
-- 尝试次数：2
-- 来源：docs/audits/cycle-20261014T163000Z-20/audit.json
+- 尝试次数：3
+- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
 ### ISSUE-0f2cb195c681 — P1 — IN_PROGRESS
 - 描述：Original G7 model-facing prompt leaked routing metadata
-- 证据：The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), and retry3 (68 requests) after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.
+- 证据：The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), retry3 (68 requests), and the protocol-corrected full retry after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.
 - 必需修复：Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.
-- 尝试次数：2
-- 来源：docs/audits/cycle-20261015T051500Z-25/audit.json
+- 尝试次数：3
+- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
@@ -111,9 +111,3 @@
 
 绿色单元测试只能验证工程门禁，不能证明 Agent 在科学发现上优于其他方法。
 Mock 输出不是科学证据。不得使用正式测试任务进行提示词调优。
-
-## 本轮执行状态
-
-- 本轮提交：`cc549df`。
-- 远端 push：失败；`github.com:443` 经 `127.0.0.1` 连接失败，远端未验证更新。
-- 用户未跟踪目录 `research_data_summary_G0_G7/` 未加入提交。

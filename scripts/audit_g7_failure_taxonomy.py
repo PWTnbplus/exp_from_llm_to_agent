@@ -103,6 +103,11 @@ def summarize(root: Path, plan_name: str, states_name: str, checkpoints_name: st
         "resource_usage": usage,
         "forbidden_model_request_key_hits": count_model_key_hits(events, FORBIDDEN_MODEL_KEYS),
         "routing_metadata_model_request_hits": count_model_key_hits(events, ROUTING_METADATA_KEYS),
+        "format_retry_scheduled_events": sum(event.get("event_type") == "FORMAT_RETRY_SCHEDULED" for event in events),
+        "format_retry_model_requests": sum(
+            event.get("event_type") == "MODEL_REQUEST" and bool((event.get("payload") or {}).get("format_retry"))
+            for event in events
+        ),
     }
 
 
@@ -118,6 +123,7 @@ def main() -> int:
         ("retry1", base / "formal-20261015T060000Z-terminal-retry", "g7_retry_plan.jsonl", "g7_retry_states.jsonl", "g7_retry_checkpoints.jsonl", "g7_retry_q_audit.jsonl", "g7_merge_manifest.json"),
         ("retry2", base / "formal-20261015T073000Z-terminal-retry2", "g7_retry2_plan.jsonl", "g7_retry2_states.jsonl", "g7_retry2_checkpoints.jsonl", "g7_retry2_q_audit.jsonl", "g7_merge_manifest.json"),
         ("retry3", base / "formal-20261015T080000Z-terminal-retry3", "g7_retry3_plan.jsonl", "g7_retry3_states.jsonl", "g7_retry3_checkpoints.jsonl", "g7_retry3_q_audit.jsonl", "g7_merge_manifest.json"),
+        ("protocol_corrected", base / "formal-20261015T060000Z-protocol-corrected-16workers", "g7_full_retry_plan.jsonl", "g7_full_retry_states.jsonl", "g7_full_retry_checkpoints.jsonl", "g7_full_retry_q_audit.jsonl", "g7_merge_manifest.json"),
     ]
     report = {
         "audit_version": "g7-failure-taxonomy-v1",

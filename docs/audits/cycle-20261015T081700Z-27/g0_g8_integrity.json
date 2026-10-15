@@ -1,0 +1,949 @@
+{
+  "audit_version": "g0-g8-integrity-v1",
+  "audit_scope": "read_only_lineage_and_protocol_checks; no_scientific_truth_decision",
+  "review": {
+    "status": "COMPLETED_WITH_EXTERNAL_REVIEW_CAVEATS",
+    "confirmed_issue_ids": [
+      "ISSUE-3d7a9c1e5b20",
+      "ISSUE-1f8c2b6a4d90",
+      "ISSUE-000000000002",
+      "ISSUE-000000000003",
+      "ISSUE-000000000004",
+      "ISSUE-ff97c7c89112",
+      "ISSUE-ad61f025976a",
+      "ISSUE-f9171bb760b1"
+    ],
+    "resolutions": [],
+    "note": "The audit confirms persisted facts and repairs only the G7 prompt metadata leak; it does not certify scientific truth, external billing, immutable weights, mathematical review, or causal conclusions."
+  },
+  "issue_ledger_status_counts": {
+    "VERIFIED": 2,
+    "RESOLVED_UNVERIFIED": 6,
+    "BLOCKED": 2,
+    "OPEN": 1,
+    "IN_PROGRESS": 2
+  },
+  "g0_g5_inventory": {
+    "pilot": {
+      "json_files": 25,
+      "mock_marked_files": 0
+    },
+    "engineering_validation": {
+      "json_files": 25,
+      "mock_marked_files": 0
+    },
+    "final_smoke": {
+      "json_files": 3,
+      "mock_marked_files": 0
+    },
+    "theory": {
+      "json_files": 1,
+      "mock_marked_files": 1
+    },
+    "theory_agent_smoke": {
+      "json_files": 1,
+      "mock_marked_files": 1
+    }
+  },
+  "g6": {
+    "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g6_counterfactual\\protocol-g3tools-v2-20261014T030000Z",
+    "plan_rows": 552,
+    "response_rows": 552,
+    "handoff_rows": 552,
+    "worker_counts": [
+      2
+    ],
+    "key_hashes": {
+      "run_plan.jsonl": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+      "responses.jsonl": "97022fa9ac84dad61c24c98fbc1fee2ba2b357ee853eccd9614cc348da8312fa",
+      "g6_to_g7_handoff.jsonl": "ec51c3114b84da9f818d0f6407794e42454cbe87565aa0baaf60081c61602c02"
+    },
+    "release_review": {
+      "review": "independent_g6_release_review",
+      "artifact_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g6_counterfactual\\protocol-g3tools-v2-20261014T030000Z",
+      "protocol_layout": "corrected_g6_protocol_g3_tools_iteration",
+      "structural_review_pass": true,
+      "scientific_release_allowed": false,
+      "failures": [],
+      "counts": {
+        "plan": 552,
+        "responses": 552,
+        "public": 92,
+        "private": 92,
+        "handoff": 552
+      },
+      "hashes": {
+        "run_plan.jsonl": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+        "public_cases.jsonl": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+        "private_oracle.jsonl": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+        "responses_audited.jsonl": "97022fa9ac84dad61c24c98fbc1fee2ba2b357ee853eccd9614cc348da8312fa",
+        "g6_to_g7_handoff.jsonl": "ec51c3114b84da9f818d0f6407794e42454cbe87565aa0baaf60081c61602c02"
+      },
+      "protocol_profile": [
+        "g6_protocol_g3_tools_iteration"
+      ],
+      "worker_counts": [
+        2
+      ],
+      "g6_audit_pass": true,
+      "revision_valid_count": 0,
+      "note": "Structural completeness does not override the G5 independent-math, upstream provenance, or verified-model-snapshot blockers."
+    }
+  },
+  "g7_original": {
+    "plan_rows": 1288,
+    "state_status_counts": {
+      "completed": 993,
+      "checkpoint_missing": 217,
+      "provider_error": 78
+    },
+    "checkpoint_status_counts": {
+      "completed": 153,
+      "provider_error": 31
+    },
+    "q_rows": 1288,
+    "q_valid": 3,
+    "trace_files": 1255,
+    "forbidden_model_request_key_hits": {},
+    "vlu_audit": {
+      "artifact": "g7_vlu_private",
+      "cases": 92,
+      "edge_count_distribution": {
+        "0": 92
+      },
+      "eligible_u_cases": 0,
+      "g6_model_responses_read": false,
+      "limitations": [
+        "Grade C controlled rulebook is not an external mathematical proof review.",
+        "No proof-graph dependency edge or U transition was inferred.",
+        "CF3 content and all scientific interpretations require external review before claims."
+      ],
+      "private_g6_oracle_read": false,
+      "rulebook_sha256": "1916b4a9947086b7c1d71bf2e195ebc1e3f6fc94fd2a435478adde6a18079beb",
+      "rulebook_version": "g7-public-rulebook-v1-no-edge-inference",
+      "source_public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+      "status": "INDEPENDENT_CONTROLLED_RULEBOOK_WITH_U_INELIGIBLE_WHEN_NO_INTERMEDIATE_NODES"
+    },
+    "key_hashes": {
+      "g7_run_plan.jsonl": "549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3",
+      "g7_states.jsonl": "714e53654e070a74bc026c11c7396fc243b8e4b72a45e3ed4e9025d8fe66efef",
+      "g7_checkpoints.jsonl": "28cbfead349cc35682141df3ac99841d3ebbecdde08280d2849738645b201932",
+      "g7_q_audit.jsonl": "7090520110215c742259dc5598d0c37dc14a155dfd93dc165d011a3e460d27ff"
+    }
+  },
+  "g7_terminal_retry": {
+    "plan_rows": 295,
+    "state_status_counts": {
+      "completed": 185,
+      "provider_error": 20,
+      "checkpoint_missing": 90
+    },
+    "q_rows": 295,
+    "q_valid": 2,
+    "retry_manifest": {
+      "kind": "g7_terminal_retry_plan",
+      "status": "FROZEN_SEPARATE_RETRY",
+      "source_plan": "results\\g7_failure_localization\\formal-20261014T030000Z-16workers\\g7_run_plan.jsonl",
+      "source_states": "results\\g7_failure_localization\\formal-20261014T030000Z-16workers\\g7_states.jsonl",
+      "source_plan_sha256": "549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3",
+      "source_states_sha256": "714e53654e070a74bc026c11c7396fc243b8e4b72a45e3ed4e9025d8fe66efef",
+      "retry_plan_sha256": "1e35cc087d72ed857e4b60eaab9c75e5f47adc1ac4f1500c56c9ee5fecef3c0e",
+      "source_plan_rows": 1288,
+      "retry_rows": 295,
+      "retry_unique_source_runs": 295,
+      "retry_unique_source_checkpoints": 81,
+      "source_terminal_status_counts": {
+        "checkpoint_missing": 217,
+        "provider_error": 78
+      },
+      "pooling_prohibited": true
+    },
+    "merge_manifest": {
+      "experiment_id": "g7_failure_localization",
+      "plan_rows": 295,
+      "states": {
+        "label": "states",
+        "expected": 295,
+        "selected_records": 295,
+        "selected_completed": 185,
+        "selected_terminal_failures": {
+          "g7r_bfcf74ca76bdd1376c36": "provider_error",
+          "g7r_4b72eeb1e42bc3f23957": "checkpoint_missing",
+          "g7r_86e64c0352a7a18c0dad": "provider_error",
+          "g7r_b8bb2d1a2b7fcaaba499": "provider_error",
+          "g7r_cb1a04b7cb50030d4713": "checkpoint_missing",
+          "g7r_65cd2301642cb04ee31e": "checkpoint_missing",
+          "g7r_333e12e52b91cb0aee5c": "checkpoint_missing",
+          "g7r_40cea0d75ddef1966e25": "checkpoint_missing",
+          "g7r_a64bba7d71d948755213": "provider_error",
+          "g7r_7174070ab13b2d60d07d": "checkpoint_missing",
+          "g7r_5bf05596b05580e348bf": "checkpoint_missing",
+          "g7r_ee05b88e848564d530a2": "checkpoint_missing",
+          "g7r_7ab2e22c8b574964c2de": "provider_error",
+          "g7r_55f648060a17ff1e43c7": "checkpoint_missing",
+          "g7r_115f6536465d0d0d0b00": "checkpoint_missing",
+          "g7r_87b69bcfa4e7bcfe9b9a": "checkpoint_missing",
+          "g7r_756779197cbc6ea7417f": "checkpoint_missing",
+          "g7r_7b6280053e2cf0ac6851": "checkpoint_missing",
+          "g7r_57b7539d278a6a86893a": "checkpoint_missing",
+          "g7r_3a734eb7afc3ec3f3c0f": "checkpoint_missing",
+          "g7r_5b442ca7058ea56430d4": "checkpoint_missing",
+          "g7r_aa8692ac93cefcb77ca9": "checkpoint_missing",
+          "g7r_4558e43cd015e0318f5e": "checkpoint_missing",
+          "g7r_209143e45ed6541a54fa": "checkpoint_missing",
+          "g7r_86fcafa1ea6240e571f9": "checkpoint_missing",
+          "g7r_1f3adfec4728e3906f83": "provider_error",
+          "g7r_d8fe2dcc52d0b7db38a0": "checkpoint_missing",
+          "g7r_d679700095d8b9967707": "checkpoint_missing",
+          "g7r_328c206d322cfdc651c6": "checkpoint_missing",
+          "g7r_32f103fbc4268bcdd8bf": "checkpoint_missing",
+          "g7r_474d94cc6aebbdf90512": "checkpoint_missing",
+          "g7r_d241d849f0125a138ecb": "checkpoint_missing",
+          "g7r_ebe859e3744cf224248c": "checkpoint_missing",
+          "g7r_5185c32cd89cddc22643": "checkpoint_missing",
+          "g7r_1e5140c9aaa64c141b2f": "checkpoint_missing",
+          "g7r_bb20b7529512c4638243": "provider_error",
+          "g7r_1290853c18447c49362c": "checkpoint_missing",
+          "g7r_a8b1576e42ae2666f650": "checkpoint_missing",
+          "g7r_cc966c73867201ca29f5": "checkpoint_missing",
+          "g7r_f738d0171126a0e79d19": "provider_error",
+          "g7r_14fad304290b9f64ee4c": "checkpoint_missing",
+          "g7r_12d384678a928089fa74": "provider_error",
+          "g7r_175c27cb2615fda1c3aa": "checkpoint_missing",
+          "g7r_47074fd3b16e109385d4": "checkpoint_missing",
+          "g7r_fd212a54145e59db8321": "provider_error",
+          "g7r_19d2a7a7007b0f9dd482": "provider_error",
+          "g7r_ec96e218d1f925cb337e": "checkpoint_missing",
+          "g7r_399310cd79ff9a5ac26e": "checkpoint_missing",
+          "g7r_253107fc25477e4f7286": "checkpoint_missing",
+          "g7r_8caf43aa8578c6b14458": "checkpoint_missing",
+          "g7r_aebe6765de1d08eaeb5e": "checkpoint_missing",
+          "g7r_9fe3ba4e5f449ce5d1e8": "checkpoint_missing",
+          "g7r_4debf35b87f77882441b": "checkpoint_missing",
+          "g7r_f74b412a38afc1ff943b": "checkpoint_missing",
+          "g7r_069ecea32cf6ada4072e": "checkpoint_missing",
+          "g7r_6f1a84046627230251b2": "checkpoint_missing",
+          "g7r_59118506db1a89542469": "checkpoint_missing",
+          "g7r_248c0003c02b3ffe20c6": "checkpoint_missing",
+          "g7r_a350012ea6e8c969771e": "checkpoint_missing",
+          "g7r_f2a97193f41cb4cbd24b": "checkpoint_missing",
+          "g7r_6d7d032d59b121d08beb": "checkpoint_missing",
+          "g7r_8053ef4ae95610651ae5": "checkpoint_missing",
+          "g7r_d1c8f1d61bb2b39e4b59": "provider_error",
+          "g7r_1dbb9fe80c01464a775f": "checkpoint_missing",
+          "g7r_0aa21263022e048baeb2": "checkpoint_missing",
+          "g7r_fe7f479eb8435f89c4a7": "checkpoint_missing",
+          "g7r_f97a7b2cd0a727b2d531": "provider_error",
+          "g7r_0574cc4214fd7dbfe30f": "checkpoint_missing",
+          "g7r_59b916e7eb8964ad1c0a": "checkpoint_missing",
+          "g7r_21617044ea1e225c5166": "checkpoint_missing",
+          "g7r_afc5e45a82419ba0d994": "provider_error",
+          "g7r_52f22c168bcfbee6463e": "checkpoint_missing",
+          "g7r_344f2165387dad19b448": "checkpoint_missing",
+          "g7r_f81e8c5d68334ea09dea": "checkpoint_missing",
+          "g7r_7b045348b92f278b8870": "checkpoint_missing",
+          "g7r_8fc9920f87fb1bbdd3f3": "checkpoint_missing",
+          "g7r_f1ed7ceec6754330662b": "checkpoint_missing",
+          "g7r_777aef715451e28f0e5c": "checkpoint_missing",
+          "g7r_d7cc76a1fd82be348c57": "provider_error",
+          "g7r_208e0a7c624cd3154aaf": "checkpoint_missing",
+          "g7r_384da09a9a1102ddaed7": "checkpoint_missing",
+          "g7r_bb8238f689b7a3b8417a": "checkpoint_missing",
+          "g7r_73eee7905e646288eb51": "checkpoint_missing",
+          "g7r_66f05509ab3a21284f59": "checkpoint_missing",
+          "g7r_19f9fb49a002935ca4d9": "checkpoint_missing",
+          "g7r_e0257bef2bee5111ada3": "checkpoint_missing",
+          "g7r_b8fcdaa1cffbfaac30ab": "checkpoint_missing",
+          "g7r_457cbc7234a21c319da9": "checkpoint_missing",
+          "g7r_67f96a195b584d92d5ab": "checkpoint_missing",
+          "g7r_a17b7e224c053ea77c0d": "provider_error",
+          "g7r_e277f6d77c47261b1cb8": "checkpoint_missing",
+          "g7r_eeb425a15cc9ed5fd03c": "provider_error",
+          "g7r_66e85ec289bfd4033fc2": "provider_error",
+          "g7r_6b954c6da6d1869615a4": "checkpoint_missing",
+          "g7r_7ec1ccb8f576fb6ad855": "checkpoint_missing",
+          "g7r_b1715404781fd5eaae5e": "checkpoint_missing",
+          "g7r_3072143433bfa2de6e88": "checkpoint_missing",
+          "g7r_c354cfc9e15ad32ccef4": "checkpoint_missing",
+          "g7r_17e5c78148e4f79e6435": "checkpoint_missing",
+          "g7r_a10c57ef3d237793e8df": "provider_error",
+          "g7r_2bb9c2b4f08d48899105": "checkpoint_missing",
+          "g7r_93450607ee0b1aebf612": "checkpoint_missing",
+          "g7r_6524ad7a853381cfd902": "checkpoint_missing",
+          "g7r_ece42a559e674269298b": "checkpoint_missing",
+          "g7r_b1e0e1a212229f9dc71a": "provider_error",
+          "g7r_36aa79cb521136a4c911": "checkpoint_missing",
+          "g7r_418fdc849e432794163e": "checkpoint_missing",
+          "g7r_5d4f8d229094ca083420": "checkpoint_missing",
+          "g7r_e220573e0f6e2f293baa": "checkpoint_missing",
+          "g7r_6477e147e6ed56f6c23b": "checkpoint_missing"
+        },
+        "missing_ids": [],
+        "source_files": [
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-0.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-1.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-10.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-11.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-12.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-13.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-14.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-15.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-2.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-3.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-4.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-5.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-6.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-7.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-8.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-9.jsonl"
+        ],
+        "duplicate_completed_ids": {},
+        "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+      },
+      "checkpoints": {
+        "label": "checkpoints",
+        "expected": 81,
+        "selected_records": 81,
+        "selected_completed": 65,
+        "selected_terminal_failures": {
+          "g7rcp_27bb45bd566b0dee0243": "provider_error",
+          "g7rcp_b377b693d200ff056094": "provider_error",
+          "g7rcp_24008d81a0fb0d94674e": "provider_error",
+          "g7rcp_0fe597b7cc3f18c1a5ce": "provider_error",
+          "g7rcp_dfd5517c4bb39b3adf88": "provider_error",
+          "g7rcp_4d668a1c2fe54d9b9eac": "provider_error",
+          "g7rcp_4633317608c887d2a70f": "provider_error",
+          "g7rcp_38976b9338faec651ff3": "provider_error",
+          "g7rcp_821cd88cff1bf2d98bfc": "provider_error",
+          "g7rcp_e9c5de210495dd280f36": "provider_error",
+          "g7rcp_1a66521a001d518d58bc": "provider_error",
+          "g7rcp_cbf0099f7532b7077795": "provider_error",
+          "g7rcp_8dd738e5c65f74779d80": "provider_error",
+          "g7rcp_bb039aeb3fdcbd0e9cab": "provider_error",
+          "g7rcp_371abf13bcbd0aa00234": "provider_error",
+          "g7rcp_f7248b9f11bd6ea75aeb": "provider_error"
+        },
+        "missing_ids": [],
+        "source_files": [
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-0.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-1.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-10.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-11.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-12.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-13.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-14.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-15.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-2.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-3.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-4.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-5.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-6.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-7.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-8.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-9.jsonl"
+        ],
+        "duplicate_completed_ids": {},
+        "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+      }
+    },
+    "forbidden_model_request_key_hits": {}
+  },
+  "g7_terminal_retry_chain": [
+    {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry",
+      "plan_rows": 295,
+      "state_status_counts": {
+        "completed": 185,
+        "provider_error": 20,
+        "checkpoint_missing": 90
+      },
+      "q_rows": 295,
+      "q_valid": 2,
+      "retry_manifest": {
+        "kind": "g7_terminal_retry_plan",
+        "status": "FROZEN_SEPARATE_RETRY",
+        "source_plan": "results\\g7_failure_localization\\formal-20261014T030000Z-16workers\\g7_run_plan.jsonl",
+        "source_states": "results\\g7_failure_localization\\formal-20261014T030000Z-16workers\\g7_states.jsonl",
+        "source_plan_sha256": "549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3",
+        "source_states_sha256": "714e53654e070a74bc026c11c7396fc243b8e4b72a45e3ed4e9025d8fe66efef",
+        "retry_plan_sha256": "1e35cc087d72ed857e4b60eaab9c75e5f47adc1ac4f1500c56c9ee5fecef3c0e",
+        "source_plan_rows": 1288,
+        "retry_rows": 295,
+        "retry_unique_source_runs": 295,
+        "retry_unique_source_checkpoints": 81,
+        "source_terminal_status_counts": {
+          "checkpoint_missing": 217,
+          "provider_error": 78
+        },
+        "pooling_prohibited": true
+      },
+      "merge_manifest": {
+        "experiment_id": "g7_failure_localization",
+        "plan_rows": 295,
+        "states": {
+          "label": "states",
+          "expected": 295,
+          "selected_records": 295,
+          "selected_completed": 185,
+          "selected_terminal_failures": {
+            "g7r_bfcf74ca76bdd1376c36": "provider_error",
+            "g7r_4b72eeb1e42bc3f23957": "checkpoint_missing",
+            "g7r_86e64c0352a7a18c0dad": "provider_error",
+            "g7r_b8bb2d1a2b7fcaaba499": "provider_error",
+            "g7r_cb1a04b7cb50030d4713": "checkpoint_missing",
+            "g7r_65cd2301642cb04ee31e": "checkpoint_missing",
+            "g7r_333e12e52b91cb0aee5c": "checkpoint_missing",
+            "g7r_40cea0d75ddef1966e25": "checkpoint_missing",
+            "g7r_a64bba7d71d948755213": "provider_error",
+            "g7r_7174070ab13b2d60d07d": "checkpoint_missing",
+            "g7r_5bf05596b05580e348bf": "checkpoint_missing",
+            "g7r_ee05b88e848564d530a2": "checkpoint_missing",
+            "g7r_7ab2e22c8b574964c2de": "provider_error",
+            "g7r_55f648060a17ff1e43c7": "checkpoint_missing",
+            "g7r_115f6536465d0d0d0b00": "checkpoint_missing",
+            "g7r_87b69bcfa4e7bcfe9b9a": "checkpoint_missing",
+            "g7r_756779197cbc6ea7417f": "checkpoint_missing",
+            "g7r_7b6280053e2cf0ac6851": "checkpoint_missing",
+            "g7r_57b7539d278a6a86893a": "checkpoint_missing",
+            "g7r_3a734eb7afc3ec3f3c0f": "checkpoint_missing",
+            "g7r_5b442ca7058ea56430d4": "checkpoint_missing",
+            "g7r_aa8692ac93cefcb77ca9": "checkpoint_missing",
+            "g7r_4558e43cd015e0318f5e": "checkpoint_missing",
+            "g7r_209143e45ed6541a54fa": "checkpoint_missing",
+            "g7r_86fcafa1ea6240e571f9": "checkpoint_missing",
+            "g7r_1f3adfec4728e3906f83": "provider_error",
+            "g7r_d8fe2dcc52d0b7db38a0": "checkpoint_missing",
+            "g7r_d679700095d8b9967707": "checkpoint_missing",
+            "g7r_328c206d322cfdc651c6": "checkpoint_missing",
+            "g7r_32f103fbc4268bcdd8bf": "checkpoint_missing",
+            "g7r_474d94cc6aebbdf90512": "checkpoint_missing",
+            "g7r_d241d849f0125a138ecb": "checkpoint_missing",
+            "g7r_ebe859e3744cf224248c": "checkpoint_missing",
+            "g7r_5185c32cd89cddc22643": "checkpoint_missing",
+            "g7r_1e5140c9aaa64c141b2f": "checkpoint_missing",
+            "g7r_bb20b7529512c4638243": "provider_error",
+            "g7r_1290853c18447c49362c": "checkpoint_missing",
+            "g7r_a8b1576e42ae2666f650": "checkpoint_missing",
+            "g7r_cc966c73867201ca29f5": "checkpoint_missing",
+            "g7r_f738d0171126a0e79d19": "provider_error",
+            "g7r_14fad304290b9f64ee4c": "checkpoint_missing",
+            "g7r_12d384678a928089fa74": "provider_error",
+            "g7r_175c27cb2615fda1c3aa": "checkpoint_missing",
+            "g7r_47074fd3b16e109385d4": "checkpoint_missing",
+            "g7r_fd212a54145e59db8321": "provider_error",
+            "g7r_19d2a7a7007b0f9dd482": "provider_error",
+            "g7r_ec96e218d1f925cb337e": "checkpoint_missing",
+            "g7r_399310cd79ff9a5ac26e": "checkpoint_missing",
+            "g7r_253107fc25477e4f7286": "checkpoint_missing",
+            "g7r_8caf43aa8578c6b14458": "checkpoint_missing",
+            "g7r_aebe6765de1d08eaeb5e": "checkpoint_missing",
+            "g7r_9fe3ba4e5f449ce5d1e8": "checkpoint_missing",
+            "g7r_4debf35b87f77882441b": "checkpoint_missing",
+            "g7r_f74b412a38afc1ff943b": "checkpoint_missing",
+            "g7r_069ecea32cf6ada4072e": "checkpoint_missing",
+            "g7r_6f1a84046627230251b2": "checkpoint_missing",
+            "g7r_59118506db1a89542469": "checkpoint_missing",
+            "g7r_248c0003c02b3ffe20c6": "checkpoint_missing",
+            "g7r_a350012ea6e8c969771e": "checkpoint_missing",
+            "g7r_f2a97193f41cb4cbd24b": "checkpoint_missing",
+            "g7r_6d7d032d59b121d08beb": "checkpoint_missing",
+            "g7r_8053ef4ae95610651ae5": "checkpoint_missing",
+            "g7r_d1c8f1d61bb2b39e4b59": "provider_error",
+            "g7r_1dbb9fe80c01464a775f": "checkpoint_missing",
+            "g7r_0aa21263022e048baeb2": "checkpoint_missing",
+            "g7r_fe7f479eb8435f89c4a7": "checkpoint_missing",
+            "g7r_f97a7b2cd0a727b2d531": "provider_error",
+            "g7r_0574cc4214fd7dbfe30f": "checkpoint_missing",
+            "g7r_59b916e7eb8964ad1c0a": "checkpoint_missing",
+            "g7r_21617044ea1e225c5166": "checkpoint_missing",
+            "g7r_afc5e45a82419ba0d994": "provider_error",
+            "g7r_52f22c168bcfbee6463e": "checkpoint_missing",
+            "g7r_344f2165387dad19b448": "checkpoint_missing",
+            "g7r_f81e8c5d68334ea09dea": "checkpoint_missing",
+            "g7r_7b045348b92f278b8870": "checkpoint_missing",
+            "g7r_8fc9920f87fb1bbdd3f3": "checkpoint_missing",
+            "g7r_f1ed7ceec6754330662b": "checkpoint_missing",
+            "g7r_777aef715451e28f0e5c": "checkpoint_missing",
+            "g7r_d7cc76a1fd82be348c57": "provider_error",
+            "g7r_208e0a7c624cd3154aaf": "checkpoint_missing",
+            "g7r_384da09a9a1102ddaed7": "checkpoint_missing",
+            "g7r_bb8238f689b7a3b8417a": "checkpoint_missing",
+            "g7r_73eee7905e646288eb51": "checkpoint_missing",
+            "g7r_66f05509ab3a21284f59": "checkpoint_missing",
+            "g7r_19f9fb49a002935ca4d9": "checkpoint_missing",
+            "g7r_e0257bef2bee5111ada3": "checkpoint_missing",
+            "g7r_b8fcdaa1cffbfaac30ab": "checkpoint_missing",
+            "g7r_457cbc7234a21c319da9": "checkpoint_missing",
+            "g7r_67f96a195b584d92d5ab": "checkpoint_missing",
+            "g7r_a17b7e224c053ea77c0d": "provider_error",
+            "g7r_e277f6d77c47261b1cb8": "checkpoint_missing",
+            "g7r_eeb425a15cc9ed5fd03c": "provider_error",
+            "g7r_66e85ec289bfd4033fc2": "provider_error",
+            "g7r_6b954c6da6d1869615a4": "checkpoint_missing",
+            "g7r_7ec1ccb8f576fb6ad855": "checkpoint_missing",
+            "g7r_b1715404781fd5eaae5e": "checkpoint_missing",
+            "g7r_3072143433bfa2de6e88": "checkpoint_missing",
+            "g7r_c354cfc9e15ad32ccef4": "checkpoint_missing",
+            "g7r_17e5c78148e4f79e6435": "checkpoint_missing",
+            "g7r_a10c57ef3d237793e8df": "provider_error",
+            "g7r_2bb9c2b4f08d48899105": "checkpoint_missing",
+            "g7r_93450607ee0b1aebf612": "checkpoint_missing",
+            "g7r_6524ad7a853381cfd902": "checkpoint_missing",
+            "g7r_ece42a559e674269298b": "checkpoint_missing",
+            "g7r_b1e0e1a212229f9dc71a": "provider_error",
+            "g7r_36aa79cb521136a4c911": "checkpoint_missing",
+            "g7r_418fdc849e432794163e": "checkpoint_missing",
+            "g7r_5d4f8d229094ca083420": "checkpoint_missing",
+            "g7r_e220573e0f6e2f293baa": "checkpoint_missing",
+            "g7r_6477e147e6ed56f6c23b": "checkpoint_missing"
+          },
+          "missing_ids": [],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-1.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-10.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-11.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-12.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-13.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-14.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-15.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-2.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-3.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-4.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-5.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-6.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-7.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-8.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\states.worker-16-9.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        },
+        "checkpoints": {
+          "label": "checkpoints",
+          "expected": 81,
+          "selected_records": 81,
+          "selected_completed": 65,
+          "selected_terminal_failures": {
+            "g7rcp_27bb45bd566b0dee0243": "provider_error",
+            "g7rcp_b377b693d200ff056094": "provider_error",
+            "g7rcp_24008d81a0fb0d94674e": "provider_error",
+            "g7rcp_0fe597b7cc3f18c1a5ce": "provider_error",
+            "g7rcp_dfd5517c4bb39b3adf88": "provider_error",
+            "g7rcp_4d668a1c2fe54d9b9eac": "provider_error",
+            "g7rcp_4633317608c887d2a70f": "provider_error",
+            "g7rcp_38976b9338faec651ff3": "provider_error",
+            "g7rcp_821cd88cff1bf2d98bfc": "provider_error",
+            "g7rcp_e9c5de210495dd280f36": "provider_error",
+            "g7rcp_1a66521a001d518d58bc": "provider_error",
+            "g7rcp_cbf0099f7532b7077795": "provider_error",
+            "g7rcp_8dd738e5c65f74779d80": "provider_error",
+            "g7rcp_bb039aeb3fdcbd0e9cab": "provider_error",
+            "g7rcp_371abf13bcbd0aa00234": "provider_error",
+            "g7rcp_f7248b9f11bd6ea75aeb": "provider_error"
+          },
+          "missing_ids": [],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-1.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-10.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-11.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-12.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-13.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-14.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-15.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-2.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-3.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-4.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-5.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-6.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-7.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-8.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\checkpoints.worker-16-9.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        }
+      },
+      "canonical_state_rows": 295,
+      "canonical_expected_state_rows": 295,
+      "canonical_missing_state_ids": [],
+      "canonical_state_complete": true,
+      "forbidden_model_request_key_hits": {},
+      "key_hashes": {
+        "g7_retry_plan.jsonl": "1e35cc087d72ed857e4b60eaab9c75e5f47adc1ac4f1500c56c9ee5fecef3c0e",
+        "g7_retry_states.jsonl": "9d36381ca24235cdc9e31dd733aaa18d44c66e343c722869fd76f70390289122",
+        "g7_retry_q_audit.jsonl": "0871c5b6bc99c365db3de6e5694a7b916ffd6d50aa2478616a7962d6b25d732e"
+      }
+    },
+    {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2",
+      "plan_rows": 110,
+      "state_status_counts": {
+        "completed": 79,
+        "checkpoint_missing": 20,
+        "provider_error": 3
+      },
+      "q_rows": 110,
+      "q_valid": 0,
+      "retry_manifest": {
+        "kind": "g7_terminal_retry_plan",
+        "status": "FROZEN_SEPARATE_RETRY",
+        "source_plan": "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\g7_retry_plan.jsonl",
+        "source_states": "results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry\\g7_retry_states.jsonl",
+        "source_plan_sha256": "1e35cc087d72ed857e4b60eaab9c75e5f47adc1ac4f1500c56c9ee5fecef3c0e",
+        "source_states_sha256": "9d36381ca24235cdc9e31dd733aaa18d44c66e343c722869fd76f70390289122",
+        "retry_plan_sha256": "3ec2ff43a582b234eb422d15e401def77e836bfb08ae9e4d97d25d264dac1878",
+        "source_plan_rows": 295,
+        "retry_rows": 110,
+        "retry_unique_source_runs": 110,
+        "retry_unique_source_checkpoints": 32,
+        "source_terminal_status_counts": {
+          "provider_error": 20,
+          "checkpoint_missing": 90
+        },
+        "pooling_prohibited": true
+      },
+      "merge_manifest": {
+        "experiment_id": "g7_failure_localization",
+        "plan_rows": 110,
+        "states": {
+          "label": "states",
+          "expected": 110,
+          "selected_records": 102,
+          "selected_completed": 79,
+          "selected_terminal_failures": {
+            "g7r_6e4f34f903e3dbdde309": "checkpoint_missing",
+            "g7r_67da6b40eb711ea19731": "checkpoint_missing",
+            "g7r_3b20ac119eb6f3f05b78": "checkpoint_missing",
+            "g7r_30a96563d6065138089c": "checkpoint_missing",
+            "g7r_f3f716cd389fbcb9ce8e": "checkpoint_missing",
+            "g7r_2d4b1fed860ef2083f47": "checkpoint_missing",
+            "g7r_1b6ab5e74c371126b446": "checkpoint_missing",
+            "g7r_095929c7b1c6c15dc7a1": "checkpoint_missing",
+            "g7r_7fc7b3f11a883a265eff": "checkpoint_missing",
+            "g7r_004dcf5cf421e8262005": "checkpoint_missing",
+            "g7r_a6362cd284b21ff99065": "checkpoint_missing",
+            "g7r_dd3af68c61fa093899ea": "checkpoint_missing",
+            "g7r_fb1a970bbe6c028b8e71": "provider_error",
+            "g7r_2456469bd5fa4a8b3e55": "checkpoint_missing",
+            "g7r_688caad31213bfcd4c3b": "provider_error",
+            "g7r_07986798a545ebbb1dfb": "provider_error",
+            "g7r_8fd64d134537d569dacb": "checkpoint_missing",
+            "g7r_bae32df3188335fc5f37": "checkpoint_missing",
+            "g7r_5be309c5eb6244adf89f": "checkpoint_missing",
+            "g7r_2481b9a8d91272da4372": "checkpoint_missing",
+            "g7r_489865ea90869ff0d400": "checkpoint_missing",
+            "g7r_22a9d16cd9cef97079da": "checkpoint_missing",
+            "g7r_9549ced43d4fca84334e": "checkpoint_missing"
+          },
+          "missing_ids": [
+            "g7r_9fb4b47864e5a65df3dc",
+            "g7r_c85e1df3a444f9c4db86",
+            "g7r_2f67c930e70f5a034894",
+            "g7r_061131e6555003e8cc24",
+            "g7r_020f19f4e31469256333",
+            "g7r_92e71820afe09c5b5623",
+            "g7r_bd750df1f4eefcb8cca8",
+            "g7r_8f0955772c7e9fa6c2da"
+          ],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\states.worker-2-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\states.worker-2-1.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        },
+        "checkpoints": {
+          "label": "checkpoints",
+          "expected": 32,
+          "selected_records": 32,
+          "selected_completed": 26,
+          "selected_terminal_failures": {
+            "g7rcp_93047b6841ac2f11261a": "provider_error",
+            "g7rcp_123b8f7cebe95fceed2e": "provider_error",
+            "g7rcp_e248ecdc1f05229cb09e": "provider_error",
+            "g7rcp_65f9704901256c153b80": "provider_error",
+            "g7rcp_8634abd31df94eb75340": "provider_error",
+            "g7rcp_e8b59fc29fd471a37664": "provider_error"
+          },
+          "missing_ids": [],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\checkpoints.worker-2-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\checkpoints.worker-2-1.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        }
+      },
+      "canonical_state_rows": 102,
+      "canonical_expected_state_rows": 110,
+      "canonical_missing_state_ids": [
+        "g7r_9fb4b47864e5a65df3dc",
+        "g7r_c85e1df3a444f9c4db86",
+        "g7r_2f67c930e70f5a034894",
+        "g7r_061131e6555003e8cc24",
+        "g7r_020f19f4e31469256333",
+        "g7r_92e71820afe09c5b5623",
+        "g7r_bd750df1f4eefcb8cca8",
+        "g7r_8f0955772c7e9fa6c2da"
+      ],
+      "canonical_state_complete": false,
+      "forbidden_model_request_key_hits": {},
+      "key_hashes": {
+        "g7_retry2_plan.jsonl": "3ec2ff43a582b234eb422d15e401def77e836bfb08ae9e4d97d25d264dac1878",
+        "g7_retry2_states.jsonl": "a26dae85ed6e94457e2a67afe1e923da4ae3868249eae5d33cff345dc7c64f4a",
+        "g7_retry2_q_audit.jsonl": "945ea028f51a42673fccd131782db4fb8cfc7c187b74b001e6cd63ea529c9f0e"
+      }
+    },
+    {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3",
+      "plan_rows": 31,
+      "state_status_counts": {
+        "completed": 16,
+        "checkpoint_missing": 12,
+        "provider_error": 3
+      },
+      "q_rows": 31,
+      "q_valid": 0,
+      "retry_manifest": {
+        "kind": "g7_terminal_retry_plan",
+        "status": "FROZEN_SEPARATE_RETRY",
+        "source_plan": "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\g7_retry2_plan.jsonl",
+        "source_states": "results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2\\g7_retry2_states.jsonl",
+        "source_plan_sha256": "3ec2ff43a582b234eb422d15e401def77e836bfb08ae9e4d97d25d264dac1878",
+        "source_states_sha256": "a26dae85ed6e94457e2a67afe1e923da4ae3868249eae5d33cff345dc7c64f4a",
+        "retry_plan_sha256": "11115bfa7975e2a30bc552e14d44fef0b6be1bfca88745115fd26199e775078b",
+        "source_plan_rows": 110,
+        "retry_rows": 31,
+        "retry_unique_source_runs": 31,
+        "retry_unique_source_checkpoints": 14,
+        "source_terminal_status_counts": {
+          "checkpoint_missing": 20,
+          "provider_error": 3,
+          "missing_state": 8
+        },
+        "pooling_prohibited": true
+      },
+      "merge_manifest": {
+        "experiment_id": "g7_failure_localization",
+        "plan_rows": 31,
+        "states": {
+          "label": "states",
+          "expected": 31,
+          "selected_records": 31,
+          "selected_completed": 16,
+          "selected_terminal_failures": {
+            "g7r_5796ca713ead1a720315": "checkpoint_missing",
+            "g7r_8bc549475f0b3de9de38": "checkpoint_missing",
+            "g7r_3182e186c429fa8179e1": "checkpoint_missing",
+            "g7r_d9c116c0df031131767f": "checkpoint_missing",
+            "g7r_7bab1bf29915326f6f79": "checkpoint_missing",
+            "g7r_2d05b2605b2eea13b0e9": "checkpoint_missing",
+            "g7r_8c6309fd423b11591fc0": "provider_error",
+            "g7r_802a8a73279e4df9d014": "checkpoint_missing",
+            "g7r_9e0fd1356a35e33457e8": "provider_error",
+            "g7r_e92150f77454b184969d": "checkpoint_missing",
+            "g7r_e89b3a609bc00e468a01": "checkpoint_missing",
+            "g7r_8db9ffe42daa2a4be2a1": "checkpoint_missing",
+            "g7r_694d00a8d1578ddb86b1": "checkpoint_missing",
+            "g7r_5105a151a82776155093": "provider_error",
+            "g7r_a96cad50932ab812e921": "checkpoint_missing"
+          },
+          "missing_ids": [],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\states.worker-4-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\states.worker-4-1.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\states.worker-4-2.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\states.worker-4-3.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        },
+        "checkpoints": {
+          "label": "checkpoints",
+          "expected": 14,
+          "selected_records": 14,
+          "selected_completed": 10,
+          "selected_terminal_failures": {
+            "g7rcp_5889107219c2fea2e14b": "provider_error",
+            "g7rcp_2cddbf347613e7de273c": "provider_error",
+            "g7rcp_e8e9b62d0565ed700938": "provider_error",
+            "g7rcp_e99bb3f93c13b9037b04": "provider_error"
+          },
+          "missing_ids": [],
+          "source_files": [
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\checkpoints.worker-4-0.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\checkpoints.worker-4-1.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\checkpoints.worker-4-2.jsonl",
+            "results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3\\checkpoints.worker-4-3.jsonl"
+          ],
+          "duplicate_completed_ids": {},
+          "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+        }
+      },
+      "canonical_state_rows": 31,
+      "canonical_expected_state_rows": 31,
+      "canonical_missing_state_ids": [],
+      "canonical_state_complete": true,
+      "forbidden_model_request_key_hits": {},
+      "key_hashes": {
+        "g7_retry3_plan.jsonl": "11115bfa7975e2a30bc552e14d44fef0b6be1bfca88745115fd26199e775078b",
+        "g7_retry3_states.jsonl": "a963b0d46ccdaefb1384169f3cf020d614107f99c0cde3ad637218b998193dc9",
+        "g7_retry3_q_audit.jsonl": "0d7eb75ea6248b78fb48ed220ede367b0683380e3d39fb89bff20de1b0af9c4b"
+      }
+    }
+  ],
+  "g7_protocol_corrected_retry": {
+    "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers",
+    "plan_rows": 1288,
+    "state_status_counts": {
+      "completed": 1285,
+      "provider_error": 3
+    },
+    "q_rows": 1288,
+    "q_valid": 20,
+    "retry_manifest": {
+      "kind": "g7_full_protocol_corrected_retry_plan",
+      "status": "FROZEN_SEPARATE_RETRY",
+      "source_plan": "results\\g7_failure_localization\\formal-20261014T030000Z-16workers\\g7_run_plan.jsonl",
+      "source_plan_sha256": "549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3",
+      "retry_plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+      "source_plan_rows": 1288,
+      "retry_rows": 1288,
+      "retry_unique_source_runs": 1288,
+      "retry_unique_source_checkpoints": 184,
+      "pooling_prohibited": true,
+      "format_retry_protocol": {
+        "version": "g7-public-case-format-retry-v1",
+        "max_format_retries_per_workflow": 1,
+        "new_scientific_observation_added": false,
+        "repair_message_is_fixed": true
+      }
+    },
+    "merge_manifest": {
+      "experiment_id": "g7_failure_localization",
+      "plan_rows": 1288,
+      "states": {
+        "label": "states",
+        "expected": 1288,
+        "selected_records": 1288,
+        "selected_completed": 1285,
+        "selected_terminal_failures": {
+          "g7full_dff0dae5a314dd9fb081": "provider_error",
+          "g7full_112d048c8fc2d5fc7f7f": "provider_error",
+          "g7full_73f3c3a5bd3823bdb85c": "provider_error"
+        },
+        "missing_ids": [],
+        "source_files": [
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-0.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-1.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-10.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-11.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-12.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-13.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-14.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-15.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-2.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-3.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-4.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-5.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-6.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-7.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-8.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\states.worker-16-9.jsonl"
+        ],
+        "duplicate_completed_ids": {},
+        "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+      },
+      "checkpoints": {
+        "label": "checkpoints",
+        "expected": 184,
+        "selected_records": 184,
+        "selected_completed": 184,
+        "selected_terminal_failures": {},
+        "missing_ids": [],
+        "source_files": [
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-0.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-1.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-10.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-11.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-12.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-13.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-14.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-15.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-2.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-3.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-4.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-5.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-6.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-7.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-8.jsonl",
+          "results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers\\checkpoints.worker-16-9.jsonl"
+        ],
+        "duplicate_completed_ids": {},
+        "selection_rule": "expected-id order; latest completed record, else latest terminal record, among stable sorted append-only sources"
+      }
+    },
+    "canonical_state_rows": 1288,
+    "canonical_expected_state_rows": 1288,
+    "canonical_missing_state_ids": [],
+    "canonical_state_complete": true,
+    "forbidden_model_request_key_hits": {},
+    "key_hashes": {
+      "g7_full_retry_plan.jsonl": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+      "g7_full_retry_states.jsonl": "45fa85c25fada1fe6653d582e7167b1f54bf7551f80c2b847ca5badddec93bc2",
+      "g7_full_retry_q_audit.jsonl": "95349ef7faec28b9e3a63290c5bda4e67be007027b2f12cce29aa656bc252543"
+    }
+  },
+  "g8": {
+    "plan_rows": 324,
+    "result_files": 324,
+    "execution_summary": {
+      "caution": "Worker count is NOT an independent-sample count. Invalid/failed runs remain in ITT denominator.",
+      "counts": {
+        "PASS": 284,
+        "TECHNICAL_FAILURE": 40
+      },
+      "plan_sha256": "e784dfdb108e0d7534557a3c20e83959f3054ee0daa3cccef5ae9f44986296dd",
+      "planned": 324,
+      "rps": 4.0,
+      "workers": 16
+    },
+    "independent_audit": {
+      "audit_status_counts": {
+        "PASS": 324
+      },
+      "audit_version": "g8-independent-output-audit-v1",
+      "execution_status_counts": {
+        "PASS": 284,
+        "TECHNICAL_FAILURE": 40
+      },
+      "n_planned": 324,
+      "n_process_audit_rows": 324,
+      "n_q_audit_rows": 30,
+      "n_result_files": 324,
+      "note": "Technical failures remain in the formal ITT denominator; process audit is not a truth label.",
+      "plan": "results\\g8_causal_mechanism\\formal-20261015T030000Z-16workers\\g8_run_plan.jsonl",
+      "plan_sha256": "e784dfdb108e0d7534557a3c20e83959f3054ee0daa3cccef5ae9f44986296dd",
+      "private_oracle_loaded": false,
+      "raw": "results\\g8_causal_mechanism\\formal-20261015T030000Z-16workers\\raw",
+      "scientific_truth_decision_made": false,
+      "unexpected_result_ids": []
+    },
+    "forbidden_model_request_key_hits": {},
+    "key_hashes": {
+      "g8_run_plan.jsonl": "e784dfdb108e0d7534557a3c20e83959f3054ee0daa3cccef5ae9f44986296dd",
+      "g9_handoff.json": "8f047d9855cfed77217a92518217d22d857dfd06e89c7b37dad4871b717b51f9"
+    }
+  },
+  "findings": [
+    "G0-G5 persisted legacy artifacts are inventoried; they are not reclassified as new formal runs.",
+    "G6 corrected release is complete structurally and remains subject to the ledger's external math/provider/statistical caveats.",
+    "Original G7 terminal failures and low Q validity remain present; the retry is separate and is not pooled.",
+    "G7 terminal retries 1-3 are separately canonicalized; terminal rows remain failures and no retry is pooled into the original run.",
+    "The G7 runner protocol was repaired so cf_type and theory_family_id are no longer model-facing hints for future runs.",
+    "The protocol-corrected G7 retry is separately canonicalized with 1288 plan rows, 184 checkpoints, and retained terminal provider failures.",
+    "G8 independent audit retains all 324 planned rows and does not load private oracle or decide scientific truth."
+  ]
+}

@@ -31,6 +31,10 @@ from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_
 
 
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
+FORMAT_RETRY_INSTRUCTION = (
+    "The previous response failed the required JSON contract. Return only one JSON object with the required fields; "
+    "do not call tools, do not add hidden information, and use empty arrays for genuinely empty L/U fields."
+)
 
 
 def utc_now() -> str:
@@ -143,16 +147,27 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
     max_calls = 2 if group == "G3" else 8
     tools = TOOLS
     parsed = None
-    for call_index in range(max_calls):
-        if group == "G3" and call_index == 1:
+    normal_calls = 0
+    request_calls = 0
+    format_retry_used = False
+    format_retry_pending = False
+    while normal_calls < max_calls or format_retry_pending:
+        is_format_retry = format_retry_pending
+        format_retry_pending = False
+        if not is_format_retry:
+            normal_calls += 1
+        request_calls += 1
+        if group == "G3" and normal_calls == 2 and not is_format_retry:
             messages.append({"role": "user", "content": "Perform the fixed second synthesis pass. Return only the required JSON."})
         limits.before_model()
         seq = emit(event_path, seq, trace_id, "MODEL_REQUEST", "RUNNING",
-                   {"call_index": call_index + 1, "checkpoint": checkpoint, "messages": messages, "tools": tools})
+                   {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
+                    "messages": messages, "tools": tools})
         response = provider.complete(messages, tools=tools)
         limits.consume(response)
         seq = emit(event_path, seq, trace_id, "MODEL_RESPONSE", "COMPLETED",
-                   {"call_index": call_index + 1, "checkpoint": checkpoint, "content": response.content,
+                   {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
+                    "content": response.content,
                     "tool_calls": response.tool_calls, "usage": response.usage.__dict__,
                     "metadata": response.metadata})
         if response.tool_calls:
@@ -174,11 +189,32 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
                            {"tool_name": name, "tool_result": result})
                 messages.append({"role": "tool", "tool_call_id": tool_call.get("id", f"tool-{limits.tool_calls}"),
                                  "name": name, "content": json.dumps(result, ensure_ascii=False)})
+            if normal_calls >= max_calls and not format_retry_used:
+                format_retry_used = True
+                messages.append({"role": "user", "content": FORMAT_RETRY_INSTRUCTION})
+                seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
+                           {"reason": "tool_loop_reached_workflow_call_limit"})
+                format_retry_pending = True
             continue
-        parsed = parse_payload(response.content)
-        if checkpoint and group == "G3" and call_index == 0:
+
+        try:
+            candidate = parse_payload(response.content)
+            if not checkpoint:
+                normalize_stages(candidate)
+            parsed = candidate
+        except ValueError as exc:
+            if format_retry_used:
+                raise
+            format_retry_used = True
+            messages.append({"role": "user", "content": FORMAT_RETRY_INSTRUCTION})
+            seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
+                       {"reason": str(exc)})
+            format_retry_pending = True
             continue
-        if checkpoint or call_index >= 1:
+
+        if group == "G3" and normal_calls < 2:
+            continue
+        if checkpoint or normal_calls >= 2:
             break
     if parsed is None:
         raise ValueError("no valid JSON response")
@@ -213,10 +249,13 @@ class Limits:
             raise RuntimeError("G7 hard budget exceeded")
 
 
-def persisted_usage(out: Path, input_rate: float, output_rate: float, max_output_tokens: int) -> dict[str, float | int]:
+def persisted_usage(out: Path, input_rate: float, output_rate: float, max_output_tokens: int,
+                    trace_ids: set[str] | None = None) -> dict[str, float | int]:
     usage = {"model_calls": 0, "tool_calls": 0, "total_tokens": 0, "cost_usd": 0.0, "reserved_cost_usd": 0.0}
     for path in out.glob("**/*.jsonl"):
         for event in readl(path):
+            if trace_ids is not None and str(event.get("run_id", "")) not in trace_ids:
+                continue
             typ = event.get("event_type")
             if typ == "MODEL_REQUEST":
                 usage["model_calls"] += 1
@@ -286,21 +325,23 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     state_path = out / f"states.worker-{args.worker_count}-{args.worker_index}.jsonl"
     checkpoint_path = out / f"checkpoints.worker-{args.worker_count}-{args.worker_index}.jsonl"
-    prior_states = {x["run_id"]: x for x in readl(state_path)}
-    prior_cp = {x["checkpoint_id"]: x for x in readl(checkpoint_path) if x.get("status") == "completed"}
-    usage = persisted_usage(out, args.input_cost_per_1k, args.output_cost_per_1k, 1024)
-    limits = Limits(args.max_model_calls, args.max_tool_calls, args.max_total_tokens, args.max_cost_usd,
-                    int(usage["model_calls"]), int(usage["tool_calls"]), int(usage["total_tokens"]), float(usage["cost_usd"]))
-    provider = OpenAICompatibleProvider(api_key=args.key_file.read_text(encoding="utf-8").strip(), base_url=args.base_url,
-                                        model_name=args.model_id, timeout=args.provider_timeout, max_retries=args.provider_retries,
-                                        input_cost_per_1k=args.input_cost_per_1k, output_cost_per_1k=args.output_cost_per_1k,
-                                        max_cost_usd=args.max_cost_usd, max_output_tokens=1024)
     selected = plan if args.limit <= 0 else plan[:args.limit]
     checkpoints: dict[str, dict[str, Any]] = {}
     for row in selected:
         checkpoints.setdefault(row["checkpoint_id"], row)
     selected_cps = {cp: row for cp, row in checkpoints.items()
                     if int(hashlib.sha256(cp.encode()).hexdigest(), 16) % args.worker_count == args.worker_index}
+    trace_ids = {"checkpoint_" + cp_id for cp_id in selected_cps}
+    trace_ids.update(row["run_id"] for row in selected if row["checkpoint_id"] in selected_cps)
+    prior_states = {x["run_id"]: x for x in readl(state_path)}
+    prior_cp = {x["checkpoint_id"]: x for x in readl(checkpoint_path) if x.get("status") == "completed"}
+    usage = persisted_usage(out, args.input_cost_per_1k, args.output_cost_per_1k, 1024, trace_ids)
+    limits = Limits(args.max_model_calls, args.max_tool_calls, args.max_total_tokens, args.max_cost_usd,
+                    int(usage["model_calls"]), int(usage["tool_calls"]), int(usage["total_tokens"]), float(usage["cost_usd"]))
+    provider = OpenAICompatibleProvider(api_key=args.key_file.read_text(encoding="utf-8").strip(), base_url=args.base_url,
+                                        model_name=args.model_id, timeout=args.provider_timeout, max_retries=args.provider_retries,
+                                        input_cost_per_1k=args.input_cost_per_1k, output_cost_per_1k=args.output_cost_per_1k,
+                                        max_cost_usd=args.max_cost_usd, max_output_tokens=1024)
     # Checkpoints are assigned as units, so all diagnostic forks from one
     # checkpoint remain on exactly one worker and have one immutable initial answer.
     for cp_id, row in selected_cps.items():
