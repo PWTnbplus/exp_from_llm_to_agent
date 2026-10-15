@@ -14,11 +14,11 @@
 
 ## 当前状态摘要
 
-开放/未验证：13。已验证：2。
+开放/未验证：14。已验证：2。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=6：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep failures and invalid Q rows in the denominator; obtain an independently reviewed trace/Q diagnosis or a separately frozen, authorized retry before any confirmatory reuse. Do not pool retries.
+- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=6：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries.
 - ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=1：Real-provider pilot and retry/cost behavior are unverified；修复=Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.
@@ -26,10 +26,10 @@
 - ISSUE-ad61f025976a P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
 - ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=0：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims.
 - ISSUE-f9171bb760b1 P1 RESOLVED_UNVERIFIED 尝试次数=0：No frozen, auditable G8 real/sham/off/extra adapter is present；修复=Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
-- ISSUE-0f2cb195c681 P1 RESOLVED_UNVERIFIED 尝试次数=3：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original batch permanently non-confirmatory; require the executable preflight to pass with zero routing/private hits before any future paid run.
+- ISSUE-0f2cb195c681 P1 RESOLVED_UNVERIFIED 尝试次数=3：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.
 - ISSUE-28ed827e40a9 P1 RESOLVED_UNVERIFIED 尝试次数=0：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-C；修复=Resolve environment/format/test blocker; rerun audit
 - ISSUE-ab0746b86bf9 P1 RESOLVED_UNVERIFIED 尝试次数=0：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder per；修复=Retain the privacy boundary and obtain a separate read-only review of result/trace artifacts before accepting this as fully verified.
-- ISSUE-000000000005 P2 OPEN 尝试次数=0：Classical baseline is only an extension interface；修复=Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
+- ISSUE-0786397621a0 P1 RESOLVED_UNVERIFIED 尝试次数=0：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observ；修复=Retain identical public initial-information handling across the two arms and obtain a separate read-only review before treating this protocol repair as verified.
 已验证的已完成工作（避免重复）：
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.
 - Corrected G6 protocol and audited G7 failure-localization execution：G6 corrected 23-family run and G7 16-worker run have canonical merge, independent audits, hashes, and explicit terminal-failure accounting; host suite and package tests pass. Scien

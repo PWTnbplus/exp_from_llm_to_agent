@@ -1,8 +1,8 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T17:14:57+00:00
+生成时间（UTC）：2026-10-15T17:35:08+00:00
 
-- 开放/阻塞/未验证：**13**
+- 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
@@ -11,8 +11,8 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Historical G7 artifacts remain immutable: corrected retry has 3 retained provider_error rows and Q valid 20/1288; no confirmatory per-arm score exists. The read-only lifecycle audit did not alter these outcomes and no provider call was made.
-- 必需修复：Keep failures and invalid Q rows in the denominator; obtain an independently reviewed trace/Q diagnosis or a separately frozen, authorized retry before any confirmatory reuse. Do not pool retries.
+- 证据：The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The trace/Q audit retains all terminal failures, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false; no provider call was made in this cycle.
+- 必需修复：Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries.
 - 尝试次数：6
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
@@ -75,8 +75,8 @@
 
 ### ISSUE-0f2cb195c681 — P1 — RESOLVED_UNVERIFIED
 - 描述：Original G7 model-facing prompt leaked routing metadata
-- 证据：The immutable original G7 model requests contain routing metadata, while corrected artifacts contain zero such hits. Cycle 31 now routes the exact shared protocol_preflight through both the standalone checker and the runner, and integration tests prove the runner stops before reading a provider key when the prompt contract is contaminated.
-- 必需修复：Keep the original batch permanently non-confirmatory; require the executable preflight to pass with zero routing/private hits before any future paid run.
+- 证据：The executable G7 preflight now runs before provider construction and key-file reading, case_prompt rejects malformed model_visible objects, and the preflight recursively scans routing plus private fields case-insensitively. The corrected public input passes with 92 cases, 1288 plan rows, 184 checkpoints, and zero routing/private hits; immutable original contamination remains non-confirmatory.
+- 必需修复：Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
@@ -113,6 +113,14 @@ g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', No
 - 必需修复：Retain the privacy boundary and obtain a separate read-only review of result/trace artifacts before accepting this as fully verified.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261016T014500Z-31/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-0786397621a0 — P1 — RESOLVED_UNVERIFIED
+- 描述：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser
+- 证据：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public observations. The repair seeds Agent history and metadata from the public initial observations; adversarial coverage passes in tests/test_agent_actions.py and the 125-test host suite.
+- 必需修复：Retain identical public initial-information handling across the two arms and obtain a separate read-only review before treating this protocol repair as verified.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261015T172856Z-32/audit.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000005 — P2 — OPEN

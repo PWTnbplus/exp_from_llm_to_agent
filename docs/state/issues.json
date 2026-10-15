@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-15T17:14:57+00:00",
+  "updated_at": "2026-10-15T17:35:08+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -335,10 +335,10 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "Historical G7 artifacts remain immutable: corrected retry has 3 retained provider_error rows and Q valid 20/1288; no confirmatory per-arm score exists. The read-only lifecycle audit did not alter these outcomes and no provider call was made.",
-      "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed trace/Q diagnosis or a separately frozen, authorized retry before any confirmatory reuse. Do not pool retries.",
+      "evidence": "The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The trace/Q audit retains all terminal failures, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false; no provider call was made in this cycle.",
+      "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-15T17:14:57+00:00",
+      "last_seen": "2026-10-15T17:35:08+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 6,
       "blocked_reason": null,
@@ -431,10 +431,10 @@
       "severity": "P1",
       "title": "Original G7 model-facing prompt leaked routing metadata",
       "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The immutable original G7 model requests contain routing metadata, while corrected artifacts contain zero such hits. Cycle 31 now routes the exact shared protocol_preflight through both the standalone checker and the runner, and integration tests prove the runner stops before reading a provider key when the prompt contract is contaminated.",
-      "remediation": "Keep the original batch permanently non-confirmatory; require the executable preflight to pass with zero routing/private hits before any future paid run.",
+      "evidence": "The executable G7 preflight now runs before provider construction and key-file reading, case_prompt rejects malformed model_visible objects, and the preflight recursively scans routing plus private fields case-insensitively. The corrected public input passes with 92 cases, 1288 plan rows, 184 checkpoints, and zero routing/private hits; immutable original contamination remains non-confirmatory.",
+      "remediation": "Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.",
       "first_seen": "2026-10-15T05:15:00+00:00",
-      "last_seen": "2026-10-15T17:14:57+00:00",
+      "last_seen": "2026-10-15T17:35:08+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 3,
       "blocked_reason": null,
@@ -467,6 +467,12 @@
           "time": "2026-10-15T17:14:57+00:00",
           "event": "RESOLVED_UNVERIFIED",
           "reason": "The executable fail-closed preflight and regression tests are now present, but the historical contamination cannot be repaired and no future paid run was authorized.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-15T17:35:08+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "The executable fail-closed boundary is strengthened and tested, but the immutable historical contamination cannot be repaired and no future paid run was authorized.",
           "evidence": ""
         }
       ]
@@ -524,6 +530,33 @@
           "evidence": ""
         }
       ]
+    },
+    {
+      "id": "ISSUE-0786397621a0",
+      "severity": "P1",
+      "title": "Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public observations. The repair seeds Agent history and metadata from the public initial observations; adversarial coverage passes in tests/test_agent_actions.py and the 125-test host suite.",
+      "remediation": "Retain identical public initial-information handling across the two arms and obtain a separate read-only review before treating this protocol repair as verified.",
+      "first_seen": "2026-10-15T17:34:37+00:00",
+      "last_seen": "2026-10-15T17:35:08+00:00",
+      "source": "docs/audits/cycle-20261015T172856Z-32/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-15T17:34:37+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261015T172856Z-32/audit.json"
+        },
+        {
+          "time": "2026-10-15T17:35:08+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "The Agent now receives and records the same public initial observations as the frozen-plan arm, with focused and full regression coverage; a separate independent review is still outstanding.",
+          "evidence": ""
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -573,7 +606,8 @@
     "docs/audits/cycle-20261015T162335Z-29/audit.json",
     "docs/audits/cycle-20261016T120000Z-30/audit.json",
     "docs/audits/cycle-20261015T161447Z-01/audit.json",
-    "docs/audits/cycle-20261016T014500Z-31/audit.json"
+    "docs/audits/cycle-20261016T014500Z-31/audit.json",
+    "docs/audits/cycle-20261015T172856Z-32/audit.json"
   ],
   "current_focus": null
 }

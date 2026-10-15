@@ -36,9 +36,15 @@ class SingleAgentRunner:
         public = self.oracle.get_public_task_description()
         assert_public_text(public)
         schema = self.oracle.get_action_schema()
-        history: list[dict[str, Any]] = []
+        initial_observations = [observation_dict(v) for v in self.oracle.get_initial_observations()]
+        assert_public_text(str(initial_observations))
+        history: list[dict[str, Any]] = list(initial_observations)
         observations = []
-        metadata: dict[str, Any] = {"protocol": "closed_loop_single_agent", "authorized_tool": "run_experiment"}
+        metadata: dict[str, Any] = {
+            "protocol": "closed_loop_single_agent",
+            "authorized_tool": "run_experiment",
+            "initial_observations": initial_observations,
+        }
         law: dict[str, Any] = {"error": "agent did not submit a final law"}
         status = "failed"
         try:

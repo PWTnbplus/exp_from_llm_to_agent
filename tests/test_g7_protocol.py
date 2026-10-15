@@ -47,6 +47,31 @@ def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() ->
     assert report["provider_calls_made"] is False
 
 
+def test_g7_runner_preflight_rejects_nested_private_model_fields() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"public": {"Ground_Truth": "secret"}, "answer_key": "secret"}}],
+        [{"case_id": "case-1"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert report["errors"] == ["private_oracle_metadata_in_model_prompt"]
+    assert report["forbidden_model_prompt_hits"]["ground_truth"] == 1
+    assert report["forbidden_model_prompt_hits"]["answer_key"] == 1
+
+
+def test_g7_runner_preflight_rejects_malformed_plan_rows() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"problem": "public"}}],
+        [{"case_id": "case-1"}],
+        [{"checkpoint_id": "cp-1", "case_id": "case-1"}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert report["errors"] == ["plan_required_fields_missing"]
+    assert report["counts"]["missing_required_plan_fields"] == ["run_id"]
+
+
 def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     public = tmp_path / "public.jsonl"
     labels = tmp_path / "labels.jsonl"

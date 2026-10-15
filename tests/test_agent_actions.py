@@ -1,4 +1,5 @@
 from scientific_discovery.environment.budget import BudgetLedger, BudgetLimits
+from scientific_discovery.benchmark.base import Observation
 from scientific_discovery.models.provider import MockLLMProvider
 from scientific_discovery.runners.single_agent import SingleAgentRunner
 from .conftest import FakeOracle
@@ -41,3 +42,17 @@ def test_agent_rejects_unauthorized_tool_call():
     result = SingleAgentRunner(provider, oracle, oracle.budget).run("fake")
     assert result.status == "failed"
     assert oracle.actions == []
+
+
+def test_agent_receives_the_same_public_initial_observations_as_llm_only():
+    provider = MockLLMProvider([{"final_law": _law()}])
+    initial = Observation(-1, {"x": 0.25}, "initial-signal", 1)
+    oracle = FakeOracle(
+        [0.0],
+        BudgetLedger(BudgetLimits(max_experiments=1, max_api_calls=4)),
+        initial_observations=[initial],
+    )
+    result = SingleAgentRunner(provider, oracle, oracle.budget).run("fake")
+    assert result.status == "completed"
+    assert "initial-signal" in provider.calls[0]["messages"][1]["content"]
+    assert result.metadata["initial_observations"][0]["result"] == "initial-signal"

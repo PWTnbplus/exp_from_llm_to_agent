@@ -1,0 +1,85 @@
+{
+  "cycle": 32,
+  "timestamp_utc": "2026-10-15T17:28:56+00:00",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "test": {
+    "command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "output_tail": "125 passed in 24.66s\n"
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "reviewer": "local_read_only_contract_review",
+    "independent_review_status": "NOT_COMPLETED",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The trace/Q audit retains all terminal failures, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false; no provider call was made in this cycle.",
+        "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries."
+      },
+      {
+        "id": "ISSUE-0f2cb195c681",
+        "severity": "P1",
+        "evidence": "The executable G7 preflight now runs before provider construction and key-file reading, case_prompt rejects malformed model_visible objects, and the preflight recursively scans routing plus private fields case-insensitively. The corrected public input passes with 92 cases, 1288 plan rows, 184 checkpoints, and zero routing/private hits; immutable original contamination remains non-confirmatory.",
+        "remediation": "Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run."
+      },
+      {
+        "fingerprint": "agent_initial_observations_not_forwarded",
+        "severity": "P1",
+        "evidence": "Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public observations. The repair seeds Agent history and metadata from the public initial observations; adversarial coverage passes in tests/test_agent_actions.py and the 125-test host suite.",
+        "remediation": "Retain identical public initial-information handling across the two arms and obtain a separate read-only review before treating this protocol repair as verified."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-0f2cb195c681",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The executable fail-closed boundary is strengthened and tested, but the immutable historical contamination cannot be repaired and no future paid run was authorized.",
+        "evidence": "scripts/run_g7_failure_localization.py, scripts/g7_protocol_preflight.py, tests/test_g7_protocol.py, and the 125-test host regression."
+      },
+      {
+        "id": "ISSUE-0786397621a0",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The Agent now receives and records the same public initial observations as the frozen-plan arm, with focused and full regression coverage; a separate independent review is still outstanding.",
+        "evidence": "src/scientific_discovery/runners/single_agent.py, tests/test_agent_actions.py, and the 125-test host regression."
+      }
+    ]
+  },
+  "verified_commands": [
+    "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_agent_actions.py (15 passed)",
+    "E:/resources/python/python.exe -X utf8 -m pytest -q (exit 0, 125 passed in 24.66s)",
+    "E:/resources/python/python.exe -X utf8 scripts/g7_protocol_preflight.py --public results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl --labels results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl --plan results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_run_plan.jsonl --worker-count 16 --out docs/audits/cycle-20261015T172856Z-32/g7_protocol_preflight.json (provider_calls_made=false, protocol_allowed=true, 92/1288/184, zero routing/private hits)",
+    "E:/resources/python/python.exe -X utf8 scripts/audit_g7_trace_q_consistency.py --states results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_states.jsonl --q results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_q_audit.jsonl --trace-root results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers --checkpoints results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_checkpoints.jsonl --out docs/audits/cycle-20261015T172856Z-32/g7_trace_q_protocol_corrected.json (1288 rows, terminal failures retained, Q trace-backed 20, confirmatory reuse false)",
+    "E:/resources/python/python.exe -X utf8 -c read_only_contract_review (exit 0)",
+    "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py scripts/g7_protocol_preflight.py src/scientific_discovery/runners/single_agent.py (exit 0)",
+    "git diff --check (exit 0)"
+  ],
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "mandatory_completion_missing": [
+    "independent_provider_Q_review",
+    "billing_export",
+    "immutable_model_snapshot",
+    "upstream_provenance",
+    "machine_gate_attestation"
+  ],
+  "unresolved_issue_ids": [
+    "ISSUE-3d7a9c1e5b20",
+    "ISSUE-0f2cb195c681",
+    "ISSUE-0786397621a0",
+    "ISSUE-000000000002",
+    "ISSUE-000000000003",
+    "ISSUE-000000000004",
+    "ISSUE-ff97c7c89112",
+    "ISSUE-ad61f025976a",
+    "ISSUE-1f8c2b6a4d90",
+    "ISSUE-f9171bb760b1",
+    "ISSUE-000000000005",
+    "ISSUE-6b3a9e1d4f20",
+    "ISSUE-ab0746b86bf9"
+  ],
+  "unverified_gates": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7"]
+}

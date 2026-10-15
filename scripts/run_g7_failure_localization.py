@@ -33,10 +33,23 @@ from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
 FORBIDDEN_MODEL_KEYS = (
     "expected_decision",
+    "affected_claim_ids",
     "oracle_affected_claim_ids",
+    "oracle_reason",
     "correct_revised_claim",
+    "counterexample",
     "private_oracle",
     "g6_private_oracle",
+    "source_g6_oracle",
+    "ground_truth",
+    "answer_key",
+    "verification_code",
+    "verification_status",
+    "verification_grade",
+    "verifier_status",
+    "V_true",
+    "L_true_impacted_nodes",
+    "U_true_node_changes",
 )
 ROUTING_METADATA_KEYS = ("cf_type", "theory_family_id")
 FORMAT_RETRY_INSTRUCTION = (
@@ -147,12 +160,16 @@ def case_prompt(case: dict[str, Any]) -> str:
     # cf_type and theory_family_id are runner/statistical metadata.  They are
     # intentionally not exposed in the model-facing prompt: the G7 protocol
     # allows them for routing and stratification, but not as predictive hints.
-    return json.dumps({"g7_public_case": case["model_visible"], "case_id": case["case_id"]},
+    model_visible = case.get("model_visible")
+    if not isinstance(model_visible, dict):
+        raise ValueError("case model_visible must be an object")
+    return json.dumps({"g7_public_case": model_visible, "case_id": case["case_id"]},
                       ensure_ascii=False)
 
 
 def _key_hits(text: str, keys: tuple[str, ...]) -> dict[str, int]:
-    return {key: text.count(key) for key in keys if key in text}
+    folded = text.casefold()
+    return {key: folded.count(key.casefold()) for key in keys if key.casefold() in folded}
 
 
 def protocol_preflight(
@@ -165,14 +182,29 @@ def protocol_preflight(
 
     public = {row.get("case_id"): row for row in public_rows}
     labels = {row.get("case_id"): row for row in label_rows}
-    prompt_text = "\n".join(
-        case_prompt(public[row["case_id"]])
-        for row in plan_rows
-        if row.get("case_id") in public
-    )
+    prompt_parts: list[str] = []
+    invalid_model_visible: list[Any] = []
+    for row in plan_rows:
+        case_id = row.get("case_id")
+        if case_id not in public:
+            continue
+        try:
+            prompt_parts.append(case_prompt(public[case_id]))
+        except (KeyError, TypeError, ValueError):
+            invalid_model_visible.append(case_id)
+    prompt_text = "\n".join(prompt_parts)
     missing_cases = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in public})
     missing_labels = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in labels})
-    duplicate_plan_ids = len(plan_rows) - len({row.get("run_id") for row in plan_rows})
+    required_plan_fields = ("run_id", "checkpoint_id", "case_id")
+    missing_required_plan_fields = sorted(
+        field for field in required_plan_fields if any(not row.get(field) for row in plan_rows)
+    )
+    run_ids = [row.get("run_id") for row in plan_rows if row.get("run_id")]
+    duplicate_plan_ids = len(run_ids) - len(set(run_ids))
+    public_case_ids = [row.get("case_id") for row in public_rows if row.get("case_id")]
+    label_case_ids = [row.get("case_id") for row in label_rows if row.get("case_id")]
+    duplicate_public_case_ids = len(public_case_ids) - len(set(public_case_ids))
+    duplicate_label_case_ids = len(label_case_ids) - len(set(label_case_ids))
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
@@ -180,8 +212,16 @@ def protocol_preflight(
         errors.append("plan_case_missing_from_public")
     if missing_labels:
         errors.append("plan_case_missing_from_labels")
+    if missing_required_plan_fields:
+        errors.append("plan_required_fields_missing")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
+    if duplicate_public_case_ids:
+        errors.append("duplicate_public_case_id")
+    if duplicate_label_case_ids:
+        errors.append("duplicate_label_case_id")
+    if invalid_model_visible:
+        errors.append("invalid_model_visible")
     if worker_count < 1 or worker_count > 16:
         errors.append("worker_count_out_of_range")
     routing_hits = _key_hits(prompt_text, ROUTING_METADATA_KEYS)
@@ -201,7 +241,11 @@ def protocol_preflight(
             "plan_rows": len(plan_rows),
             "missing_cases": len(missing_cases),
             "missing_labels": len(missing_labels),
+            "missing_required_plan_fields": missing_required_plan_fields,
             "duplicate_run_ids": duplicate_plan_ids,
+            "duplicate_public_case_ids": duplicate_public_case_ids,
+            "duplicate_label_case_ids": duplicate_label_case_ids,
+            "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
             "unique_checkpoint_ids": len({row.get("checkpoint_id") for row in plan_rows}),
         },
         "routing_metadata_model_prompt_hits": routing_hits,
