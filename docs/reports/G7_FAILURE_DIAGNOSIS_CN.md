@@ -25,6 +25,7 @@
 ## 修复与剩余门禁
 
 - 已修复 runner 的 model-facing prompt：`cf_type` 和 `theory_family_id` 不再发送给模型；retry1–retry3 的 990 个模型请求均为 0 命中。
+- 已新增无 provider 的正式运行前 preflight：原始计划 1288 行、184 个 checkpoint、0 重复 run ID、0 routing/private prompt 命中；共享 checkpoint 被按 G7 fork 语义允许。
 - 原始 G7 的 5920 次 routing metadata 命中不可从历史 trace 中删除，因此该原始 formal run 保持不可确认状态。
 - provider 终端失败与独立 Q 无效性仍未解除；任何后续 formal run 必须先通过 prompt preflight，并继续保留失败项。
 

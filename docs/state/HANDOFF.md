@@ -18,8 +18,8 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=1：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with
-- ISSUE-0f2cb195c681 P1 IN_PROGRESS 尝试次数=1：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a p
+- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=2：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with
+- ISSUE-0f2cb195c681 P1 IN_PROGRESS 尝试次数=2：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a p
 - ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=1：Real-provider pilot and retry/cost behavior are unverified；修复=Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.

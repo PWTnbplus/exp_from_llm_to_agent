@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T05:17:32+00:00
+生成时间（UTC）：2026-10-15T05:32:28+00:00
 
 - 开放/阻塞/未验证：**11**
 - 已验证修复：**2**
@@ -13,7 +13,7 @@
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
 - 证据：Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). Retry manifests, source mappings, canonical merges, and hashes are recorded under results/g7_failure_localization/formal-20261015T060000Z-terminal-retry, formal-20261015T073000Z-terminal-retry2, and formal-20261015T080000Z-terminal-retry3; terminal failures and low Q remain unresolved.
 - 必需修复：Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.
-- 尝试次数：1
+- 尝试次数：2
 - 来源：docs/audits/cycle-20261014T163000Z-20/audit.json
 - 阻塞原因：未记录
 
@@ -21,7 +21,7 @@
 - 描述：Original G7 model-facing prompt leaked routing metadata
 - 证据：The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), and retry3 (68 requests) after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.
 - 必需修复：Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.
-- 尝试次数：1
+- 尝试次数：2
 - 来源：docs/audits/cycle-20261015T051500Z-25/audit.json
 - 阻塞原因：未记录
 

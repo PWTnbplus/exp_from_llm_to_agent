@@ -1,0 +1,42 @@
+{
+  "audit_version": "g7-protocol-gate-v1",
+  "audit_scope": "read_only_g7_formal_preflight_and_adversarial_protocol_check; no_provider_calls; no_scientific_truth_decision",
+  "review": {
+    "status": "COMPLETED_WITH_REMAINING_P1_BLOCKERS",
+    "confirmed_issue_ids": [
+      "ISSUE-3d7a9c1e5b20",
+      "ISSUE-0f2cb195c681"
+    ],
+    "resolutions": [
+      "Future G7 formal runs now have an executable preflight gate for public-case completeness, duplicate run IDs, private metadata, and routing metadata.",
+      "The preflight correctly permits shared checkpoint IDs because diagnostic forks intentionally share checkpoint units."
+    ],
+    "note": "The gate passes the corrected prompt contract but does not close the existing provider/Q or immutable-original-prompt P1 issues; no paid formal run was started."
+  },
+  "preflight": {
+    "artifact": "docs/audits/cycle-20261015T053500Z-26/g7_protocol_preflight.json",
+    "command": "E:/resources/python/python.exe -X utf8 scripts/g7_protocol_preflight.py --public results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl --labels results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl --plan results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_run_plan.jsonl --worker-count 16",
+    "provider_calls_made": false,
+    "formal_run_allowed_by_protocol": true,
+    "public_cases": 92,
+    "labels": 92,
+    "plan_rows": 1288,
+    "unique_checkpoint_ids": 184,
+    "duplicate_run_ids": 0,
+    "routing_metadata_model_prompt_hits": {},
+    "forbidden_model_prompt_hits": {}
+  },
+  "verification": {
+    "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+    "result": "106 passed",
+    "adversarial_tests": [
+      "routing metadata in model_visible prompt is blocked",
+      "shared checkpoint IDs across diagnostic forks are allowed"
+    ]
+  },
+  "findings": [
+    "The original G7 traces remain immutable and contain the previously recorded routing metadata leak.",
+    "The corrected preflight is a protocol gate only; it does not repair historical traces or certify provider/Q validity.",
+    "No new paid provider calls were made in this cycle."
+  ]
+}

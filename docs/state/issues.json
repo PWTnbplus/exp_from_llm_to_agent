@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-15T05:16:49+00:00",
+  "updated_at": "2026-10-15T05:30:05+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -338,9 +338,9 @@
       "evidence": "Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). Retry manifests, source mappings, canonical merges, and hashes are recorded under results/g7_failure_localization/formal-20261015T060000Z-terminal-retry, formal-20261015T073000Z-terminal-retry2, and formal-20261015T080000Z-terminal-retry3; terminal failures and low Q remain unresolved.",
       "remediation": "Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-15T06:30:00+00:00",
+      "last_seen": "2026-10-15T05:35:00+00:00",
       "source": "docs/audits/cycle-20261014T163000Z-20/audit.json",
-      "attempts": 1,
+      "attempts": 2,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -360,6 +360,12 @@
           "event": "IN_PROGRESS",
           "reason": "Completed two additional separately frozen terminal retries and canonical merges after repairing missing-state accounting; no retry was pooled into the original run.",
           "evidence": "retry2 canonical states=102/110 with 79 completed and 23 terminal failures, Q=0/110; retry3 canonical states=31/31 with 16 completed and 15 terminal failures, Q=0/31. Independent cycle audit is docs/audits/cycle-20261015T080000Z-24/audit.json. The issue remains unresolved."
+        },
+        {
+          "time": "2026-10-15T05:35:00+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Added and executed a no-provider G7 protocol preflight; it validates the corrected prompt contract and records shared checkpoint semantics without closing provider/Q failures.",
+          "evidence": "Preflight passed 1288 plan rows and 184 unique checkpoints with zero duplicate run IDs, zero routing metadata hits, and zero private metadata hits. The issue remains unresolved because historical terminal failures and Q invalidity remain."
         }
       ]
     },
@@ -398,9 +404,9 @@
       "evidence": "The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), and retry3 (68 requests) after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.",
       "remediation": "Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.",
       "first_seen": "2026-10-15T05:15:00+00:00",
-      "last_seen": "2026-10-15T05:15:00+00:00",
+      "last_seen": "2026-10-15T05:35:00+00:00",
       "source": "docs/audits/cycle-20261015T051500Z-25/audit.json",
-      "attempts": 1,
+      "attempts": 2,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -414,6 +420,12 @@
           "event": "IN_PROGRESS",
           "reason": "The runner prompt contract was repaired and verified on all three non-pooled retries, but immutable original data cannot be retroactively repaired.",
           "evidence": "Original routing metadata hits=2960 cf_type and 2960 theory_family_id; retry1/retry2/retry3 routing metadata hits are empty. No scientific truth decision is made."
+        },
+        {
+          "time": "2026-10-15T05:35:00+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "The executable preflight gate now checks future model-facing prompts before any provider call and correctly permits shared checkpoint IDs.",
+          "evidence": "The original 1288-row plan passed with zero routing/private prompt hits under the repaired contract; the historical 2960+2960 original trace hits remain immutable and non-confirmatory."
         }
       ]
     }
