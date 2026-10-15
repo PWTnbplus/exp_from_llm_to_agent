@@ -8,7 +8,7 @@
 |---|---:|---:|---:|---|
 | G0–G5 | 已持久化 pilot、engineering、smoke、theory 工件 | 55 个 JSON 工件 | mock 标记只出现在 theory/theory_agent_smoke 教学工件各 1 个 | 未把 smoke/mock 当正式科学结果 |
 | G6 | corrected 23-family release | 552 plan / 552 response / 552 handoff；2 workers | release structural review PASS；scientific_release_allowed=false | 保留数学、provider、snapshot、billing 外部门禁 |
-| G7 原始 | formal-20261014T030000Z-16workers | 1288 fork；184 checkpoint | 993 completed；217 checkpoint_missing；78 provider_error；Q valid 3/1288；edge_count=0/92；eligible_U=0 | 原始结果不可变；不得作 L/U 机制确认 |
+| G7 原始 | formal-20261014T030000Z-16workers | 1288 fork；184 checkpoint | 993 completed；217 checkpoint_missing；78 provider_error；Q valid 3/1288；edge_count=0/92；eligible_U=0；MODEL_REQUEST 中 routing metadata 各命中 2960 次 | 原始结果不可变；prompt 隔离门禁失败，不得作确认性结论 |
 | G7 retry1 | formal-20261015T060000Z-terminal-retry | 仅原始 295 个 terminal fork；81 source checkpoint；16 workers | 185 completed；90 checkpoint_missing；20 provider_error；Q valid 2/295 | 单独冻结、不可与原始 G7 合并 |
 | G7 retry2 | formal-20261015T073000Z-terminal-retry2 | retry1 中 110 个 terminal fork；32 source checkpoint；2 workers | 规范状态 102/110：79 completed；20 checkpoint_missing；3 provider_error；另有 8 missing state；Q valid 0/110 | 未完成项已单独进入 retry3；retry2 不与前轮 pooling |
 | G7 retry3 | formal-20261015T080000Z-terminal-retry3 | retry2 中 31 个 terminal/missing-state fork；14 source checkpoint；4 workers | 16 completed；12 checkpoint_missing；3 provider_error；Q valid 0/31 | 已规范合并；仍有终端失败，不与前轮 pooling |
@@ -33,6 +33,7 @@
 | 修复项 | 证据 | 状态 |
 |---|---|---|
 | G7 model-facing prompt 删除 `cf_type`、`theory_family_id` | `scripts/run_g7_failure_localization.py::case_prompt`；`tests/test_g7_protocol.py` | 已修复并回归通过 |
+| 原始 G7 prompt 泄漏诊断 | `scripts/audit_g7_failure_taxonomy.py`；`docs/reports/G7_FAILURE_DIAGNOSIS_CN.md`；cycle-20261015T051500Z-25 | 已确认；原始数据不可逆修复，保留为 P1 未解决门禁 |
 | G7 terminal retry 独立冻结与 source 映射 | `scripts/build_g7_terminal_retry.py`、`retry_manifest.json`、`g7_merge_manifest.json` | 已完成；禁止静默 pooling |
 | G0–G8 lineage / 私有 oracle / 计划完整性审计 | `scripts/audit_g0_g8_integrity.py`、`docs/audits/cycle-20261015T080000Z-24/audit.json` | 已完成；包含 retry1–retry3 链路 |
 
@@ -41,6 +42,7 @@
 | 问题 | 保留原因 |
 |---|---|
 | G7 provider/Q | retry1–retry3 仍有 terminal failures（90/295、23/110、15/31）；Q valid 分别为 2/295、0/110、0/31；不能宣称已修复 |
+| G7 原始 prompt 隔离 | 原始 MODEL_REQUEST 含 `cf_type`、`theory_family_id` 各 2960 次；只能排除原始 run，不能从历史 trace 删除 |
 | G7 L/U | 92/92 proof graph 无 dependency edge，U eligible=0；没有独立替代边数据 |
 | G6/G8 provider 真实性 | 无 immutable gateway weight fingerprint 与外部 billing receipt |
 | G5 数学审查、统计审查、upstream provenance | 仍需外部/独立审查或网络凭据，不能由本地 pytest 代替 |

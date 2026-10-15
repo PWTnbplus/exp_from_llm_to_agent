@@ -1,0 +1,237 @@
+{
+  "audit_version": "g7-failure-taxonomy-v1",
+  "audit_scope": "read_only_provider_failure_and_q_invalidity_classification; no_scientific_truth_decision",
+  "review": {
+    "status": "COMPLETED_WITH_G7_PROTOCOL_CAVEAT",
+    "confirmed_issue_ids": [
+      "ISSUE-3d7a9c1e5b20",
+      "ISSUE-0f2cb195c681"
+    ],
+    "resolutions": [],
+    "note": "The repaired runner has zero routing-metadata hits in all non-pooled retries, but the immutable original G7 run contains routing metadata in model requests and remains non-confirmatory for that gate."
+  },
+  "runs": {
+    "original": {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261014T030000Z-16workers",
+      "plan_rows": 1288,
+      "state_status_counts": {
+        "completed": 993,
+        "checkpoint_missing": 217,
+        "provider_error": 78
+      },
+      "checkpoint_status_counts": {
+        "completed": 153,
+        "provider_error": 31
+      },
+      "canonical_state_rows": 1288,
+      "canonical_expected_state_rows": 1288,
+      "canonical_missing_state_ids": [],
+      "error_messages": {
+        "no valid JSON response": 44,
+        "provider response did not contain a JSON object": 7,
+        "missing stage U": 7,
+        "missing stage V": 9,
+        "missing stage Q": 39,
+        "missing stages object": 12,
+        "invalid V verdict": 1
+      },
+      "q_rows": 1288,
+      "q_valid": 3,
+      "q_invalid_reason_counts": {
+        "missing_or_incomplete_state": 295
+      },
+      "q_invalid_check_combinations": {
+        "L+Q": 143,
+        "Q+V+final_decision": 46,
+        "Q+U": 158,
+        "Q": 229,
+        "L+Q+U": 118,
+        "Q+U+final_decision": 107,
+        "L+Q+U+V+final_decision": 2,
+        "L+Q+V+final_decision": 16,
+        "L+Q+U+final_decision": 62,
+        "Q+final_decision": 57,
+        "Q+U+V+final_decision": 6,
+        "V+final_decision": 2,
+        "L+Q+final_decision": 14,
+        "Q+U+V": 4,
+        "L": 6,
+        "Q+V": 11,
+        "L+Q+U+V": 3,
+        "L+V+final_decision": 1,
+        "L+Q+V": 4,
+        "V": 1
+      },
+      "resource_usage": {
+        "model_calls": 2960,
+        "tool_calls": 1925,
+        "total_tokens": 6494545,
+        "observed_cost_usd": 10.260655
+      },
+      "forbidden_model_request_key_hits": {},
+      "routing_metadata_model_request_hits": {
+        "cf_type": 2960,
+        "theory_family_id": 2960
+      }
+    },
+    "retry1": {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T060000Z-terminal-retry",
+      "plan_rows": 295,
+      "state_status_counts": {
+        "completed": 185,
+        "provider_error": 20,
+        "checkpoint_missing": 90
+      },
+      "checkpoint_status_counts": {
+        "completed": 65,
+        "provider_error": 16
+      },
+      "canonical_state_rows": 295,
+      "canonical_expected_state_rows": 295,
+      "canonical_missing_state_ids": [],
+      "error_messages": {
+        "no valid JSON response": 28,
+        "missing stage U": 1,
+        "missing stage Q": 4,
+        "missing stage V": 1,
+        "provider response did not contain a JSON object": 2
+      },
+      "q_rows": 295,
+      "q_valid": 2,
+      "q_invalid_reason_counts": {
+        "missing_or_incomplete_state": 110
+      },
+      "q_invalid_check_combinations": {
+        "Q+U+V": 2,
+        "Q+U": 29,
+        "Q+U+final_decision": 24,
+        "Q": 43,
+        "L+Q+U": 16,
+        "L+Q": 28,
+        "Q+final_decision": 12,
+        "L+Q+U+V": 2,
+        "L+Q+final_decision": 3,
+        "Q+V": 2,
+        "Q+V+final_decision": 7,
+        "L+Q+V+final_decision": 4,
+        "L": 1,
+        "L+Q+U+final_decision": 8,
+        "Q+U+V+final_decision": 1,
+        "final_decision": 1
+      },
+      "resource_usage": {
+        "model_calls": 646,
+        "tool_calls": 535,
+        "total_tokens": 1385282,
+        "observed_cost_usd": 2.266945999999998
+      },
+      "forbidden_model_request_key_hits": {},
+      "routing_metadata_model_request_hits": {}
+    },
+    "retry2": {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T073000Z-terminal-retry2",
+      "plan_rows": 110,
+      "state_status_counts": {
+        "completed": 79,
+        "checkpoint_missing": 20,
+        "provider_error": 3
+      },
+      "checkpoint_status_counts": {
+        "completed": 26,
+        "provider_error": 6
+      },
+      "canonical_state_rows": 102,
+      "canonical_expected_state_rows": 110,
+      "canonical_missing_state_ids": [
+        "g7r_9fb4b47864e5a65df3dc",
+        "g7r_c85e1df3a444f9c4db86",
+        "g7r_2f67c930e70f5a034894",
+        "g7r_061131e6555003e8cc24",
+        "g7r_020f19f4e31469256333",
+        "g7r_92e71820afe09c5b5623",
+        "g7r_bd750df1f4eefcb8cca8",
+        "g7r_8f0955772c7e9fa6c2da"
+      ],
+      "error_messages": {
+        "no valid JSON response": 18,
+        "provider response did not contain a JSON object": 1,
+        "missing stage Q": 1
+      },
+      "q_rows": 110,
+      "q_valid": 0,
+      "q_invalid_reason_counts": {
+        "missing_or_incomplete_state": 31
+      },
+      "q_invalid_check_combinations": {
+        "L+Q+U": 12,
+        "L+Q+U+final_decision": 6,
+        "Q+U": 15,
+        "Q+U+final_decision": 16,
+        "Q+final_decision": 8,
+        "Q": 11,
+        "Q+V": 1,
+        "L+Q+final_decision": 2,
+        "L+Q": 5,
+        "L+Q+V+final_decision": 1,
+        "Q+V+final_decision": 2
+      },
+      "resource_usage": {
+        "model_calls": 276,
+        "tool_calls": 196,
+        "total_tokens": 601606,
+        "observed_cost_usd": 1.0066400000000006
+      },
+      "forbidden_model_request_key_hits": {},
+      "routing_metadata_model_request_hits": {}
+    },
+    "retry3": {
+      "root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3",
+      "plan_rows": 31,
+      "state_status_counts": {
+        "completed": 16,
+        "checkpoint_missing": 12,
+        "provider_error": 3
+      },
+      "checkpoint_status_counts": {
+        "completed": 10,
+        "provider_error": 4
+      },
+      "canonical_state_rows": 31,
+      "canonical_expected_state_rows": 31,
+      "canonical_missing_state_ids": [],
+      "error_messages": {
+        "no valid JSON response": 6,
+        "missing stage Q": 1
+      },
+      "q_rows": 31,
+      "q_valid": 0,
+      "q_invalid_reason_counts": {
+        "missing_or_incomplete_state": 15
+      },
+      "q_invalid_check_combinations": {
+        "Q+V+final_decision": 2,
+        "L+Q+V+final_decision": 1,
+        "Q+U": 3,
+        "Q": 5,
+        "Q+U+final_decision": 3,
+        "Q+final_decision": 1,
+        "L+Q+U": 1
+      },
+      "resource_usage": {
+        "model_calls": 68,
+        "tool_calls": 61,
+        "total_tokens": 156629,
+        "observed_cost_usd": 0.27191100000000007
+      },
+      "forbidden_model_request_key_hits": {},
+      "routing_metadata_model_request_hits": {}
+    }
+  },
+  "conclusion": {
+    "provider_failures_are_retained": true,
+    "q_invalidity_is_retained": true,
+    "retries_are_not_pooled": true,
+    "scientific_truth_decision_made": false,
+    "interpretation_boundary": "Error strings and independent-Q checks describe persisted execution evidence; they do not establish why the provider produced malformed output beyond the recorded contract failure."
+  }
+}

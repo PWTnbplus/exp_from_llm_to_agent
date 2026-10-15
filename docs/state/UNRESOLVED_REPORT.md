@@ -1,8 +1,8 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T05:10:25+00:00
+生成时间（UTC）：2026-10-15T05:17:32+00:00
 
-- 开放/阻塞/未验证：**10**
+- 开放/阻塞/未验证：**11**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
@@ -15,6 +15,14 @@
 - 必需修复：Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.
 - 尝试次数：1
 - 来源：docs/audits/cycle-20261014T163000Z-20/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-0f2cb195c681 — P1 — IN_PROGRESS
+- 描述：Original G7 model-facing prompt leaked routing metadata
+- 证据：The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), and retry3 (68 requests) after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.
+- 必需修复：Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.
+- 尝试次数：1
+- 来源：docs/audits/cycle-20261015T051500Z-25/audit.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED

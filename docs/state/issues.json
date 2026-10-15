@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-15T05:10:21+00:00",
+  "updated_at": "2026-10-15T05:16:49+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -389,6 +389,33 @@
           "evidence": ""
         }
       ]
+    },
+    {
+      "id": "ISSUE-0f2cb195c681",
+      "severity": "P1",
+      "title": "Original G7 model-facing prompt leaked routing metadata",
+      "status": "IN_PROGRESS",
+      "evidence": "The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), and retry3 (68 requests) after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.",
+      "remediation": "Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.",
+      "first_seen": "2026-10-15T05:15:00+00:00",
+      "last_seen": "2026-10-15T05:15:00+00:00",
+      "source": "docs/audits/cycle-20261015T051500Z-25/audit.json",
+      "attempts": 1,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-15T05:15:00+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261015T051500Z-25/audit.json"
+        },
+        {
+          "time": "2026-10-15T05:15:00+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "The runner prompt contract was repaired and verified on all three non-pooled retries, but immutable original data cannot be retroactively repaired.",
+          "evidence": "Original routing metadata hits=2960 cf_type and 2960 theory_family_id; retry1/retry2/retry3 routing metadata hits are empty. No scientific truth decision is made."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -430,7 +457,8 @@
     "docs/audits/cycle-20261015T000000Z-21/audit.json",
     "docs/audits/cycle-20261015T040000Z-22/audit.json",
     "docs/audits/cycle-20261015T060000Z-23/audit.json",
-    "docs/audits/cycle-20261015T080000Z-24/audit.json"
+    "docs/audits/cycle-20261015T080000Z-24/audit.json",
+    "docs/audits/cycle-20261015T051500Z-25/audit.json"
   ],
   "current_focus": null
 }
