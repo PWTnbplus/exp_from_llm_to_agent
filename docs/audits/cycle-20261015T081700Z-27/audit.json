@@ -67,6 +67,10 @@
     "reason": "Terminal provider failures, low independent Q coverage, and immutable original prompt contamination remain recorded."
   },
   "git": {
-    "push_status": "PENDING"
+    "commit": "30e7f9d",
+    "branch": "autopilot/scientific-law-discovery",
+    "push_status": "FAILED",
+    "push_error": "Failed to connect to github.com port 443 via 127.0.0.1",
+    "remote_verification": "FAILED_WITH_SAME_NETWORK_ERROR"
   }
 }
