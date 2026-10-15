@@ -61,6 +61,33 @@ def count_nested_model_key_hits(paths: list[Path]) -> dict[str, int]:
     return dict(hits)
 
 
+def summarize_retry(root: Path, plan_name: str, states_name: str, q_name: str,
+                    manifest_name: str, merge_name: str) -> dict[str, Any]:
+    """Summarize one immutable retry directory from canonical files only."""
+    plan = readl(root / plan_name)
+    states = readl(root / states_name)
+    q = readl(root / q_name)
+    manifest_path = root / manifest_name
+    merge_path = root / merge_name
+    merge = json.loads(merge_path.read_text(encoding="utf-8")) if merge_path.is_file() else None
+    state_merge = (merge or {}).get("states") or {}
+    return {
+        "root": str(root),
+        "plan_rows": len(plan),
+        "state_status_counts": dict(collections.Counter(row.get("status") for row in states)),
+        "q_rows": len(q),
+        "q_valid": sum(bool(row.get("is_valid")) for row in q),
+        "retry_manifest": json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else None,
+        "merge_manifest": merge,
+        "canonical_state_rows": state_merge.get("selected_records"),
+        "canonical_expected_state_rows": state_merge.get("expected"),
+        "canonical_missing_state_ids": state_merge.get("missing_ids", []),
+        "canonical_state_complete": bool(state_merge) and not state_merge.get("missing_ids"),
+        "forbidden_model_request_key_hits": count_model_key_hits(list(root.glob("**/events.jsonl"))),
+        "key_hashes": {name: sha256(root / name) for name in [plan_name, states_name, q_name]},
+    }
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--root", type=Path, default=Path("."))
@@ -70,6 +97,8 @@ def main() -> int:
     g6 = root / "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z"
     g7 = root / "results/g7_failure_localization/formal-20261014T030000Z-16workers"
     retry = root / "results/g7_failure_localization/formal-20261015T060000Z-terminal-retry"
+    retry2 = root / "results/g7_failure_localization/formal-20261015T073000Z-terminal-retry2"
+    retry3 = root / "results/g7_failure_localization/formal-20261015T080000Z-terminal-retry3"
     g8 = root / "results/g8_causal_mechanism/formal-20261015T030000Z-16workers"
 
     issues = json.loads((root / "docs/state/issues.json").read_text(encoding="utf-8"))
@@ -159,6 +188,14 @@ def main() -> int:
             "merge_manifest": json.loads((retry / "g7_merge_manifest.json").read_text(encoding="utf-8")),
             "forbidden_model_request_key_hits": count_model_key_hits(list(retry.glob("**/events.jsonl"))),
         },
+        "g7_terminal_retry_chain": [
+            summarize_retry(retry, "g7_retry_plan.jsonl", "g7_retry_states.jsonl", "g7_retry_q_audit.jsonl",
+                            "retry_manifest.json", "g7_merge_manifest.json"),
+            summarize_retry(retry2, "g7_retry2_plan.jsonl", "g7_retry2_states.jsonl", "g7_retry2_q_audit.jsonl",
+                            "retry2_manifest.json", "g7_merge_manifest.json"),
+            summarize_retry(retry3, "g7_retry3_plan.jsonl", "g7_retry3_states.jsonl", "g7_retry3_q_audit.jsonl",
+                            "retry3_manifest.json", "g7_merge_manifest.json"),
+        ],
         "g8": {
             "plan_rows": len(g8_plan),
             "result_files": len(g8_result_files),
@@ -171,6 +208,7 @@ def main() -> int:
             "G0-G5 persisted legacy artifacts are inventoried; they are not reclassified as new formal runs.",
             "G6 corrected release is complete structurally and remains subject to the ledger's external math/provider/statistical caveats.",
             "Original G7 terminal failures and low Q validity remain present; the retry is separate and is not pooled.",
+            "G7 terminal retries 1-3 are separately canonicalized; terminal rows remain failures and no retry is pooled into the original run.",
             "The G7 runner protocol was repaired so cf_type and theory_family_id are no longer model-facing hints for future runs.",
             "G8 independent audit retains all 324 planned rows and does not load private oracle or decide scientific truth.",
         ],

@@ -79,7 +79,8 @@ def main() -> int:
     }
     counts: dict[str, int] = {}
     for row in terminal:
-        status = str(state_by_run[row["run_id"]].get("status"))
+        state = state_by_run.get(row["run_id"])
+        status = str(state.get("status")) if state is not None else "missing_state"
         counts[status] = counts.get(status, 0) + 1
     manifest["source_terminal_status_counts"] = counts
     args.manifest.parent.mkdir(parents=True, exist_ok=True)
