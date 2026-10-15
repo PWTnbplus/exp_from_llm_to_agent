@@ -31,6 +31,14 @@ from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_
 
 
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
+FORBIDDEN_MODEL_KEYS = (
+    "expected_decision",
+    "oracle_affected_claim_ids",
+    "correct_revised_claim",
+    "private_oracle",
+    "g6_private_oracle",
+)
+ROUTING_METADATA_KEYS = ("cf_type", "theory_family_id")
 FORMAT_RETRY_INSTRUCTION = (
     "The previous response failed the required JSON contract. Return only one JSON object with the required fields; "
     "do not call tools or add hidden information. For a diagnostic fork, put V, L, U, and Q as objects in the "
@@ -141,6 +149,65 @@ def case_prompt(case: dict[str, Any]) -> str:
     # allows them for routing and stratification, but not as predictive hints.
     return json.dumps({"g7_public_case": case["model_visible"], "case_id": case["case_id"]},
                       ensure_ascii=False)
+
+
+def _key_hits(text: str, keys: tuple[str, ...]) -> dict[str, int]:
+    return {key: text.count(key) for key in keys if key in text}
+
+
+def protocol_preflight(
+    public_rows: list[dict[str, Any]],
+    label_rows: list[dict[str, Any]],
+    plan_rows: list[dict[str, Any]],
+    worker_count: int,
+) -> dict[str, Any]:
+    """Validate the exact model-facing G7 contract before provider creation."""
+
+    public = {row.get("case_id"): row for row in public_rows}
+    labels = {row.get("case_id"): row for row in label_rows}
+    prompt_text = "\n".join(
+        case_prompt(public[row["case_id"]])
+        for row in plan_rows
+        if row.get("case_id") in public
+    )
+    missing_cases = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in public})
+    missing_labels = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in labels})
+    duplicate_plan_ids = len(plan_rows) - len({row.get("run_id") for row in plan_rows})
+    errors: list[str] = []
+    if not public_rows or not label_rows or not plan_rows:
+        errors.append("public_labels_plan_must_be_nonempty")
+    if missing_cases:
+        errors.append("plan_case_missing_from_public")
+    if missing_labels:
+        errors.append("plan_case_missing_from_labels")
+    if duplicate_plan_ids:
+        errors.append("duplicate_run_id")
+    if worker_count < 1 or worker_count > 16:
+        errors.append("worker_count_out_of_range")
+    routing_hits = _key_hits(prompt_text, ROUTING_METADATA_KEYS)
+    forbidden_hits = _key_hits(prompt_text, FORBIDDEN_MODEL_KEYS)
+    if routing_hits:
+        errors.append("routing_metadata_in_model_prompt")
+    if forbidden_hits:
+        errors.append("private_oracle_metadata_in_model_prompt")
+    return {
+        "audit_version": "g7-protocol-preflight-v1",
+        "provider_calls_made": False,
+        "formal_run_allowed_by_protocol": not errors,
+        "errors": errors,
+        "counts": {
+            "public_cases": len(public_rows),
+            "labels": len(label_rows),
+            "plan_rows": len(plan_rows),
+            "missing_cases": len(missing_cases),
+            "missing_labels": len(missing_labels),
+            "duplicate_run_ids": duplicate_plan_ids,
+            "unique_checkpoint_ids": len({row.get("checkpoint_id") for row in plan_rows}),
+        },
+        "routing_metadata_model_prompt_hits": routing_hits,
+        "forbidden_model_prompt_hits": forbidden_hits,
+        "scientific_truth_decision_made": False,
+    }
 
 
 def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str, Any]],
@@ -315,16 +382,30 @@ def main() -> int:
         raise SystemExit("real G7 requires explicit --allow-paid")
     if args.worker_count < 1 or args.worker_count > 16 or not 0 <= args.worker_index < args.worker_count:
         raise SystemExit("worker_count must be between 1 and 16 and worker_index must be in range")
-    public = {x["case_id"]: x for x in readl(args.public)}
-    labels = {x["case_id"]: x for x in readl(args.labels)}
+    public_rows = readl(args.public)
+    label_rows = readl(args.labels)
+    public = {x["case_id"]: x for x in public_rows}
+    labels = {x["case_id"]: x for x in label_rows}
     plan = readl(args.plan)
     if not public or not plan:
         raise SystemExit("public cases and plan are required")
+    preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count)
+    out = args.out
+    out.mkdir(parents=True, exist_ok=True)
+    write_json(out / "g7_protocol_preflight.json", {
+        **preflight,
+        "input_hashes": {
+            "public": sha256_file(args.public),
+            "labels": sha256_file(args.labels),
+            "plan": sha256_file(args.plan),
+        },
+        "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+    })
+    if preflight["errors"]:
+        raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
     for row in plan:
         if row["case_id"] not in public or row["case_id"] not in labels:
             raise SystemExit(f"plan row lacks public case or G7 label: {row.get('run_id')}")
-    out = args.out
-    out.mkdir(parents=True, exist_ok=True)
     state_path = out / f"states.worker-{args.worker_count}-{args.worker_index}.jsonl"
     checkpoint_path = out / f"checkpoints.worker-{args.worker_count}-{args.worker_index}.jsonl"
     selected = plan if args.limit <= 0 else plan[:args.limit]

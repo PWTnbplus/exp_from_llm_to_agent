@@ -25,6 +25,7 @@ def test_independent_validation_accepts_exact_mock_law():
     assert result["mechanistic_validity"] is True
     assert result["equivalence_class"] == "canonical_ast"
     assert result["scoring_protocol_version"] == "scoring-v1"
+    assert "ground_truth" not in result
 
 
 def _candidate(task_id, code, equation="candidate"):

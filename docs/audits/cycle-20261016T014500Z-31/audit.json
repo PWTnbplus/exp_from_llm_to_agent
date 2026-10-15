@@ -1,0 +1,60 @@
+{
+  "cycle": 31,
+  "timestamp_utc": "20261015T174500Z",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "test": {
+    "command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "output_tail": "122 passed in 28.62s\n"
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "Historical G7 artifacts remain immutable: corrected retry has 3 retained provider_error rows and Q valid 20/1288; no confirmatory per-arm score exists. The read-only lifecycle audit did not alter these outcomes and no provider call was made.",
+        "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed trace/Q diagnosis or a separately frozen, authorized retry before any confirmatory reuse. Do not pool retries."
+      },
+      {
+        "id": "ISSUE-0f2cb195c681",
+        "severity": "P1",
+        "evidence": "The immutable original G7 model requests contain routing metadata, while corrected artifacts contain zero such hits. Cycle 31 now routes the exact shared protocol_preflight through both the standalone checker and the runner, and integration tests prove the runner stops before reading a provider key when the prompt contract is contaminated.",
+        "remediation": "Keep the original batch permanently non-confirmatory; require the executable preflight to pass with zero routing/private hits before any future paid run."
+      },
+      {
+        "fingerprint": "result_artifact_hidden_truth_leak",
+        "severity": "P1",
+        "evidence": "The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source field, recursively strips private evaluator keys from ordinary result artifacts, and adds adversarial tests; the full host suite passes 122 tests.",
+        "remediation": "Retain the privacy boundary and obtain a separate read-only review of result/trace artifacts before accepting this as fully verified."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-0f2cb195c681",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The executable fail-closed preflight and regression tests are now present, but the historical contamination cannot be repaired and no future paid run was authorized.",
+        "evidence": "tests/test_g7_protocol_preflight.py, tests/test_g7_protocol.py, and the 122-test host regression pass."
+      },
+      {
+        "id": "ISSUE-ab0746b86bf9",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The ordinary result-artifact leakage path was removed and tested, but a separate review is still required before verification.",
+        "evidence": "src/scientific_discovery/evaluation/law_recovery.py, src/scientific_discovery/experiment/recorder.py, and tests/test_result_recorder_privacy.py."
+      },
+      {
+        "id": "ISSUE-28ed827e40a9",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The prior cycle's malformed/stale nested-agent output was a workflow artifact rather than a current host-test failure; this valid audit and the 122-test host regression supersede that transient blocker, while no evidence is discarded.",
+        "evidence": "docs/audits/cycle-20261016T014500Z-31/audit.json and the successful host regression."
+      }
+    ]
+  },
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "mandatory_completion_missing": ["independent_provider_Q_review", "billing_export", "immutable_model_snapshot", "upstream_provenance", "machine_gate_attestation"],
+  "unresolved_issue_ids": ["ISSUE-3d7a9c1e5b20", "ISSUE-0f2cb195c681", "ISSUE-ab0746b86bf9", "ISSUE-28ed827e40a9", "ISSUE-000000000002", "ISSUE-000000000003", "ISSUE-000000000004", "ISSUE-ff97c7c89112", "ISSUE-ad61f025976a", "ISSUE-1f8c2b6a4d90", "ISSUE-f9171bb760b1", "ISSUE-000000000005", "ISSUE-6b3a9e1d4f20"],
+  "unverified_gates": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7"]
+}

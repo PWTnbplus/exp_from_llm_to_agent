@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 
 import pytest
 
@@ -14,7 +15,9 @@ from scripts.run_g7_failure_localization import (
     parse_payload,
     persisted_usage,
     public_tool_loop,
+    protocol_preflight,
 )
+import scripts.run_g7_failure_localization as g7_runner
 
 
 def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> None:
@@ -30,6 +33,38 @@ def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> Non
     assert payload == {"g7_public_case": {"problem": "public"}, "case_id": "case-1"}
     assert "cf_type" not in prompt
     assert "theory_family_id" not in prompt
+
+
+def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"problem": "public", "cf_type": "CF1"}}],
+        [{"case_id": "case-1"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert report["errors"] == ["routing_metadata_in_model_prompt"]
+    assert report["provider_calls_made"] is False
+
+
+def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    public = tmp_path / "public.jsonl"
+    labels = tmp_path / "labels.jsonl"
+    plan = tmp_path / "plan.jsonl"
+    public.write_text(json.dumps({"case_id": "case-1", "model_visible": {"cf_type": "CF1"}}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    plan.write_text(json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n", encoding="utf-8")
+    out = tmp_path / "out"
+    monkeypatch.setattr(sys, "argv", [
+        "run_g7_failure_localization.py", "--public", str(public), "--labels", str(labels),
+        "--plan", str(plan), "--out", str(out), "--model-id", "unused",
+        "--key-file", str(tmp_path / "missing-key"), "--allow-paid",
+    ])
+    with pytest.raises(SystemExit, match="protocol preflight failed"):
+        g7_runner.main()
+    report = json.loads((out / "g7_protocol_preflight.json").read_text(encoding="utf-8"))
+    assert report["provider_calls_made"] is False
+    assert "routing_metadata_in_model_prompt" in report["errors"]
 
 
 def test_g7_malformed_stage_contract_is_retained_as_failure() -> None:

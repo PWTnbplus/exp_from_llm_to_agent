@@ -15,6 +15,31 @@ def serialize_run(result: RunResult) -> dict[str, Any]:
     return asdict(result)
 
 
+_PRIVATE_RESULT_KEYS = frozenset({
+    "ground_truth",
+    "answer_key",
+    "private_oracle",
+    "g6_private_oracle",
+    "verification_code",
+})
+
+
+def _public_result_value(value: Any) -> Any:
+    """Remove hidden evaluator payloads before writing ordinary result files."""
+
+    if isinstance(value, dict):
+        return {
+            str(key): _public_result_value(item)
+            for key, item in value.items()
+            if str(key).lower() not in _PRIVATE_RESULT_KEYS
+        }
+    if isinstance(value, list):
+        return [_public_result_value(item) for item in value]
+    if isinstance(value, tuple):
+        return [_public_result_value(item) for item in value]
+    return value
+
+
 class ResultRecorder:
     def __init__(self, output_dir: Path):
         self.output_dir = Path(output_dir)
@@ -30,6 +55,7 @@ class ResultRecorder:
         payload = serialize_run(result)
         if validation is not None:
             payload["validation"] = validation
+        payload = _public_result_value(payload)
         stem = f"{result.runner}_{result.task_id.replace(':', '__')}"
         if replicate_index is not None:
             stem += f"__replicate-{int(replicate_index):03d}"

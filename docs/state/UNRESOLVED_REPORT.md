@@ -1,8 +1,8 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T17:06:59+00:00
+生成时间（UTC）：2026-10-15T17:14:57+00:00
 
-- 开放/阻塞/未验证：**12**
+- 开放/阻塞/未验证：**13**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
@@ -11,44 +11,10 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The lifecycle audit repair is implemented and tested, but persisted G7 evidence still contains terminal provider failures and low independently valid Q coverage: original 3/1288, retry1 2/295, retry2 0/110, retry3 0/31, protocol-corrected 20/1288, with 3 protocol-corrected provider_error states. No provider call was made in this cycle.
-- 必需修复：Keep all terminal failures and Q invalidity unchanged. Before confirmatory reuse, obtain an independent trace/Q review or a separately frozen authorized retry, and diagnose provider failures without pooling runs silently.
+- 证据：Historical G7 artifacts remain immutable: corrected retry has 3 retained provider_error rows and Q valid 20/1288; no confirmatory per-arm score exists. The read-only lifecycle audit did not alter these outcomes and no provider call was made.
+- 必需修复：Keep failures and invalid Q rows in the denominator; obtain an independently reviewed trace/Q diagnosis or a separately frozen, authorized retry before any confirmatory reuse. Do not pool retries.
 - 尝试次数：6
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：未记录
-
-### ISSUE-0f2cb195c681 — P1 — IN_PROGRESS
-- 描述：Original G7 model-facing prompt leaked routing metadata
-- 证据：The independent G7 failure taxonomy audit found cf_type and theory_family_id in 2960 original G7 MODEL_REQUEST events. The metadata leak is absent from retry1 (646 requests), retry2 (276 requests), retry3 (68 requests), and the protocol-corrected full retry after the runner repair. The original G7 artifacts are immutable and therefore remain non-confirmatory for this protocol gate.
-- 必需修复：Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.
-- 尝试次数：3
-- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：未记录
-
-### ISSUE-28ed827e40a9 — P1 — OPEN
-- 描述：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ
-- 证据：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independently_verified_g7_local_labels"}, "run_id": "g7full_73f3c3a5bd3823bdb85c", "status": "provider_error", "trace_ref": "traces\\g7full_73f3c3a5bd3823bdb85c\\events.jsonl"}
-events [('MODEL_RESPONSE', 'COMPLETED', None, None), ('MODEL_REQUEST', 'RUNNING', None, None), ('MODEL_RESPONSE', 'COMPLETED', None, None), ('ERROR', 'FAILED', 'ValueError', 'missing stages object'), ('RUN_END', 'FAILED', None, None)]
-
-2026-10-15T17:06:43.791296Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 216ms)... turn_id=01a1407e-9393-7fb2-a2f2-b19efae12fb4 retries=1 max_retries=5 sampling_error=stream disconnected before completion: idle timeout waiting for SSE
-ERROR: Reconnecting... 1/5
-exec
-"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
-import json
-from pathlib import Path
-base=Path('results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers')
-states=[json.loads(x) for x in (base/'g7_full_retry_states.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
-for s in states:
- if s.get('status')"'!='"'completed':
-  p=base/s['trace_ref'].replace('\\\\\\\\','/')
-  ev=[json.loads(x) for x in p.read_text(encoding='utf-8').splitlines() if x.strip()]
-  print(s['run_id'], [(e.get('event_type'), (e.get('payload') or {}).get('call_index'), (e.get('payload') or {}).get('error')) for e in ev])
-'@ | E:/resources/python/python.exe -" in E:\master_exp\nature_prj1_cal\from_llm_to_agent
- succeeded in 612ms:
-g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', None, None), ('MODEL_REQUEST', 1, None), ('MODEL_RESPONSE', 1, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 2, None), ('MODEL_RESPONSE', 2, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 3, None), ('MODEL_RESPONSE', 3, None), ('TOOL
-- 必需修复：Resolve environment/format/test blocker; rerun audit
-- 尝试次数：0
-- 来源：cycle-20261015T161447Z-01
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
@@ -105,6 +71,48 @@ g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', No
 - 必需修复：Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261015T000000Z-21/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-0f2cb195c681 — P1 — RESOLVED_UNVERIFIED
+- 描述：Original G7 model-facing prompt leaked routing metadata
+- 证据：The immutable original G7 model requests contain routing metadata, while corrected artifacts contain zero such hits. Cycle 31 now routes the exact shared protocol_preflight through both the standalone checker and the runner, and integration tests prove the runner stops before reading a provider key when the prompt contract is contaminated.
+- 必需修复：Keep the original batch permanently non-confirmatory; require the executable preflight to pass with zero routing/private hits before any future paid run.
+- 尝试次数：3
+- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
+- 阻塞原因：未记录
+
+### ISSUE-28ed827e40a9 — P1 — RESOLVED_UNVERIFIED
+- 描述：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ
+- 证据：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independently_verified_g7_local_labels"}, "run_id": "g7full_73f3c3a5bd3823bdb85c", "status": "provider_error", "trace_ref": "traces\\g7full_73f3c3a5bd3823bdb85c\\events.jsonl"}
+events [('MODEL_RESPONSE', 'COMPLETED', None, None), ('MODEL_REQUEST', 'RUNNING', None, None), ('MODEL_RESPONSE', 'COMPLETED', None, None), ('ERROR', 'FAILED', 'ValueError', 'missing stages object'), ('RUN_END', 'FAILED', None, None)]
+
+2026-10-15T17:06:43.791296Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 216ms)... turn_id=01a1407e-9393-7fb2-a2f2-b19efae12fb4 retries=1 max_retries=5 sampling_error=stream disconnected before completion: idle timeout waiting for SSE
+ERROR: Reconnecting... 1/5
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
+import json
+from pathlib import Path
+base=Path('results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers')
+states=[json.loads(x) for x in (base/'g7_full_retry_states.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+for s in states:
+ if s.get('status')"'!='"'completed':
+  p=base/s['trace_ref'].replace('\\\\\\\\','/')
+  ev=[json.loads(x) for x in p.read_text(encoding='utf-8').splitlines() if x.strip()]
+  print(s['run_id'], [(e.get('event_type'), (e.get('payload') or {}).get('call_index'), (e.get('payload') or {}).get('error')) for e in ev])
+'@ | E:/resources/python/python.exe -" in E:\master_exp\nature_prj1_cal\from_llm_to_agent
+ succeeded in 612ms:
+g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', None, None), ('MODEL_REQUEST', 1, None), ('MODEL_RESPONSE', 1, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 2, None), ('MODEL_RESPONSE', 2, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 3, None), ('MODEL_RESPONSE', 3, None), ('TOOL
+- 必需修复：Resolve environment/format/test blocker; rerun audit
+- 尝试次数：0
+- 来源：cycle-20261015T161447Z-01
+- 阻塞原因：未记录
+
+### ISSUE-ab0746b86bf9 — P1 — RESOLVED_UNVERIFIED
+- 描述：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel
+- 证据：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source field, recursively strips private evaluator keys from ordinary result artifacts, and adds adversarial tests; the full host suite passes 122 tests.
+- 必需修复：Retain the privacy boundary and obtain a separate read-only review of result/trace artifacts before accepting this as fully verified.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261016T014500Z-31/audit.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000005 — P2 — OPEN

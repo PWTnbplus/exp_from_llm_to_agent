@@ -5,7 +5,6 @@ from __future__ import annotations
 import ast
 from dataclasses import asdict, dataclass, field
 import importlib
-import inspect
 import math
 from pathlib import Path
 import random
@@ -293,7 +292,6 @@ class NewtonBenchLawEvaluator:
                 "symbolic_judge_used": False,
                 "scoring_protocol_version": SCORING_PROTOCOL["version"],
                 "error": None,
-                "ground_truth": {"source": inspect.getsource(gt_law), "exposed_to_model": False, "phase": "post_submission_evaluation"},
             }
         except Exception as exc:
             return self._failure(str(exc), upstream_ground_truth_function_used=True)
