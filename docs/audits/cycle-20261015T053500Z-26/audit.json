@@ -34,6 +34,13 @@
       "shared checkpoint IDs across diagnostic forks are allowed"
     ]
   },
+  "git_delivery": {
+    "commit": "cc549df",
+    "remote": "origin/autopilot/scientific-law-discovery",
+    "push_status": "FAILED",
+    "push_error": "Failed to connect to github.com port 443 via 127.0.0.1",
+    "remote_verified_at_commit": false
+  },
   "findings": [
     "The original G7 traces remain immutable and contain the previously recorded routing metadata leak.",
     "The corrected preflight is a protocol gate only; it does not repair historical traces or certify provider/Q validity.",
