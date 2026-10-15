@@ -60,6 +60,8 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "push_required": true,
+    "push_status": "FAILED",
+    "push_error": "git push and git ls-remote both failed with exit 128: Failed to connect to github.com port 443 via 127.0.0.1",
     "remote_update_verified": false
   }
 }
