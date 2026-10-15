@@ -130,8 +130,10 @@ REJECT, REVISE, or UNDETERMINED. Do not reveal hidden chain-of-thought."""
 
 
 def case_prompt(case: dict[str, Any]) -> str:
-    return json.dumps({"g7_public_case": case["model_visible"], "case_id": case["case_id"],
-                       "cf_type": case["cf_type"], "theory_family_id": case["theory_family_id"]},
+    # cf_type and theory_family_id are runner/statistical metadata.  They are
+    # intentionally not exposed in the model-facing prompt: the G7 protocol
+    # allows them for routing and stratification, but not as predictive hints.
+    return json.dumps({"g7_public_case": case["model_visible"], "case_id": case["case_id"]},
                       ensure_ascii=False)
 
 

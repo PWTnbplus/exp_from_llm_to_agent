@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-15T03:03:42+00:00",
+  "updated_at": "2026-10-15T03:46:59+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -334,13 +334,13 @@
       "id": "ISSUE-3d7a9c1e5b20",
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
-      "status": "OPEN",
-      "evidence": "The canonical G7 run still retains 1288 planned fork IDs and 184 checkpoint IDs, with 993 completed forks, 295 terminal fork failures, 153 completed checkpoints, 31 checkpoint provider errors, and only 3/1288 independently valid Q rows.",
+      "status": "IN_PROGRESS",
+      "evidence": "Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. A separately frozen retry covered exactly the 295 terminal source rows: 185 completed, 90 checkpoint_missing, 20 provider_error, and 2/295 independently valid Q rows; retry hashes and non-pooling are recorded in results/g7_failure_localization/formal-20261015T060000Z-terminal-retry/retry_manifest.json.",
       "remediation": "Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.",
       "first_seen": "2026-10-14T16:31:46+00:00",
       "last_seen": "2026-10-15T03:03:41+00:00",
       "source": "docs/audits/cycle-20261014T163000Z-20/audit.json",
-      "attempts": 0,
+      "attempts": 1,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -348,6 +348,12 @@
           "time": "2026-10-14T16:31:46+00:00",
           "event": "OPENED",
           "source": "docs/audits/cycle-20261014T163000Z-20/audit.json"
+        },
+        {
+          "time": "2026-10-15T03:45:56+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Diagnosed canonical G7 terminal failures and ran a separately frozen, non-pooled retry using the repaired prompt protocol; original 1288-row artifacts remain immutable.",
+          "evidence": "Original artifacts remain immutable; retry_manifest.json source_plan_sha256=549c39a9508fae3c7611564f0cca6022ade5dda67f52d8cc6c1fbd51b9633eb3 and source_states_sha256=714e53654e070a74bc026c11c7396fc243b8e4b72a45e3ed4e9025d8fe66efef; retry q_valid=2/295, so the provider/Q issue is not resolved."
         }
       ]
     },
@@ -416,7 +422,8 @@
     "docs/audits/cycle-20261014T030000Z-19/audit.json",
     "docs/audits/cycle-20261014T163000Z-20/audit.json",
     "docs/audits/cycle-20261015T000000Z-21/audit.json",
-    "docs/audits/cycle-20261015T040000Z-22/audit.json"
+    "docs/audits/cycle-20261015T040000Z-22/audit.json",
+    "docs/audits/cycle-20261015T060000Z-23/audit.json"
   ],
   "current_focus": null
 }
