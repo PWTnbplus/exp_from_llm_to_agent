@@ -382,3 +382,356 @@ protocol-corrected retry 的完成率显著高于原始 G7，但 Q valid 仍只�
 - G6 corrected root：`results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z`
 - G7 original root：`results/g7_failure_localization/formal-20261014T030000Z-16workers`
 - G7 corrected root：`results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers`
+
+---
+
+# 附录 A：逐个 Skill 的内部指标、字段与门禁
+
+本附录回答“每个 skill 内部到底检查什么、记录什么、怎么算”的问题。所有数值都标注为以下三类之一：
+
+- **规范/计划值**：来自 skill、schema 或配置的要求，不能当成已执行数据。
+- **实际落盘值**：来自本仓库真实结果、trace、merge 或审计文件。
+- **审计结论**：对结构、隔离、缺失和失败的判定，不等于科学真值。
+
+## A.1 编号和 namespace 对齐
+
+| 来源 | G 编号含义 | 本报告如何使用 |
+|---|---|---|
+| `g0-g4.zip` 统一总控 skill 的 `theory_benchmark` | G0=Single LLM；G1=LLM+Tools；G2=LLM+Iteration；G3=Tools+Iteration；G4=Agentic Workflow | 作为理论 benchmark 能力组规范 |
+| 本仓库 `law_discovery` 的 `experiment_groups.json` | G1=冻结 LLM-only；G2=固定 calculator；G3=固定 reflection；G4=adaptive Agent；G5=bounded memory Agent | 作为 NewtonBench/定律恢复实际组规范 |
+| G6 专项 skill | G6 counterfactual，比较派生 G3/G4 | 独立于旧 G0–G5，不改写旧数据 |
+| G7 专项 skill | G7 failure localization，V/L/U/Q | 独立消费 G6 public/checkpoint，不能读取私有 oracle |
+
+因此，统一总控 skill 的“theory_benchmark G0–G4”和本项目定律恢复的“G1–G5”不能按同名直接合并。下面的实际数据均以本项目执行编号为准。
+
+## A.2 统一总控 Skill 的内部总指标（规范值）
+
+| 内部项 | skill 规定 |
+|---|---:|
+| theory benchmark base tasks | 100 |
+| theoretical chemistry | 50 |
+| theoretical biology | 50 |
+| L1/L2/L3 合计 | 34 / 33 / 33 |
+| L1 chemistry/biology | 17 / 17 |
+| L2 chemistry/biology | 17 / 16 |
+| L3 chemistry/biology | 16 / 17 |
+| 理论 benchmark 能力组 | 5 组（G0–G4） |
+| real provider trace 记录 | 每次 provider、LLM role、tool、retry、异常和 evaluator 边界事件均追加写入 JSONL |
+| mock/demo 规则 | mock 必须显式标记；不得进入正式科学统计 |
+| transport retry 默认 | 0；配置更高时 controlled run 应在构造阶段拒绝 |
+| ground truth 进入模型消息 | 禁止；只在 evaluator 边界打开 |
+
+### A.2.1 统一 trace 的内部字段
+
+每个可观察事件至少围绕以下字段审计：
+
+| 字段类别 | 字段 |
+|---|---|
+| 身份与拓扑 | `run_id`、`task_id`、`system_type`、`model_name`、`step_id`、`parent_step_id` |
+| 时间与事件 | `event_type`、`timestamp`、`status`、`latency_ms` |
+| 输入输出 | `input`、`output`、`prediction` |
+| 工具 | `tool_name`、`tool_arguments`、`tool_result` |
+| 资源 | `token_usage`、`cost` |
+| 失败 | `error_message`、policy/budget/provider/parse 状态 |
+| 元数据 | `metadata`、模型信息、重试/attempt、哈希和隔离审计字段 |
+
+关键原则是：失败 attempt 也记录；原始 trace append-only；API key、hidden chain-of-thought、private oracle 和 answer key 不得进入普通结果或模型输入。
+
+## A.3 G0 Skill 内部指标：注册、冻结、预算和 evaluator
+
+### A.3.1 输入、输出和控制字段
+
+| 类别 | 内部字段/产物 | 本项目实际情况 |
+|---|---|---|
+| 上游 | pinned NewtonBench registry/commit | commit 配置为 `912a4ba5f4356ddd06acc16e44460ca30be4abc2` |
+| 注册 | stable task ID、domain、difficulty、variant、law-family | 当前首阶段 108 个 direct-measurement tasks |
+| 选择 | registered seed、stratified round-robin、outcome-blind manifest | seed=42；manifest hash 写入每条正式结果 |
+| 公开输入 | public task description、action schema、noise、precision | 模型可见；不含 ground truth |
+| 隐藏输入 | target law、validation/OOD interventions | 仅 evaluator 可见 |
+| 运行记录 | runner、task/arm/replicate、plan hash、observations、provider metadata、budget ledger | 已实现并进入结果/trace |
+| 交付 | frozen manifest、manifest SHA-256、task-run result、validation output | 工程验证和正式结果均有审计路径 |
+
+### A.3.2 G0 的数值判定字段
+
+| 指标 | 固定规则 |
+|---|---|
+| `numeric_fit` | 128 个 deterministic seeded validation interventions；relative RMSE ≤ `1e-5` |
+| `structural_recovery` | canonical executable-law AST fingerprint；只匹配字符串不算通过 |
+| `ood_fit` | 64 个 deterministic legal OOD interventions；relative RMSE ≤ `1e-5`；至少 16 个 finite points |
+| `mechanistic_validity` | structural recovery 和 OOD fit 同时为真 |
+| `validated_success` | numeric fit、structural recovery、OOD fit 三者全部通过 |
+| 次要诊断 | RMSLE 保留，但不能替代主判定 |
+| evaluator 归属 | 项目自有 restricted numeric evaluator；`official_numeric_evaluator=false` |
+| 失败分母 | provider、parse、budget、missing-arm 全部保留 |
+
+### A.3.3 G0 计划值与落盘值对照
+
+| 指标 | Skill/协议计划 | 实际盘点 |
+|---|---:|---:|
+| 直接测量任务 | 由 registry 生成 | 108 |
+| 工程验证 | 12 tasks × 2 runners | 24 records |
+| pilot | 12 domains × 5 matched replicates | 作为 pilot 规划记录 |
+| formal target | 72 tasks × 5 replicates × 2 arms | 作为 frozen statistical target |
+| 默认单次实验 | 6 experiments；120 measurements | runner/protocol 配置 |
+| mock 标记 JSON | 应显式标记 | pilot/engineering/final smoke 为 0；theory/theory-agent-smoke 各 1 |
+
+## A.4 G1–G5 Skill 内部能力与策略指标
+
+### A.4.1 共享硬约束
+
+| 约束 | 值 |
+|---|---:|
+| shared max input tokens | 100,000 |
+| shared max output tokens | 30,000 |
+| transport retries | 0 |
+| ground truth | 只在最终提交后由 evaluator 打开 |
+| policy violation | 写入 `POLICY_CHECK` 和 `ERROR`，该运行失败 |
+| budget snapshots | 无论成功/失败均记录 |
+| provider attempt | 区分 logical model call 与实际 transport attempt |
+| LLM-only 反馈通道 | 关闭；中间 observations 不得进入 planning message |
+
+### A.4.2 各组内部指标
+
+| 组 | Skill 内部名称 | model calls | tools/steps | feedback/planning | memory/retrieval | 实际审计要点 |
+|---|---|---:|---|---|---|---|
+| G1 | `llm_only` / frozen plan | NewtonBench 2；theory 1 | 无 | one-shot；plan→batch→final | 无/无 | `tools=None`；plan canonicalize+hash；batch 无 provider reference |
+| G2 | `llm_with_fixed_tools` | 2 | `calculate_expression`；4 compute steps | fixed tool assist | 无/无 | 只允许 calculator；越权工具/计算失败 |
+| G3 | `llm_with_reflection` | 2 | 无 | fixed two-pass reflection | 无/无 | 第二次是固定 synthesis，不是 observation-conditioned replanning |
+| G4 | `single_agent` | 8 | `run_experiment`、`calculate_expression`；6 experiments | adaptive；后续行动可依赖公开 observation | 无/无 | 每次 provider call 最多一个 `run_experiment`；工具白名单硬校验 |
+| G5 | `single_agent_with_bounded_memory` | 10 | 同 G4；最多 10 tool calls | adaptive memory | run-local 32 items/无 retrieval | memory 只属于当前 run；跨任务记忆、检索、越权均失败 |
+
+### A.4.3 G1–G5 的内部阶段和失败字段
+
+| 组/阶段 | 关键内部数据 | 不能做的事情 |
+|---|---|---|
+| G1 plan | provider request、JSON plan、canonical plan、SHA-256 | 得到 observation 后重规划；让后续结果影响已冻结计划 |
+| G1 batch | action sequence、每次 observation、budget snapshot | provider reference、tools、文件/网络/隐藏状态 |
+| G1 final | initial+batch observations 一次性提交、law schema | 在 batch 中插入最终判断 |
+| G2 compute | calculator arguments/result、step index、4 steps | 使用实验、memory、retrieval 或额外模型调用 |
+| G3 reflection | first response、fixed second synthesis、两次 usage | 根据反馈改变实验路径；追加第三次调用 |
+| G4 adaptive | observation history、selected action、tool result、stop/final schema | 使用未授权 tool、代码、浏览、文件、隐藏 state |
+| G5 memory | memory slot id/content、write/read event、32-item cap | 跨 task memory、answer key、retrieval |
+| 任意组 | `provider_error`、`parse_error`、`budget_exceeded`、`policy_violation`、`missing_arm` | 删除失败行、将缺失当成 wrong 或成功 |
+
+### A.4.4 实际 G1–G5 工程数据
+
+| 指标 | 实际值 |
+|---|---:|
+| engineering tasks | 12 |
+| runner | 2 |
+| completed records | 24/24 |
+| matched pairs | 12 |
+| Mock Agent−LLM mean difference | 0.0 |
+| Mock bootstrap CI | [0.0, 0.0] |
+| zero-function negative control success | 0 |
+| historical real provider requests | 0 |
+| 当前 host suite | 108 passed |
+
+这些内部数据验证的是 policy/runner/trace/negative-control 工程，不是 G1–G5 的科学 superiority 结果。
+
+## A.5 G5 Skill 内部指标：proof graph、family 和可用分母
+
+| 内部项 | 规范含义 | 实际值 |
+|---|---|---:|
+| G5 产物 | `events.jsonl`、`steps.jsonl`、`proof_graph.json`、`summary.json`、`manifest.json` | 均有对应审计路径 |
+| graph 文件 | 每个 proof graph 与 expected sibling 绑定 | 1309/1309 |
+| source-only family | 不读取 private input/answer key 的独立核验单位 | 24 |
+| independent grade-B family | 进入 corrected denominator 的 family | 23/24 |
+| excluded family | `EXCLUDED_INVALID_SOURCE`，TB-L1-010 | 1/24 |
+| graph source hash | 由 graph/manifest 追溯 | 保留 |
+| private input | G5 graph 审计不得读取 | 否 |
+| answer key | G5 graph 审计不得读取 | 否 |
+| public cases | 23 family × 4 CF | 92 |
+| dependency edges | 每个 case 的 `from→to` 依赖传播边 | `edge_count=0`，92/92 |
+| eligible U | 需要真实非终值中间节点 | 0/92 |
+
+G5 的“graph 文件存在”与“graph 能支持边级机制推断”是两件事。当前 edge_count=0 导致 G7 的 L/U 受协议性不资格限制；不能通过补标签、padding 或推测恢复。
+
+## A.6 G6 Skill 内部指标、schema 和计划/实际差异
+
+### A.6.1 G6 假设与固定 arm
+
+| 项目 | 内部定义 |
+|---|---|
+| H6 | 关键前提翻转应拒绝原结论；无关/等价改变应保持；边界弱化应合法修订；信息不足应 `UNDETERMINED` |
+| G6-A | `G6_A_G3_GIVEN`，派生 G3 Tools+Iteration，主对照 |
+| G6-B | `G6_B_G4_GIVEN`，派生 G4 Agentic Workflow，主实验 |
+| G6-C | `G6_C_G4_HIDDEN`，可选 hidden anchor；不得与 A/B 主试验混算；当前 corrected run 未使用 |
+| 四类 CF | CF1 critical flip；CF2 irrelevant equivalent；CF3 boundary weakening；CF4 insufficient information |
+| 统计独立单位 | `theory_family_id`；不是 case、variant 或 replicate |
+| 主分析 | A/B 同族配对；family-cluster bootstrap；保留 all planned 分母 |
+
+### A.6.2 G6 schema 内部字段
+
+| 数据对象 | 必需/关键字段 |
+|---|---|
+| public case | `case_id`、`paired_set_id`、`source_task_id`、`theory_family_id`、`domain`、`cf_type`、`split`、`quantifier`、`model_visible`、`source_g5_graph_sha256`、`verification_grade` |
+| `model_visible` | `original_problem`、`original_claim`、`public_proof_graph`、`intervention_statement`、`quantifier` |
+| private oracle | `case_id`、`cf_type`、`expected_decision`、`affected_claim_ids`、`oracle_reason`、`verification_grade`、`verifier_status`；可选 `correct_revised_claim`、`counterexample` |
+| frozen plan | `run_id`、`experiment_id=g6_counterfactual`、`case_id`、`paired_set_id`、`theory_family_id`、`cf_type`、`arm_id`、`group_id`、`replicate`、`split` |
+| model response | `run_id`、`decision`、`affected_claim_ids`、`revised_claim`、`supporting_evidence`、`status`、`trace_ref`；可选 revision verification fields |
+| response status | `completed`、`timeout`、`provider_error`、`policy_violation`、`invalid` |
+
+模型只能看 public case；private oracle 的 expected decision、reason、counterexample、correct revised claim 和 verifier status 不得进入 prompt。
+
+### A.6.3 G6 计划值、历史完整运行和 corrected 实际运行
+
+| 层级 | families | public cases | CF | arms | replicate | plan/response |
+|---|---:|---:|---:|---:|---:|---:|
+| 离线 DEMO 规范 | 2（不同族） | 8 | 4 | 2 | 1 | 仅工具自测，不是科学数据 |
+| 正式先导规范 | 4 | 16 | 4 | 2 | 1 | 32 条轨迹 |
+| 正式规模规范 | 24 | 96 | 4 | 2 | 3 | 576 条轨迹 |
+| 历史 full G6 | 24 | 96 | 4 | 2 | 3 | 576/576 |
+| corrected eligible G6 | 23 | 92 | 4 | 2 | 3 | 552/552 |
+
+corrected 版本不是重新随机抽取，也不是根据 response outcome 选样；它固定排除 TB-L1-010，使用 23 个 source-only accepted family，保留原始独立轨迹。
+
+### A.6.4 G6 runner 硬限制与实际使用
+
+| 资源 | corrected 配置上限 | 实际使用 |
+|---|---:|---:|
+| model calls | 4608 | 1826 |
+| tool calls | 3456 | 1796 |
+| total tokens | 4,608,000 | 3,454,449 |
+| cost ceiling | USD 200.0 | trace-audit USD 6.057783 |
+| provider transport retries | 0 | 按 controlled run 规则 |
+| workers | 用户指定 2 | `[2]` |
+| revision audit rows | — | 138 |
+| valid revision rows | — | 0 |
+
+### A.6.5 G6 分数内部定义
+
+| 指标 | 分母/定义 |
+|---|---|
+| completion rate | completed response ÷ all frozen plan rows |
+| end-to-end / all-planned decision accuracy | 正确 decision ÷ 全计划行；缺失/失败不删除 |
+| conditional/valid-only accuracy | 正确 decision ÷ completed 且可解析行；不能替代 all-planned |
+| CF1 accuracy | 正确 `REJECT` |
+| CF2 accuracy | 正确 `MAINTAIN` |
+| CF3 accuracy | 正确识别边界并给合法 `REVISE`；revision validity 需另审 |
+| CF4 accuracy | 正确 `UNDETERMINED` |
+| paired effect | 同一 theory family 的 G4−G3 |
+| uncertainty | family-level bootstrap 95% CI |
+| paired test | matched McNemar；不把 replicates 当独立自然定律 |
+
+## A.7 G7 Skill 内部指标、字段和诊断定义
+
+### A.7.1 G7 强制观测顺序
+
+`checkpoint → initial_Y → V → L → U → Q → final_Y`
+
+| 阶段 | 必须记录的内部内容 | 允许为空的情况 |
+|---|---|---|
+| checkpoint | 新 provider call、public messages、工具输出、initial decision、usage、trace hash | 不能从 G6 final response 回填 |
+| `initial_Y` | 同一 checkpoint 的初始 decision/status | provider/checkpoint failure 时可缺失，但必须记失败 |
+| V | `verdict`：`SUPPORTED`/`CONTRADICTED`/`INDETERMINATE` | 不接受模型声称已核验替代独立标签 |
+| L | `nodes`、`edges`，edge 为 `from→to` | 空 graph 合法；本项目 92/92 无 edge |
+| U | `node_changes`，每项 `claim_id` + `to_status`（supported/rejected/uncertain） | 没有非终值中间命题时为 ineligible，不得注入最终答案 |
+| Q | 顶层 `stages.Q={verdict,reason}` | 必须由运行结束后的独立 `q_audit` 审计 |
+| final_Y | `decision`、`affected_claim_ids`、`revised_claim`、`supporting_evidence` | 不能用 final answer 字符串反推 V/L/U |
+
+### A.7.2 G7 7 个 diagnostic arm 的信息注入
+
+| arm | 注入内容 | 内部用途 | 重要限制 |
+|---|---|---|---|
+| D0 | 中性占位；无 oracle 信息 | 自然过程/格式基线 | 不是“完全无提示”以外的因果证明 |
+| D1 | V | V 阶梯入口 | 若与 V_ONLY 同内容，不算两个独立机制证据 |
+| D2 | V + L | 逐级诊断上界 | D2−D1 不能称内生 L 因果效应 |
+| D3 | V + L + 非终值 U | 诊断上界 | 禁止 final claim/answer injection |
+| V_ONLY | 仅 V | 单因素/一致性检查 | 与 D1 重复时不应 double count |
+| L_ONLY | 仅 L | L 单因素诊断 | 需 matched injection position/context |
+| U_ONLY | 仅非终值 U | U 单因素诊断 | 无非平凡中间命题时 `INELIGIBLE` |
+
+### A.7.3 G7 规范计划、实际计划和 runner 限制
+
+| 指标 | G7 skill 提案 | 本次实际值 |
+|---|---:|---:|
+| pilot families | 4 | 未单独作为本次 confirmatory batch |
+| confirmatory families | 24 | corrected 可用 23 |
+| only-substudy families | 8 | 未另建 only-substudy 分母 |
+| proposed repeats | 3 | 本次正式 retry 为 1 replicate |
+| proposed main+only forks | 1440（建议值） | 1288 = 23×4×2×7×1 |
+| checkpoint count | 每 case×group 一份 | 184 |
+| workers | skill 不固定 | 原始 16；corrected 16；G6 为 2 |
+| max model calls/worker | skill example 为 null | runner default 4608 |
+| max tool calls/worker | skill example 为 null | runner default 3456 |
+| max tokens/worker | skill example 为 null | runner default 4,608,000 |
+| max cost/worker | skill example 为 null | runner default USD 200 |
+| provider retries | — | 0 |
+| provider timeout | — | 60 seconds |
+| max output tokens | — | 1024 |
+| input/output price proxy | — | USD 0.001 / 0.003 per 1k |
+
+### A.7.4 G7 内部响应格式和硬校验
+
+| 层级 | 必须字段/规则 |
+|---|---|
+| decision | `MAINTAIN`、`REJECT`、`REVISE`、`UNDETERMINED` |
+| claim fields | `affected_claim_ids` 为 list；`revised_claim` 可为 string/null；`supporting_evidence` 为 string |
+| stages | 顶层 `stages` 必须含 V、L、U、Q 四个 object |
+| V | `verdict` 只能是 SUPPORTED/CONTRADICTED/INDETERMINATE |
+| L | `nodes` 和 `edges` 必须是 list；禁止用 arrow string 代替 edge object |
+| U | `node_changes` 必须是 list；不能用 object/map 代替 |
+| Q | `verdict` 和 `reason` 必须是 string |
+| format retry | 每个 workflow 最多 1 次；不增加新的 scientific observation |
+| malformed response | 记 invalid/provider failure；不得静默修复为成功 |
+
+### A.7.5 G7 内部分数、失败和配对指标
+
+| 指标 | 定义 |
+|---|---|
+| `completion_rate` | completed state ÷ 全部计划 fork rows |
+| `all_planned_final_decision_accuracy` | 正确 final decision ÷ 全部计划行；terminal/missing 保留 |
+| `valid_only_accuracy` | 正确 final decision ÷ completed 且结构有效回答 |
+| `original_claim_status_accuracy` | 对原 claim 状态的独立判定正确率 |
+| `corrected_wrong_W_to_C` | 初始错误后恢复正确的比例 |
+| `damaged_correct_C_to_W` | 初始正确后被辅助损坏的比例，安全性指标 |
+| `C_TO_C/W_TO_C/C_TO_W/W_TO_W` | checkpoint 初始状态到 final 状态的转移计数 |
+| `first_observable_error` | V/L/U/Q/MISSING/NOT_OBSERVED 等首次可观察错误位置 |
+| V metric | 独立局部 verdict accuracy/F1 |
+| L metric | affected nodes、dependency edges 的 precision/recall/F1；当前 edge 不可用 |
+| U metric | 非终值 node transition accuracy；当前 92/92 U ineligible |
+| Q metric | 独立 q_audit valid/invalid；不能信模型自报 Q |
+| paired effect | 同一 checkpoint、同一 family 的 arm/diagnostic paired difference |
+| CI | theory-family cluster bootstrap；不把 tasks/repeats 当自然定律 |
+
+### A.7.6 G7 交付文件与当前状态
+
+| 规范交付物 | 当前对应数据 |
+|---|---|
+| G6 import audit | `g7_input_audit`/integrity audit 路径 |
+| public cases | 92 cases；source public SHA 保留 |
+| private V/L/U labels | `g7_vlu_private`；模型不可见 |
+| frozen plan | 原始 plan 与 corrected retry plan 分开 |
+| checkpoint traces | corrected 184/184 completed |
+| raw events | append-only；format/provider/terminal events 保留 |
+| state merge | corrected 1288/1288 canonical；原始/terminal retry 不 pooled |
+| error taxonomy | `g7_failure_taxonomy.json`；按批次和 workflow 分层 |
+| Q audit | 原始 3/1288 valid；corrected 20/1288 valid |
+| selected mechanisms | 当前不能从 G7 直接宣称机制；G8/外部复核门禁未关闭 |
+
+## A.8 各 Skill 的“计划、执行、发布”三层状态总表
+
+| Skill | 计划/接口层 | 实际执行层 | 发布层 |
+|---|---|---|---|
+| G0 | registry、manifest、seed、预算、evaluator 已定义 | 108 registry；工程/测试数据可追溯 | 上游 provenance/evaluator 官方性未完全确认 |
+| G1 | 2-call frozen LLM-only，0 tool/retry | 24/24 engineering records；历史 real provider=0 | 仅工程证据 |
+| G2 | 2-call calculator，4 steps | 权限边界可审计 | 仅工程证据 |
+| G3 | fixed reflection；G6 使用显式 Tools+Iteration profile | G6 276 rows；G7 644 planned forks | 无 superiority/causal 发布 |
+| G4 | adaptive observation-conditioned agent | G6 276 rows；G7 644 planned forks | 无 superiority/causal 发布 |
+| G5 | memory 32、10 calls、10 tools、proof graph | 1309 graph；23/24 accepted family；edge 0/92 | U/L 机制发布受阻 |
+| G6 | 24×4×2×3 proposed；CF1–CF4；A/B paired | full 576 历史；corrected 552/552；revision valid 0 | external math/stats/model/billing gates open |
+| G7 | checkpoint + V/L/U/Q；7 arms；独立 Q | corrected 1288 state、184 checkpoint；Q valid 20 | provider failure、low Q、edge 0；不允许 confirmatory claim |
+
+## A.9 本附录使用的 Skill 源文件
+
+| Skill/规范 | 源文件 |
+|---|---|
+| 统一 G0–G5 总控 | `D:/硕士/prj1_ai_cal/exp/exp1_from_llm_to_agent/prompt/g0-g4.zip`、`whole_pros_g5.zip` |
+| G6 | `D:/硕士/prj1_ai_cal/exp/exp1_from_llm_to_agent/prompt/G6_Counterfactual_Reasoning_Skill.zip` |
+| G7 | `D:/硕士/prj1_ai_cal/exp/exp1_from_llm_to_agent/prompt/G7_Failure_Localization_Skill.zip` |
+| 实际 G1–G5 配置 | `configs/experiment_groups.json`、`docs/experiment_groups.md` |
+| G0 evaluator | `docs/evaluation_protocol.md`、`docs/experiment_protocol.md` |
+| G6/G7 最新审计 | `docs/audits/cycle-20261015T083400Z-28/g0_g8_integrity.json`、`g7_failure_taxonomy.json` |
+
+附录中的 proposed/demo 数字只用于解释 skill 的内部设计；实际科研数据仍以正文的 canonical artifacts、失败分母、哈希和 issue ledger 为准。
