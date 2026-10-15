@@ -1,8 +1,8 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-15T16:07:42+00:00
+生成时间（UTC）：2026-10-15T17:06:59+00:00
 
-- 开放/阻塞/未验证：**11**
+- 开放/阻塞/未验证：**12**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Original canonical G7: 1288 planned fork IDs, 993 completed, 217 checkpoint_missing, 78 provider_error, 153 completed checkpoints, 31 checkpoint provider errors, and 3/1288 independently valid Q rows. Separately frozen non-pooled terminal retries covered 295 rows in retry1 (185 completed, 90 checkpoint_missing, 20 provider_error, Q 2/295), 110 rows in retry2 (79 completed, 20 checkpoint_missing, 3 provider_error, Q 0/110), and 31 rows in retry3 (16 completed, 12 checkpoint_missing, 3 provider_error, Q 0/31). The protocol-corrected full retry completed 1285/1288 canonical states with 3 retained provider_error rows, all 184 checkpoints completed, and 20/1288 independently valid Q rows; its preflight and taxonomy audit found zero routing/private model-prompt hits, and format retries were fixed and bounded. Retry manifests, source mappings, canonical merges, and hashes remain separate; terminal failures and low Q remain unresolved.
-- 必需修复：Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.
-- 尝试次数：4
+- 证据：The lifecycle audit repair is implemented and tested, but persisted G7 evidence still contains terminal provider failures and low independently valid Q coverage: original 3/1288, retry1 2/295, retry2 0/110, retry3 0/31, protocol-corrected 20/1288, with 3 protocol-corrected provider_error states. No provider call was made in this cycle.
+- 必需修复：Keep all terminal failures and Q invalidity unchanged. Before confirmatory reuse, obtain an independent trace/Q review or a separately frozen authorized retry, and diagnose provider failures without pooling runs silently.
+- 尝试次数：6
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
@@ -23,6 +23,32 @@
 - 必需修复：Keep the original G7 artifacts immutable and exclude them from confirmatory claims under the contaminated prompt gate. Retain the repaired case_prompt contract and adversarial tests; any future formal rerun must pass a preflight scan proving zero routing-metadata hits before paid execution.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
+- 阻塞原因：未记录
+
+### ISSUE-28ed827e40a9 — P1 — OPEN
+- 描述：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ
+- 证据：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independently_verified_g7_local_labels"}, "run_id": "g7full_73f3c3a5bd3823bdb85c", "status": "provider_error", "trace_ref": "traces\\g7full_73f3c3a5bd3823bdb85c\\events.jsonl"}
+events [('MODEL_RESPONSE', 'COMPLETED', None, None), ('MODEL_REQUEST', 'RUNNING', None, None), ('MODEL_RESPONSE', 'COMPLETED', None, None), ('ERROR', 'FAILED', 'ValueError', 'missing stages object'), ('RUN_END', 'FAILED', None, None)]
+
+2026-10-15T17:06:43.791296Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 216ms)... turn_id=01a1407e-9393-7fb2-a2f2-b19efae12fb4 retries=1 max_retries=5 sampling_error=stream disconnected before completion: idle timeout waiting for SSE
+ERROR: Reconnecting... 1/5
+exec
+"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
+import json
+from pathlib import Path
+base=Path('results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers')
+states=[json.loads(x) for x in (base/'g7_full_retry_states.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+for s in states:
+ if s.get('status')"'!='"'completed':
+  p=base/s['trace_ref'].replace('\\\\\\\\','/')
+  ev=[json.loads(x) for x in p.read_text(encoding='utf-8').splitlines() if x.strip()]
+  print(s['run_id'], [(e.get('event_type'), (e.get('payload') or {}).get('call_index'), (e.get('payload') or {}).get('error')) for e in ev])
+'@ | E:/resources/python/python.exe -" in E:\master_exp\nature_prj1_cal\from_llm_to_agent
+ succeeded in 612ms:
+g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', None, None), ('MODEL_REQUEST', 1, None), ('MODEL_RESPONSE', 1, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 2, None), ('MODEL_RESPONSE', 2, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 3, None), ('MODEL_RESPONSE', 3, None), ('TOOL
+- 必需修复：Resolve environment/format/test blocker; rerun audit
+- 尝试次数：0
+- 来源：cycle-20261015T161447Z-01
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED

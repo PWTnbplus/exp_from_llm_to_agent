@@ -1,0 +1,115 @@
+{
+  "audit_version": "g7-trace-q-consistency-v1",
+  "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
+  "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; retain_prior_history_count",
+  "inputs": {
+    "states": "45fa85c25fada1fe6653d582e7167b1f54bf7551f80c2b847ca5badddec93bc2",
+    "q": "95349ef7faec28b9e3a63290c5bda4e67be007027b2f12cce29aa656bc252543",
+    "checkpoints": "62b4f3a65eab5cc3cb2d8a8c601ee25d10dc943fb602cd1bad0e46ab0fe9a42b"
+  },
+  "states": {
+    "rows": 1288,
+    "status_counts": {
+      "completed": 1285,
+      "provider_error": 3
+    },
+    "trace_status_counts": {
+      "pass": 1285,
+      "terminal_failure_evidence": 3
+    },
+    "review_samples": [
+      {
+        "run_id": "g7full_dff0dae5a314dd9fb081",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7full_dff0dae5a314dd9fb081\\events.jsonl",
+        "event_count": 9,
+        "history_segment_count": 4,
+        "event_run_ids": [
+          "g7full_dff0dae5a314dd9fb081"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "missing stage Q",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7full_112d048c8fc2d5fc7f7f",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7full_112d048c8fc2d5fc7f7f\\events.jsonl",
+        "event_count": 9,
+        "history_segment_count": 2,
+        "event_run_ids": [
+          "g7full_112d048c8fc2d5fc7f7f"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "missing stages object",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7full_73f3c3a5bd3823bdb85c",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7full_73f3c3a5bd3823bdb85c\\events.jsonl",
+        "event_count": 9,
+        "history_segment_count": 3,
+        "event_run_ids": [
+          "g7full_73f3c3a5bd3823bdb85c"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "missing stages object",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      }
+    ]
+  },
+  "checkpoints": {
+    "provided": true,
+    "rows": 184,
+    "status_counts": {
+      "completed": 184
+    },
+    "trace_status_counts": {
+      "pass": 184
+    },
+    "review_samples": []
+  },
+  "q": {
+    "rows": 1288,
+    "original_independent_valid": 20,
+    "trace_backed_valid": 20,
+    "valid_rows_invalidated_by_trace_review": 0,
+    "rows_missing_state_review": 0,
+    "review_status_counts": {
+      "q_invalid_preserved": 1268,
+      "trace_backed_valid": 20
+    }
+  },
+  "conclusion": {
+    "terminal_failures_retained": true,
+    "q_invalidity_retained": true,
+    "retries_pooled": false,
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false,
+    "interpretation_boundary": "Failure categories are derived from persisted trace text; they do not establish an external provider root cause or scientific validity."
+  },
+  "trace_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T060000Z-protocol-corrected-16workers",
+  "audit_script_sha256": "b40bb2851ee0a4dc309f5dd8114334cc3fe53f38d517a8034ebdfd5245f39cd1"
+}

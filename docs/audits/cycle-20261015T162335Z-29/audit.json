@@ -1,0 +1,76 @@
+{
+  "cycle": "20261015T162335Z-29",
+  "scope": "G7 read-only trace/Q consistency audit and adversarial regression tests",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "repair": {
+    "source": "scripts/audit_g7_trace_q_consistency.py",
+    "change": "Added an independent derived audit that checks latest append-only RUN_START..RUN_END segments, preserves terminal failures, classifies recorded failure text conservatively, and requires trace-backed evidence for Q-valid rows.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "evidence": {
+    "original": {
+      "states": 1288,
+      "q_original_valid": 3,
+      "q_trace_backed_valid": 3,
+      "terminal_failures_retained": true
+    },
+    "retry1": {
+      "states": 295,
+      "q_original_valid": 2,
+      "q_trace_backed_valid": 2,
+      "terminal_failures_retained": true
+    },
+    "retry2": {
+      "states": 102,
+      "q_rows": 110,
+      "missing_state_reviews": 8,
+      "q_original_valid": 0,
+      "q_trace_backed_valid": 0,
+      "terminal_failures_retained": true
+    },
+    "retry3": {
+      "states": 31,
+      "q_original_valid": 0,
+      "q_trace_backed_valid": 0,
+      "terminal_failures_retained": true
+    },
+    "protocol_corrected": {
+      "states": 1288,
+      "completed": 1285,
+      "provider_error": 3,
+      "checkpoints": 184,
+      "q_original_valid": 20,
+      "q_trace_backed_valid": 20,
+      "terminal_failures_retained": true,
+      "confirmatory_reuse_allowed": false
+    }
+  },
+  "tests": {
+    "targeted": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_trace_q_consistency.py tests/test_g7_protocol.py tests/test_g7_terminal_retry.py tests/test_g7_failure_taxonomy.py tests/test_provider_trace.py",
+      "result": "15 passed"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "113 passed in 18.86s"
+    }
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-3d7a9c1e5b20",
+    "status_after_cycle": "IN_PROGRESS",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "23d091d",
+    "commit_or_push_by_agent": false,
+    "note": "Per user instruction, no commit or push was attempted; the trusted host supervisor handles delivery."
+  }
+}

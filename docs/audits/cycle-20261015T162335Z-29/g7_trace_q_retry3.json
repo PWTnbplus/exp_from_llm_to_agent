@@ -1,0 +1,295 @@
+{
+  "audit_version": "g7-trace-q-consistency-v1",
+  "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
+  "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; retain_prior_history_count",
+  "inputs": {
+    "states": "a963b0d46ccdaefb1384169f3cf020d614107f99c0cde3ad637218b998193dc9",
+    "q": "0d7eb75ea6248b78fb48ed220ede367b0683380e3d39fb89bff20de1b0af9c4b",
+    "checkpoints": "a5efae60d20deae94157ecc846ceae1cf542a0726c86b291ade34b485b150f50"
+  },
+  "states": {
+    "rows": 31,
+    "status_counts": {
+      "completed": 16,
+      "checkpoint_missing": 12,
+      "provider_error": 3
+    },
+    "trace_status_counts": {
+      "pass": 16,
+      "not_executed": 12,
+      "terminal_failure_evidence": 3
+    },
+    "review_samples": [
+      {
+        "run_id": "g7r_5796ca713ead1a720315",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_8bc549475f0b3de9de38",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_3182e186c429fa8179e1",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_d9c116c0df031131767f",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_7bab1bf29915326f6f79",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_2d05b2605b2eea13b0e9",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_8c6309fd423b11591fc0",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7r_8c6309fd423b11591fc0\\events.jsonl",
+        "event_count": 12,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7r_8c6309fd423b11591fc0"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_802a8a73279e4df9d014",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_9e0fd1356a35e33457e8",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7r_9e0fd1356a35e33457e8\\events.jsonl",
+        "event_count": 14,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7r_9e0fd1356a35e33457e8"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_e92150f77454b184969d",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_e89b3a609bc00e468a01",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_8db9ffe42daa2a4be2a1",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_694d00a8d1578ddb86b1",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_5105a151a82776155093",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7r_5105a151a82776155093\\events.jsonl",
+        "event_count": 8,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7r_5105a151a82776155093"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "missing stage Q",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7r_a96cad50932ab812e921",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      }
+    ]
+  },
+  "checkpoints": {
+    "provided": true,
+    "rows": 14,
+    "status_counts": {
+      "completed": 10,
+      "provider_error": 4
+    },
+    "trace_status_counts": {
+      "pass": 10,
+      "terminal_failure_evidence": 4
+    },
+    "review_samples": [
+      {
+        "run_id": "g7rcp_5889107219c2fea2e14b",
+        "record_status": "provider_error",
+        "trace_ref": "checkpoint_traces\\checkpoint_g7rcp_5889107219c2fea2e14b\\events.jsonl",
+        "event_count": 11,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "checkpoint_g7rcp_5889107219c2fea2e14b"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7rcp_2cddbf347613e7de273c",
+        "record_status": "provider_error",
+        "trace_ref": "checkpoint_traces\\checkpoint_g7rcp_2cddbf347613e7de273c\\events.jsonl",
+        "event_count": 11,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "checkpoint_g7rcp_2cddbf347613e7de273c"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7rcp_e8e9b62d0565ed700938",
+        "record_status": "provider_error",
+        "trace_ref": "checkpoint_traces\\checkpoint_g7rcp_e8e9b62d0565ed700938\\events.jsonl",
+        "event_count": 11,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "checkpoint_g7rcp_e8e9b62d0565ed700938"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      },
+      {
+        "run_id": "g7rcp_e99bb3f93c13b9037b04",
+        "record_status": "provider_error",
+        "trace_ref": "checkpoint_traces\\checkpoint_g7rcp_e99bb3f93c13b9037b04\\events.jsonl",
+        "event_count": 13,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "checkpoint_g7rcp_e99bb3f93c13b9037b04"
+        ],
+        "error_count": 2,
+        "error_text": [
+          "no valid JSON response",
+          "ValueError"
+        ],
+        "failure_category": "response_contract_failure",
+        "parse_errors": [],
+        "trace_status": "terminal_failure_evidence",
+        "trace_ok": true,
+        "reasons": []
+      }
+    ]
+  },
+  "q": {
+    "rows": 31,
+    "original_independent_valid": 0,
+    "trace_backed_valid": 0,
+    "valid_rows_invalidated_by_trace_review": 0,
+    "rows_missing_state_review": 0,
+    "review_status_counts": {
+      "q_invalid_preserved": 31
+    }
+  },
+  "conclusion": {
+    "terminal_failures_retained": true,
+    "q_invalidity_retained": true,
+    "retries_pooled": false,
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false,
+    "interpretation_boundary": "Failure categories are derived from persisted trace text; they do not establish an external provider root cause or scientific validity."
+  },
+  "trace_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g7_failure_localization\\formal-20261015T080000Z-terminal-retry3",
+  "audit_script_sha256": "b40bb2851ee0a4dc309f5dd8114334cc3fe53f38d517a8034ebdfd5245f39cd1"
+}
