@@ -1,0 +1,82 @@
+{
+  "cycle": "20261015T040000Z-22",
+  "experiment": "g8_causal_mechanism",
+  "status": "COMPLETED_WITH_EXTERNAL_REVIEW_CAVEATS",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "status": "OPEN",
+        "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
+        "evidence": "The canonical G7 run still retains 1288 planned fork IDs and 184 checkpoint IDs, with 993 completed forks, 295 terminal fork failures, 153 completed checkpoints, 31 checkpoint provider errors, and only 3/1288 independently valid Q rows.",
+        "remediation": "Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "status": "BLOCKED",
+        "title": "G7 has no independently audited dependency edges, so L/U mechanism selection is not eligible",
+        "evidence": "The G7 audit remains edge_count_distribution={0:92} with eligible_u_cases=0. G8 therefore executed only the externally reviewed V mechanism and did not fabricate L/U edges or state transitions.",
+        "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-f9171bb760b1",
+        "verdict": "FIXED_UNVERIFIED",
+        "reason": "The G8 real/sham/off/extra adapter is now implemented, frozen in the formal plan, used in 324 real-provider rows, and passes 324/324 independent structural output audits. External immutable gateway-weight and billing verification remain outstanding, so this is resolved-unverified rather than verified.",
+        "evidence": "scripts/run_g8_causal_mechanism.py; results/g8_causal_mechanism/formal-20261015T030000Z-16workers/audit/g8_independent_audit.json"
+      }
+    ],
+    "positive_checks": [
+      "G8 skill ZIP and all required references were read; ZIP SHA-256 is 4086360f393b8b3232ec700105a87738246438a16e4e97daad1de8a5e3a09bb2.",
+      "G7 source-only trace review produced a derived V selection with public supporting/counterexample cases; the original G7 handoff remains immutable.",
+      "G8 input audit accepted 18 public cases from 9 families, 9 CF1 and 9 CF2, with no demo/mock rows.",
+      "Frozen formal plan contains 324 rows: 18 cases x 6 arms x 3 replicates; plan SHA-256 is e784dfdb108e0d7534557a3c20e83959f3054ee0daa3cccef5ae9f44986296dd.",
+      "Formal run completed all 324 result rows with 284 PASS, 40 TECHNICAL_FAILURE, and 0 missing; 16 workers were concurrency only.",
+      "Independent output audit passed 324/324 result envelopes, public-only checks, mechanism event contracts, budget checks, snapshot checks, and private-field checks.",
+      "G8 scorer produced six-arm scores, paired family-bootstrap effects, targeted process effects, stratified scores, and resource usage without issuing an automatic causal verdict.",
+      "Host suite passed 99 tests; temporary G8 skill review copy passed 8 tests after Windows shlex and UTF-8 subprocess-output compatibility fixes. The supplied ZIP was not modified.",
+      "G9 handoff is explicitly REVIEW_REQUIRED/PENDING_INDEPENDENT_SCIENTIFIC_REVIEW; no G9 path mechanism was inferred."
+    ]
+  },
+  "evidence": {
+    "g8_root": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers",
+    "g8_plan": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers/g8_run_plan.jsonl",
+    "g8_execution_summary": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers/raw/execution_summary.json",
+    "g8_independent_audit": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers/audit/g8_independent_audit.json",
+    "g8_score_manifest": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers/score/g8_analysis_manifest.json",
+    "g8_report": "docs/reports/G8_CAUSAL_MECHANISM_REPORT_CN.md",
+    "g9_handoff": "results/g8_causal_mechanism/formal-20261015T030000Z-16workers/g9_handoff.json",
+    "planned_rows": 324,
+    "pass_rows": 284,
+    "technical_failure_rows": 40,
+    "missing_rows": 0,
+    "families": 9,
+    "cases": 18,
+    "replicates": 3,
+    "workers": 16,
+    "total_tokens": 1448684,
+    "model_calls": 818,
+    "tool_calls": 977,
+    "cost_usd": 2.557378,
+    "g8_plan_sha256": "e784dfdb108e0d7534557a3c20e83959f3054ee0daa3cccef5ae9f44986296dd"
+  },
+  "scope": {
+    "paid_calls_authorized": true,
+    "g8_workers": 16,
+    "synthetic_results_used_as_science": false,
+    "private_oracle_loaded_by_adapter": false,
+    "old_g0_g7_artifacts_modified": false,
+    "user_untracked_research_summary_touched": false,
+    "remote_push": "not attempted"
+  },
+  "scientific_caveats": [
+    "The G8 results are real-provider execution and valid statistical artifacts, but the G8 package itself labels the result as requiring external audit and scientific review.",
+    "The B-A point estimate is positive and its family-bootstrap interval excludes zero, but B-C, B-D, and E-F intervals cross zero; this does not isolate an independent causal mechanism effect.",
+    "The targeted-failure metric is a process-contract metric, not scientific truth or oracle correctness.",
+    "Immutable gateway weight fingerprint and independent billing export remain unavailable; model metadata records the selected snapshot string but not external gateway verification.",
+    "G7 provider failures, low Q validity, and edge-free proof graphs remain unresolved and are not erased by executing G8."
+  ]
+}

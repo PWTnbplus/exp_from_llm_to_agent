@@ -1,0 +1,31 @@
+{
+  "profile": "theory_benchmark",
+  "mechanism_id": "V",
+  "g4_mode": "derived_pair",
+  "model_id": "glm-5",
+  "model_snapshot": "results/g6_counterfactual/formal-20261013T000000Z/provider_model_metadata.json#sha256=3508217b79d8ca0dd9244782d45ee28b99461692e14f3f1accb991a6651f5f8f; gateway_weight_fingerprint=false",
+  "eligible_splits": ["final_test"],
+  "adapter_budget_enforcement_required": true,
+  "limits": {
+    "max_model_calls": 8,
+    "max_tool_calls": 64,
+    "max_total_tokens": 32000,
+    "max_cost_usd": 0.25
+  },
+  "provider": {
+    "base_url": "https://token.ctflow.cn/v1",
+    "input_cost_per_1k": 0.001,
+    "output_cost_per_1k": 0.003,
+    "max_output_tokens": 1024,
+    "internal_retries": 0
+  },
+  "randomization_seed": 20261015,
+  "repeat_per_arm": 3,
+  "primary_outcome": "all_planned_correct",
+  "safety_outcome": "C_to_W_rate",
+  "source_notes": [
+    "Nine theory families are retained because only these have completed real G7 public checkpoints for both groups and CF1/CF2.",
+    "The gateway metadata is an identity record, not an immutable weight fingerprint; this limitation remains explicit.",
+    "G7 provider-error checkpoints are excluded from the derived denominator, never imputed."
+  ]
+}

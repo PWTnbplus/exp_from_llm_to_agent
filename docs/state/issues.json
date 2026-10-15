@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-14T17:18:23+00:00",
+  "updated_at": "2026-10-15T03:03:42+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -308,10 +308,10 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "The final G7 V/L/U audit covers 92 public cases and reports edge_count_distribution={0:92} with eligible_u_cases=0. The G7-to-G8 handoff has mechanisms=[] and selection=REQUIRES_EXTERNAL_TRACE_AND_SCIENTIFIC_REVIEW.",
-      "remediation": "Obtain an independent scientific/trace review and, if L or U is proposed, an independently audited replacement edge/state-transition dataset with source hashes. Do not auto-select L or invent edges.",
+      "evidence": "The G7 audit remains edge_count_distribution={0:92} with eligible_u_cases=0. G8 therefore executed only the externally reviewed V mechanism and did not fabricate L/U edges or state transitions.",
+      "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-14T17:18:23+00:00",
+      "last_seen": "2026-10-15T03:03:41+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
       "attempts": 0,
       "blocked_reason": "G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.",
@@ -335,10 +335,10 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "OPEN",
-      "evidence": "The canonical G7 run retains all 1288 fork IDs and 184 checkpoint IDs, but only 993/1288 forks and 153/184 checkpoints completed. Independent Q audit has 3 valid and 1285 invalid rows.",
-      "remediation": "Keep terminal failures and Q invalidity unchanged. Before confirmatory G8 use, diagnose provider failures and obtain independent trace/Q review or run a separately frozen retry plan.",
+      "evidence": "The canonical G7 run still retains 1288 planned fork IDs and 184 checkpoint IDs, with 993 completed forks, 295 terminal fork failures, 153 completed checkpoints, 31 checkpoint provider errors, and only 3/1288 independently valid Q rows.",
+      "remediation": "Keep all G7 terminal failures and Q invalidity unchanged. Before confirmatory reuse, diagnose provider failures and obtain an independent trace/Q review or run a separately frozen retry plan; do not pool it silently with the present G7 run.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-14T17:18:23+00:00",
+      "last_seen": "2026-10-15T03:03:41+00:00",
       "source": "docs/audits/cycle-20261014T163000Z-20/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -355,9 +355,9 @@
       "id": "ISSUE-f9171bb760b1",
       "severity": "P1",
       "title": "No frozen, auditable G8 real/sham/off/extra adapter is present",
-      "status": "OPEN",
-      "evidence": "Repository inspection found G6/G7 runners but no G8 implementation exposing M_real, M_sham, M_off and generic_extra_thinking with the required mechanism events and hard per-call budgets. The G8 example config still contains placeholder model snapshot text.",
-      "remediation": "After G7 selection=GO, implement and independently review the real adapter, freeze its operation contract/version hash, public checkpoint mapping, model snapshot, hard limits, sham construction and G4 removal semantics before any paid run.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "The G8 adapter now exposes real, sham, off, and extra-thinking paths with required events and hard per-row budgets; the formal 324-row run passed 324/324 independent structural output audits. External immutable gateway-weight and billing verification remain unavailable.",
+      "remediation": "Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.",
       "first_seen": "2026-10-14T17:18:23+00:00",
       "last_seen": "2026-10-14T17:18:23+00:00",
       "source": "docs/audits/cycle-20261015T000000Z-21/audit.json",
@@ -369,6 +369,12 @@
           "time": "2026-10-14T17:18:23+00:00",
           "event": "OPENED",
           "source": "docs/audits/cycle-20261015T000000Z-21/audit.json"
+        },
+        {
+          "time": "2026-10-15T03:03:42+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Formal G8 adapter and mechanism event contracts are implemented and independently structure-audited across all 324 real-provider rows; external immutable model-weight and billing verification remain outstanding.",
+          "evidence": ""
         }
       ]
     }
@@ -409,7 +415,8 @@
     "docs/audits/cycle-20261014T020000Z-18/audit.json",
     "docs/audits/cycle-20261014T030000Z-19/audit.json",
     "docs/audits/cycle-20261014T163000Z-20/audit.json",
-    "docs/audits/cycle-20261015T000000Z-21/audit.json"
+    "docs/audits/cycle-20261015T000000Z-21/audit.json",
+    "docs/audits/cycle-20261015T040000Z-22/audit.json"
   ],
   "current_focus": null
 }
