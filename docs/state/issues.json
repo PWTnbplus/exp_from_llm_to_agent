@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-15T17:35:08+00:00",
+  "updated_at": "2026-10-15T18:02:48+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -335,12 +335,12 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The trace/Q audit retains all terminal failures, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false; no provider call was made in this cycle.",
-      "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries.",
+      "evidence": "The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The new v2 trace/Q audit retains all terminal failures, requires exact state-to-Q coverage and status-aligned RUN_END evidence, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false. No provider call was made in this cycle.",
+      "remediation": "Keep failures and invalid Q rows in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries. Billing export, immutable model snapshot, and external provider review remain required.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-15T17:35:08+00:00",
+      "last_seen": "2026-10-15T18:02:48+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
-      "attempts": 6,
+      "attempts": 7,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -395,6 +395,12 @@
           "time": "2026-10-15T16:43:28+00:00",
           "event": "IN_PROGRESS",
           "reason": "Cycle 20261016T120000Z-30 tightened the derived G7 trace/Q audit with lifecycle-ordering, duplicate-event, sequence, and call-pairing checks; persisted terminal failures and low Q coverage remain unresolved and no provider call was made.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-15T18:02:01+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 33 hardened the G7 trace/Q audit against missing or duplicate Q rows and status-mismatched terminal traces; the underlying 3 provider errors and low 20/1288 independently valid Q coverage remain unresolved.",
           "evidence": ""
         }
       ]
@@ -607,7 +613,8 @@
     "docs/audits/cycle-20261016T120000Z-30/audit.json",
     "docs/audits/cycle-20261015T161447Z-01/audit.json",
     "docs/audits/cycle-20261016T014500Z-31/audit.json",
-    "docs/audits/cycle-20261015T172856Z-32/audit.json"
+    "docs/audits/cycle-20261015T172856Z-32/audit.json",
+    "docs/audits/cycle-20261015T175935Z-33/audit.json"
   ],
   "current_focus": null
 }

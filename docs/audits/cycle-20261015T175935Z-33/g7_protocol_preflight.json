@@ -1,0 +1,32 @@
+{
+  "audit_version": "g7-protocol-preflight-v1",
+  "provider_calls_made": false,
+  "formal_run_allowed_by_protocol": false,
+  "errors": [
+    "public_labels_plan_must_be_nonempty",
+    "plan_case_missing_from_public",
+    "plan_case_missing_from_labels"
+  ],
+  "counts": {
+    "public_cases": 0,
+    "labels": 0,
+    "plan_rows": 1288,
+    "missing_cases": 92,
+    "missing_labels": 92,
+    "missing_required_plan_fields": [],
+    "duplicate_run_ids": 0,
+    "duplicate_public_case_ids": 0,
+    "duplicate_label_case_ids": 0,
+    "invalid_model_visible_cases": [],
+    "unique_checkpoint_ids": 184
+  },
+  "routing_metadata_model_prompt_hits": {},
+  "forbidden_model_prompt_hits": {},
+  "scientific_truth_decision_made": false,
+  "input_hashes": {
+    "public": null,
+    "labels": null,
+    "plan": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+  },
+  "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt"
+}

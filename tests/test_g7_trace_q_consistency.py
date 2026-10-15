@@ -179,3 +179,53 @@ def test_provider_error_may_end_after_unanswered_request_but_needs_error_event()
         {"run_id": "run-1", "event_type": "RUN_END", "seq": 4, "payload": {"status": "provider_error"}},
     ]
     assert validate_lifecycle(events, {"run-1"}) == []
+
+
+def test_provider_error_record_rejects_completed_run_end(tmp_path: Path) -> None:
+    state = {"run_id": "run-1", "status": "provider_error", "trace_ref": "traces/run-1/events.jsonl"}
+    _write_events(
+        tmp_path / "traces/run-1/events.jsonl",
+        [
+            {"run_id": "run-1", "event_type": "RUN_START", "payload": {}},
+            {"run_id": "run-1", "event_type": "ERROR", "payload": {"error": "timeout"}},
+            {"run_id": "run-1", "event_type": "RUN_END", "payload": {"status": "completed"}},
+        ],
+    )
+    review = audit_trace_reference(tmp_path, state)
+    assert review["trace_ok"] is False
+    assert "missing_provider_error_run_end" in review["reasons"]
+    assert "run_end_status_mismatch" in review["reasons"]
+
+
+def test_q_coverage_must_match_state_rows_before_confirmatory_reuse(tmp_path: Path) -> None:
+    state = {"run_id": "run-1", "status": "completed", "trace_ref": "traces/run-1/events.jsonl"}
+    _write_events(
+        tmp_path / "traces/run-1/events.jsonl",
+        [
+            {"run_id": "run-1", "event_type": "RUN_START", "payload": {}},
+            {"run_id": "run-1", "event_type": "MODEL_RESPONSE", "payload": {}},
+            {"run_id": "run-1", "event_type": "RUN_END", "payload": {"status": "completed"}},
+        ],
+    )
+    report = build_report(states=[state], q_rows=[], trace_root=tmp_path)
+    assert report["q"]["states_missing_q_row"] == 1
+    assert report["conclusion"]["confirmatory_reuse_allowed"] is False
+
+
+def test_duplicate_q_rows_fail_closed(tmp_path: Path) -> None:
+    state = {"run_id": "run-1", "status": "completed", "trace_ref": "traces/run-1/events.jsonl"}
+    _write_events(
+        tmp_path / "traces/run-1/events.jsonl",
+        [
+            {"run_id": "run-1", "event_type": "RUN_START", "payload": {}},
+            {"run_id": "run-1", "event_type": "MODEL_RESPONSE", "payload": {}},
+            {"run_id": "run-1", "event_type": "RUN_END", "payload": {"status": "completed"}},
+        ],
+    )
+    report = build_report(
+        states=[state],
+        q_rows=[{"run_id": "run-1", "is_valid": True}, {"run_id": "run-1", "is_valid": True}],
+        trace_root=tmp_path,
+    )
+    assert report["q"]["duplicate_run_ids"] == ["run-1"]
+    assert report["conclusion"]["confirmatory_reuse_allowed"] is False

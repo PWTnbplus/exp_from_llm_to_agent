@@ -267,6 +267,8 @@ def audit_trace_reference(root: Path, record: dict[str, Any]) -> dict[str, Any]:
             reasons.append("missing_run_start")
         if not completed_end:
             reasons.append("missing_completed_run_end")
+        if failed_end:
+            reasons.append("run_end_status_mismatch")
         if errors:
             reasons.append("error_event_in_completed_trace")
         if not has_model_response:
@@ -281,6 +283,10 @@ def audit_trace_reference(root: Path, record: dict[str, Any]) -> dict[str, Any]:
             reasons.append("trace_run_id_mismatch")
         if not starts:
             reasons.append("missing_run_start")
+        if not failed_end:
+            reasons.append("missing_provider_error_run_end")
+        if completed_end:
+            reasons.append("run_end_status_mismatch")
         if not errors and not failed_end:
             reasons.append("missing_failure_evidence")
         return {**common, "trace_status": "terminal_failure_evidence" if not reasons else "failure_trace_inconsistent",
@@ -292,9 +298,21 @@ def audit_trace_reference(root: Path, record: dict[str, Any]) -> dict[str, Any]:
 def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
                  trace_root: Path, checkpoints: list[dict[str, Any]] | None = None,
                  input_hashes: dict[str, str | None] | None = None) -> dict[str, Any]:
-    state_by_id = {str(row.get("run_id")): row for row in states}
+    state_ids = [str(row.get("run_id", "")) for row in states]
+    state_id_counts = collections.Counter(state_ids)
+    duplicate_state_ids = sorted(run_id for run_id, count in state_id_counts.items()
+                                 if count > 1 or not run_id)
+    state_by_id = {run_id: row for run_id, row in zip(state_ids, states)}
     state_reviews = [audit_trace_reference(trace_root, row) for row in states]
     state_review_by_id = {row["run_id"]: row for row in state_reviews}
+    q_ids = [str(row.get("run_id", "")) for row in q_rows]
+    q_id_counts = collections.Counter(q_ids)
+    duplicate_q_ids = sorted(run_id for run_id, count in q_id_counts.items()
+                             if count > 1 or not run_id)
+    state_id_set = set(state_ids)
+    q_id_set = set(q_ids)
+    q_missing_for_state = sorted(state_id_set - q_id_set)
+    q_extra_rows = sorted(q_id_set - state_id_set)
     q_original_valid = sum(bool(row.get("is_valid")) for row in q_rows)
     q_trace_backed_valid = 0
     q_invalidated = 0
@@ -330,12 +348,14 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
     terminal_states = sum(count for status, count in state_status_counts.items() if status != "completed")
     terminal_checkpoints = sum(count for status, count in checkpoint_status_counts.items() if status != "completed")
     return {
-        "audit_version": "g7-trace-q-consistency-v1",
+        "audit_version": "g7-trace-q-consistency-v2",
         "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
         "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; retain_prior_history_count",
         "inputs": input_hashes or {},
         "states": {
             "rows": len(states),
+            "unique_run_ids": len(state_id_set),
+            "duplicate_run_ids": duplicate_state_ids,
             "status_counts": dict(state_status_counts),
             "trace_status_counts": dict(trace_status_counts),
             "recorded_failure_category_counts": dict(failure_category_counts),
@@ -353,17 +373,34 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
         },
         "q": {
             "rows": len(q_rows),
+            "unique_run_ids": len(q_id_set),
             "original_independent_valid": q_original_valid,
             "trace_backed_valid": q_trace_backed_valid,
             "valid_rows_invalidated_by_trace_review": q_invalidated,
             "rows_missing_state_review": q_missing_state,
+            "states_missing_q_row": len(q_missing_for_state),
+            "q_rows_without_state": len(q_extra_rows),
+            "duplicate_run_ids": duplicate_q_ids,
             "review_status_counts": dict(q_review_statuses),
         },
         "conclusion": {
             "terminal_failures_retained": terminal_states > 0 or terminal_checkpoints > 0,
-            "q_invalidity_retained": q_original_valid + sum(1 for row in q_rows if not row.get("is_valid")) == len(q_rows),
+            "q_invalidity_retained": (
+                bool(q_rows)
+                and q_original_valid + sum(1 for row in q_rows if not row.get("is_valid")) == len(q_rows)
+            ),
             "retries_pooled": False,
-            "confirmatory_reuse_allowed": False if terminal_states or terminal_checkpoints or q_invalidated or q_missing_state else True,
+            "confirmatory_reuse_allowed": not any((
+                terminal_states,
+                terminal_checkpoints,
+                q_invalidated,
+                q_missing_state,
+                bool(duplicate_state_ids),
+                bool(duplicate_q_ids),
+                bool(q_missing_for_state),
+                bool(q_extra_rows),
+                len(q_rows) != len(states),
+            )),
             "scientific_truth_decision_made": False,
             "interpretation_boundary": "Failure categories are derived from persisted trace text; they do not establish an external provider root cause or scientific validity.",
         },
