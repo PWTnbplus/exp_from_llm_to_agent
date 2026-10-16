@@ -528,6 +528,6 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only scan confirms `wrong_profile=0`, `wrong_retry_protocol=0`, missing/wrong experiment identity `0`, source-arm mismatches `0`, source-checkpoint mismatch groups `0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
 - `ISSUE-6bd0c43fb941` is `VERIFIED` for this local executable-profile identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider, provenance, Q/math/statistics, dependency-edge, and scientific-release blockers remain.
 - Audit files: `docs/audits/cycle-20261016T095836Z-85/audit.json`, `g7_profile_finding.json`, and `g7_profile_review.json`.
-- Local repair commit: `4474e95`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- Local repair commit: `4474e95`; audit/state commit: `102994c`; delivery-blocker state commit: `c004e9d`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 

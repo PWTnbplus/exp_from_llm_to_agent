@@ -93,12 +93,12 @@
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "34aa748",
     "code_commit": "4474e95",
-    "audit_state_commit": null,
-    "delivery_state_commit": null,
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
+    "audit_state_commit": "102994c",
+    "delivery_state_commit": "c004e9d",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
     "remote_updated": false,
-    "note": "Remote delivery will be attempted after local audit/state ingestion; no remote success is claimed here."
+    "note": "Both git push and git ls-remote failed to connect to github.com:443 through the configured 127.0.0.1 proxy; remote delivery is not claimed or verified."
   },
   "ledger": {
     "new_local_issue": "ISSUE-6bd0c43fb941",
