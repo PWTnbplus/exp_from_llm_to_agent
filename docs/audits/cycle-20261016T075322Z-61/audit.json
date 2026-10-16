@@ -97,7 +97,7 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "4bf2cc0",
-    "commit": "15bb73f Harden G7 trace identity and retry audit",
+    "commit": "15bb73f Harden G7 trace identity and retry audit; d057249 Record cycle 61 delivery blocker",
     "push_exit_code": 1,
     "ls_remote_exit_code": 1,
     "commit_or_push_by_agent": true,
