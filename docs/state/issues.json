@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:35:17+00:00",
+  "updated_at": "2026-10-16T08:36:11+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 67 local commit 7589a9e exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443.",
+      "evidence": "Cycle 68 local repair commit 1829293 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 67 GitHub delivery remains externally blocked after stale-workflow verification commit.",
+      "blocked_reason": "Cycle 68 GitHub delivery remains externally blocked after G7 prompt-isolation repair.",
       "verification": null,
       "history": [
         {
@@ -253,6 +253,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 67 GitHub delivery remains externally blocked after stale-workflow verification commit.",
           "evidence": "Cycle 67 local commit 7589a9e exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443."
+        },
+        {
+          "time": "2026-10-16T08:35:55+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 68 GitHub delivery remains externally blocked after G7 prompt-isolation repair.",
+          "evidence": "Cycle 68 local repair commit 1829293 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated."
         }
       ]
     },
@@ -995,7 +1001,8 @@
     "docs/audits/cycle-20261016T080638Z-64/audit.json",
     "docs/audits/cycle-20261016T081104Z-65/audit.json",
     "docs/audits/cycle-20261016T081826Z-66/audit.json",
-    "docs/audits/cycle-20261016T082213Z-67/audit.json"
+    "docs/audits/cycle-20261016T082213Z-67/audit.json",
+    "docs/audits/cycle-20261016T083448Z-68/audit.json"
   ],
   "current_focus": null
 }

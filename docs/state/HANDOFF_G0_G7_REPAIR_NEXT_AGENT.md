@@ -319,5 +319,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - No source, provider artifact, paid run, or scientific result was changed. Local commits: `7589a9e` and delivery-state record `2367fca`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
 - Current state: `10` open/blocked/unverified issues, `6` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
 
+## Cycle 68 G7 forward prompt-isolation repair (2026-10-16T08:34Z)
+
+- Compared the implementation against all three user-specified design documents under `D:/硕士/prj1_ai_cal/writing/实验设计`. The review retained the design requirements that private whole-proof/oracle data cannot reach the model, D0–D3 and ONLY arms are information interventions, U-ineligible rows remain in the denominator, Q requires an independent verifier, and historical contaminated traces cannot be retroactively repaired.
+- Repaired `scripts/run_g7_failure_localization.py`: V/L/U labels now have a strict nested public shape; `verifier_ref`, eligibility, and ineligibility-reason metadata are forbidden model-visible keys; `protocol_preflight` now scans the exact constructed diagnostic payload as well as public case prompts; explicit `arm_eligible_for_diagnostic=false` U rows are retained without producing a false ineligible-arm error.
+- Added `tests/test_g7_label_contract.py` coverage for nested private-label rejection, extra-field rejection, strict acceptance, private diagnostic-payload scanning, and explicit ineligible-U retention.
+- Focused G7 regression: `59 passed`; full host suite: `204 passed`; `git diff --check`: PASS. Fresh read-only preflight of the protocol-corrected input passes with `92` public cases, `92` labels, `1288` plan rows, `184` checkpoints, zero routing/private hits, `provider_calls_made=false`, and no scientific truth decision.
+- Independent historical trace review found `3252` MODEL_REQUEST events in the immutable corrected trace, `0` routing hits, but `4222` `verifier_ref` hits. This historical corrected trace remains permanently non-confirmatory; no raw result, plan, label, or trace was modified. The prior original routing-contaminated batch also remains non-confirmatory.
+- `ISSUE-0f2cb195c681` is now `VERIFIED` only for the forward local isolation/preflight remediation. This does not verify historical outputs, Q validity, dependency/L/U validity, or scientific release. `ISSUE-000000000002`, `ISSUE-000000000003`, `ISSUE-000000000004`, `ISSUE-1f8c2b6a4d90`, `ISSUE-3d7a9c1e5b20`, `ISSUE-ff97c7c89112`, `ISSUE-ad61f025976a`, and `ISSUE-f9171bb760b1` remain externally or mathematically unresolved; P2 classical baseline remains out of scope.
+- Audit files: `docs/audits/cycle-20261016T083448Z-68/audit.json` and `g7_prompt_isolation_review.json`.
+- Local repair commit: `1829293`. `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This is recorded under `ISSUE-000000000003`.
+- Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 are engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, retry, confirmatory inference, or scientific claim was made.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
