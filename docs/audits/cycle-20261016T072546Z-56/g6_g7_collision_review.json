@@ -1,0 +1,19 @@
+{
+  "scope": "Independent read-only review of G6 audit and G6-to-G7 handoff collision guards",
+  "synthetic_checks": {
+    "audit_duplicate_plan_run_id": "reported duplicate_plan_run_id without replacing the first row",
+    "handoff_duplicate_response_run_id": "failed before writing output",
+    "handoff_unexpected_response_run_id": "failed before writing output",
+    "verdict": "PASS"
+  },
+  "real_verified23_probe": {
+    "plan_rows": 552,
+    "private_rows": 92,
+    "response_rows": 552,
+    "handoff_rows": 552,
+    "unique_handoff_run_ids": 552,
+    "collision_failures": [],
+    "provider_calls_made": false
+  },
+  "external_review_present": false
+}

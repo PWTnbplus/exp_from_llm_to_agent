@@ -21,6 +21,20 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def index_unique(rows: list[dict[str, Any]], field: str, label: str) -> tuple[dict[Any, dict[str, Any]], list[str]]:
+    """Index rows without allowing duplicate records to be silently replaced."""
+
+    indexed: dict[Any, dict[str, Any]] = {}
+    failures: list[str] = []
+    for row in rows:
+        value = row[field]
+        if value in indexed:
+            failures.append(f"duplicate_{label}:{value}")
+            continue
+        indexed[value] = row
+    return indexed, failures
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -95,10 +109,16 @@ def main() -> int:
     public = read_jsonl(args.public)
     private = read_jsonl(args.private)
     responses = read_jsonl(args.responses)
-    plan_by_run = {row["run_id"]: row for row in plan}
-    private_by_case = {row["case_id"]: row for row in private}
-    response_by_run = {row["run_id"]: row for row in responses}
     failures: list[str] = []
+    plan_by_run, plan_index_failures = index_unique(plan, "run_id", "plan_run_id")
+    private_by_case, private_index_failures = index_unique(private, "case_id", "private_case_id")
+    response_by_run, response_index_failures = index_unique(responses, "run_id", "response_run_id")
+    failures.extend(plan_index_failures)
+    failures.extend(private_index_failures)
+    failures.extend(response_index_failures)
+    missing_private_cases = sorted({row["case_id"] for row in plan} - set(private_by_case))
+    if missing_private_cases:
+        failures.append(f"missing_private_cases:{missing_private_cases}")
     checks = Counter()
     manifests, manifest_failures = load_manifests(args.out)
     failures.extend(manifest_failures)
@@ -227,8 +247,10 @@ def main() -> int:
     for plan_row in plan:
         if plan_row["cf_type"] != "CF3":
             continue
-        oracle = private_by_case[plan_row["case_id"]]
-        response = response_by_run[plan_row["run_id"]]
+        oracle = private_by_case.get(plan_row["case_id"])
+        response = response_by_run.get(plan_row["run_id"])
+        if oracle is None or response is None:
+            continue
         decision_ok = response.get("decision") == oracle.get("expected_decision")
         claims_ok = set(response.get("affected_claim_ids", [])) == set(oracle.get("affected_claim_ids", []))
         revision_ok = bool(response.get("revised_claim")) and norm_text(response.get("revised_claim")) == norm_text(oracle.get("correct_revised_claim"))

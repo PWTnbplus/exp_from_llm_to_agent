@@ -1,0 +1,76 @@
+{
+  "cycle": "20261016T072546Z-56",
+  "scope": "Repair silent G6 audit and G6-to-G7 handoff input collisions",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "repair": {
+    "sources": [
+      "scripts/audit_g6_counterfactual.py",
+      "scripts/build_g6_g7_handoff.py"
+    ],
+    "tests": "tests/test_g6_input_collision_guards.py",
+    "change": "G6 audit and handoff indexing now rejects duplicate plan/response/oracle IDs, duplicate arm records, missing oracle rows, and unexpected response IDs instead of silently replacing or ignoring records.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "before": "Dictionary comprehensions in the audit/handoff paths could replace duplicate rows; missing/extra combinations were not uniformly rejected before downstream processing.",
+    "after": "Collision and bijection guards fail closed, preserve the first indexed row for diagnostics, and prevent handoff output creation on invalid inputs."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g6_input_collision_guards.py tests/test_analyze_g6_clustered.py tests/test_statistics.py",
+      "result": "16 passed in 13.09s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "165 passed in 31.92s"
+    },
+    "real_verified23_handoff": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/build_g6_g7_handoff.py --plan <verified23 plan> --oracle <verified23 oracle> --responses <verified23 responses> --out <temporary-file>",
+      "result": "PASS: 552 rows and 552 unique run IDs"
+    },
+    "real_verified23_audit_index": {
+      "command": "read-only index_unique probe over verified23 plan/oracle/responses",
+      "result": "PASS: 552/92/552 rows with no collision failures"
+    }
+  },
+  "remaining_boundary": {
+    "independent_statistical_or_mathematical_review_present": false,
+    "scientific_release_allowed": false,
+    "note": "Input collision integrity is locally repaired; this does not validate the scientific verifier, oracle grade, preregistration, or inferential conclusions."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G6/G7 input-contract review",
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "formal_statistical_validity_not_established",
+        "severity": "P1",
+        "evidence": "G6 audit/handoff collision guards are locally repaired and verified on synthetic and verified23 inputs, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent.",
+        "remediation": "Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
+        "blocker": "The remaining review is external and unavailable in the current environment."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000004",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "f79bfc5",
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no scientific conclusion was claimed."
+  }
+}

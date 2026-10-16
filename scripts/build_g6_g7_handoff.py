@@ -16,6 +16,18 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def index_unique(rows: list[dict[str, Any]], field: str, label: str) -> dict[str, dict[str, Any]]:
+    """Build a handoff index without silently replacing duplicate rows."""
+
+    indexed: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        value = str(row[field])
+        if value in indexed:
+            raise SystemExit(f"cannot build handoff: duplicate {label} {value!r}")
+        indexed[value] = row
+    return indexed
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -32,12 +44,18 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
-    plan = {str(row["run_id"]): row for row in read_jsonl(args.plan)}
-    oracle = {str(row["case_id"]): row for row in read_jsonl(args.oracle)}
-    responses = {str(row["run_id"]): row for row in read_jsonl(args.responses)}
+    plan = index_unique(read_jsonl(args.plan), "run_id", "plan run_id")
+    oracle = index_unique(read_jsonl(args.oracle), "case_id", "oracle case_id")
+    responses = index_unique(read_jsonl(args.responses), "run_id", "response run_id")
     missing = sorted(set(plan) - set(responses))
     if missing:
         raise SystemExit(f"cannot build handoff: missing completed responses for {len(missing)} run_ids")
+    extra = sorted(set(responses) - set(plan))
+    if extra:
+        raise SystemExit(f"cannot build handoff: unexpected responses for {len(extra)} run_ids")
+    missing_oracle = sorted({str(row["case_id"]) for row in plan.values()} - set(oracle))
+    if missing_oracle:
+        raise SystemExit(f"cannot build handoff: missing oracle rows for {len(missing_oracle)} case_ids")
 
     rows: list[dict[str, Any]] = []
     for run_id, p in plan.items():

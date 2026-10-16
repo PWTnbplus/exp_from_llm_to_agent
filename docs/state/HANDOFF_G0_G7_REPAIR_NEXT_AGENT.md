@@ -235,5 +235,14 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T072158Z-55/audit.json` and `statistical_input_contract_review.json`.
 - Cycle 55 delivery: local repair commit `f79bfc5`; push and `git ls-remote` both failed through the configured proxy. Remote branch remains unverified under `ISSUE-000000000003`.
 
+## Cycle 56 G6/G7 collision-guard repair (2026-10-16T07:25Z)
+
+- Repaired `scripts/audit_g6_counterfactual.py` and `scripts/build_g6_g7_handoff.py` so duplicate plan/response/oracle IDs, duplicate arm records, missing oracle rows, and unexpected responses fail closed.
+- Added `tests/test_g6_input_collision_guards.py`; focused collision/statistics tests: `16 passed`; full host suite: `165 passed`.
+- Real verified23 probes: `552` plan rows, `92` private rows, `552` responses, `552` handoff rows, and `552` unique handoff run IDs; no collision failures.
+- `ISSUE-000000000004` remains `BLOCKED` pending independent statistical/mathematical review. Input integrity is not inferential validity and is not a scientific result.
+- No provider call, paid run, retry, confirmatory inference, or superiority claim was made.
+- Audit: `docs/audits/cycle-20261016T072546Z-56/audit.json` and `g6_g7_collision_review.json`.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
