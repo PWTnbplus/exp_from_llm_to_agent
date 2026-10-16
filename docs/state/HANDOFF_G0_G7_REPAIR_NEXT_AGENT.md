@@ -479,3 +479,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `e5bc327`; audit/state commit: `01c5f52`; delivery-blocker state commit: `0e9e3c7`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Do not stage the user-owned untracked `research_data_summary_G0_G7/` directory.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. A remote push must be attempted and verified with `git ls-remote`; do not claim success if the proxy remains unavailable.
 
+## Cycle 82 G7 formal experiment identity repair (2026-10-16T09:48Z)
+
+- Re-read `D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`; the executable G7 plan namespace is `g7_failure_localization`, and the G7 design requires a frozen, auditable experiment/run contract before provider creation.
+- Independently reproduced a local fail-open: before repair, a complete valid G7 fixture with `experiment_id` omitted from every plan row returned `formal_run_allowed_by_protocol=true` and `errors=[]` under `require_complete_plan=True`.
+- Repaired `scripts/run_g7_failure_localization.py` so `_formal_plan_contract_valid` requires exact `experiment_id=g7_failure_localization`; added an adversarial missing/wrong identity test and corrected complete-plan fixtures.
+- Focused G7 tests pass `43/43`; full repository suite passes `233/233`; py_compile and `git diff --check` pass.
+- Re-ran the immutable formal preflight: `92` public cases, `92` labels, `1288` plan rows, `formal_run_allowed_by_protocol=true`, `errors=[]`, `invalid_g7_plan_metadata=[]`, `g7_plan_group_arm_mismatches=[]`, `incomplete_case_group_coverage=[]`, `duplicate_case_group_checkpoints=[]`, `checkpoint_identity_collisions=[]`, `184` unique checkpoints.
+- Independent read-only scan confirms `1288` rows, `missing_experiment_id=0`, `wrong_experiment_id=0`, `source_arm_mismatches=0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- `ISSUE-6f5db82e86c0` is `VERIFIED` for this local formal experiment-identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T094833Z-82/audit.json`, `g7_experiment_identity_finding.json`, and `g7_experiment_identity_review.json`.
+- Local repair commit: `b84f005`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote push plus `git ls-remote` must be attempted and verified before claiming delivery.
+

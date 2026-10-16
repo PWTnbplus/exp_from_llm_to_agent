@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:45:41+00:00
+生成时间（UTC）：2026-10-16T09:49:00+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**18**
+- 已验证修复：**19**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -101,6 +101,7 @@
 - **ISSUE-7b3e9a1c5d20**（P2）：Issue status transitions did not refresh top-level last_seen——`python -m pytest -q`；update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass.
 - **ISSUE-dad1d3f0293e**（P1）：G7 formal preflight could accept a plan that silently dropped an entire public case——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage.
 - **ISSUE-42e2f49eb73e**（P1）：G7 complete preflight accepted a source G6 arm inconsistent with the diagnostic group——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[].
+- **ISSUE-6f5db82e86c0**（P1）：G7 complete preflight accepted a missing or wrong formal experiment identity——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires experiment_id=g7_failure_localization. The adversarial missing/wrong identity test passes; the focused G7 suite passes 43/43; the full repository suite passes 233/233; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell reconstruction reports zero missing or wrong experiment identities, zero source-arm mismatches, and the expected plan hash.
 
 ## 可复用的已验证完成工作（不要重新构建）
 
