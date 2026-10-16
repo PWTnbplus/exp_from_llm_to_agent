@@ -59,6 +59,8 @@ FORMAT_RETRY_INSTRUCTION = (
     "top-level stages field (not inside supporting_evidence): stages must contain stages.V={verdict}, "
     "L={nodes,edges}, U={node_changes}, and stages.Q={verdict,reason}; use empty arrays for genuinely empty L/U fields."
 )
+G7_GROUPS = {"G3", "G4"}
+G7_STAGES = {"V", "L", "U"}
 
 
 def utc_now() -> str:
@@ -173,6 +175,25 @@ def _key_hits(text: str, keys: tuple[str, ...]) -> dict[str, int]:
     return {key: folded.count(key.casefold()) for key in keys if key.casefold() in folded}
 
 
+def _label_contract_valid(row: dict[str, Any]) -> bool:
+    """Validate private V/L/U label shape before any provider can be called."""
+    v = row.get("v")
+    l = row.get("l")
+    u = row.get("u")
+    return (
+        isinstance(v, dict)
+        and v.get("verdict") in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}
+        and isinstance(l, dict)
+        and isinstance(l.get("nodes"), list)
+        and isinstance(l.get("edges"), list)
+        and isinstance(u, dict)
+        and isinstance(u.get("node_changes"), list)
+        and isinstance(row.get("eligible_u"), bool)
+        and isinstance(row.get("verifier_ref"), str)
+        and bool(row.get("verifier_ref"))
+    )
+
+
 def protocol_preflight(
     public_rows: list[dict[str, Any]],
     label_rows: list[dict[str, Any]],
@@ -200,6 +221,26 @@ def protocol_preflight(
     missing_required_plan_fields = sorted(
         field for field in required_plan_fields if any(not row.get(field) for row in plan_rows)
     )
+    invalid_plan_rows: list[str] = []
+    for index, row in enumerate(plan_rows):
+        run_id = str(row.get("run_id") or f"row-{index}")
+        stages = row.get("inject_stages")
+        stages_valid = (
+            isinstance(stages, list)
+            and all(isinstance(stage, str) for stage in stages)
+            and len(stages) == len(set(stages))
+            and set(stages).issubset(G7_STAGES)
+        )
+        if (
+            not isinstance(row.get("group_id"), str)
+            or row.get("group_id") not in G7_GROUPS
+            or not isinstance(row.get("diagnostic_arm"), str)
+            or not stages_valid
+        ):
+            invalid_plan_rows.append(run_id)
+    invalid_label_cases = sorted({
+        str(row.get("case_id")) for row in label_rows if not _label_contract_valid(row)
+    })
     run_ids = [row.get("run_id") for row in plan_rows if row.get("run_id")]
     duplicate_plan_ids = len(run_ids) - len(set(run_ids))
     public_case_ids = [row.get("case_id") for row in public_rows if row.get("case_id")]
@@ -215,6 +256,10 @@ def protocol_preflight(
         errors.append("plan_case_missing_from_labels")
     if missing_required_plan_fields:
         errors.append("plan_required_fields_missing")
+    if invalid_plan_rows:
+        errors.append("invalid_plan_contract")
+    if invalid_label_cases:
+        errors.append("invalid_label_contract")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -243,6 +288,8 @@ def protocol_preflight(
             "missing_cases": len(missing_cases),
             "missing_labels": len(missing_labels),
             "missing_required_plan_fields": missing_required_plan_fields,
+            "invalid_plan_rows": sorted(set(invalid_plan_rows)),
+            "invalid_label_cases": invalid_label_cases,
             "duplicate_run_ids": duplicate_plan_ids,
             "duplicate_public_case_ids": duplicate_public_case_ids,
             "duplicate_label_case_ids": duplicate_label_case_ids,

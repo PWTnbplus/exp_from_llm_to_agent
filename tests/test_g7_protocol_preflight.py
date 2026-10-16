@@ -47,10 +47,14 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
     plan = tmp_path / "plan.jsonl"
     out = tmp_path / "preflight.json"
     public.write_text(json.dumps({"case_id": "case-1", "model_visible": {"problem": "public"}}) + "\n", encoding="utf-8")
-    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps({"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+                                  "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+                                  "eligible_u": False, "verifier_ref": "ref"}) + "\n", encoding="utf-8")
     plan.write_text(
-        json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n"
-        + json.dumps({"run_id": "run-2", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n",
+        json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+                    "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}) + "\n"
+        + json.dumps({"run_id": "run-2", "checkpoint_id": "cp-1", "case_id": "case-1",
+                      "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}) + "\n",
         encoding="utf-8",
     )
 

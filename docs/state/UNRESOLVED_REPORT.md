@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T05:43:18+00:00
+生成时间（UTC）：2026-10-16T05:48:47+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：G7 runner budget hardening now rejects multi-worker paid runs without an explicit aggregate cost cap, partitions a USD 200 aggregate cap into USD 12.50 per worker for 16 workers, and checks persisted cost/token limits before a new model request. The corrected historical G7 retry remains 1285 completed, 3 provider_error, and Q valid 20/1288; no provider call was made in this cycle.
-- 必需修复：Keep failures, invalid Q rows, trace-integrity failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.
-- 尝试次数：9
+- 证据：G7 preflight now validates private V/L/U label shape and plan group/arm/stage shape before provider setup. The corrected inputs pass with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero invalid plan/label rows, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.
+- 必需修复：Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.
+- 尝试次数：10
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

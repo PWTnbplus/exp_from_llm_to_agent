@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T05:43:18+00:00",
+  "updated_at": "2026-10-16T05:48:47+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -335,12 +335,12 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "G7 runner budget hardening now rejects multi-worker paid runs without an explicit aggregate cost cap, partitions a USD 200 aggregate cap into USD 12.50 per worker for 16 workers, and checks persisted cost/token limits before a new model request. The corrected historical G7 retry remains 1285 completed, 3 provider_error, and Q valid 20/1288; no provider call was made in this cycle.",
-      "remediation": "Keep failures, invalid Q rows, trace-integrity failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.",
+      "evidence": "G7 preflight now validates private V/L/U label shape and plan group/arm/stage shape before provider setup. The corrected inputs pass with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero invalid plan/label rows, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.",
+      "remediation": "Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T05:43:17+00:00",
+      "last_seen": "2026-10-16T05:48:46+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
-      "attempts": 9,
+      "attempts": 10,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -413,6 +413,12 @@
           "time": "2026-10-16T05:43:18+00:00",
           "event": "IN_PROGRESS",
           "reason": "Cycle 35 added an explicit aggregate G7 cost cap for multi-worker runs, partitions the cap across workers, and rejects requests after persisted budget exhaustion; historical provider failures and low Q remain unresolved.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-16T05:48:47+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 36 added fail-closed validation for private V/L/U labels and G7 plan group/arm/stage fields before provider setup; corrected inputs pass, but historical provider errors and low Q remain unresolved.",
           "evidence": ""
         }
       ]
@@ -628,7 +634,8 @@
     "docs/audits/cycle-20261015T172856Z-32/audit.json",
     "docs/audits/cycle-20261015T175935Z-33/audit.json",
     "docs/audits/cycle-20261016T053748Z-34/audit.json",
-    "docs/audits/cycle-20261016T054256Z-35/audit.json"
+    "docs/audits/cycle-20261016T054256Z-35/audit.json",
+    "docs/audits/cycle-20261016T060000Z-36/audit.json"
   ],
   "current_focus": null
 }

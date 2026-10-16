@@ -39,8 +39,11 @@ def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> Non
 def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
     report = protocol_preflight(
         [{"case_id": "case-1", "model_visible": {"problem": "public", "cf_type": "CF1"}}],
-        [{"case_id": "case-1"}],
-        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+          "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}],
         worker_count=1,
     )
     assert report["formal_run_allowed_by_protocol"] is False
@@ -51,8 +54,11 @@ def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() ->
 def test_g7_runner_preflight_rejects_nested_private_model_fields() -> None:
     report = protocol_preflight(
         [{"case_id": "case-1", "model_visible": {"public": {"Ground_Truth": "secret"}, "answer_key": "secret"}}],
-        [{"case_id": "case-1"}],
-        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+          "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}],
         worker_count=1,
     )
     assert report["formal_run_allowed_by_protocol"] is False
@@ -64,13 +70,44 @@ def test_g7_runner_preflight_rejects_nested_private_model_fields() -> None:
 def test_g7_runner_preflight_rejects_malformed_plan_rows() -> None:
     report = protocol_preflight(
         [{"case_id": "case-1", "model_visible": {"problem": "public"}}],
-        [{"case_id": "case-1"}],
-        [{"checkpoint_id": "cp-1", "case_id": "case-1"}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"checkpoint_id": "cp-1", "case_id": "case-1", "group_id": "G4",
+          "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}],
         worker_count=1,
     )
     assert report["formal_run_allowed_by_protocol"] is False
     assert report["errors"] == ["plan_required_fields_missing"]
     assert report["counts"]["missing_required_plan_fields"] == ["run_id"]
+
+
+def test_g7_runner_preflight_rejects_invalid_private_label_contract() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"problem": "public"}}],
+        [{"case_id": "case-1", "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+          "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert report["errors"] == ["invalid_label_contract"]
+    assert report["counts"]["invalid_label_cases"] == ["case-1"]
+
+
+def test_g7_runner_preflight_rejects_invalid_plan_contract() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"problem": "public"}}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+          "group_id": {"bad": True}, "diagnostic_arm": "V_ONLY", "inject_stages": [{"bad": True}]}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert report["errors"] == ["invalid_plan_contract"]
+    assert report["counts"]["invalid_plan_rows"] == ["run-1"]
 
 
 def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
