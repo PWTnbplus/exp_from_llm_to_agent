@@ -73,6 +73,7 @@ def _formal_g7_case(case_id: str) -> tuple[dict, dict, list[dict]]:
                 "run_id": f"run-{case_id}-{group}-{arm}",
                 "checkpoint_id": checkpoint_id,
                 "case_id": case_id,
+                "experiment_id": "g7_failure_localization",
                 "group_id": group,
                 "diagnostic_arm": arm,
                 "inject_stages": stages,
@@ -173,6 +174,23 @@ def test_g7_formal_preflight_rejects_wrong_source_arm_group_mapping() -> None:
     assert report["formal_run_allowed_by_protocol"] is False
     assert "g7_plan_group_arm_mismatch" in report["errors"]
     assert report["counts"]["g7_plan_group_arm_mismatches"] == mismatched_run_ids
+
+
+def test_g7_formal_preflight_rejects_missing_or_wrong_experiment_identity() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    plan[0].pop("experiment_id")
+    plan[1]["experiment_id"] = "different_experiment"
+
+    report = protocol_preflight(
+        [public], [label], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_g7_plan_metadata" in report["errors"]
+    assert report["counts"]["invalid_g7_plan_metadata"] == [
+        plan[0]["run_id"], plan[1]["run_id"],
+    ]
 
 
 def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
@@ -295,6 +313,7 @@ def test_g7_formal_preflight_requires_all_diagnostic_arms_per_checkpoint() -> No
           "independent_verified": True, "synthetic_demo": False}],
         [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
           "group_id": "G4", "diagnostic_arm": "D0", "inject_stages": [],
+          "experiment_id": "g7_failure_localization",
           "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
           "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
           "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
@@ -339,6 +358,7 @@ def test_g7_formal_preflight_rejects_public_plan_and_label_hash_mismatch() -> No
              "independent_verified": True, "synthetic_demo": False}
     plan = {"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
             "group_id": "G4", "diagnostic_arm": "D0", "inject_stages": [],
+            "experiment_id": "g7_failure_localization",
             "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF2",
             "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
             "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
@@ -381,6 +401,7 @@ def test_g7_formal_preflight_rejects_plan_label_eligibility_mismatch() -> None:
              "independent_verified": True, "synthetic_demo": False}
     plan = {"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
             "group_id": "G4", "diagnostic_arm": "U_ONLY", "inject_stages": ["U"],
+            "experiment_id": "g7_failure_localization",
             "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
             "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
             "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",

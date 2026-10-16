@@ -73,6 +73,7 @@ G7_SOURCE_G6_ARM_BY_GROUP = {
     "G3": "G6_A_G3_GIVEN",
     "G4": "G6_B_G4_GIVEN",
 }
+G7_EXPERIMENT_ID = "g7_failure_localization"
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -92,7 +93,7 @@ G7_LABEL_METADATA_FIELDS = (
     "verifier_ref",
 )
 G7_PLAN_METADATA_FIELDS = (
-    "paired_set_id", "theory_family_id", "cf_type", "split", "source_g6_arm_id",
+    "experiment_id", "paired_set_id", "theory_family_id", "cf_type", "split", "source_g6_arm_id",
     "source_run_id", "source_checkpoint_id", "profile", "protocol_version",
     "retry_scope", "retry_protocol",
 )
@@ -489,6 +490,7 @@ def _formal_label_contract_valid(row: dict[str, Any]) -> bool:
 def _formal_plan_contract_valid(row: dict[str, Any]) -> bool:
     return (
         all(_valid_identifier(row.get(field)) for field in G7_PLAN_METADATA_FIELDS)
+        and row.get("experiment_id") == G7_EXPERIMENT_ID
         and isinstance(row.get("replicate"), int)
         and not isinstance(row.get("replicate"), bool)
         and row.get("replicate") >= 0

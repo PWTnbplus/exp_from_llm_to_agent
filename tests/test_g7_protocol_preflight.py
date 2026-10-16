@@ -33,6 +33,7 @@ def _label(public: dict | None = None) -> dict:
 def _plan_row(run_id: str, arm: str, group: str, stages: list[str]) -> dict:
     return {
         "run_id": run_id, "checkpoint_id": "cp-1", "case_id": "case-1",
+        "experiment_id": "g7_failure_localization",
         "group_id": group, "diagnostic_arm": arm, "inject_stages": stages,
         "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
         "split": "final_test",
