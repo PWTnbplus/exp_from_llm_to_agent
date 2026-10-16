@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:54:56+00:00",
+  "updated_at": "2026-10-16T07:55:39+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -449,7 +449,7 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made.",
+      "evidence": "Cycle 61: future G7 trace identity/collision guards pass 53 focused tests and 185 host tests. Re-auditing the immutable corrected run found 1288/1288 state traces and 184/184 checkpoint traces without event/step identities, invalidated all 20 previously Q-valid rows by trace review, retained 3 provider_error states, and confirmed confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made.",
       "remediation": "Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.",
       "first_seen": "2026-10-14T16:31:46+00:00",
       "last_seen": "2026-10-16T07:54:50+00:00",
@@ -624,6 +624,12 @@
           "event": "BLOCKED",
           "reason": "Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.",
           "evidence": "Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made."
+        },
+        {
+          "time": "2026-10-16T07:55:39+00:00",
+          "event": "BLOCKED",
+          "reason": "Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.",
+          "evidence": "Cycle 61: future G7 trace identity/collision guards pass 53 focused tests and 185 host tests. Re-auditing the immutable corrected run found 1288/1288 state traces and 184/184 checkpoint traces without event/step identities, invalidated all 20 previously Q-valid rows by trace review, retained 3 provider_error states, and confirmed confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made."
         }
       ]
     },

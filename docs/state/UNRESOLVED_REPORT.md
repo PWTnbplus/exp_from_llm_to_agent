@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:54:56+00:00
+生成时间（UTC）：2026-10-16T07:55:39+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -59,7 +59,7 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made.
+- 证据：Cycle 61: future G7 trace identity/collision guards pass 53 focused tests and 185 host tests. Re-auditing the immutable corrected run found 1288/1288 state traces and 184/184 checkpoint traces without event/step identities, invalidated all 20 previously Q-valid rows by trace review, retained 3 provider_error states, and confirmed confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made.
 - 必需修复：Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.
 - 尝试次数：21
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
