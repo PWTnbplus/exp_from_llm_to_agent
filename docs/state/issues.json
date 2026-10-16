@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T15:59:19+00:00",
+  "updated_at": "2026-10-16T16:02:11+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1736,6 +1736,38 @@
           "evidence": "The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs."
         }
       ]
+    },
+    {
+      "id": "ISSUE-5984ec2cef1c",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted replacement case in the frozen public/private set",
+      "status": "VERIFIED",
+      "evidence": "The strict contract now compares the public case set with the frozen 92-case corrected set. The replacement-case test passes; focused G7 tests pass 56/56; the full suite passes 246/246; immutable preflight and an independent data-only scan report the exact case set with no missing or extra IDs.",
+      "remediation": "Freeze and enforce the exact audited 92-case corrected public set and add an adversarial replacement-case regression test.",
+      "first_seen": "2026-10-16T16:02:06+00:00",
+      "last_seen": "2026-10-16T16:02:11+00:00",
+      "source": "docs/audits/cycle-20261016T160121Z-91/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T16:02:11+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The strict contract now compares the public case set with the frozen 92-case corrected set. The replacement-case test passes; focused G7 tests pass 56/56; the full suite passes 246/246; immutable preflight and an independent data-only scan report the exact case set with no missing or extra IDs.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T16:02:06+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T160121Z-91/audit.json"
+        },
+        {
+          "time": "2026-10-16T16:02:11+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The strict contract now compares the public case set with the frozen 92-case corrected set. The replacement-case test passes; focused G7 tests pass 56/56; the full suite passes 246/246; immutable preflight and an independent data-only scan report the exact case set with no missing or extra IDs."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1842,7 +1874,8 @@
     "docs/audits/cycle-20261016T154007Z-87/audit.json",
     "docs/audits/cycle-20261016T154759Z-88/audit.json",
     "docs/audits/cycle-20261016T155220Z-89/audit.json",
-    "docs/audits/cycle-20261016T155738Z-90/audit.json"
+    "docs/audits/cycle-20261016T155738Z-90/audit.json",
+    "docs/audits/cycle-20261016T160121Z-91/audit.json"
   ],
   "current_focus": null
 }

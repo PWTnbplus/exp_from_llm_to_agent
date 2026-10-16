@@ -1,0 +1,24 @@
+{
+  "review_version": "g7-formal-case-denominator-review-v1",
+  "reviewer": "independent read-only G7 public/private identity review",
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "findings": [
+    {
+      "id": "ISSUE-5984ec2cef1c",
+      "fingerprint": "g7-formal-case-denominator-v1",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted replacement case in the frozen public/private set",
+      "evidence": "The pre-repair mutation replaced one immutable case ID, synchronized its public label hash and plan mappings, and was accepted while retaining 92 rows, exact public/label equality, 23 families, CF1-CF4 coverage, and complete checkpoints.",
+      "remediation": "Freeze and enforce the exact audited 92-case corrected public set and add an adversarial replacement-case regression test."
+    }
+  ],
+  "resolutions": [
+    {
+      "id": "ISSUE-5984ec2cef1c",
+      "verdict": "VERIFIED",
+      "evidence": "The strict contract now compares the public case set with the frozen 92-case corrected set. The replacement-case test passes; focused G7 tests pass 56/56; the full suite passes 246/246; immutable preflight and an independent data-only scan report the exact case set with no missing or extra IDs.",
+      "reason": "Local formal case-identity defect fixed; provider, provenance, mathematical, statistical, and scientific-release gates remain external or blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T15:59:19+00:00
+生成时间（UTC）：2026-10-16T16:02:11+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**27**
+- 已验证修复：**28**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -110,6 +110,7 @@
 - **ISSUE-136c15318a59**（P1）：G7 formal preflight accepted incomplete public-label, family-CF, and retry-scope contracts——`E:/resources/python/python.exe -X utf8 -m pytest -q`；Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes.
 - **ISSUE-95600eba9ce3**（P1）：G7 formal preflight accepted colliding source_run_id references——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The strict formal-input contract now rejects source_run_id collisions while preserving the documented shared source-checkpoint fork boundary. The adversarial collision test passes; focused G7 tests pass 54/54; the full repository suite passes 244/244. Strict immutable preflight reports no source-run collisions, no source-checkpoint/group-arm/label-set/family-layout errors, 1288 plan rows, and 184 checkpoints. An independent scan finds 1288 unique source_run_id values for 1288 plan rows.
 - **ISSUE-e83dea5cdd11**（P1）：G7 formal preflight accepted replacement theory family in the corrected denominator——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs.
+- **ISSUE-5984ec2cef1c**（P1）：G7 formal preflight accepted replacement case in the frozen public/private set——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The strict contract now compares the public case set with the frozen 92-case corrected set. The replacement-case test passes; focused G7 tests pass 56/56; the full suite passes 246/246; immutable preflight and an independent data-only scan report the exact case set with no missing or extra IDs.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

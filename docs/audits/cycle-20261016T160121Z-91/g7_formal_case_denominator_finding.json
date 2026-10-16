@@ -1,0 +1,8 @@
+{
+  "id": "ISSUE-5984ec2cef1c",
+  "fingerprint": "g7-formal-case-denominator-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight accepted replacement case in the frozen public/private set",
+  "evidence": "Before repair, replacing one formal case_id with a new ID and synchronizing its label hash and every plan row still passed strict formal preflight with complete public/label equality, family CF coverage, and pair/checkpoint coverage.",
+  "remediation": "Freeze and enforce the exact audited 92-case corrected public set and add an adversarial replacement-case regression test."
+}

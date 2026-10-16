@@ -540,6 +540,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit files: `docs/audits/cycle-20261016T155738Z-90/audit.json`, `g7_formal_family_denominator_finding.json`, and `g7_formal_family_denominator_review.json`.
 - Local repair commit: `1f3cda2`; audit/state commit: `04b8958`; delivery-blocker state commit: `7e2693a`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
 
+## Cycle 91 G7 frozen case-denominator identity repair (2026-10-16T16:01Z)
+
+- Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the V2 state. The formal G7 public/private input set is frozen; preserving only row count, family layout, and synchronized label/plan mappings is insufficient if a case is silently replaced.
+- Independently reproduced a local fail-open before repair: replacing one formal `case_id` with a new ID, updating its public `source_task_id`, label public hash, and every plan mapping, still returned `formal_run_allowed_by_protocol=true` and `errors=[]` with `92` public rows and complete family/checkpoint coverage.
+- Repaired `scripts/run_g7_failure_localization.py` with the exact corrected `92`-case set generated from the audited `23` families × `CF1`-`CF4`; strict preflight now reports missing/extra case IDs and rejects the mutation. Added an adversarial replacement-case test in `tests/test_g7_protocol.py`.
+- Focused G7 tests pass `56/56`; full repository suite passes `246/246`; py_compile and `git diff --check` pass.
+- Immutable strict preflight passes: `92` public cases, `92` labels, `1288` plan rows, exact case/family sets with no missing or extra IDs, every family exactly CF1-CF4, public/label equality, `1288` unique source runs, and `184` unique checkpoints. Independent read-only reconstruction reports the same zero-defect counts.
+- `ISSUE-5984ec2cef1c` is `VERIFIED` for this local frozen case-set guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T160121Z-91/audit.json`, `g7_formal_case_denominator_finding.json`, and `g7_formal_case_denominator_review.json`.
+- Local repair commit: `95a5a70`; audit/state and delivery-blocker commits are pending. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
+
 ## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
 
 - Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) together with `docs/state/gates.json`. The formal G7 input contract is the CF1-CF4 `final_test` public benchmark set; this is a precondition for any frozen provider plan, not a scientific result.
