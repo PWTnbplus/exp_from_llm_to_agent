@@ -56,13 +56,13 @@
   },
   "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
   "git": {
-    "commit": "pending-local-commit",
+    "commit": "cb8f400",
     "push_command": "git push origin autopilot/scientific-law-discovery",
-    "push_exit_code": null,
-    "push_output": "pending",
+    "push_exit_code": 128,
+    "push_output": "fatal: unable to access 'https://github.com/PWTnbplus/exp_from_llm_to_agent.git/': Failed to connect to github.com port 443 via 127.0.0.1 after 2115 ms: Could not connect to server",
     "remote_verification_command": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery",
-    "remote_verification_exit_code": null,
-    "remote_verification_output": "pending",
+    "remote_verification_exit_code": 128,
+    "remote_verification_output": "fatal: unable to access 'https://github.com/PWTnbplus/exp_from_llm_to_agent.git/': Failed to connect to github.com port 443 via 127.0.0.1 after 2102 ms: Could not connect to server",
     "remote_updated": false
   },
   "ready": false,
