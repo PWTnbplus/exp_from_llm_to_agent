@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T05:52:06+00:00",
+  "updated_at": "2026-10-16T05:59:15+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -335,12 +335,12 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "G7 preflight now handles malformed/non-string public, label, plan, run, checkpoint, and case identifiers without TypeError, writes a fail-closed report, and only constructs provider-facing maps after preflight passes. Corrected inputs pass with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero invalid IDs/contracts, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.",
-      "remediation": "Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.",
+      "evidence": "G7 preflight now enforces the frozen diagnostic-arm/stage contract: D0=empty, D1=V, D2=V+L, D3=V+L+U, L_ONLY=L, U_ONLY=U, V_ONLY=V, while permitting both observed G3 and G4 groups. The corrected plan has 1288 rows with 184 rows per arm, zero invalid plan rows, 92 public cases, 92 labels, 184 checkpoints, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.",
+      "remediation": "Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, arm-contract failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T05:52:06+00:00",
+      "last_seen": "2026-10-16T05:59:15+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
-      "attempts": 11,
+      "attempts": 12,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -425,6 +425,12 @@
           "time": "2026-10-16T05:52:06+00:00",
           "event": "IN_PROGRESS",
           "reason": "Cycle 37 made malformed/non-string G7 identifiers fail closed before provider-facing map construction; corrected inputs pass, but historical provider errors and low Q remain unresolved.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-16T05:59:15+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 38 enforced the real frozen arm-to-stage contract while allowing both observed G3/G4 groups; final preflight passes all 1288 rows, but historical provider errors and low Q remain unresolved.",
           "evidence": ""
         }
       ]
@@ -642,7 +648,8 @@
     "docs/audits/cycle-20261016T053748Z-34/audit.json",
     "docs/audits/cycle-20261016T054256Z-35/audit.json",
     "docs/audits/cycle-20261016T060000Z-36/audit.json",
-    "docs/audits/cycle-20261016T055122Z-37/audit.json"
+    "docs/audits/cycle-20261016T055122Z-37/audit.json",
+    "docs/audits/cycle-20261016T055621Z-38/audit.json"
   ],
   "current_focus": null
 }

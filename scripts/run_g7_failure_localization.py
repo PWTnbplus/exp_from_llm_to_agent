@@ -61,6 +61,15 @@ FORMAT_RETRY_INSTRUCTION = (
 )
 G7_GROUPS = {"G3", "G4"}
 G7_STAGES = {"V", "L", "U"}
+G7_ARM_CONTRACT = {
+    "D0": (),
+    "D1": ("V",),
+    "D2": ("V", "L"),
+    "D3": ("V", "L", "U"),
+    "L_ONLY": ("L",),
+    "U_ONLY": ("U",),
+    "V_ONLY": ("V",),
+}
 
 
 def utc_now() -> str:
@@ -247,6 +256,15 @@ def protocol_preflight(
             and len(stages) == len(set(stages))
             and set(stages).issubset(G7_STAGES)
         )
+        arm_name = row.get("diagnostic_arm")
+        arm_contract = G7_ARM_CONTRACT.get(arm_name) if isinstance(arm_name, str) else None
+        arm_matches = (
+            arm_contract is not None
+            and isinstance(row.get("group_id"), str)
+            and row.get("group_id") in G7_GROUPS
+            and stages_valid
+            and tuple(stages) == arm_contract
+        )
         if (
             any(field in row and not _valid_identifier(row.get(field))
                 for field in ("run_id", "checkpoint_id", "case_id"))
@@ -255,6 +273,7 @@ def protocol_preflight(
             or row.get("group_id") not in G7_GROUPS
             or not isinstance(row.get("diagnostic_arm"), str)
             or not stages_valid
+            or not arm_matches
         ):
             invalid_plan_rows.append(run_id)
     invalid_label_cases = sorted({
