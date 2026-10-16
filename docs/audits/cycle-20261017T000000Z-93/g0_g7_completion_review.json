@@ -1,0 +1,18 @@
+{
+  "review_id": "cycle-20261017T000000Z-93-read-only-review",
+  "reviewer_mode": "independent_read_only_reproduction",
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "verified": [
+    "Local code/test contracts are green.",
+    "Correct frozen G7 input selection and hashes are reproducible.",
+    "G6/G7 persisted row counts, failure accounting, retry separation, and non-release flags are reproducible."
+  ],
+  "not_verified": [
+    "Upstream provenance and licensing against the remote.",
+    "Real provider identity, billing, immutable weights, and paid authorization.",
+    "Independent mathematical/statistical validity and dependency-edge truth.",
+    "Scientific superiority, causal mechanism, or release claim."
+  ],
+  "release_decision": "BLOCKED",
+  "review_note": "A green local suite verifies engineering contracts only; it cannot replace the missing external evidence required by the V2 skill and the G0-G7 design boundary."
+}

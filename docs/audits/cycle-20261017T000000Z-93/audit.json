@@ -1,0 +1,106 @@
+{
+  "cycle": "20261017T000000Z-93",
+  "audit_scope": "final_local_g0_g7_integrity_review_after_cycle_92",
+  "status": "BLOCKED_NO_LOCAL_REPAIR_REMAINING",
+  "scientific_release_allowed": false,
+  "user_owned_untracked_preserved": [
+    "research_data_summary_G0_G7/"
+  ],
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "skill_reference": ".agents/skills/scientific-law-recovery/SKILL.md",
+  "verification": {
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "247 passed in 21.63s"
+    },
+    "focused_g0_g7_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7*.py tests/test_gate_attestation.py tests/test_statistics.py (PowerShell-expanded explicit file list)",
+      "result": "113 passed in 11.87s"
+    },
+    "strict_g7_formal_preflight": {
+      "public": "results/g7_failure_localization/formal-20261014T030000Z/g7_public_cases.jsonl",
+      "labels": "results/g7_failure_localization/formal-20261014T030000Z/g7_vlu_private.jsonl",
+      "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+      "formal_run_allowed_by_protocol": true,
+      "errors": [],
+      "public_cases": 92,
+      "labels": 92,
+      "plan_rows": 1288,
+      "unique_checkpoint_ids": 184,
+      "duplicate_run_ids": 0,
+      "duplicate_public_case_ids": 0,
+      "duplicate_label_case_ids": 0,
+      "canonical_input_hash_mismatches": [],
+      "canonical_hashes": {
+        "public": "b0ff3d3c9178cc068b0399f073981f990e313677536b6791cc170ecd2c6db597",
+        "labels": "bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70",
+        "plan": "a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3"
+      },
+      "raw_file_hashes": {
+        "public": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+        "labels": "29782338db2a76a7c854cacb8c68479cb6a47241caddadc26ba18393cc0e7490",
+        "plan": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      }
+    },
+    "independent_g0_g8_audit": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g0_g8_integrity.py --root . --out <temporary-file>",
+      "exit_code": 0,
+      "status": "COMPLETED_WITH_EXTERNAL_REVIEW_CAVEATS",
+      "scientific_truth_decision_made": false
+    },
+    "independent_g7_failure_audit": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g7_failure_taxonomy.py --root . --out <temporary-file>",
+      "exit_code": 0,
+      "status": "COMPLETED_WITH_G7_PROTOCOL_CAVEAT",
+      "original": {
+        "plan_rows": 1288,
+        "completed": 993,
+        "checkpoint_missing": 217,
+        "provider_error": 78,
+        "q_valid": 3,
+        "routing_metadata_hits": {
+          "cf_type": 2960,
+          "theory_family_id": 2960
+        },
+        "forbidden_verifier_ref_hits": 2083
+      },
+      "protocol_corrected": {
+        "plan_rows": 1288,
+        "completed": 1285,
+        "provider_error": 3,
+        "q_valid": 20,
+        "routing_metadata_hits": {},
+        "forbidden_verifier_ref_hits": 2771,
+        "format_retry_model_requests": 302
+      },
+      "scientific_truth_decision_made": false
+    },
+    "independent_g6_review": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/review_g6_release.py --out results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z --report <temporary-file>",
+      "exit_code": 0,
+      "structural_review_pass": true,
+      "scientific_release_allowed": false,
+      "counts": {
+        "plan": 552,
+        "responses": 552,
+        "public": 92,
+        "private": 92,
+        "handoff": 552
+      },
+      "revision_valid_count": 0
+    }
+  },
+  "formal_input_clarification": {
+    "observation": "The older formal-20261014T030000Z g7_run_plan.jsonl and g7_run_plan_final_check.jsonl are not the frozen protocol-corrected formal plan; their canonical plan hash is b21541e03db4bda7d3f11ede72e5f6f14834626fedc3f594ed35e216561dd2dd and they fail the strict retry-scope/hash gate.",
+    "resolution": "No code change is needed: the formal plan is explicitly the separately frozen protocol-corrected g7_full_retry_plan.jsonl, whose canonical hash is a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3 and which passes strict preflight.",
+    "scientific_claim": false
+  },
+  "remaining_blockers": [
+    "G0 upstream NewtonBench provenance/license and remote delivery cannot be independently verified.",
+    "Paid provider execution remains unauthorized and lacks positive hard USD cap, immutable model evidence, independent billing, and isolation review.",
+    "Independent mathematical/statistical review is absent.",
+    "Dependency/state edges and valid independently verified Q/L/U evidence are absent; historical contaminated traces remain non-confirmatory.",
+    "GitHub push and remote branch verification remain blocked by the configured proxy/network."
+  ],
+  "decision": "Do not run a provider, do not synthesize missing results, do not mark G0/G6/G7 PASS, and do not make a scientific superiority or causal claim."
+}

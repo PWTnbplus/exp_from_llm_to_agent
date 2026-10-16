@@ -1,0 +1,25 @@
+{
+  "finding_id": "cycle-20261017T000000Z-93-final-integrity",
+  "severity": "P1",
+  "status": "BLOCKED_EXTERNAL",
+  "title": "Local G0-G7 repair surface is complete; formal scientific release remains externally blocked",
+  "evidence": [
+    "Full host suite passed 247/247.",
+    "Focused G7, gate-attestation, and statistics suite passed 113/113.",
+    "The correct protocol-corrected frozen G7 plan passed strict preflight with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, and no errors or canonical hash mismatches.",
+    "Independent G0-G8 lineage audit and independent G6 structural release review both completed successfully while retaining scientific_release_allowed=false.",
+    "Independent G7 forensic review retained provider failures and invalid Q rows, found no routing metadata in the protocol-corrected retry, and kept historical contaminated traces non-confirmatory."
+  ],
+  "not_a_resolution": [
+    "No external upstream verification was fabricated.",
+    "No paid provider request was made.",
+    "No mathematical/statistical review was represented as completed.",
+    "No G0/G6/G7 gate was changed to PASS."
+  ],
+  "required_next_evidence": [
+    "Explicit paid-run authorization with provider/model, frozen scope, and positive hard USD ceiling.",
+    "Independent immutable model or gateway-weight fingerprint and billing export.",
+    "Independent isolation, mathematical, and statistical reviews.",
+    "Successful upstream provenance verification and verified feature-branch push."
+  ]
+}
