@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T15:49:16+00:00",
+  "updated_at": "2026-10-16T15:53:22+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1660,6 +1660,38 @@
           "evidence": "Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes."
         }
       ]
+    },
+    {
+      "id": "ISSUE-95600eba9ce3",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted colliding source_run_id references",
+      "status": "VERIFIED",
+      "evidence": "The strict formal-input contract now rejects source_run_id collisions while preserving the documented shared source-checkpoint fork boundary. The adversarial collision test passes; focused G7 tests pass 54/54; the full repository suite passes 244/244. Strict immutable preflight reports no source-run collisions, no source-checkpoint/group-arm/label-set/family-layout errors, 1288 plan rows, and 184 checkpoints. An independent scan finds 1288 unique source_run_id values for 1288 plan rows.",
+      "remediation": "Reject source_run_id collisions in the strict formal-input contract and test the mutation.",
+      "first_seen": "2026-10-16T15:53:17+00:00",
+      "last_seen": "2026-10-16T15:53:22+00:00",
+      "source": "docs/audits/cycle-20261016T155220Z-89/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T15:53:22+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The strict formal-input contract now rejects source_run_id collisions while preserving the documented shared source-checkpoint fork boundary. The adversarial collision test passes; focused G7 tests pass 54/54; the full repository suite passes 244/244. Strict immutable preflight reports no source-run collisions, no source-checkpoint/group-arm/label-set/family-layout errors, 1288 plan rows, and 184 checkpoints. An independent scan finds 1288 unique source_run_id values for 1288 plan rows.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T15:53:17+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T155220Z-89/audit.json"
+        },
+        {
+          "time": "2026-10-16T15:53:22+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The strict formal-input contract now rejects source_run_id collisions while preserving the documented shared source-checkpoint fork boundary. The adversarial collision test passes; focused G7 tests pass 54/54; the full repository suite passes 244/244. Strict immutable preflight reports no source-run collisions, no source-checkpoint/group-arm/label-set/family-layout errors, 1288 plan rows, and 184 checkpoints. An independent scan finds 1288 unique source_run_id values for 1288 plan rows."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1764,7 +1796,8 @@
     "docs/audits/cycle-20261016T095836Z-85/audit.json",
     "docs/audits/cycle-20261016T100123Z-86/audit.json",
     "docs/audits/cycle-20261016T154007Z-87/audit.json",
-    "docs/audits/cycle-20261016T154759Z-88/audit.json"
+    "docs/audits/cycle-20261016T154759Z-88/audit.json",
+    "docs/audits/cycle-20261016T155220Z-89/audit.json"
   ],
   "current_focus": null
 }

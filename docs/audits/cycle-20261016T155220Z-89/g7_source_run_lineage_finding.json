@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-95600eba9ce3",
+  "fingerprint": "g7-formal-source-run-lineage-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight accepted colliding source_run_id references",
+  "evidence": "Before repair, changing every source_run_id in the immutable formal-plan-shaped input to the same nonempty identifier still returned formal_run_allowed_by_protocol=true with errors=[] under the strict formal-input preflight. The actual frozen retry plan has one distinct source_run_id per plan row, as required by the source-plan builder and audit manifest.",
+  "remediation": "Require unique source_run_id values across formal retry rows, retain shared source_checkpoint_id only at the intended case/group fork boundary, add an adversarial collision test, and independently verify the immutable plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

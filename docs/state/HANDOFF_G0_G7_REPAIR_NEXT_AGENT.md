@@ -518,6 +518,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `d9e6b7f`; audit/state commit: `8a7468d`; delivery-blocker state commit: `b41043c`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
+## Cycle 89 G7 source-run lineage repair (2026-10-16T15:52Z)
+
+- Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the V2 state. The formal G7 plan must retain auditable source-run lineage for every diagnostic row; this is a protocol/input condition, not a scientific result. The source checkpoint may remain shared per case/group as repaired in cycle 84, while source run IDs must remain distinct per plan row.
+- Independently reproduced a local fail-open before repair: setting every complete formal plan row's `source_run_id` to the same valid identifier still returned `formal_run_allowed_by_protocol=true`, `errors=[]`, and `duplicate_run_ids=0` under the strict formal-input preflight.
+- Repaired `scripts/run_g7_failure_localization.py` to reject duplicate `source_run_id` values in the strict formal contract with `g7_formal_source_run_id_collision`; updated complete-plan fixtures to use unique source-run IDs per diagnostic arm and added an adversarial collision regression test.
+- Focused G7 tests pass `54/54`; full repository suite passes `244/244`; py_compile and `git diff --check` pass.
+- Immutable strict formal preflight passes: `92` public cases, `92` labels, `1288` plan rows, `23` families, exact CF1-CF4/final-test family coverage, exact public/label sets, fixed retry scope, no source-run collisions, no mixed source checkpoints, and `184` unique case/group checkpoints. Independent read-only scan confirms `1288` unique source-run IDs.
+- `ISSUE-95600eba9ce3` is `VERIFIED` for this local source-run lineage guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T155220Z-89/audit.json`, `g7_source_run_lineage_finding.json`, and `g7_source_run_lineage_review.json`.
+- Local repair commit: `37acedd`; audit/state and delivery-blocker commits are pending. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
+
 ## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
 
 - Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) together with `docs/state/gates.json`. The formal G7 input contract is the CF1-CF4 `final_test` public benchmark set; this is a precondition for any frozen provider plan, not a scientific result.
