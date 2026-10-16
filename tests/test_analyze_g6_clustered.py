@@ -23,7 +23,7 @@ def _plan() -> list[dict]:
 
 
 def _private() -> list[dict]:
-    return [{"case_id": "c1", "expected_decision": "MAINTAIN"}]
+    return [{"case_id": "c1", "cf_type": "CF1", "expected_decision": "MAINTAIN"}]
 
 
 def _responses() -> list[dict]:
@@ -82,6 +82,20 @@ def test_failed_response_with_matching_decision_is_not_correct() -> None:
     assert not analysis.response_matches_oracle(response, _private()[0])
 
 
+@pytest.mark.parametrize("replicate", ["0", True])
+def test_non_integer_replicate_is_rejected(replicate: object) -> None:
+    plan = _plan()
+    plan[0]["replicate"] = replicate
+    with pytest.raises(SystemExit, match="invalid plan replicate"):
+        analysis.validate_statistical_inputs(plan, _private(), _responses())
+
+
+def test_private_cf_type_must_match_plan() -> None:
+    private = [{"case_id": "c1", "cf_type": "CF2", "expected_decision": "MAINTAIN"}]
+    with pytest.raises(SystemExit, match="private cf_type mismatch"):
+        analysis.validate_statistical_inputs(_plan(), private, _responses())
+
+
 def test_missing_and_unexpected_responses_are_rejected() -> None:
     with pytest.raises(SystemExit, match="missing matched response run_id"):
         analysis.validate_statistical_inputs(_plan(), _private(), _responses()[:1])
@@ -105,7 +119,7 @@ def test_formal_layout_rejects_missing_counterfactual_type() -> None:
 def test_unexpected_private_case_is_rejected() -> None:
     with pytest.raises(SystemExit, match="unexpected private case_id"):
         analysis.validate_statistical_inputs(
-            _plan(), _private() + [{"case_id": "extra", "expected_decision": "MAINTAIN"}], _responses()
+            _plan(), _private() + [{"case_id": "extra", "cf_type": "CF1", "expected_decision": "MAINTAIN"}], _responses()
         )
 
 

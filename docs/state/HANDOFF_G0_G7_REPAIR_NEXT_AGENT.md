@@ -386,5 +386,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `9` open/blocked/unverified issues and `10` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 74 G6 typed-schema and oracle-CF alignment repair (2026-10-16T08:59Z)
+
+- Compared the G6 input contract with the user design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the data report: frozen plan identity fields are typed, four CF variants and their private oracle rows must remain aligned, and replicates are repeated observations within family clusters.
+- Independently reproduced two fail-open cases: the old `int(row["replicate"])` coercion accepted string/boolean replicate values, and a private oracle with `cf_type=CF2` was accepted for a plan case in `CF1`.
+- Repaired `validate_statistical_inputs` to require nonempty typed plan identifiers, integer non-boolean replicate values, same-case CF consistency, valid private oracle CF/decision fields, and private-oracle CF equality with the plan.
+- Added adversarial tests for string/boolean replicates and private CF mismatch. Focused G6 input tests: `19 passed`; full host suite: `220 passed`; `git diff --check`: PASS.
+- Read-only validation of the immutable corrected G6 inputs passes: `552` plan rows, `92` private rows, `552` responses, replicate values `[0,1,2]`, all response statuses `completed`, and no schema/alignment errors.
+- `ISSUE-0b7d3f91a2c4` is `VERIFIED` for this local schema/alignment guard only. `ISSUE-000000000004` remains `BLOCKED`: independent formal statistical/mathematical review is still absent, so no confirmatory inference or scientific release is allowed.
+- Audit files: `docs/audits/cycle-20261016T085921Z-74/audit.json`, `g6_schema_alignment_finding.json`, and `g6_schema_alignment_review.json`.
+- Current ledger after this cycle: `10` open/blocked/unverified issues and `10` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

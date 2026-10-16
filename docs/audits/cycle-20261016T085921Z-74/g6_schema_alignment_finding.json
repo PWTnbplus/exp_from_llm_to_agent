@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 schema-alignment review",
+  "findings": [
+    {
+      "id": "ISSUE-0b7d3f91a2c4",
+      "severity": "P1",
+      "title": "G6 statistical input validation coerced malformed replicate and oracle alignment fields",
+      "evidence": "Before this cycle, analyze_g6_clustered.py applied int(row['replicate']), so a string replicate or boolean could be silently coerced into a formal arm key. It also did not validate private-oracle cf_type against the plan's case CF. A read-only synthetic probe with a malformed replicate was accepted, and a private row with cf_type=CF2 for a plan case in CF1 was accepted. The design requires typed frozen-plan replicate fields and paired counterfactual/oracle identities.",
+      "remediation": "Require typed nonempty plan identifiers and integer non-boolean replicate values; reject inconsistent CF mappings within a case; require private oracle case_id/cf_type/expected_decision fields to be valid and aligned with the plan before summaries. Do not rewrite historical artifacts."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

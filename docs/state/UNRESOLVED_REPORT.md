@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T08:57:41+00:00
+生成时间（UTC）：2026-10-16T08:59:44+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**10**
+- 已验证修复：**11**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -93,6 +93,7 @@
 - **ISSUE-4c7e2a91d6f0**（P1）：G7 model-output stage parser accepted malformed nested V/L/U fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py`；The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory.
 - **ISSUE-9e31a7c4b2d8**（P1）：G6 statistical pairing did not enforce same task lineage across G3 and G4——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214.
 - **ISSUE-6a4e8b2c1d90**（P1）：G6 clustered analysis could count a failed response with a matching decision as correct——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects missing response status and unknown completed decisions. The independent response_matches_oracle probe returns false for provider_error with a matching decision and true only for completed with a matching decision. The immutable corrected G6 inputs pass with 552/552 responses status=completed and the full formal input validation. Focused G6 tests pass 16/16 and the full host suite passes 217/217.
+- **ISSUE-0b7d3f91a2c4**（P1）：G6 statistical input validation coerced malformed replicate and oracle alignment fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects string/boolean replicate probes and rejects a private CF mismatch against the plan. It also enforces nonempty typed plan identifiers, valid private CF/decision fields, and same-case CF consistency. The immutable corrected inputs pass formal validation with 552 plan rows, 92 private rows, 552 responses, replicate values [0,1,2], and all registered statuses/decisions. Focused G6 tests pass 19/19 and the full host suite passes 220/220.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

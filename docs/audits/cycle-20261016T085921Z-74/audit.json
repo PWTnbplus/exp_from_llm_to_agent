@@ -1,0 +1,82 @@
+{
+  "cycle": "20261016T085921Z-74",
+  "scope": "G6 statistical input type and private-oracle CF alignment guard",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:327-362",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:285-290",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:568-585,606-615"
+    ],
+    "relevant_controls_reviewed": [
+      "A frozen G6 plan contains typed run/case/pair/family/CF/replicate/group identity fields.",
+      "The four counterfactual versions and private oracle rows must refer to the same case/CF lineage.",
+      "Replicate rows are repeated observations within theory-family clusters, not new independent laws."
+    ],
+    "alignment_conclusion": "The repaired validator now rejects type coercion and oracle/plan CF misalignment before the family-clustered paired analysis."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only probes using replicate='0' or True and private case cf_type=CF2 while the plan case is CF1",
+      "result": "FAIL_OPEN: malformed typed/alignment fields were accepted"
+    },
+    "after_repair": {
+      "command": "Read-only invalid replicate, invalid identifier, and private CF mismatch probes",
+      "result": "All malformed inputs fail closed with explicit schema/alignment errors"
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/analyze_g6_clustered.py"],
+    "tests_added_or_changed": ["tests/test_analyze_g6_clustered.py"],
+    "change": "Added strict nonempty plan identity checks, integer/non-boolean replicate checks, same-case CF consistency, and private-oracle CF/decision alignment checks.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+      "result": "19 passed in 0.20s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "220 passed in 23.51s"
+    },
+    "real_corrected_input_probe": {
+      "command": "Read-only validate_statistical_inputs on corrected G6 plan/private/responses with formal dimensions",
+      "result": "PASS: 552 plan rows, 92 private rows, 552 response rows, replicate values [0,1,2], response status completed, and no schema/alignment error"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G6 schema-alignment review",
+    "findings": [
+      {
+        "id": "ISSUE-0b7d3f91a2c4",
+        "severity": "P1",
+        "title": "G6 statistical input validation coerced malformed replicate and oracle alignment fields",
+        "evidence": "The pre-repair validator coerced replicate through int() and did not compare private oracle cf_type with the plan case CF.",
+        "remediation": "Reject malformed typed fields and private-oracle CF/decision misalignment before analysis."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-0b7d3f91a2c4",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "This is a local input-contract repair only; provider authorization, provenance, independent statistical/mathematical/dependency review, historical G7 validity, and remote delivery remain unresolved."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "bca20fc",
+    "remote_updated": false,
+    "note": "Commit and push status will be recorded after the audit/state update; no remote update is presumed."
+  }
+}

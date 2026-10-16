@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 schema-alignment review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-0b7d3f91a2c4",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired validator rejects string/boolean replicate probes and rejects a private CF mismatch against the plan. It also enforces nonempty typed plan identifiers, valid private CF/decision fields, and same-case CF consistency. The immutable corrected inputs pass formal validation with 552 plan rows, 92 private rows, 552 responses, replicate values [0,1,2], and all registered statuses/decisions. Focused G6 tests pass 19/19 and the full host suite passes 220/220.",
+      "reason": "The local G6 schema and oracle-alignment guard is independently verified; formal statistical/mathematical review and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

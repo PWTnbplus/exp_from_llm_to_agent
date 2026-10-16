@@ -44,12 +44,26 @@ def validate_statistical_inputs(
 ) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     """Reject collisions and, for formal runs, any incomplete frozen layout."""
 
+    plan_cf_by_case: dict[str, str] = {}
+    for row in plan:
+        for field in ("run_id", "case_id", "paired_set_id", "theory_family_id", "cf_type", "group_id"):
+            value = row.get(field)
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit(f"invalid plan {field} for run_id: {row.get('run_id')!r}")
+        replicate = row.get("replicate")
+        if isinstance(replicate, bool) or not isinstance(replicate, int):
+            raise SystemExit(f"invalid plan replicate for run_id: {row.get('run_id')!r}: {replicate!r}")
+        prior_cf_type = plan_cf_by_case.get(row["case_id"])
+        if prior_cf_type is not None and prior_cf_type != row["cf_type"]:
+            raise SystemExit(f"plan case_id maps to multiple cf_type values: {row['case_id']!r}")
+        plan_cf_by_case[row["case_id"]] = row["cf_type"]
+
     plan_by_run = _index_unique(plan, lambda row: row["run_id"], "plan run_id")
     seen_arm_keys: set[tuple[Any, ...]] = set()
     pair_lineage: dict[tuple[Any, ...], dict[str, tuple[str, str]]] = defaultdict(dict)
     for row in plan:
         arm_key = (
-            row["theory_family_id"], row["cf_type"], int(row["replicate"]), row["group_id"]
+            row["theory_family_id"], row["cf_type"], row["replicate"], row["group_id"]
         )
         if arm_key in seen_arm_keys:
             raise SystemExit(f"duplicate plan family/CF/replicate/arm: {arm_key!r}")
@@ -71,6 +85,18 @@ def validate_statistical_inputs(
                 f"G3={g3_lineage!r} G4={g4_lineage!r}"
             )
 
+    for row in private_rows:
+        case_id = row.get("case_id")
+        if not isinstance(case_id, str) or not case_id.strip():
+            raise SystemExit(f"invalid private case_id: {case_id!r}")
+        cf_type = row.get("cf_type")
+        if cf_type not in FORMAL_VERIFIED23_CF_TYPES:
+            raise SystemExit(f"invalid private cf_type for case_id: {case_id!r}: {cf_type!r}")
+        if row.get("expected_decision") not in G6_DECISIONS:
+            raise SystemExit(
+                f"invalid private expected_decision for case_id: {case_id!r}: "
+                f"{row.get('expected_decision')!r}"
+            )
     private = _index_unique(private_rows, lambda row: row["case_id"], "private case_id")
     responses = _index_unique(response_rows, lambda row: row["run_id"], "response run_id")
     missing_response_ids = sorted(set(plan_by_run) - set(responses))
@@ -94,12 +120,17 @@ def validate_statistical_inputs(
     extra_cases = sorted(set(private) - {row["case_id"] for row in plan})
     if extra_cases:
         raise SystemExit(f"unexpected private case_id: {extra_cases!r}")
+    private_cf_mismatches = sorted(
+        case_id for case_id, oracle in private.items() if oracle["cf_type"] != plan_cf_by_case[case_id]
+    )
+    if private_cf_mismatches:
+        raise SystemExit(f"private cf_type mismatch for case_id: {private_cf_mismatches!r}")
     if any(value is not None for value in (expected_families, expected_cf_types, expected_replicates, expected_groups)):
         if None in (expected_families, expected_cf_types, expected_replicates, expected_groups):
             raise ValueError("formal statistical layout requires all expected dimensions")
         family_ids = {row["theory_family_id"] for row in plan}
         cf_types = {row["cf_type"] for row in plan}
-        replicates = {int(row["replicate"]) for row in plan}
+        replicates = {row["replicate"] for row in plan}
         groups = {row["group_id"] for row in plan}
         expected_cf_types = frozenset(expected_cf_types)
         expected_replicates = frozenset(expected_replicates)
@@ -210,7 +241,7 @@ def main() -> int:
         oracle = private.get(row["case_id"])
         if response is None or oracle is None:
             raise SystemExit(f"missing matched record: {row['run_id']}")
-        key = (row["theory_family_id"], row["cf_type"], int(row["replicate"]))
+        key = (row["theory_family_id"], row["cf_type"], row["replicate"])
         matched[key][row["group_id"]] = response_matches_oracle(response, oracle)
     if any(set(value) != {"G3", "G4"} for value in matched.values()):
         raise SystemExit("unmatched G3/G4 pair")
