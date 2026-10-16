@@ -148,7 +148,9 @@ def update_status(data: dict[str, Any], issue_id: str, status: str, *, reason: s
         # source of truth.
         issue['evidence'] = evidence
     issue['status'] = status
-    issue['history'].append({'time': timestamp(), 'event': status, 'reason': reason,
+    transition_time = timestamp()
+    issue['last_seen'] = transition_time
+    issue['history'].append({'time': transition_time, 'event': status, 'reason': reason,
                              'evidence': evidence[:1500]})
 
 

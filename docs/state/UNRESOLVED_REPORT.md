@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:22:41+00:00
+生成时间（UTC）：2026-10-16T09:26:29+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**15**
+- 已验证修复：**16**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -19,11 +19,11 @@
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：Cycle 78 local commit 95e104f was created; git push and git ls-remote each exited 1 because the proxy could not connect to github.com:443. Remote update is not claimed.
+- 证据：Cycle 79 repair makes each status transition refresh last_seen; the local commit remains ahead of origin because push and ls-remote cannot connect through the configured proxy.
 - 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 78 delivery verification remains externally blocked by the configured proxy
+- 阻塞原因：Cycle 79 ledger timestamp repair verified; external delivery remains blocked
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
@@ -98,6 +98,7 @@
 - **ISSUE-5f7a1c9d3e20**（P1）：G6 statistical analysis did not validate formal experiment, arm, and split identity fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.
 - **ISSUE-2d7c9a4e1f60**（P1）：G6 report table mixed formal-run metrics with the protocol-v2 artifact root——`E:/resources/python/python.exe -X utf8 -m pytest -q`；Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.
 - **ISSUE-4a8f6c2e1d90**（P1）：Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys——`python -m pytest -q`；find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes.
+- **ISSUE-7b3e9a1c5d20**（P2）：Issue status transitions did not refresh top-level last_seen——`python -m pytest -q`；update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:22:41+00:00",
+  "updated_at": "2026-10-16T09:26:28+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 78 local commit 95e104f was created; git push and git ls-remote each exited 1 because the proxy could not connect to github.com:443. Remote update is not claimed.",
+      "evidence": "Cycle 79 repair makes each status transition refresh last_seen; the local commit remains ahead of origin because push and ls-remote cannot connect through the configured proxy.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T06:50:23+00:00",
+      "last_seen": "2026-10-16T09:26:28+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 78 delivery verification remains externally blocked by the configured proxy",
+      "blocked_reason": "Cycle 79 ledger timestamp repair verified; external delivery remains blocked",
       "verification": null,
       "history": [
         {
@@ -331,6 +331,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 78 delivery verification remains externally blocked by the configured proxy",
           "evidence": "Cycle 78 local commit 95e104f was created; git push and git ls-remote each exited 1 because the proxy could not connect to github.com:443. Remote update is not claimed."
+        },
+        {
+          "time": "2026-10-16T09:26:28+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 79 ledger timestamp repair verified; external delivery remains blocked",
+          "evidence": "Cycle 79 repair makes each status transition refresh last_seen; the local commit remains ahead of origin because push and ls-remote cannot connect through the configured proxy."
         }
       ]
     },
@@ -1274,6 +1280,38 @@
           "evidence": "find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes."
         }
       ]
+    },
+    {
+      "id": "ISSUE-7b3e9a1c5d20",
+      "severity": "P2",
+      "title": "Issue status transitions did not refresh top-level last_seen",
+      "status": "VERIFIED",
+      "evidence": "update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass.",
+      "remediation": "Write one transition timestamp to both issue.last_seen and the appended status-history event.",
+      "first_seen": "2026-10-16T09:26:15+00:00",
+      "last_seen": "2026-10-16T09:26:15+00:00",
+      "source": "docs/audits/cycle-20261016T092700Z-79/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:26:15+00:00",
+        "command": "python -m pytest -q",
+        "evidence": "update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:26:15+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T092700Z-79/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:26:15+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1368,7 +1406,8 @@
     "docs/audits/cycle-20261016T090232Z-75/audit.json",
     "docs/audits/cycle-20261016T090727Z-76/audit.json",
     "docs/audits/cycle-20261016T091032Z-77/audit.json",
-    "docs/audits/cycle-20261016T094500Z-78/audit.json"
+    "docs/audits/cycle-20261016T094500Z-78/audit.json",
+    "docs/audits/cycle-20261016T092700Z-79/audit.json"
   ],
   "current_focus": null
 }

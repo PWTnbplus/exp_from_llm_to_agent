@@ -129,6 +129,16 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(issue['history'][-1]['evidence'], evidence)
         self.assertEqual(issue['status'], 'IN_PROGRESS')
 
+    def test_status_transition_updates_last_seen_with_history_timestamp(self):
+        ledger = r.new_state()
+        issue_id = r.ingest_findings(ledger, [self.finding()], source='cycle-1')[0]
+        issue = r.get_issue(ledger, issue_id)
+        issue['last_seen'] = 'stale-timestamp'
+        r.update_status(ledger, issue_id, 'BLOCKED', reason='record current blocker')
+        issue = r.get_issue(ledger, issue_id)
+        self.assertNotEqual(issue['last_seen'], 'stale-timestamp')
+        self.assertEqual(issue['last_seen'], issue['history'][-1]['time'])
+
 
 if __name__ == '__main__':
     unittest.main()

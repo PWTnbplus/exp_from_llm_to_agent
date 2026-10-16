@@ -374,6 +374,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `9` open/blocked/unverified issues and `9` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 79 V2 ledger chronology repair (2026-10-16T09:27Z)
+
+- During the post-cycle-78 state review, `ISSUE-000000000003` had a newer append-only BLOCKED history event but a stale top-level `last_seen`, weakening handoff chronology.
+- Reproduced the defect with `tests/test_recovery_state.py::RecoveryTests::test_status_transition_updates_last_seen_with_history_timestamp`: the adversarial stale-timestamp probe failed before repair.
+- Repaired `scripts/recovery_state.py::update_status` to write one `transition_time` to both `issue.last_seen` and the new history event. Added a regression test that rejects stale `last_seen` values.
+- Recovery-state tests pass `13/13`; full host suite passes `228/228`; `py_compile` and `git diff --check` pass. The actual delivery-blocker issue was transitioned once after the repair so its top-level timestamp is current.
+- `ISSUE-7b3e9a1c5d20` is `VERIFIED` for this local state-ledger consistency only. G0/G6/G7 remain `BLOCKED`; scientific release remains false; paid/provider and external provenance/statistical/math blockers are unchanged.
+- Audit files: `docs/audits/cycle-20261016T092700Z-79/audit.json`, `ledger_timestamp_finding.json`, and `ledger_timestamp_review.json`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 ## Cycle 73 G6 response-status and failure-denominator repair (2026-10-16T08:56Z)
 
 - Compared the response-analysis path with the user design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the data report: response statuses must distinguish completed and technical failures, and failures must remain in the all-planned denominator.

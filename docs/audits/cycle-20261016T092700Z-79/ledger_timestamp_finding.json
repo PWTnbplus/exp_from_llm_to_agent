@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only V2 ledger review",
+  "findings": [
+    {
+      "id": "ISSUE-7b3e9a1c5d20",
+      "severity": "P2",
+      "title": "Issue status transitions did not refresh top-level last_seen",
+      "evidence": "The status history recorded a current transition while issue.last_seen retained the previous timestamp; this was reproduced by the stale-timestamp regression probe.",
+      "remediation": "Set last_seen from the same transition timestamp used for the new history record.",
+      "scientific_truth_decision_made": false
+    }
+  ],
+  "resolutions": []
+}
