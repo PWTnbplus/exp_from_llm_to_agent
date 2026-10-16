@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T15:58:46+00:00",
+  "updated_at": "2026-10-16T15:59:19+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 89 commits 37acedd and 64e7f3a are local; git push and git ls-remote both exited 1 because the configured proxy could not connect to github.com:443; remote branch update is not verified.",
+      "evidence": "Cycle 90 commits 1f3cda2 and 04b8958 are local; git push and git ls-remote both exited 1 because the configured proxy could not connect to github.com:443; remote branch update is not verified.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T15:53:55+00:00",
+      "last_seen": "2026-10-16T15:59:19+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "GitHub delivery remains externally blocked after cycle 89",
+      "blocked_reason": "GitHub delivery remains externally blocked after cycle 90",
       "verification": null,
       "history": [
         {
@@ -403,6 +403,12 @@
           "event": "BLOCKED",
           "reason": "GitHub delivery remains externally blocked after cycle 89",
           "evidence": "Cycle 89 commits 37acedd and 64e7f3a are local; git push and git ls-remote both exited 1 because the configured proxy could not connect to github.com:443; remote branch update is not verified."
+        },
+        {
+          "time": "2026-10-16T15:59:19+00:00",
+          "event": "BLOCKED",
+          "reason": "GitHub delivery remains externally blocked after cycle 90",
+          "evidence": "Cycle 90 commits 1f3cda2 and 04b8958 are local; git push and git ls-remote both exited 1 because the configured proxy could not connect to github.com:443; remote branch update is not verified."
         }
       ]
     },
