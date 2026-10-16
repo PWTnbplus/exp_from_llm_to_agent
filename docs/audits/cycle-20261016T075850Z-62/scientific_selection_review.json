@@ -1,0 +1,22 @@
+{
+  "status": "BLOCKED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7-to-G8 selection identity review",
+  "findings": [
+    {
+      "id": "ISSUE-1f8c2b6a4d90",
+      "severity": "P1",
+      "verdict": "BLOCKED",
+      "evidence": "Duplicate public case IDs, duplicate checkpoint pair IDs, duplicate checkpoint IDs, malformed identities, and non-completed checkpoints now fail before selection output. The real source-only handoff remains incomplete for dependency/Q/scientific purposes.",
+      "remediation": "Keep the selection non-confirmatory and obtain independent dependency/state/Q/mathematical evidence before any causal claim."
+    }
+  ],
+  "independent_checks": [
+    "Pre-repair duplicate CLI fixture exited 0 and wrote GO output",
+    "Post-repair duplicate CLI fixture exited 1 with no output",
+    "AST confirms no ordinary by_case/by_pair last-row-wins comprehensions remain",
+    "Full host regression reports 188 passed",
+    "git diff --check passes"
+  ],
+  "scientific_truth_decision_made": false
+}

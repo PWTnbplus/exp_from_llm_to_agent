@@ -1,0 +1,91 @@
+{
+  "cycle": "20261016T075850Z-62",
+  "scope": "Repair duplicate-identity acceptance in the derived G7-to-G8 scientific selection",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery"
+  ],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_retained": [
+      "G7 public cases and checkpoints remain keyed by auditable source identities",
+      "G8 selection cannot turn a partial/duplicated source-only handoff into a complete mechanism denominator",
+      "Failures and malformed rows are rejected before derived output rather than overwritten or imputed",
+      "A source-only GO is a pilot/handoff status, not mathematical truth, Q validity, causal evidence, or Agent superiority"
+    ],
+    "alignment_conclusion": "The repair closes a downstream identity hole while preserving the design's explicit boundary that G7-to-G8 selection is non-confirmatory until independent Q, provenance, and causal evidence exist."
+  },
+  "repair": {
+    "source": "scripts/review_g7_scientific_selection.py",
+    "tests": "tests/test_g7_scientific_selection.py",
+    "change": "The selection now validates JSON object shape, unique public case IDs, unique checkpoint (case_id, group_id) pairs, unique checkpoint IDs, and completed checkpoint status before constructing indexes or writing a GO handoff.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "A valid four-case selection fixture with a second completed checkpoint row for the same case_id and group_id but a different checkpoint_id.",
+    "before": "The ordinary by_pair dict silently retained the first/last row according to input order and the CLI exited 0 with selection=GO and a derived output.",
+    "after": "The same CLI input exits 1 before output with checkpoint_pair_duplicate_identity; no derived selection file is written."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_scientific_selection.py tests/test_g7_g8_handoff_contract.py tests/test_g7_protocol.py",
+      "result": "35 passed in 1.63s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "188 passed in 22.27s"
+    },
+    "real_source_only_probe": {
+      "command": "Read-only temporary probe: review_g7_g8_handoff.py on results/g7_failure_localization/formal-20261014T030000Z-16workers, followed by review_g7_scientific_selection.py with scripts/g8_public_v_verifier.py; temporary output removed",
+      "result": "handoff_exit=0, source_only_status=REAL_TRACE_AUDITED, selection_exit=0, selection=GO for the four prewritten public examples; this remains a structural/pilot handoff only and does not resolve the 31 provider errors, missing pairs, Q, dependency, billing, immutable-weight, or mathematical-review gates"
+    },
+    "independent_read_only_review": {
+      "command": "AST inspection for removed last-row-wins dicts, valid/failure synthetic index probes, duplicate CLI probe, and git diff --check",
+      "result": "PASS: duplicate public/checkpoint identities and incomplete status are rejected before output; valid unique inputs remain indexable; formatting check passes"
+    }
+  },
+  "remaining_boundary": {
+    "source_only_selection_is_confirmatory": false,
+    "dependency_edges_available": false,
+    "scientific_release_allowed": false,
+    "note": "The real source-only handoff can still produce a structural/pilot GO after the repaired identity checks, but it retains historical provider failures and missing checkpoint pairs and has no independently audited dependency edges or Q standard. No mechanism, causal, or Agent-superiority claim is made."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G7-to-G8 selection identity review",
+    "findings": [
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "fingerprint": "g7_dependency_edges_absent",
+        "severity": "P1",
+        "evidence": "Cycle 62 removes a last-row-wins G7-to-G8 selection path and verifies duplicate public/checkpoint identities fail closed. The real source-only probe remains structural: it reports REAL_TRACE_AUDITED and can form a pilot GO, but dependency-edge/state-transition evidence and a complete independently reviewed G7 denominator remain unavailable.",
+        "remediation": "Retain the source-only selection as non-confirmatory. Obtain independently audited dependency-edge/state-transition data with source hashes, complete the separately frozen checkpoint denominator, and obtain independent mathematical/Q review before any edge-level L/U, G8 causal, or scientific release claim.",
+        "blocker": "Replacement dependency/state data and independent scientific review are external and unavailable."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "875102a",
+    "commit": "pending",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "Commit and remote verification are pending. No provider or paid experiment was started."
+  }
+}

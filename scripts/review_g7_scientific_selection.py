@@ -18,7 +18,47 @@ def sha(path: Path) -> str:
 
 
 def rows(path: Path) -> list[dict[str, Any]]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    values: list[dict[str, Any]] = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        value = json.loads(line)
+        if not isinstance(value, dict):
+            raise ValueError(f"{path}:{line_number}: expected JSON object")
+        values.append(value)
+    return values
+
+
+def index_unique(rows: list[dict[str, Any]], fields: tuple[str, ...], label: str) -> tuple[dict[Any, dict[str, Any]], list[str]]:
+    """Build an index without allowing duplicate public identities to win by order."""
+    indexed: dict[Any, dict[str, Any]] = {}
+    errors: list[str] = []
+    for line_number, row in enumerate(rows, 1):
+        values = [row.get(field) for field in fields]
+        if any(not isinstance(value, str) or not value.strip() for value in values):
+            errors.append(f"{label}_missing_identity:{line_number}")
+            continue
+        key: Any = values[0] if len(values) == 1 else tuple(values)
+        if key in indexed:
+            errors.append(f"{label}_duplicate_identity:{key!r}")
+            continue
+        indexed[key] = row
+    return indexed, errors
+
+
+def validate_public_checkpoint_inputs(
+    public: list[dict[str, Any]], checkpoints: list[dict[str, Any]]
+) -> tuple[dict[str, dict[str, Any]], dict[tuple[str, str], dict[str, Any]], list[str]]:
+    """Validate identities and completion status before deriving G8 evidence."""
+    by_case, public_errors = index_unique(public, ("case_id",), "public_case")
+    by_pair, pair_errors = index_unique(checkpoints, ("case_id", "group_id"), "checkpoint_pair")
+    _, checkpoint_id_errors = index_unique(checkpoints, ("checkpoint_id",), "checkpoint")
+    status_errors = [
+        f"checkpoint_not_completed:{index}"
+        for index, row in enumerate(checkpoints, 1)
+        if row.get("status") != "completed"
+    ]
+    return by_case, by_pair, [*public_errors, *pair_errors, *checkpoint_id_errors, *status_errors]
 
 
 def main() -> int:
@@ -32,8 +72,7 @@ def main() -> int:
     trace_review = json.loads(args.trace_review.read_text(encoding="utf-8"))
     public = rows(root / "g7_public_cases.jsonl")
     checkpoints = rows(args.trace_review.parent / "g8_public_checkpoints.jsonl")
-    by_case = {row["case_id"]: row for row in public}
-    by_pair = {(row["case_id"], row["group_id"]): row for row in checkpoints}
+    by_case, by_pair, identity_errors = validate_public_checkpoint_inputs(public, checkpoints)
     # These examples are selected from public interventions, not from the
     # hidden labels.  The first two expose parameter/domain checks; the latter
     # two are cosmetic counterexamples where the mechanism should be neutral.
@@ -45,7 +84,7 @@ def main() -> int:
         ("G6F-TB-L1-001-CF2", "G3"),  # pure state-variable rename
         ("G6F-TC-L1-004-CF2", "G4"),  # pure Arrhenius variable rename
     ]
-    errors: list[str] = []
+    errors: list[str] = list(identity_errors)
     for case_id, group in supporting + counterexamples:
         if case_id not in by_case:
             errors.append(f"missing public case {case_id}")

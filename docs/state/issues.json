@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:56:08+00:00",
+  "updated_at": "2026-10-16T07:59:42+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -422,13 +422,13 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "Cycle 60: duplicate public/checkpoint identities now fail closed; real source-only audit has 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, and 17 missing CF1/CF2 pairs. No independently audited dependency edges are available; no L/U or G8 causal claim is made.",
-      "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes and complete the separately frozen checkpoint denominator before making edge-level L/U or G8 causal claims.",
+      "evidence": "Cycle 62 preserves a structural REAL_TRACE_AUDITED handoff only; it does not resolve missing dependency edges, missing checkpoint pairs, Q validity, provenance, or mathematical review.",
+      "remediation": "Retain the source-only selection as non-confirmatory. Obtain independently audited dependency-edge/state-transition data with source hashes, complete the separately frozen checkpoint denominator, and obtain independent mathematical/Q review before any edge-level L/U, G8 causal, or scientific release claim.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-16T07:46:39+00:00",
+      "last_seen": "2026-10-16T07:59:36+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
-      "attempts": 0,
-      "blocked_reason": "Cycle 60 repaired G7-to-G8 checkpoint identity collisions; dependency-edge/state-transition evidence remains unavailable.",
+      "attempts": 1,
+      "blocked_reason": "Replacement dependency/state data and independent scientific review remain externally unavailable; a source-only pilot GO cannot support causal or scientific release claims.",
       "verification": null,
       "history": [
         {
@@ -447,6 +447,18 @@
           "event": "BLOCKED",
           "reason": "Cycle 60 repaired G7-to-G8 checkpoint identity collisions; dependency-edge/state-transition evidence remains unavailable.",
           "evidence": "Cycle 60: duplicate public/checkpoint identities now fail closed; real source-only audit has 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, and 17 missing CF1/CF2 pairs. No independently audited dependency edges are available; no L/U or G8 causal claim is made."
+        },
+        {
+          "time": "2026-10-16T07:59:42+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 62 repaired the downstream G7-to-G8 scientific selection identity guard and re-audited the source-only handoff.",
+          "evidence": "Cycle 62: duplicate public case/checkpoint pair/checkpoint ID fixtures previously produced selection=GO; they now fail before output. Focused selection/handoff/protocol tests 35 passed and host suite 188 passed. Source-only handoff remains structural with no dependency-edge or independent Q/math evidence."
+        },
+        {
+          "time": "2026-10-16T07:59:42+00:00",
+          "event": "BLOCKED",
+          "reason": "Replacement dependency/state data and independent scientific review remain externally unavailable; a source-only pilot GO cannot support causal or scientific release claims.",
+          "evidence": "Cycle 62 preserves a structural REAL_TRACE_AUDITED handoff only; it does not resolve missing dependency edges, missing checkpoint pairs, Q validity, provenance, or mathematical review."
         }
       ]
     },
@@ -874,7 +886,8 @@
     "docs/audits/cycle-20261016T073921Z-58/audit.json",
     "docs/audits/cycle-20261016T074311Z-59/audit.json",
     "docs/audits/cycle-20261016T074534Z-60/audit.json",
-    "docs/audits/cycle-20261016T075322Z-61/audit.json"
+    "docs/audits/cycle-20261016T075322Z-61/audit.json",
+    "docs/audits/cycle-20261016T075850Z-62/audit.json"
   ],
   "current_focus": null
 }
