@@ -18,7 +18,7 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=2：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as ex
+- ISSUE-000000000002 P1 BLOCKED 尝试次数=2：Real-provider pilot and retry/cost behavior are unverified；修复=Keep the paid gate closed. Obtain explicit authorization, a positive hard USD ceiling, independently verifiable model/billing evidence, and an independent isolation review before any real-provider pilot.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.

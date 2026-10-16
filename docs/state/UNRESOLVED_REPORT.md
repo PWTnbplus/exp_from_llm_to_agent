@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:15:34+00:00
+生成时间（UTC）：2026-10-16T07:17:02+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -9,13 +9,13 @@
 
 ## 未解决和阻塞问题
 
-### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
+### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：The read-only AST/order review found validate_paid_evidence() at scripts/run_g7_failure_localization.py:124, its call at :857, and key-file reading/provider construction only at :901; the runner-level regression asserts that missing evidence exits with provider_calls_made=false and never constructs the provider. Structurally valid temporary manifests retain only file SHA-256 values in the report and remain PRESENT_UNVERIFIED_EXTERNAL. No real provider call or paid experiment was launched.
-- 必需修复：Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as external verification; do not launch a paid run without separate explicit authorization and a hard positive USD ceiling.
+- 证据：Cycle 54: tests/test_g7_protocol.py 29 passed; fail-closed paid-evidence gate rejects missing or malformed snapshot/billing before key/provider setup, and structurally valid local manifests remain PRESENT_UNVERIFIED_EXTERNAL. No explicit paid authorization, positive hard USD ceiling, immutable model evidence, independent billing, or external isolation review is available; no provider call was made.
+- 必需修复：Keep the paid gate closed. Obtain explicit authorization, a positive hard USD ceiling, independently verifiable model/billing evidence, and an independent isolation review before any real-provider pilot.
 - 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：未记录
+- 阻塞原因：Cycle 54 paid-evidence review confirms external authorization and verification blocker
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked

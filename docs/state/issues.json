@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:15:34+00:00",
+  "updated_at": "2026-10-16T07:17:02+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -50,14 +50,14 @@
       "id": "ISSUE-000000000002",
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
-      "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The read-only AST/order review found validate_paid_evidence() at scripts/run_g7_failure_localization.py:124, its call at :857, and key-file reading/provider construction only at :901; the runner-level regression asserts that missing evidence exits with provider_calls_made=false and never constructs the provider. Structurally valid temporary manifests retain only file SHA-256 values in the report and remain PRESENT_UNVERIFIED_EXTERNAL. No real provider call or paid experiment was launched.",
-      "remediation": "Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as external verification; do not launch a paid run without separate explicit authorization and a hard positive USD ceiling.",
+      "status": "BLOCKED",
+      "evidence": "Cycle 54: tests/test_g7_protocol.py 29 passed; fail-closed paid-evidence gate rejects missing or malformed snapshot/billing before key/provider setup, and structurally valid local manifests remain PRESENT_UNVERIFIED_EXTERNAL. No explicit paid authorization, positive hard USD ceiling, immutable model evidence, independent billing, or external isolation review is available; no provider call was made.",
+      "remediation": "Keep the paid gate closed. Obtain explicit authorization, a positive hard USD ceiling, independently verifiable model/billing evidence, and an independent isolation review before any real-provider pilot.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T06:41:41+00:00",
+      "last_seen": "2026-10-16T07:17:02+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 2,
-      "blocked_reason": null,
+      "blocked_reason": "Cycle 54 paid-evidence review confirms external authorization and verification blocker",
       "verification": null,
       "history": [
         {
@@ -100,6 +100,12 @@
           "event": "RESOLVED_UNVERIFIED",
           "reason": "Cycle 47 local machine gate and boundary tests pass; external billing and immutable model verification remain unavailable, so this stays RESOLVED_UNVERIFIED.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:17:02+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 54 paid-evidence review confirms external authorization and verification blocker",
+          "evidence": "Cycle 54: tests/test_g7_protocol.py 29 passed; fail-closed paid-evidence gate rejects missing or malformed snapshot/billing before key/provider setup, and structurally valid local manifests remain PRESENT_UNVERIFIED_EXTERNAL. No explicit paid authorization, positive hard USD ceiling, immutable model evidence, independent billing, or external isolation review is available; no provider call was made."
         }
       ]
     },
@@ -746,7 +752,8 @@
     "docs/audits/cycle-20261016T065435Z-50/audit.json",
     "docs/audits/cycle-20261016T070211Z-51/audit.json",
     "docs/audits/cycle-20261016T070818Z-52/audit.json",
-    "docs/audits/cycle-20261016T071456Z-53/audit.json"
+    "docs/audits/cycle-20261016T071456Z-53/audit.json",
+    "docs/audits/cycle-20261016T071631Z-54/audit.json"
   ],
   "current_focus": null
 }
