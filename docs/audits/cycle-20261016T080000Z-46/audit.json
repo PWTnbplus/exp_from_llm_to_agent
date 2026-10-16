@@ -1,0 +1,82 @@
+{
+  "cycle": 46,
+  "timestamp_utc": "2026-10-16T08:00:00+00:00",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "repair": {
+    "issue": "ISSUE-3d7a9c1e5b20",
+    "change": "Added a read-only corrected-G7 metric audit that preserves all-planned denominators, reports valid-answer diagnostics, W-to-C/C-to-W transitions, first observable error categories, and paired-arm status without pooling retries or persisting private oracle values. A boundary check caught and removed a private-field name from aggregate output.",
+    "historical_artifacts_rewritten": false
+  },
+  "test": {
+    "targeted_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q", "tests/test_g7_corrected_metrics.py", "tests/test_g7_protocol.py", "tests/test_g7_protocol_preflight.py"],
+    "targeted_exit_code": 0,
+    "targeted_output_tail": "27 passed in 3.69s\n",
+    "full_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "full_exit_code": 0,
+    "full_output_tail": "145 passed in 19.03s\n",
+    "py_compile_exit_code": 0,
+    "git_diff_check_exit_code": 0
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "reviewer": "independent_g7_corrected_metrics_boundary_check_v12",
+    "independent_review_status": "PASS_READ_ONLY_LOCAL",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "The corrected metric report covers 1288 plan/state/Q rows, 92 aggregate-scored oracle cases, retains 3 terminal failures and 1268 invalid Q rows, and reports 20 independently valid Q rows. Its confirmatory_reuse_allowed flag is false because formal preflight has ineligible_u_diagnostic_arm and 368 U-stage rows are not eligible. U-dependent pairs are explicitly NOT_COMPUTABLE_INELIGIBLE_U; all other pairs are NON_CONFIRMATORY_PREFLIGHT_FAILURE. The independent boundary check found no private raw values or private field names in the persisted report.",
+        "remediation": "Use these metrics only as non-confirmatory diagnostics. Retain all failed and invalid rows in the denominator, do not make mechanism or L/U claims, and obtain independently audited non-final dependency/state data plus provider/Q, billing, immutable-model, and external review evidence before any formal score or scientific inference."
+      }
+    ],
+    "resolutions": [],
+    "verified_commands": [
+      "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_corrected_metrics.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py (exit 0, 27 passed)",
+      "E:/resources/python/python.exe -X utf8 -m pytest -q (exit 0, 145 passed in 19.03s)",
+      "E:/resources/python/python.exe -X utf8 -m py_compile scripts/audit_g7_corrected_metrics.py tests/test_g7_corrected_metrics.py (exit 0)",
+      "git diff --check (exit 0)",
+      "E:/resources/python/python.exe -X utf8 scripts/audit_g7_corrected_metrics.py --plan results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl --states results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_states.jsonl --q results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_q_audit.jsonl --oracle results/g6_counterfactual/formal-20261013T000000Z/private_oracle_verified23.jsonl --preflight docs/audits/cycle-20261016T071500Z-45/g7_protocol_preflight.json --out docs/audits/cycle-20261016T080000Z-46/g7_corrected_metrics.json (exit 0; confirmatory_reuse_allowed=false; terminal=3; invalid_q=1268; q_valid=20; ineligible_u=368)",
+      "independent_g7_corrected_metrics_boundary_check_v12 (exit 0; aggregate report contains no private raw values or private field names; denominator and q totals match source audits)"
+    ]
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计 and docs/audits/cycle-20261016T061307Z-41/g7_design_compliance.json",
+  "git": {
+    "commit": "PENDING_CYCLE_COMMIT",
+    "push_command": "git push origin autopilot/scientific-law-discovery",
+    "push_exit_code": null,
+    "push_output": "pending substantive commit",
+    "remote_verification_command": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery",
+    "remote_verification_exit_code": null,
+    "remote_verification_output": "pending substantive commit",
+    "remote_updated": false
+  },
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "mandatory_completion_missing": [
+    "independently_reviewed_provider_Q_diagnosis",
+    "independently_audited_dependency_edges_and_nonfinal_U_states",
+    "billing_export",
+    "immutable_model_snapshot",
+    "upstream_provenance",
+    "design_scale_or_power_justification",
+    "machine_gate_attestation"
+  ],
+  "unresolved_issue_ids": [
+    "ISSUE-3d7a9c1e5b20",
+    "ISSUE-0f2cb195c681",
+    "ISSUE-0786397621a0",
+    "ISSUE-000000000002",
+    "ISSUE-000000000003",
+    "ISSUE-000000000004",
+    "ISSUE-ff97c7c89112",
+    "ISSUE-ad61f025976a",
+    "ISSUE-1f8c2b6a4d90",
+    "ISSUE-f9171bb760b1",
+    "ISSUE-000000000005",
+    "ISSUE-6b3a9e1d4f20",
+    "ISSUE-ab0746b86bf9",
+    "ISSUE-28ed827e40a9"
+  ]
+}

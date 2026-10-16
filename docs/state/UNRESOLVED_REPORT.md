@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:31:31+00:00
+生成时间（UTC）：2026-10-16T06:36:26+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The model-facing diagnostic payload now contains only V/L/U label objects; source, label_source, verifier_ref, eligible, and u_ineligibility_reason remain in the append-only audit injection. The independent boundary probe passed. The actual formal preflight still reports 1288 plan rows, 368 ineligible U rows in D3/U_ONLY, no routing/private hits, provider_calls_made=false, and formal_run_allowed_by_protocol=false. Historical execution remains 1285 completed plus 3 provider_error rows and Q valid only for 20/1288.
-- 必需修复：Retain all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures, eligibility failures, and budget failures in the denominator. Do not select a mechanism or make L/U claims. Obtain independently audited replacement dependency/state data with non-final U states, or run a separately frozen and explicitly authorized replacement after billing, immutable model snapshot, and full preflight evidence; never pool or rewrite historical traces.
-- 尝试次数：17
+- 证据：The corrected metric report covers 1288 plan/state/Q rows, 92 aggregate-scored oracle cases, retains 3 terminal failures and 1268 invalid Q rows, and reports 20 independently valid Q rows. Its confirmatory_reuse_allowed flag is false because formal preflight has ineligible_u_diagnostic_arm and 368 U-stage rows are not eligible. U-dependent pairs are explicitly NOT_COMPUTABLE_INELIGIBLE_U; all other pairs are NON_CONFIRMATORY_PREFLIGHT_FAILURE. The independent boundary check found no private raw values or private field names in the persisted report.
+- 必需修复：Use these metrics only as non-confirmatory diagnostics. Retain all failed and invalid rows in the denominator, do not make mechanism or L/U claims, and obtain independently audited non-final dependency/state data plus provider/Q, billing, immutable-model, and external review evidence before any formal score or scientific inference.
+- 尝试次数：18
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

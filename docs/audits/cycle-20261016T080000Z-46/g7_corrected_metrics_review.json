@@ -1,0 +1,30 @@
+{
+  "audit_version": "g7-corrected-metrics-review-v1",
+  "reviewer": "independent_g7_corrected_metrics_boundary_check_v12",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "report": "docs/audits/cycle-20261016T080000Z-46/g7_corrected_metrics.json",
+  "plan_rows": 1288,
+  "state_rows": 1288,
+  "q_rows": 1288,
+  "terminal_failures": 3,
+  "invalid_q_rows": 1268,
+  "q_valid_rows": 20,
+  "ineligible_u_rows": 368,
+  "oracle_rows_scored": 92,
+  "confirmatory_reuse_allowed": false,
+  "private_raw_values_persisted": false,
+  "denominator_policy_preserved": true,
+  "pair_statuses": {
+    "D2_minus_D3": "NOT_COMPUTABLE_INELIGIBLE_U",
+    "U_ONLY_minus_D0": "NOT_COMPUTABLE_INELIGIBLE_U",
+    "other_pairs": "NON_CONFIRMATORY_PREFLIGHT_FAILURE"
+  },
+  "independent_checks": [
+    "report contains no expected-decision values or private oracle fields",
+    "sum of per-arm q_valid equals 20",
+    "all 1288 planned rows remain represented in the arm denominators",
+    "terminal failures and invalid Q rows remain counted",
+    "formal preflight error remains ineligible_u_diagnostic_arm"
+  ],
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}
