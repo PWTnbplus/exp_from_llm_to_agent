@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:48:29+00:00",
+  "updated_at": "2026-10-16T08:48:48+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 70 local repair commit 2f69df9 and audit/state commit 68b65b4 exist on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated.",
+      "evidence": "Cycle 71 local repair commit 4542ed3 and audit/state commit 423724c exist on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 70 GitHub delivery remains externally blocked after G7 arm-specific output repair.",
+      "blocked_reason": "Cycle 71 GitHub delivery remains externally blocked after G7 field-type repair.",
       "verification": null,
       "history": [
         {
@@ -277,6 +277,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 70 GitHub delivery remains externally blocked after G7 arm-specific output repair.",
           "evidence": "Cycle 70 local repair commit 2f69df9 and audit/state commit 68b65b4 exist on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated."
+        },
+        {
+          "time": "2026-10-16T08:48:48+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 71 GitHub delivery remains externally blocked after G7 field-type repair.",
+          "evidence": "Cycle 71 local repair commit 4542ed3 and audit/state commit 423724c exist on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443 (exit 128); remote branch is not verified or claimed updated."
         }
       ]
     },

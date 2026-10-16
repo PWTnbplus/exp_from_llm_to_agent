@@ -352,5 +352,15 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local commits: `2f69df9` (repair) and `68b65b4` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
 - Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, confirmatory inference, or scientific claim was made.
 
+## Cycle 71 G7 output field-type repair (2026-10-16T08:47Z)
+
+- Compared the implementation with the design-aligned G7 report (`docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:670-671`) and found the top-level contract still accepted non-string/empty `supporting_evidence`; the immutable corrected checkpoint artifact contains `22/184` such rows. Historical artifacts remain unchanged and non-confirmatory.
+- Repaired `scripts/run_g7_failure_localization.py`: `revised_claim` must be string/null and `supporting_evidence` must be a nonempty string for both checkpoint and diagnostic outputs. Added adversarial type assertions.
+- Focused G7 regression: `67 passed`; full host suite: `212 passed`; `git diff --check`: PASS. Independent probes reject a revised-claim object and supporting-evidence list before provider output is accepted.
+- `ISSUE-4c7e2a91d6f0` remains `VERIFIED` only for the forward field-type remediation. The historical `22/184` malformed rows remain non-confirmatory; no result, trace, or checkpoint file was modified.
+- Audit files: `docs/audits/cycle-20261016T084740Z-71/audit.json`, `g7_field_type_finding.json`, and `g7_field_type_review.json`.
+- Local commits: `4542ed3` (repair) and `423724c` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
+- Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, confirmatory inference, or scientific claim was made.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
