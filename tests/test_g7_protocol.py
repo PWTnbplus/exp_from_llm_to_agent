@@ -110,6 +110,7 @@ def _formal_g7_family() -> tuple[list[dict], list[dict], list[dict]]:
             row["paired_set_id"] = "family-1"
             row["theory_family_id"] = "family-1"
             row["cf_type"] = cf_type
+            row["source_run_id"] += f"-{row['diagnostic_arm']}"
             row["retry_scope"] = "all_original_rows_protocol_corrected"
         public_rows.append(public)
         label_rows.append(label)
@@ -331,6 +332,23 @@ def test_g7_formal_input_contract_rejects_wrong_retry_scope() -> None:
     ]
 
 
+def test_g7_formal_input_contract_rejects_source_run_id_collision() -> None:
+    public, label, plan = _formal_g7_family()
+    for row in plan:
+        row["source_run_id"] = "same-source-run"
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_formal_source_run_id_collision" in report["errors"]
+    assert report["counts"]["g7_formal_source_run_id_collisions"] == ["same-source-run"]
+
+
 def test_g7_formal_input_contract_rejects_incomplete_family_cf_coverage() -> None:
     public, label, plan = _formal_g7_family()
     removed_case = "case-CF4"
@@ -348,6 +366,40 @@ def test_g7_formal_input_contract_rejects_incomplete_family_cf_coverage() -> Non
     assert report["formal_run_allowed_by_protocol"] is False
     assert "g7_public_family_cf_coverage_mismatch" in report["errors"]
     assert report["counts"]["g7_public_family_cf_coverage_mismatches"] == ["family-1"]
+
+
+def test_g7_formal_input_contract_rejects_extra_case_within_family() -> None:
+    public, label, plan = _formal_g7_family()
+    duplicate = dict(public[0])
+    duplicate["case_id"] = "case-CF1-extra"
+    duplicate["source_task_id"] = "task-CF1-extra"
+    duplicate_label = dict(label[0])
+    duplicate_label["case_id"] = duplicate["case_id"]
+    duplicate_label["source_public_case_sha256"] = hashlib.sha256(
+        json.dumps(duplicate, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    duplicate_plan = []
+    for row in plan:
+        if row["case_id"] != public[0]["case_id"]:
+            continue
+        copied = dict(row)
+        copied["run_id"] += "-extra"
+        copied["checkpoint_id"] += "-extra"
+        copied["case_id"] = duplicate["case_id"]
+        copied["source_run_id"] += "-extra"
+        copied["source_checkpoint_id"] += "-extra"
+        duplicate_plan.append(copied)
+
+    report = protocol_preflight(
+        [*public, duplicate], [*label, duplicate_label], [*plan, *duplicate_plan],
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_family_case_count_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_family_case_count_mismatches"] == ["family-1"]
 
 
 def test_g7_formal_input_contract_rejects_family_paired_set_drift() -> None:

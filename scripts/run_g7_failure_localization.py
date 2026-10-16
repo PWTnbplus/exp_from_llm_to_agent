@@ -746,6 +746,14 @@ def protocol_preflight(
     })
     run_ids = [row.get("run_id") for row in plan_rows if _valid_identifier(row.get("run_id"))]
     duplicate_plan_ids = len(run_ids) - len(set(run_ids))
+    source_run_ids = [
+        row.get("source_run_id") for row in plan_rows
+        if _valid_identifier(row.get("source_run_id"))
+    ]
+    duplicate_source_run_ids = sorted({
+        source_run_id for source_run_id in source_run_ids
+        if source_run_ids.count(source_run_id) > 1
+    })
     public_case_ids = [row.get("case_id") for row in public_rows if _valid_identifier(row.get("case_id"))]
     label_case_ids = [row.get("case_id") for row in label_rows if _valid_identifier(row.get("case_id"))]
     duplicate_public_case_ids = len(public_case_ids) - len(set(public_case_ids))
@@ -754,6 +762,7 @@ def protocol_preflight(
     label_case_id_set = set(label_case_ids)
     formal_public_label_missing = sorted(public_case_id_set - label_case_id_set)
     formal_public_label_extra = sorted(label_case_id_set - public_case_id_set)
+    family_case_counts: dict[str, int] = {}
     family_cf_types: dict[str, set[str]] = {}
     family_paired_sets: dict[str, set[str]] = {}
     paired_set_families: dict[str, set[str]] = {}
@@ -763,12 +772,17 @@ def protocol_preflight(
         cf_type = row.get("cf_type")
         if not (_valid_identifier(family) and _valid_identifier(paired_set)):
             continue
+        family_case_counts[family] = family_case_counts.get(family, 0) + 1
         family_cf_types.setdefault(family, set()).add(cf_type)
         family_paired_sets.setdefault(family, set()).add(paired_set)
         paired_set_families.setdefault(paired_set, set()).add(family)
     formal_family_cf_coverage_mismatches = sorted(
         family for family, cf_types in family_cf_types.items()
         if cf_types != set(G7_CF_TYPES)
+    )
+    formal_family_case_count_mismatches = sorted(
+        family for family, count in family_case_counts.items()
+        if count != len(G7_CF_TYPES)
     )
     formal_family_paired_set_mismatches = sorted(
         family for family, paired_sets in family_paired_sets.items()
@@ -825,8 +839,12 @@ def protocol_preflight(
         errors.append("g7_public_label_case_set_mismatch")
     if require_formal_input_contract and formal_retry_scope_mismatches:
         errors.append("invalid_g7_plan_metadata")
+    if require_formal_input_contract and duplicate_source_run_ids:
+        errors.append("g7_formal_source_run_id_collision")
     if require_formal_input_contract and formal_family_cf_coverage_mismatches:
         errors.append("g7_public_family_cf_coverage_mismatch")
+    if require_formal_input_contract and formal_family_case_count_mismatches:
+        errors.append("g7_public_family_case_count_mismatch")
     if require_formal_input_contract and (
         formal_family_paired_set_mismatches or formal_paired_set_family_mismatches
     ):
@@ -888,7 +906,9 @@ def protocol_preflight(
                 "extra_labels_not_in_public": formal_public_label_extra,
             },
             "g7_formal_retry_scope_mismatches": formal_retry_scope_mismatches,
+            "g7_formal_source_run_id_collisions": duplicate_source_run_ids,
             "g7_public_family_cf_coverage_mismatches": formal_family_cf_coverage_mismatches,
+            "g7_public_family_case_count_mismatches": formal_family_case_count_mismatches,
             "g7_public_family_paired_set_mismatches": formal_family_paired_set_mismatches,
             "g7_public_paired_set_family_mismatches": formal_paired_set_family_mismatches,
             "require_formal_input_contract": require_formal_input_contract,
