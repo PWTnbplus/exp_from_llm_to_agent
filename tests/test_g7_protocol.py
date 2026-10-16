@@ -85,7 +85,7 @@ def _formal_g7_case(case_id: str) -> tuple[dict, dict, list[dict]]:
                 "source_run_id": f"g6-run-{case_id}-{group}",
                 "source_checkpoint_id": f"g6-checkpoint-{case_id}-{group}",
                 "profile": "theory_benchmark",
-                "protocol_version": "g7-test-v1",
+                "protocol_version": "g7-public-case-format-retry-v1",
                 "retry_scope": "test",
                 "retry_protocol": "separate_frozen_retry_not_pooled",
                 "replicate": 0,
@@ -212,6 +212,21 @@ def test_g7_formal_preflight_rejects_wrong_profile() -> None:
     public, label, plan = _formal_g7_case("case-1")
     for row in plan:
         row["profile"] = "law_discovery"
+
+    report = protocol_preflight(
+        [public], [label], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_g7_plan_metadata" in report["errors"]
+    assert report["counts"]["invalid_g7_plan_metadata"] == [row["run_id"] for row in plan]
+
+
+def test_g7_formal_preflight_rejects_wrong_protocol_version() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    for row in plan:
+        row["protocol_version"] = "legacy"
 
     report = protocol_preflight(
         [public], [label], plan,
@@ -361,7 +376,7 @@ def test_g7_formal_preflight_requires_all_diagnostic_arms_per_checkpoint() -> No
           "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
           "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
           "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
-          "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+          "profile": "theory_benchmark", "protocol_version": "g7-public-case-format-retry-v1",
           "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
           "replicate": 0, "arm_eligible_for_diagnostic": True}],
         worker_count=1,
@@ -406,7 +421,7 @@ def test_g7_formal_preflight_rejects_public_plan_and_label_hash_mismatch() -> No
             "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF2",
             "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
             "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
-            "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+            "profile": "theory_benchmark", "protocol_version": "g7-public-case-format-retry-v1",
             "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
             "replicate": 0, "arm_eligible_for_diagnostic": True}
     report = protocol_preflight([public], [label], [plan], worker_count=1, require_complete_plan=True)
@@ -449,7 +464,7 @@ def test_g7_formal_preflight_rejects_plan_label_eligibility_mismatch() -> None:
             "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
             "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
             "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
-            "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+            "profile": "theory_benchmark", "protocol_version": "g7-public-case-format-retry-v1",
             "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
             "replicate": 0, "arm_eligible_for_diagnostic": False}
     report = protocol_preflight([public], [label], [plan], worker_count=1, require_complete_plan=True)

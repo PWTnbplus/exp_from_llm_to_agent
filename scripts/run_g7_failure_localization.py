@@ -75,6 +75,7 @@ G7_SOURCE_G6_ARM_BY_GROUP = {
 }
 G7_EXPERIMENT_ID = "g7_failure_localization"
 G7_PROFILE = "theory_benchmark"
+G7_PROTOCOL_VERSION = "g7-public-case-format-retry-v1"
 G7_RETRY_PROTOCOL = "separate_frozen_retry_not_pooled"
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
@@ -494,6 +495,7 @@ def _formal_plan_contract_valid(row: dict[str, Any]) -> bool:
         all(_valid_identifier(row.get(field)) for field in G7_PLAN_METADATA_FIELDS)
         and row.get("experiment_id") == G7_EXPERIMENT_ID
         and row.get("profile") == G7_PROFILE
+        and row.get("protocol_version") == G7_PROTOCOL_VERSION
         and row.get("retry_protocol") == G7_RETRY_PROTOCOL
         and isinstance(row.get("replicate"), int)
         and not isinstance(row.get("replicate"), bool)

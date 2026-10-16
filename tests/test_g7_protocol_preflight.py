@@ -39,7 +39,7 @@ def _plan_row(run_id: str, arm: str, group: str, stages: list[str]) -> dict:
         "split": "final_test",
         "source_g6_arm_id": "G6_A_G3_GIVEN" if group == "G3" else "G6_B_G4_GIVEN",
         "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
-        "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+        "profile": "theory_benchmark", "protocol_version": "g7-public-case-format-retry-v1",
         "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
         "replicate": 0, "arm_eligible_for_diagnostic": True,
     }
