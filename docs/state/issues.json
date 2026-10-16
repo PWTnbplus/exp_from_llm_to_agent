@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:26:57+00:00",
+  "updated_at": "2026-10-16T07:33:33+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -195,10 +195,10 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "BLOCKED",
-      "evidence": "Cycle 56: G6 audit and G6-to-G7 handoff collision guards pass 16 focused tests and the full host suite (165 passed); real verified23 probe passes 552 plan rows, 92 private rows, 552 responses, and 552 unique handoff IDs. Independent statistical/mathematical review remains absent; no confirmatory inference or scientific release is allowed.",
+      "evidence": "The G5/G6 input collision path is repaired, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent; no confirmatory inference is allowed.",
       "remediation": "Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T07:26:15+00:00",
+      "last_seen": "2026-10-16T07:33:33+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 0,
       "blocked_reason": "Cycle 56 G6/G7 collision repair leaves independent statistical/mathematical review as blocker",
@@ -261,10 +261,10 @@
       "severity": "P1",
       "title": "G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep",
       "status": "RESOLVED_UNVERIFIED",
-      "evidence": "scripts/verify_g5_g6_inputs.py independently checked the public model/parameters and selected proof graphs without reading answer_key or private_oracle: 23/24 families passed grade-B analytic/numeric checks; TB-L1-010 was explicitly excluded because its recessive mutation-selection formula is inconsistent and its graph contains an unresolved validity node. The 23-family corrected release has 552/552 completed responses, official validation, official score, and trace_audit.pass=true.",
-      "remediation": "Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.",
+      "evidence": "Cycle 57: duplicate public task and source-index identifiers now fail closed; focused tests 21 passed, host suite 170 passed, and verified23 remains 23 VERIFIED_INDEPENDENT_B plus TB-L1-010 permanently excluded. No external mathematical review is present.",
+      "remediation": "Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.",
       "first_seen": "2026-10-12T15:07:31+00:00",
-      "last_seen": "2026-10-13T17:13:56+00:00",
+      "last_seen": "2026-10-16T07:33:33+00:00",
       "source": "docs/audits/cycle-20261012T150331Z-14/audit.json",
       "attempts": 0,
       "blocked_reason": null,
@@ -280,6 +280,12 @@
           "event": "RESOLVED_UNVERIFIED",
           "reason": "Independent source-only verifier now restricts the scientific release to 23 grade-B families and explicitly excludes TB-L1-010; external mathematical review remains required.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:33:33+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Cycle 57 locally repaired the public-task and G6 source-index collision path; independent mathematical review remains outstanding.",
+          "evidence": "Cycle 57: duplicate public task and source-index identifiers now fail closed; focused tests 21 passed, host suite 170 passed, and verified23 remains 23 VERIFIED_INDEPENDENT_B plus TB-L1-010 permanently excluded. No external mathematical review is present."
         }
       ]
     },
@@ -785,7 +791,8 @@
     "docs/audits/cycle-20261016T071456Z-53/audit.json",
     "docs/audits/cycle-20261016T071631Z-54/audit.json",
     "docs/audits/cycle-20261016T072158Z-55/audit.json",
-    "docs/audits/cycle-20261016T072546Z-56/audit.json"
+    "docs/audits/cycle-20261016T072546Z-56/audit.json",
+    "docs/audits/cycle-20261016T073248Z-57/audit.json"
   ],
   "current_focus": null
 }

@@ -1,0 +1,20 @@
+{
+  "scope": "Independent read-only review of G5/G6 task-index collision guards",
+  "synthetic_checks": {
+    "prepare_duplicate_public_task_id": "raised duplicate public task task_id before G6 case construction",
+    "verify_duplicate_public_task_id": "failed before report output creation",
+    "verify_duplicate_source_index_task_id": "failed before family verification",
+    "malformed_row_checks": "missing/non-object rows rejected",
+    "verdict": "PASS"
+  },
+  "real_verified23_probe": {
+    "family_count": 24,
+    "verified_independent_b": 23,
+    "excluded_invalid_source": ["TB-L1-010"],
+    "private_inputs_read": false,
+    "answer_key_read": false,
+    "provider_calls_made": false
+  },
+  "external_math_review_present": false,
+  "external_statistical_review_present": false
+}

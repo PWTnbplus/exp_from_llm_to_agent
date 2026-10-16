@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:26:57+00:00
+生成时间（UTC）：2026-10-16T07:33:33+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -27,7 +27,7 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：Cycle 56: G6 audit and G6-to-G7 handoff collision guards pass 16 focused tests and the full host suite (165 passed); real verified23 probe passes 552 plan rows, 92 private rows, 552 responses, and 552 unique handoff IDs. Independent statistical/mathematical review remains absent; no confirmatory inference or scientific release is allowed.
+- 证据：The G5/G6 input collision path is repaired, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent; no confirmatory inference is allowed.
 - 必需修复：Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
@@ -35,8 +35,8 @@
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
-- 证据：scripts/verify_g5_g6_inputs.py independently checked the public model/parameters and selected proof graphs without reading answer_key or private_oracle: 23/24 families passed grade-B analytic/numeric checks; TB-L1-010 was explicitly excluded because its recessive mutation-selection formula is inconsistent and its graph contains an unresolved validity node. The 23-family corrected release has 552/552 completed responses, official validation, official score, and trace_audit.pass=true.
-- 必需修复：Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.
+- 证据：Cycle 57: duplicate public task and source-index identifiers now fail closed; focused tests 21 passed, host suite 170 passed, and verified23 remains 23 VERIFIED_INDEPENDENT_B plus TB-L1-010 permanently excluded. No external mathematical review is present.
+- 必需修复：Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
 - 阻塞原因：未记录

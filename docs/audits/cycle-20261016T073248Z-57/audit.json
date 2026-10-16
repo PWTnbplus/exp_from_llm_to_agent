@@ -1,0 +1,105 @@
+{
+  "cycle": "20261016T073248Z-57",
+  "scope": "Repair silent G5/G6 public-task and source-index collisions",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "design_alignment_review": {
+    "reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+    "documents_read": [
+      "全流程实验.md",
+      "整体思路简化版.md",
+      "科学问题到科学假设全思路.md"
+    ],
+    "required_controls_confirmed": [
+      "G0-G7 staged gate chain",
+      "G5 public proof graph and independent verifier",
+      "G6 paired counterfactual prerequisite response",
+      "G7 V/L/U diagnosis with independent Q verification",
+      "frozen preregistration, held-out validation, and failure denominators",
+      "no claim from structural/mock results alone"
+    ],
+    "alignment_conclusion": "The Cycle 57 repair is limited to the design-required public-input/source-index integrity boundary; it does not upgrade any blocked scientific gate."
+  },
+  "repair": {
+    "sources": [
+      "scripts/prepare_g6_counterfactual.py",
+      "scripts/verify_g5_g6_inputs.py"
+    ],
+    "tests": "tests/test_g5_g6_input_contract.py",
+    "change": "G5/G6 public-task and G6 source-index consumers now reject malformed rows and duplicate identifiers before indexing; duplicate rows can no longer silently replace the public model or verification source.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "Synthetic public_tasks.json containing TC-L1-001 twice with k=1 and k=999",
+    "before": "prepare_g6_counterfactual.load_public() silently retained the last row and returned k=999; the independent verifier used the same silent dictionary replacement pattern.",
+    "after": "The preparation loader raises on duplicate public task_id; the verifier rejects duplicate public task_id and duplicate G6 source-index task_id before writing a report."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g5_g6_input_contract.py tests/test_g6_input_collision_guards.py tests/test_analyze_g6_clustered.py tests/test_statistics.py",
+      "result": "21 passed in 11.43s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "170 passed in 29.60s"
+    },
+    "independent_static_review": {
+      "command": "AST parse of both changed scripts plus explicit main-flow wiring assertions and git diff --check",
+      "result": "PASS: both index_unique functions parse and verifier main wires public and source-index uniqueness checks; diff check passed"
+    },
+    "real_verified23_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/verify_g5_g6_inputs.py --g6-out results/g6_counterfactual/formal-20261013T000000Z --out <temporary-file>",
+      "result": "PASS: family_count=24, VERIFIED_INDEPENDENT_B=23, EXCLUDED_INVALID_SOURCE=1 (TB-L1-010); private_inputs_read=false; answer_key_read=false"
+    }
+  },
+  "remaining_boundary": {
+    "independent_statistical_or_mathematical_review_present": false,
+    "scientific_release_allowed": false,
+    "note": "This repair protects the public-task and source-family input contract only. It does not establish upstream provenance, oracle validity, formal statistical validity, Q validity, dependency edges, provider authorization, billing evidence, or a scientific Agent-vs-LLM result."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G5/G6 input-contract review",
+    "findings": [
+      {
+        "id": "ISSUE-ff97c7c89112",
+        "fingerprint": "g6_verifier_math_review_missing",
+        "severity": "P1",
+        "evidence": "Cycle 57 closes the locally found public-task/source-index collision path: duplicate identifiers and malformed records fail closed, focused tests pass 21/21, the host suite passes 170/170, and the real verified23 verifier remains 23 VERIFIED_INDEPENDENT_B plus one permanently excluded TB-L1-010. Independent external mathematical review of the verifier and the corrected subset remains absent.",
+        "remediation": "Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.",
+        "blocker": "Independent mathematical review is external and unavailable in the current environment."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "formal_statistical_validity_not_established",
+        "severity": "P1",
+        "evidence": "The G5/G6 input collision path is repaired, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent; no confirmatory inference is allowed.",
+        "remediation": "Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
+        "blocker": "The required review is external and unavailable in the current environment."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "8e4c6e8",
+    "commit": "PENDING_LOCAL_COMMIT",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no scientific conclusion was claimed. Commit and remote verification are recorded after the state/report update."
+  }
+}

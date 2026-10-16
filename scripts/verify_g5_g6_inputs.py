@@ -25,6 +25,23 @@ def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def index_unique(rows: Any, field: str, label: str) -> dict[str, dict[str, Any]]:
+    """Index records only when identifiers are unique and well-formed."""
+    if not isinstance(rows, list):
+        raise SystemExit(f"{label} must be a JSON list")
+    indexed: dict[str, dict[str, Any]] = {}
+    for position, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise SystemExit(f"{label} row {position} must be an object")
+        value = row.get(field)
+        if not isinstance(value, str) or not value:
+            raise SystemExit(f"{label} row {position} has missing or invalid {field}")
+        if value in indexed:
+            raise SystemExit(f"duplicate {label} {field}: {value}")
+        indexed[value] = row
+    return indexed
+
+
 def normalise(text: str) -> str:
     table = str.maketrans({
         "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4",
@@ -119,10 +136,11 @@ def main() -> int:
     parser.add_argument("--public-tasks", type=Path, default=Path("data/theory_benchmark_v2/public_tasks.json"))
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
-    public = {row["task_id"]: row for row in read_json(args.public_tasks)}
+    public = index_unique(read_json(args.public_tasks), "task_id", "public task")
     index = read_json(args.g6_out / "G6_SOURCE_INDEX.json")
+    source_rows = index_unique(index.get("source_rows"), "task_id", "G6 source index")
     rows: list[dict[str, Any]] = []
-    for source in index.get("source_rows", []):
+    for source in source_rows.values():
         task_id = source["task_id"]
         task = public.get(task_id)
         failures: list[str] = []

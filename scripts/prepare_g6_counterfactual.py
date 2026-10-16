@@ -50,9 +50,25 @@ def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
 
 
+def index_unique(rows: Any, field: str, label: str) -> dict[str, dict[str, Any]]:
+    """Index a record list without silently replacing duplicate identifiers."""
+    if not isinstance(rows, list):
+        raise ValueError(f"{label} must be a JSON list")
+    indexed: dict[str, dict[str, Any]] = {}
+    for position, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise ValueError(f"{label} row {position} must be an object")
+        value = row.get(field)
+        if not isinstance(value, str) or not value:
+            raise ValueError(f"{label} row {position} has missing or invalid {field}")
+        if value in indexed:
+            raise ValueError(f"duplicate {label} {field}: {value}")
+        indexed[value] = row
+    return indexed
+
+
 def load_public(path: Path) -> dict[str, dict[str, Any]]:
-    rows = json.loads(path.read_text(encoding="utf-8"))
-    return {str(row["task_id"]): row for row in rows}
+    return index_unique(json.loads(path.read_text(encoding="utf-8")), "task_id", "public task")
 
 
 def find_verified_graph(root: Path, model_id: str, task_id: str) -> tuple[Path, dict[str, Any], dict[str, Any]]:
