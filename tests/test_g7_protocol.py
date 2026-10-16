@@ -21,6 +21,7 @@ from scripts.run_g7_failure_localization import (
     public_tool_loop,
     protocol_preflight,
     validate_paid_evidence,
+    validate_model_output_contract,
 )
 import scripts.run_g7_failure_localization as g7_runner
 
@@ -467,6 +468,53 @@ def test_g7_nested_stage_contract_rejects_private_or_malformed_fields(stage, val
 def test_g7_invalid_decision_is_not_silently_repaired() -> None:
     with pytest.raises(ValueError, match="invalid decision"):
         parse_payload('{"decision":"guess"}')
+
+
+def test_g7_output_contract_is_arm_specific_and_fail_closed() -> None:
+    checkpoint = {
+        "decision": "MAINTAIN",
+        "affected_claim_ids": [],
+        "revised_claim": "",
+        "supporting_evidence": "public",
+    }
+    diagnostic = {
+        **checkpoint,
+        "stages": {
+            "V": {"verdict": "SUPPORTED"},
+            "L": {"nodes": [], "edges": []},
+            "U": {"node_changes": []},
+            "Q": {"verdict": "PASS", "reason": "ok"},
+        },
+    }
+    validate_model_output_contract(checkpoint, checkpoint=True)
+    validate_model_output_contract(diagnostic, checkpoint=False)
+    with pytest.raises(ValueError, match="invalid checkpoint output contract"):
+        validate_model_output_contract(diagnostic, checkpoint=True)
+    with pytest.raises(ValueError, match="invalid diagnostic output contract"):
+        validate_model_output_contract(checkpoint, checkpoint=False)
+
+
+def test_g7_checkpoint_stages_are_rejected_then_bounded_retry_can_accept_valid_shape(tmp_path: Path) -> None:
+    bad = {
+        "decision": "MAINTAIN",
+        "affected_claim_ids": [],
+        "revised_claim": "",
+        "supporting_evidence": "public",
+        "stages": {"V": {"verdict": "SUPPORTED"}, "L": {"nodes": [], "edges": []},
+                   "U": {"node_changes": []}, "Q": {"verdict": "PASS", "reason": "ok"}},
+    }
+    valid = {
+        "decision": "MAINTAIN", "affected_claim_ids": [],
+        "revised_claim": "", "supporting_evidence": "public",
+    }
+    provider = MockLLMProvider(responses=[bad, valid])
+    event_path = tmp_path / "events.jsonl"
+    payload, _ = public_tool_loop(provider, [{"role": "user", "content": "public"}], "G4",
+                                  Limits(10, 10, 100000, 10.0), event_path, "checkpoint-probe", 0, True)
+    events = [json.loads(line) for line in event_path.read_text(encoding="utf-8").splitlines()]
+    assert payload == valid
+    assert len(provider.calls) == 2
+    assert sum(event["event_type"] == "FORMAT_RETRY_SCHEDULED" for event in events) == 1
 
 
 def test_g7_format_retry_is_bounded_and_audited(tmp_path: Path) -> None:

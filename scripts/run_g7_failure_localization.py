@@ -32,6 +32,12 @@ from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_
 
 
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
+CHECKPOINT_OUTPUT_KEYS = frozenset({
+    "decision", "affected_claim_ids", "revised_claim", "supporting_evidence",
+})
+DIAGNOSTIC_OUTPUT_KEYS = frozenset({
+    "decision", "affected_claim_ids", "revised_claim", "supporting_evidence", "stages",
+})
 FORBIDDEN_MODEL_KEYS = (
     "expected_decision",
     "affected_claim_ids",
@@ -281,6 +287,22 @@ def parse_payload(content: str) -> dict[str, Any]:
         raise ValueError(f"invalid decision {decision!r}")
     value["decision"] = decision
     return value
+
+
+def validate_model_output_contract(value: dict[str, Any], *, checkpoint: bool) -> None:
+    expected_keys = CHECKPOINT_OUTPUT_KEYS if checkpoint else DIAGNOSTIC_OUTPUT_KEYS
+    if set(value) != expected_keys:
+        arm = "checkpoint" if checkpoint else "diagnostic"
+        raise ValueError(f"invalid {arm} output contract")
+    affected_claim_ids = value.get("affected_claim_ids")
+    if (
+        not isinstance(affected_claim_ids, list)
+        or any(not isinstance(claim_id, str) or not claim_id.strip()
+               for claim_id in affected_claim_ids)
+    ):
+        raise ValueError("invalid affected_claim_ids")
+    if not checkpoint and not isinstance(value.get("stages"), dict):
+        raise ValueError("invalid diagnostic stages")
 
 
 def normalize_stages(value: dict[str, Any]) -> dict[str, Any]:
@@ -785,6 +807,7 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
 
         try:
             candidate = parse_payload(response.content)
+            validate_model_output_contract(candidate, checkpoint=checkpoint)
             if not checkpoint:
                 normalize_stages(candidate)
             parsed = candidate

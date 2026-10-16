@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:43:10+00:00",
+  "updated_at": "2026-10-16T08:45:32+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -936,17 +936,17 @@
       "severity": "P1",
       "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
       "status": "VERIFIED",
-      "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.",
-      "remediation": "Require exact public V/L/U/Q nested schemas in normalize_stages and retain malformed provider outputs as failed attempts with bounded format retry; extend the forensic taxonomy to report verifier_ref/eligibility metadata hits. Never repair historical rows in place.",
+      "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory.",
+      "remediation": "Enforce exact arm-specific top-level output keys: checkpoint outputs must exclude stages, diagnostic outputs must include stages; preserve malformed outputs through the bounded format-retry path and never rewrite historical checkpoint artifacts.",
       "first_seen": "2026-10-16T08:42:10+00:00",
-      "last_seen": "2026-10-16T08:42:10+00:00",
+      "last_seen": "2026-10-16T08:45:32+00:00",
       "source": "docs/audits/cycle-20261016T084135Z-69/g7_stage_contract_finding.json",
       "attempts": 0,
       "blocked_reason": null,
       "verification": {
-        "time": "2026-10-16T08:42:16+00:00",
+        "time": "2026-10-16T08:45:32+00:00",
         "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
-        "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.",
+        "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory.",
         "reason": "Independent reviewer verification"
       },
       "history": [
@@ -960,6 +960,17 @@
           "event": "VERIFIED",
           "reason": "Independent reviewer verification",
           "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory."
+        },
+        {
+          "time": "2026-10-16T08:45:32+00:00",
+          "event": "REOPENED",
+          "source": "docs/audits/cycle-20261016T084506Z-70/g7_top_level_contract_finding.json"
+        },
+        {
+          "time": "2026-10-16T08:45:32+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory."
         }
       ]
     }

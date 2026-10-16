@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 arm-specific output-contract review",
+  "findings": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
+      "evidence": "Before this repair, public_tool_loop(..., checkpoint=true) accepted a checkpoint payload containing the diagnostic stages object instead of rejecting it; a direct MockLLMProvider probe returned accepted=true with top-level stages. The immutable protocol-corrected checkpoint artifact contains 184 rows, of which 128 include stages even though the checkpoint contract has only decision, affected_claim_ids, revised_claim, and supporting_evidence. This historical artifact is preserved and remains non-confirmatory.",
+      "remediation": "Enforce exact arm-specific top-level output keys: checkpoint outputs must exclude stages, diagnostic outputs must include stages; preserve malformed outputs through the bounded format-retry path and never rewrite historical checkpoint artifacts."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

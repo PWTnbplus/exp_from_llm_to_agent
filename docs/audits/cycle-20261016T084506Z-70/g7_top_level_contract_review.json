@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 arm-specific output-contract review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory.",
+      "reason": "The future-run top-level output contract is independently verified locally; no historical trace or scientific conclusion was changed."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

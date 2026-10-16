@@ -1,0 +1,87 @@
+{
+  "cycle": "20261016T084506Z-70",
+  "scope": "G7 arm-specific top-level output contract for checkpoints and diagnostic forks",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 natural checkpoint output and diagnostic-fork output are distinct protocol stages.",
+      "The model-facing contract specifies exact top-level fields and diagnostic V/L/U/Q only at the diagnostic fork.",
+      "Malformed outputs are retained as failures with only the bounded format retry; no historical rows are silently repaired.",
+      "Historical Q and output-shape evidence cannot be promoted to scientific validity without independent verification."
+    ],
+    "alignment_conclusion": "The arm-specific top-level contract is now fail-closed and matches the staged G7 design. The historical checkpoint artifact remains immutable and is explicitly excluded from confirmatory interpretation."
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py"],
+    "change": "Added exact checkpoint and diagnostic top-level key contracts plus affected_claim_ids validation before checkpoint/diagnostic stage handling; malformed checkpoint stages now enter the bounded format-retry path.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+      "result": "67 passed"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "212 passed in 23.50s"
+    },
+    "pre_repair_probe": {
+      "command": "Read-only MockLLMProvider checkpoint probe with a valid checkpoint plus an unexpected stages object, executed before this repair",
+      "result": "The old code accepted the payload and returned top-level stages, demonstrating the fail-open defect."
+    },
+    "post_repair_probe": {
+      "command": "Read-only MockLLMProvider checkpoint probe with malformed checkpoint stages followed by valid four-field checkpoint",
+      "result": "The first response schedules exactly one FORMAT_RETRY; the second valid response is accepted; no provider/network call occurs."
+    },
+    "historical_checkpoint_probe": {
+      "command": "Read-only key-shape scan of results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_checkpoints.jsonl",
+      "result": "184 checkpoint rows; 128 contain stages and 56 have the four-field shape. The artifact is immutable and non-confirmatory."
+    },
+    "source_review": {
+      "files": ["scripts/run_g7_failure_localization.py", "tests/test_g7_protocol.py"],
+      "result": "PASS: arm-specific top-level validation runs before checkpoint acceptance or diagnostic V/L/U normalization; malformed responses remain auditable retry/failure events."
+    }
+  },
+  "remaining_boundary": {
+    "scientific_release_allowed": false,
+    "note": "G0/G6/G7 remain blocked by provider authorization, immutable model/billing evidence, provenance, independent Q/statistical/mathematical/dependency review, and remote delivery. No provider or paid experiment was started."
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 arm-specific output-contract review",
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-4c7e2a91d6f0",
+        "verdict": "VERIFIED",
+        "evidence": "Exact arm-specific top-level validation and bounded checkpoint retry are covered by 67 focused tests, 212 full tests, and independent pre/post probes. The historical 128/184 checkpoint-shape discrepancy remains preserved and non-confirmatory.",
+        "reason": "Only the future local output-contract remediation is verified; Q validity and scientific release remain blocked."
+      }
+    ]
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "6280a23",
+    "commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": true,
+    "remote_updated": false,
+    "note": "Filled after local commit and delivery verification attempts."
+  }
+}
