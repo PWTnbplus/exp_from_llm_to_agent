@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:11:27+00:00",
+  "updated_at": "2026-10-16T08:12:02+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 64 local commit 64c36d2 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443.",
+      "evidence": "Cycle 65 local commit d28b9c6 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 64 GitHub delivery remains externally blocked after local privacy verification commit.",
+      "blocked_reason": "Cycle 65 GitHub delivery remains externally blocked after the paired-observation metadata repair commit.",
       "verification": null,
       "history": [
         {
@@ -235,6 +235,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 64 GitHub delivery remains externally blocked after local privacy verification commit.",
           "evidence": "Cycle 64 local commit 64c36d2 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443."
+        },
+        {
+          "time": "2026-10-16T08:12:02+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 65 GitHub delivery remains externally blocked after the paired-observation metadata repair commit.",
+          "evidence": "Cycle 65 local commit d28b9c6 exists on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with proxy connection errors to github.com:443."
         }
       ]
     },
