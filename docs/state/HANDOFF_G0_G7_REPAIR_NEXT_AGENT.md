@@ -528,7 +528,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only scan confirms `wrong_protocol_version=0`, `wrong_profile=0`, `wrong_retry_protocol=0`, missing/wrong experiment identity `0`, source-arm mismatches `0`, source-checkpoint mismatch groups `0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
 - `ISSUE-5788b5a4ed09` is `VERIFIED` for this local protocol-version identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider, provenance, Q/math/statistics, dependency-edge, and scientific-release blockers remain.
 - Audit files: `docs/audits/cycle-20261016T100123Z-86/audit.json`, `g7_protocol_version_finding.json`, and `g7_protocol_version_review.json`.
-- Local repair commit: `077c649`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- Local repair commit: `077c649`; audit/state commit: `0067010`; delivery-blocker state commit: `32535f9`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
 ## Cycle 85 G7 executable profile identity repair (2026-10-16T09:58Z)
