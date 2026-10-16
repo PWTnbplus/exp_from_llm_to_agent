@@ -312,5 +312,12 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local commits: `6a7feb4` and delivery-state record `a5c9f1c`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
 - Current state: `11` open/blocked/unverified issues, `5` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
 
+## Cycle 67 stale workflow blocker independent verification (2026-10-16T08:22Z)
+
+- Independently reviewed the historical malformed/stale nested-agent output in cycle 1 and the subsequent valid cycle-33 audit; the original failure evidence remains immutable, while the later audit exited successfully and current G7 protocol/trace/taxonomy/terminal-retry tests pass `54/54`.
+- `ISSUE-28ed827e40a9` is now `VERIFIED` as a transient workflow/test blocker resolved by later valid audit evidence. This does not erase historical provider failures or lift any scientific gate.
+- No source, provider artifact, paid run, or scientific result was changed. Local commits: `7589a9e` and delivery-state record `2367fca`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
+- Current state: `10` open/blocked/unverified issues, `6` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
