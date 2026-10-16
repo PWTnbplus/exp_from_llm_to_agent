@@ -256,5 +256,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T073248Z-57/audit.json` and `g5_g6_input_contract_review.json`.
 - Cycle 57 delivery: local repair commit `e1fdf16`; `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed because the configured proxy could not connect to GitHub port 443. Remote update is not claimed and remains unverified under `ISSUE-000000000003`.
 
+## Cycle 58 G6 frozen statistical-layout repair (2026-10-16T07:39Z)
+
+- Repaired `scripts/analyze_g6_clustered.py`: the formal CLI now requires the frozen verified23 layout of 23 families × CF1–CF4 × replicates 0–2 × G3/G4, exactly 552 plan rows and every expected arm key; unexpected private cases also fail closed.
+- Reproduction before repair: a one-family CF1-only input with matched responses was accepted by the validator and could omit CF2–CF4 from a formal analysis. After repair, incomplete layout fails before output creation.
+- Added formal-layout adversarial coverage; focused tests: `16 passed`; full host suite: `173 passed`.
+- Real verified23 read-only probe remains structurally complete: `552` plan rows, `23` families, CF1–CF4 and `ALL_CF`; output status is `ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW` and is not a scientific result.
+- `ISSUE-000000000004` remains `BLOCKED`: independent statistical/mathematical review is absent. G0/G6/G7 remain blocked and `scientific_release_allowed=false`.
+- No provider call, paid run, retry, confirmatory inference, or superiority/scientific claim was made.
+- Audit: `docs/audits/cycle-20261016T073921Z-58/audit.json` and `statistical_layout_review.json`.
+- Delivery is pending the Cycle 58 local commit; push and `git ls-remote` must be attempted and truthfully recorded afterward.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

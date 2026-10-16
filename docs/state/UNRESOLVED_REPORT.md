@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:34:48+00:00
+生成时间（UTC）：2026-10-16T07:39:48+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -27,11 +27,11 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：The G5/G6 input collision path is repaired, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent; no confirmatory inference is allowed.
-- 必需修复：Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
+- 证据：Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed.
+- 必需修复：Retain the strict frozen-layout and collision guards and obtain independent statistical and mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, bootstrap/McNemar code, and inferential interpretation before scientific release.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 56 G6/G7 collision repair leaves independent statistical/mathematical review as blocker
+- 阻塞原因：Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep

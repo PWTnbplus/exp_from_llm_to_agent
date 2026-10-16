@@ -1,0 +1,20 @@
+{
+  "scope": "Independent read-only review of formal G6 frozen-layout enforcement",
+  "synthetic_checks": {
+    "incomplete_cf_layout_before_repair": "accepted by the unpinned validator and could omit CF2-CF4 from a formal CLI input",
+    "incomplete_cf_layout_after_repair": "formal CLI rejects before output creation",
+    "unexpected_private_case": "rejected before analysis",
+    "verdict": "PASS"
+  },
+  "real_verified23_probe": {
+    "plan_rows": 552,
+    "families": 23,
+    "cf_types": ["CF1", "CF2", "CF3", "CF4"],
+    "replicates": [0, 1, 2],
+    "groups": ["G3", "G4"],
+    "scientific_status": "ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW",
+    "provider_calls_made": false
+  },
+  "external_statistical_review_present": false,
+  "external_math_review_present": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:34:48+00:00",
+  "updated_at": "2026-10-16T07:39:48+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -201,13 +201,13 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "BLOCKED",
-      "evidence": "The G5/G6 input collision path is repaired, but independent statistical/mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, and inferential code remains absent; no confirmatory inference is allowed.",
-      "remediation": "Retain all collision guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
+      "evidence": "Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed.",
+      "remediation": "Retain the strict frozen-layout and collision guards and obtain independent statistical and mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, bootstrap/McNemar code, and inferential interpretation before scientific release.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T07:33:33+00:00",
+      "last_seen": "2026-10-16T07:39:48+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 0,
-      "blocked_reason": "Cycle 56 G6/G7 collision repair leaves independent statistical/mathematical review as blocker",
+      "blocked_reason": "Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.",
       "verification": null,
       "history": [
         {
@@ -238,6 +238,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 56 G6/G7 collision repair leaves independent statistical/mathematical review as blocker",
           "evidence": "Cycle 56: G6 audit and G6-to-G7 handoff collision guards pass 16 focused tests and the full host suite (165 passed); real verified23 probe passes 552 plan rows, 92 private rows, 552 responses, and 552 unique handoff IDs. Independent statistical/mathematical review remains absent; no confirmatory inference or scientific release is allowed."
+        },
+        {
+          "time": "2026-10-16T07:39:48+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.",
+          "evidence": "Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed."
         }
       ]
     },
@@ -798,7 +804,8 @@
     "docs/audits/cycle-20261016T071631Z-54/audit.json",
     "docs/audits/cycle-20261016T072158Z-55/audit.json",
     "docs/audits/cycle-20261016T072546Z-56/audit.json",
-    "docs/audits/cycle-20261016T073248Z-57/audit.json"
+    "docs/audits/cycle-20261016T073248Z-57/audit.json",
+    "docs/audits/cycle-20261016T073921Z-58/audit.json"
   ],
   "current_focus": null
 }

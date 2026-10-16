@@ -1,0 +1,93 @@
+{
+  "cycle": "20261016T073921Z-58",
+  "scope": "Repair incomplete frozen-layout acceptance in G6 clustered analysis",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "design_alignment_review": {
+    "reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+    "documents_read": [
+      "全流程实验.md",
+      "整体思路简化版.md",
+      "科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls": [
+      "G6 preregistered paired counterfactual response",
+      "CF1-CF4 separate reporting and secondary pooled aggregate",
+      "all registered failures retained in denominators",
+      "frozen layout before formal analysis",
+      "independent statistical review before confirmatory inference"
+    ],
+    "alignment_conclusion": "Cycle 58 enforces the frozen verified23 input layout at the formal CLI boundary and does not upgrade exploratory output to a scientific claim."
+  },
+  "repair": {
+    "source": "scripts/analyze_g6_clustered.py",
+    "tests": "tests/test_analyze_g6_clustered.py",
+    "change": "Formal analysis now requires 23 theory families, CF1-CF4, replicates 0-2, both G3/G4 arms, every expected arm key, exactly 552 plan rows, and an exact private-case key match. Small synthetic unit tests may still call the unpinned validator without formal dimensions.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "Synthetic one-family plan containing only CF1 G3/G4 rows with matching private and response rows",
+    "before": "validate_statistical_inputs() accepted the incomplete plan and returned the private index; the formal layout had no guard against silently omitting CF2-CF4.",
+    "after": "The formal CLI rejects incomplete layout before writing analysis output; the error identifies the family/CF/replicate/arm dimension mismatch."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_statistics.py",
+      "result": "16 passed in 12.54s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "173 passed in 30.75s"
+    },
+    "independent_read_only_review": {
+      "command": "git diff --check; AST/layout wiring assertions; synthetic incomplete-layout rejection probe",
+      "result": "PASS: strict dimensions are wired into main; incomplete CF layout fails before output; no historical artifact changed"
+    },
+    "real_verified23_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/analyze_g6_clustered.py --plan results/g6_counterfactual/formal-20261013T000000Z/run_plan_verified23.jsonl --private results/g6_counterfactual/formal-20261013T000000Z/private_oracle_verified23.jsonl --responses results/g6_counterfactual/formal-20261013T000000Z/responses_verified23.jsonl --out <temporary-file>",
+      "result": "PASS: 552 plan rows, 23 families, CF1-CF4 and ALL_CF reports; scientific_status=ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW; temporary output removed"
+    }
+  },
+  "remaining_boundary": {
+    "independent_statistical_or_mathematical_review_present": false,
+    "scientific_release_allowed": false,
+    "note": "The layout repair protects the preregistered denominator and pairing contract but does not validate oracle provenance, cluster choice, bootstrap/McNemar assumptions, upstream provenance, provider identity/billing, Q validity, dependency edges, or any Agent-vs-LLM scientific conclusion."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only frozen-layout/statistical-input review",
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "formal_statistical_validity_not_established",
+        "severity": "P1",
+        "evidence": "Cycle 58 repairs a locally reproducible denominator defect: the formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases, focused tests pass 16/16, the host suite passes 173/173, and the real verified23 probe retains 552 rows and CF1-CF4. Independent statistical/mathematical review remains absent, so the output stays exploratory and no confirmatory inference is allowed.",
+        "remediation": "Retain the strict frozen-layout and collision guards and obtain independent statistical and mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, bootstrap/McNemar code, and inferential interpretation before scientific release.",
+        "blocker": "The required independent review is external and unavailable in the current environment."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "5aba8bb",
+    "commit": "PENDING_LOCAL_COMMIT",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no statistical conclusion was claimed. Commit and remote verification are recorded after the state/report update."
+  }
+}

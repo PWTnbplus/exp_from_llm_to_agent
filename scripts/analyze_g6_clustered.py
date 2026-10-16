@@ -10,6 +10,12 @@ from pathlib import Path
 from typing import Any
 
 
+FORMAL_VERIFIED23_FAMILY_COUNT = 23
+FORMAL_VERIFIED23_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
+FORMAL_VERIFIED23_REPLICATES = frozenset({0, 1, 2})
+FORMAL_VERIFIED23_GROUPS = frozenset({"G3", "G4"})
+
+
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
@@ -28,8 +34,13 @@ def validate_statistical_inputs(
     plan: list[dict[str, Any]],
     private_rows: list[dict[str, Any]],
     response_rows: list[dict[str, Any]],
+    *,
+    expected_families: int | None = None,
+    expected_cf_types: set[str] | frozenset[str] | None = None,
+    expected_replicates: set[int] | frozenset[int] | None = None,
+    expected_groups: set[str] | frozenset[str] | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Reject input collisions before any statistical row can be overwritten."""
+    """Reject collisions and, for formal runs, any incomplete frozen layout."""
 
     plan_by_run = _index_unique(plan, lambda row: row["run_id"], "plan run_id")
     seen_arm_keys: set[tuple[Any, ...]] = set()
@@ -52,6 +63,43 @@ def validate_statistical_inputs(
     missing_cases = sorted({row["case_id"] for row in plan} - set(private))
     if missing_cases:
         raise SystemExit(f"missing matched private case_id: {missing_cases!r}")
+    extra_cases = sorted(set(private) - {row["case_id"] for row in plan})
+    if extra_cases:
+        raise SystemExit(f"unexpected private case_id: {extra_cases!r}")
+    if any(value is not None for value in (expected_families, expected_cf_types, expected_replicates, expected_groups)):
+        if None in (expected_families, expected_cf_types, expected_replicates, expected_groups):
+            raise ValueError("formal statistical layout requires all expected dimensions")
+        family_ids = {row["theory_family_id"] for row in plan}
+        cf_types = {row["cf_type"] for row in plan}
+        replicates = {int(row["replicate"]) for row in plan}
+        groups = {row["group_id"] for row in plan}
+        expected_cf_types = frozenset(expected_cf_types)
+        expected_replicates = frozenset(expected_replicates)
+        expected_groups = frozenset(expected_groups)
+        if len(family_ids) != expected_families:
+            raise SystemExit(
+                f"statistical layout family count {len(family_ids)} != expected {expected_families}"
+            )
+        if cf_types != expected_cf_types:
+            raise SystemExit(f"statistical layout CF types {sorted(cf_types)!r} != expected {sorted(expected_cf_types)!r}")
+        if replicates != expected_replicates:
+            raise SystemExit(f"statistical layout replicates {sorted(replicates)!r} != expected {sorted(expected_replicates)!r}")
+        if groups != expected_groups:
+            raise SystemExit(f"statistical layout groups {sorted(groups)!r} != expected {sorted(expected_groups)!r}")
+        expected_arm_count = len(family_ids) * len(expected_cf_types) * len(expected_replicates) * len(expected_groups)
+        if len(plan) != expected_arm_count:
+            raise SystemExit(f"statistical layout plan rows {len(plan)} != expected {expected_arm_count}")
+        expected_arm_keys = {
+            (family, cf_type, replicate, group)
+            for family in family_ids
+            for cf_type in expected_cf_types
+            for replicate in expected_replicates
+            for group in expected_groups
+        }
+        if seen_arm_keys != expected_arm_keys:
+            missing = sorted(expected_arm_keys - seen_arm_keys)
+            extra = sorted(seen_arm_keys - expected_arm_keys)
+            raise SystemExit(f"statistical layout arm keys mismatch: missing={missing!r} extra={extra!r}")
     return private, responses
 
 
@@ -114,7 +162,13 @@ def main() -> int:
     args = parser.parse_args()
     plan = read_jsonl(args.plan)
     private, responses = validate_statistical_inputs(
-        plan, read_jsonl(args.private), read_jsonl(args.responses)
+        plan,
+        read_jsonl(args.private),
+        read_jsonl(args.responses),
+        expected_families=FORMAL_VERIFIED23_FAMILY_COUNT,
+        expected_cf_types=FORMAL_VERIFIED23_CF_TYPES,
+        expected_replicates=FORMAL_VERIFIED23_REPLICATES,
+        expected_groups=FORMAL_VERIFIED23_GROUPS,
     )
     matched: dict[tuple[str, str, int], dict[str, bool]] = defaultdict(dict)
     for row in plan:

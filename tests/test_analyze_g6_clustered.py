@@ -57,6 +57,42 @@ def test_missing_and_unexpected_responses_are_rejected() -> None:
         )
 
 
+def test_formal_layout_rejects_missing_counterfactual_type() -> None:
+    with pytest.raises(SystemExit, match="statistical layout CF types"):
+        analysis.validate_statistical_inputs(
+            _plan(), _private(), _responses(),
+            expected_families=1,
+            expected_cf_types={"CF1", "CF2"},
+            expected_replicates={0},
+            expected_groups={"G3", "G4"},
+        )
+
+
+def test_unexpected_private_case_is_rejected() -> None:
+    with pytest.raises(SystemExit, match="unexpected private case_id"):
+        analysis.validate_statistical_inputs(
+            _plan(), _private() + [{"case_id": "extra", "expected_decision": "MAINTAIN"}], _responses()
+        )
+
+
+def test_main_rejects_incomplete_formal_layout_before_writing_analysis(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    for name, rows in (("plan", _plan()), ("private", _private()), ("responses", _responses())):
+        (tmp_path / f"{name}.jsonl").write_text(
+            "\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8"
+        )
+    out = tmp_path / "out"
+    monkeypatch.setattr(sys, "argv", [
+        "analyze_g6_clustered.py", "--plan", str(tmp_path / "plan.jsonl"),
+        "--private", str(tmp_path / "private.jsonl"), "--responses", str(tmp_path / "responses.jsonl"),
+        "--out", str(out),
+    ])
+    with pytest.raises(SystemExit, match="statistical layout family count"):
+        analysis.main()
+    assert not out.exists()
+
+
 def test_main_rejects_duplicate_response_before_writing_analysis(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     plan = _plan()
     private = _private()
