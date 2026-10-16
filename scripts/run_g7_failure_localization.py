@@ -77,6 +77,8 @@ G7_EXPERIMENT_ID = "g7_failure_localization"
 G7_PROFILE = "theory_benchmark"
 G7_PROTOCOL_VERSION = "g7-public-case-format-retry-v1"
 G7_RETRY_PROTOCOL = "separate_frozen_retry_not_pooled"
+G7_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
+G7_FORMAL_SPLIT = "final_test"
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -472,6 +474,8 @@ def _formal_public_contract_valid(row: dict[str, Any]) -> bool:
     return (
         all(_valid_identifier(row.get(field)) for field in G7_PUBLIC_METADATA_FIELDS[:-2])
         and _valid_sha256(row.get("source_g5_graph_sha256"))
+        and row.get("cf_type") in G7_CF_TYPES
+        and row.get("split") == G7_FORMAL_SPLIT
         and row.get("verification_grade") in {"A", "B", "C"}
         and isinstance(row.get("model_visible"), dict)
     )

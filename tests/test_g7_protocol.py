@@ -238,6 +238,37 @@ def test_g7_formal_preflight_rejects_wrong_protocol_version() -> None:
     assert report["counts"]["invalid_g7_plan_metadata"] == [row["run_id"] for row in plan]
 
 
+def test_g7_formal_preflight_rejects_nonformal_cf_or_split() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    public["cf_type"] = "CF5"
+    label["source_public_case_sha256"] = hashlib.sha256(
+        json.dumps(public, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    for row in plan:
+        row["cf_type"] = "CF5"
+    cf_report = protocol_preflight(
+        [public], [label], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    public2, label2, plan2 = _formal_g7_case("case-2")
+    public2["split"] = "dev"
+    label2["source_public_case_sha256"] = hashlib.sha256(
+        json.dumps(public2, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    for row in plan2:
+        row["split"] = "dev"
+    split_report = protocol_preflight(
+        [public2], [label2], plan2,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    assert cf_report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_g7_public_metadata" in cf_report["errors"]
+    assert split_report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_g7_public_metadata" in split_report["errors"]
+
+
 def test_g7_formal_preflight_rejects_mixed_source_checkpoint_within_case_group() -> None:
     public, label, plan = _formal_g7_case("case-1")
     plan[0]["source_checkpoint_id"] = "different-source-checkpoint"
