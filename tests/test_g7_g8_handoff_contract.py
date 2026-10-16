@@ -47,3 +47,28 @@ def test_duplicate_checkpoint_id_fails_closed() -> None:
             lambda row: row["checkpoint_id"],
             "checkpoint_id",
         )
+
+
+def test_model_visible_forbidden_keys_are_case_insensitive_and_nested() -> None:
+    leaks = handoff.find_forbidden(
+        {
+            "public": {
+                "Verifier_Ref": "private-ref",
+                "Eligible_U": False,
+                "nested": {"CF_TYPE": "CF1", "Theory_Family_Id": "family-1"},
+            }
+        },
+        "$.model_visible",
+    )
+    assert leaks == [
+        "$.model_visible.public.Verifier_Ref",
+        "$.model_visible.public.Eligible_U",
+        "$.model_visible.public.nested.CF_TYPE",
+        "$.model_visible.public.nested.Theory_Family_Id",
+    ]
+
+
+def test_public_prose_is_not_rejected_for_mentioning_reserved_words() -> None:
+    assert handoff.find_forbidden(
+        {"problem": "The public text mentions answer_key and CF_TYPE as ordinary words."}
+    ) == []

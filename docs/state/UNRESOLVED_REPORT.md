@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:11:39+00:00
+生成时间（UTC）：2026-10-16T09:20:16+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**14**
+- 已验证修复：**15**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -97,6 +97,7 @@
 - **ISSUE-8c2f6d1a4b70**（P1）：G6 validation did not enforce one task lineage across repeats and counterfactual variants——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222.
 - **ISSUE-5f7a1c9d3e20**（P1）：G6 statistical analysis did not validate formal experiment, arm, and split identity fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.
 - **ISSUE-2d7c9a4e1f60**（P1）：G6 report table mixed formal-run metrics with the protocol-v2 artifact root——`E:/resources/python/python.exe -X utf8 -m pytest -q`；Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.
+- **ISSUE-4a8f6c2e1d90**（P1）：Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys——`python -m pytest -q`；find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

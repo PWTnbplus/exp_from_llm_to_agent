@@ -1,0 +1,95 @@
+{
+  "cycle": "20261016T094500Z-78",
+  "scope": "G7 independent handoff model-visible metadata audit",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 model-visible prompts must not contain routing, private-oracle, verifier, or eligibility metadata.",
+      "The G7-to-G8 source-only audit must independently verify the public boundary and must fail closed on leaks.",
+      "This repair is structural only and cannot establish Q validity, provider validity, or scientific release."
+    ],
+    "alignment_conclusion": "The independent handoff audit now uses a case-insensitive recursive key boundary aligned with the executable G7 preflight, while ordinary public prose is not rejected."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only source inspection of scripts/review_g7_g8_handoff.py::find_forbidden",
+      "result": "FAIL: the reviewer used exact case-sensitive membership against an incomplete key set; nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id keys could be missed even though the executable runner rejects them."
+    },
+    "after_repair": {
+      "command": "pytest adversarial handoff contract tests",
+      "result": "PASS: nested mixed-case verifier/eligibility/routing keys are reported with paths, while reserved words in ordinary public prose are not treated as key leaks."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/review_g7_g8_handoff.py"],
+    "tests_added_or_changed": ["tests/test_g7_g8_handoff_contract.py"],
+    "change": "Expanded the independent review boundary to the executable runner's private/routing metadata set and normalized dictionary keys with casefold before recursive comparison.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_g8_handoff_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_label_contract.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py tests/test_g7_corrected_metrics.py tests/test_g7_terminal_retry.py",
+      "result": "77 passed in 6.12s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "227 passed in 25.42s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/review_g7_g8_handoff.py tests/test_g7_g8_handoff_contract.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate source-only audit of find_forbidden and adversarial tests",
+      "result": "PASS: recursive key matching is case-insensitive, routing and private metadata are included, and public string values are not scanned as key names."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 handoff boundary review",
+    "findings": [
+      {
+        "id": "ISSUE-4a8f6c2e1d90",
+        "severity": "P1",
+        "title": "Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys",
+        "evidence": "The pre-repair reviewer checked only a smaller case-sensitive set; the adversarial nested probe covers Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id variants.",
+        "remediation": "Use the complete runner-aligned key boundary with case-insensitive recursive matching and add adversarial tests."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-4a8f6c2e1d90",
+        "verdict": "VERIFIED",
+        "evidence": "The repaired independent reviewer reports all four nested mixed-case leaks; the prose control remains clean; the focused G7 suite passes 77/77 and py_compile/diff-check pass.",
+        "reason": "The local independent-audit fail-open is closed. External model, billing, provenance, mathematical, statistical, and provider gates remain unchanged."
+      }
+    ]
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-4a8f6c2e1d90",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only independent handoff boundary coverage was repaired; no scientific truth decision was made."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "4142d0d",
+    "commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "Filled after the reviewed local commit and push/ls-remote attempt."
+  }
+}

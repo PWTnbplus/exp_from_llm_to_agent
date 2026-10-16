@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 handoff boundary review",
+  "findings": [
+    {
+      "id": "ISSUE-4a8f6c2e1d90",
+      "severity": "P1",
+      "title": "Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys",
+      "evidence": "scripts/review_g7_g8_handoff.py::find_forbidden used exact case-sensitive membership and omitted verifier_ref, eligible_u, u_ineligibility_reason, and routing metadata. The executable G7 runner already treats these as forbidden, so the independent audit could under-report a boundary violation.",
+      "remediation": "Align the independent recursive key check with the complete runner boundary using case-insensitive matching; retain ordinary public prose as allowed text.",
+      "scientific_truth_decision_made": false
+    }
+  ],
+  "resolutions": []
+}

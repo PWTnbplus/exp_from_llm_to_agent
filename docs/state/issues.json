@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:11:39+00:00",
+  "updated_at": "2026-10-16T09:20:16+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1224,6 +1224,44 @@
           "evidence": "Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225."
         }
       ]
+    },
+    {
+      "id": "ISSUE-4a8f6c2e1d90",
+      "severity": "P1",
+      "title": "Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys",
+      "status": "VERIFIED",
+      "evidence": "find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes.",
+      "remediation": "Use the complete runner-aligned key boundary with case-insensitive recursive matching and add adversarial tests.",
+      "first_seen": "2026-10-16T09:18:56+00:00",
+      "last_seen": "2026-10-16T09:18:56+00:00",
+      "source": "docs/audits/cycle-20261016T094500Z-78/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:20:16+00:00",
+        "command": "python -m pytest -q",
+        "evidence": "find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:18:56+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T094500Z-78/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:19:57+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Local repair complete; awaiting independent review ingestion",
+          "evidence": "77 focused G7 tests pass; py_compile and git diff --check pass"
+        },
+        {
+          "time": "2026-10-16T09:20:16+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1317,7 +1355,8 @@
     "docs/audits/cycle-20261016T085921Z-74/audit.json",
     "docs/audits/cycle-20261016T090232Z-75/audit.json",
     "docs/audits/cycle-20261016T090727Z-76/audit.json",
-    "docs/audits/cycle-20261016T091032Z-77/audit.json"
+    "docs/audits/cycle-20261016T091032Z-77/audit.json",
+    "docs/audits/cycle-20261016T094500Z-78/audit.json"
   ],
   "current_focus": null
 }

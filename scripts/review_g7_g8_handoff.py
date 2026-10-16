@@ -18,10 +18,15 @@ from typing import Any
 
 
 FORBIDDEN = {
-    "expected_decision", "correct_revised_claim", "oracle_reason", "private_oracle",
-    "V_true", "L_true_impacted_nodes", "U_true_node_changes", "ground_truth",
-    "source_g6_oracle", "answer_key",
+    "expected_decision", "affected_claim_ids", "oracle_affected_claim_ids",
+    "oracle_reason", "correct_revised_claim", "counterexample", "private_oracle",
+    "g6_private_oracle", "V_true", "L_true_impacted_nodes", "U_true_node_changes",
+    "ground_truth", "source_g6_oracle", "answer_key", "verification_code",
+    "verification_status", "verification_grade", "verifier_ref", "eligible_u",
+    "u_ineligibility_reason", "verifier_status",
 }
+ROUTING_METADATA = {"cf_type", "theory_family_id"}
+FORBIDDEN_NORMALIZED = {key.casefold() for key in FORBIDDEN | ROUTING_METADATA}
 
 
 def sha256(path: Path) -> str:
@@ -74,7 +79,7 @@ def find_forbidden(value: Any, path: str = "$") -> list[str]:
     errors: list[str] = []
     if isinstance(value, dict):
         for key, child in value.items():
-            if key in FORBIDDEN:
+            if isinstance(key, str) and key.casefold() in FORBIDDEN_NORMALIZED:
                 errors.append(f"{path}.{key}")
             errors.extend(find_forbidden(child, f"{path}.{key}"))
     elif isinstance(value, list):

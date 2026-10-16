@@ -434,3 +434,13 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
+## Cycle 78 G7 independent handoff boundary repair (2026-10-16T09:45Z)
+
+- Compared the G7-to-G8 source-only handoff boundary with the design requirements under `D:/硕士/prj1_ai_cal/writing/实验设计` and the executable G7 preflight. The independent reviewer must fail closed on routing, private-oracle, verifier, and eligibility metadata in model-visible messages.
+- Independently identified a local fail-open in `scripts/review_g7_g8_handoff.py::find_forbidden`: it used an incomplete, case-sensitive key set, so nested `Verifier_Ref`, `Eligible_U`, `CF_TYPE`, and `Theory_Family_Id` variants could be missed even though the runner rejects them.
+- Repaired the independent reviewer to recursively casefold dictionary keys against the complete runner-aligned private/routing boundary. Ordinary public prose mentioning reserved words remains allowed because values are not scanned as key names.
+- Added adversarial handoff tests. Focused G7 suite: `77 passed`; full host suite: `227 passed`; `py_compile` and `git diff --check` pass.
+- `ISSUE-4a8f6c2e1d90` is `VERIFIED` for this local independent-audit boundary only. `ISSUE-000000000002`, `ISSUE-000000000003`, `ISSUE-000000000004`, `ISSUE-1f8c2b6a4d90`, and `ISSUE-3d7a9c1e5b20` remain externally or scientifically blocked; G0/G6/G7 remain `BLOCKED` and `scientific_release_allowed=false`.
+- Audit files: `docs/audits/cycle-20261016T094500Z-78/audit.json`, `g7_handoff_boundary_finding.json`, and `g7_handoff_boundary_review.json`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
