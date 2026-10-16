@@ -75,7 +75,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "b17c788",
+    "commit": "c502db5",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "Commit and push status will be recorded after the audit/state update; no remote update is presumed."
+    "note": "Local report/audit/state commit c502db5 was created. git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; the remote branch was not updated or verified."
   }
 }
