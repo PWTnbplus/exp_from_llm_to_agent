@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:04:52+00:00",
+  "updated_at": "2026-10-16T07:08:57+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -359,12 +359,12 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "This local G0 repair does not alter the corrected G7 provider/Q records: 3 provider errors, 1268 invalid Q rows, 20 valid Q rows, and 368 ineligible U-stage rows remain as audited in cycle 46.",
-      "remediation": "Keep all failures and invalid Q rows in the denominator; obtain independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through an explicitly authorized, separately frozen run before formal G7 inference.",
+      "evidence": "Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run.",
+      "remediation": "Keep all terminal failures and Q NOT_SCORED rows in the denominator. Obtain independently reviewed provider/Q diagnosis and eligible dependency/state data only through an explicitly authorized, separately frozen run before formal G7 inference.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T06:50:23+00:00",
+      "last_seen": "2026-10-16T07:08:50+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
-      "attempts": 18,
+      "attempts": 20,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -492,6 +492,18 @@
           "event": "IN_PROGRESS",
           "reason": "Cycle 46 added and independently audited a non-confirmatory corrected-G7 metric report. It preserves 1288 planned rows, 3 terminal failures, 1268 invalid Q rows, and 20 valid Q rows; U-dependent pairs are explicitly not computable and no private oracle values are persisted. Formal provider/Q and dependency/U blockers remain.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:05:55+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 51 corrected Q semantics against the design: without a separate external Q verifier, formal Q_validity is NOT_SCORED for all 1288 rows; three provider_error rows and 368 U-ineligible rows remain. Read-only provider forensics retained all errors; no paid retry was run.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:08:57+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 52 repaired V2 state evidence propagation; G7 scientific blocker remains unresolved",
+          "evidence": "Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run."
         }
       ]
     },
@@ -720,7 +732,8 @@
     "docs/audits/cycle-20261016T070000Z-48/audit.json",
     "docs/audits/cycle-20261016T065000Z-49/audit.json",
     "docs/audits/cycle-20261016T065435Z-50/audit.json",
-    "docs/audits/cycle-20261016T070211Z-51/audit.json"
+    "docs/audits/cycle-20261016T070211Z-51/audit.json",
+    "docs/audits/cycle-20261016T070818Z-52/audit.json"
   ],
   "current_focus": null
 }

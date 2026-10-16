@@ -4,8 +4,10 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'scripts' / 'recovery_state.py'
 spec = importlib.util.spec_from_file_location('recovery_state_test', SCRIPT)
@@ -111,6 +113,21 @@ class RecoveryTests(unittest.TestCase):
         path.write_text('{"schema_version":999,"issues":[]}')
         with self.assertRaises(ValueError):
             r.load(self.root)
+
+    def test_cli_status_transition_persists_evidence(self):
+        ledger = r.new_state()
+        issue_id = r.ingest_findings(ledger, [self.finding()], source='cycle-1')[0]
+        r.save(self.root, ledger)
+        evidence = 'cycle-52 CLI evidence: state transition persisted'
+        with patch.object(sys, 'argv', [
+                str(SCRIPT), 'start', '--root', str(self.root), '--id', issue_id,
+                '--reason', 'recorded cycle-52 state evidence',
+                '--evidence', evidence]):
+            self.assertEqual(r.main(), 0)
+        issue = r.get_issue(r.load(self.root), issue_id)
+        self.assertEqual(issue['evidence'], evidence)
+        self.assertEqual(issue['history'][-1]['evidence'], evidence)
+        self.assertEqual(issue['status'], 'IN_PROGRESS')
 
 
 if __name__ == '__main__':

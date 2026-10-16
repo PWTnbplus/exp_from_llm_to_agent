@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:04:52+00:00
+生成时间（UTC）：2026-10-16T07:08:57+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：This local G0 repair does not alter the corrected G7 provider/Q records: 3 provider errors, 1268 invalid Q rows, 20 valid Q rows, and 368 ineligible U-stage rows remain as audited in cycle 46.
-- 必需修复：Keep all failures and invalid Q rows in the denominator; obtain independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through an explicitly authorized, separately frozen run before formal G7 inference.
-- 尝试次数：18
+- 证据：Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run.
+- 必需修复：Keep all terminal failures and Q NOT_SCORED rows in the denominator. Obtain independently reviewed provider/Q diagnosis and eligible dependency/state data only through an explicitly authorized, separately frozen run before formal G7 inference.
+- 尝试次数：20
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

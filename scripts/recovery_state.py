@@ -141,6 +141,12 @@ def update_status(data: dict[str, Any], issue_id: str, status: str, *, reason: s
             issue['blocked_reason'] = None
     if status == 'IN_PROGRESS':
         issue['attempts'] += 1
+    if evidence.strip():
+        # Keep the issue's current evidence synchronized with the explicit
+        # status transition.  The history entry below remains the append-only
+        # audit record, while reports use this top-level value as the current
+        # source of truth.
+        issue['evidence'] = evidence
     issue['status'] = status
     issue['history'].append({'time': timestamp(), 'event': status, 'reason': reason,
                              'evidence': evidence[:1500]})
@@ -346,7 +352,8 @@ def main() -> int:
         states = {'start': 'IN_PROGRESS', 'block': 'BLOCKED', 'claim-fixed': 'RESOLVED_UNVERIFIED', 'verify': 'VERIFIED'}
         if args.command == 'verify':
             raise ValueError('Manual VERIFY is intentionally disabled: independent executed review required')
-        update_status(data, args.id, states[args.command], reason=args.reason)
+        update_status(data, args.id, states[args.command], reason=args.reason,
+                      evidence=args.evidence, proof_command=args.command_run)
         save(root, data)
         write_reports(root, data)
     elif args.command == 'gate-pass':

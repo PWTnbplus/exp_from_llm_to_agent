@@ -1,0 +1,17 @@
+{
+  "scope": "Independent read-only review of V2 recovery-state evidence propagation",
+  "provider_calls_made": false,
+  "paid_experiment_started": false,
+  "checks": {
+    "main_forwards_evidence": true,
+    "update_status_refreshes_current_evidence": true,
+    "temporary_cli_round_trip": {
+      "return_code": 0,
+      "top_level_evidence": "independent CLI evidence",
+      "history_evidence": "independent CLI evidence",
+      "status": "IN_PROGRESS"
+    }
+  },
+  "verdict": "PASS",
+  "command": "E:/resources/python/python.exe -X utf8 -c <AST and temporary-ledger CLI probe>"
+}

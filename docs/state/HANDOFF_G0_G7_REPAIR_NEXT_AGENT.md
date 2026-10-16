@@ -195,5 +195,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 | experiment policy | `docs/experiment_groups.md`、`configs/experiment_groups.json` |
 | V1 scientific requirements | `.agents/skills/scientific-law-autopilot/references/` |
 
+## Cycle 52 state-workflow repair (2026-10-16T07:08Z)
+
+- Repaired `scripts/recovery_state.py`: `start`, `block`, and `claim-fixed` now forward `--evidence` and `--command-run`; explicit evidence updates both the current issue record and its append-only history entry.
+- Added `tests/test_recovery_state.py::test_cli_status_transition_persists_evidence`.
+- Focused regression: `44 passed`; full host suite: `157 passed`; `git diff --check`: PASS.
+- Independent AST and temporary-ledger CLI review: PASS. No provider call, paid run, or retry was made.
+- The design requirement remains enforced: without an external independent Q verifier, formal `Q_validity` is `NOT_SCORED` for `1288/1288`; the `316/1288` label-consistency count is structural only. G7 retains `3` provider errors and `368` U-ineligible rows.
+- Gate state remains truthful: G0, G6, and G7 are `BLOCKED`; G1-G5 are engineering/smoke scope only; `scientific_release_allowed=false`.
+- Cycle audit: `docs/audits/cycle-20261016T070818Z-52/audit.json` and `recovery_state_cli_evidence_review.json`.
+- Next priority remains `ISSUE-3d7a9c1e5b20`: independently diagnose provider/Q failures and obtain eligible dependency/state data only through an explicitly authorized, separately frozen run. Do not pool retries, infer L/U from `0/92` edges, or claim scientific completion.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
