@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:00:10+00:00",
+  "updated_at": "2026-10-16T08:03:33+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -428,13 +428,13 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "Cycle 62 preserves a structural REAL_TRACE_AUDITED handoff only; it does not resolve missing dependency edges, missing checkpoint pairs, Q validity, provenance, or mathematical review.",
-      "remediation": "Retain the source-only selection as non-confirmatory. Obtain independently audited dependency-edge/state-transition data with source hashes, complete the separately frozen checkpoint denominator, and obtain independent mathematical/Q review before any edge-level L/U, G8 causal, or scientific release claim.",
+      "evidence": "Cycle 63 keeps the reduced denominator non-confirmatory. No dependency-edge or independent Q/math/provenance evidence is available, so no G8 causal, L/U, or scientific release claim is made.",
+      "remediation": "Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-16T07:59:36+00:00",
+      "last_seen": "2026-10-16T08:03:27+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
-      "attempts": 1,
-      "blocked_reason": "Replacement dependency/state data and independent scientific review remain externally unavailable; a source-only pilot GO cannot support causal or scientific release claims.",
+      "attempts": 2,
+      "blocked_reason": "The reduced source-only denominator is structural only; independent dependency/state/Q/mathematical evidence remains externally unavailable.",
       "verification": null,
       "history": [
         {
@@ -465,6 +465,18 @@
           "event": "BLOCKED",
           "reason": "Replacement dependency/state data and independent scientific review remain externally unavailable; a source-only pilot GO cannot support causal or scientific release claims.",
           "evidence": "Cycle 62 preserves a structural REAL_TRACE_AUDITED handoff only; it does not resolve missing dependency edges, missing checkpoint pairs, Q validity, provenance, or mathematical review."
+        },
+        {
+          "time": "2026-10-16T08:03:33+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 63 repaired status-blind G8 denominator construction and re-audited the historical source-only input.",
+          "evidence": "Cycle 63: the pre-repair provider_error fixture exited 0 and wrote a G8 denominator; the repaired builder filters to completed CF1/CF2 rows, rejects duplicate identities, and the host suite passed 192 tests. The real source-only input selects 9 families/18 cases and explicitly excludes 31 provider_error checkpoints."
+        },
+        {
+          "time": "2026-10-16T08:03:33+00:00",
+          "event": "BLOCKED",
+          "reason": "The reduced source-only denominator is structural only; independent dependency/state/Q/mathematical evidence remains externally unavailable.",
+          "evidence": "Cycle 63 keeps the reduced denominator non-confirmatory. No dependency-edge or independent Q/math/provenance evidence is available, so no G8 causal, L/U, or scientific release claim is made."
         }
       ]
     },
@@ -893,7 +905,8 @@
     "docs/audits/cycle-20261016T074311Z-59/audit.json",
     "docs/audits/cycle-20261016T074534Z-60/audit.json",
     "docs/audits/cycle-20261016T075322Z-61/audit.json",
-    "docs/audits/cycle-20261016T075850Z-62/audit.json"
+    "docs/audits/cycle-20261016T075850Z-62/audit.json",
+    "docs/audits/cycle-20261016T080255Z-63/audit.json"
   ],
   "current_focus": null
 }

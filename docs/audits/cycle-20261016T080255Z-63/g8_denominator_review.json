@@ -1,0 +1,22 @@
+{
+  "status": "BLOCKED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7/G8 denominator and failure-exclusion review",
+  "findings": [
+    {
+      "id": "ISSUE-1f8c2b6a4d90",
+      "severity": "P1",
+      "verdict": "BLOCKED",
+      "evidence": "The builder now rejects duplicate public/checkpoint identities and uses only completed CF1/CF2 rows. The actual historical source-only input yields 9 complete families and excludes 31 provider_error rows, but missing dependency/Q/math/provenance evidence still blocks scientific use.",
+      "remediation": "Keep this as structural denominator evidence only and obtain independent replacement evidence before causal or scientific claims."
+    }
+  ],
+  "independent_checks": [
+    "Pre-repair provider_error fixture exited 0 and wrote a denominator",
+    "Post-repair partial and duplicate fixtures fail before output",
+    "AST confirms completed-status filtering and collision guards",
+    "Full host regression reports 192 passed",
+    "git diff --check passes"
+  ],
+  "scientific_truth_decision_made": false
+}

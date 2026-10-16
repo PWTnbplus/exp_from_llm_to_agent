@@ -1,0 +1,92 @@
+{
+  "cycle": "20261016T080255Z-63",
+  "scope": "Repair G8 denominator construction so only unique completed G7 CF1/CF2 checkpoints can define a family",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery"
+  ],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_retained": [
+      "G7/G8 reduced denominators are based on completed real public checkpoints, not provider-error rows",
+      "Duplicate case/pair/checkpoint identities fail closed before derived output",
+      "CF3/CF4 remain outside the G8 CF1/CF2 main denominator as specified by the current design path",
+      "Excluded failures are counted and never imputed; a structural denominator is not a scientific result"
+    ],
+    "alignment_conclusion": "The repair brings the G8 input builder into line with the design's completed-checkpoint and failure-denominator requirements without treating the reduced source-only denominator as confirmatory evidence."
+  },
+  "repair": {
+    "source": "scripts/prepare_g8_inputs.py",
+    "tests": "tests/test_prepare_g8_inputs.py",
+    "change": "The builder now validates JSON objects, unique public case IDs, unique checkpoint pair IDs, unique checkpoint IDs, and public family/CF metadata; it uses only status=completed CF1/CF2 rows for complete-family selection, records excluded statuses, and refuses to write output on validation errors.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "One family with all four CF1/CF2 x G3/G4 checkpoint identities present, but one checkpoint has status=provider_error.",
+    "before": "The builder ignored checkpoint status while constructing complete and exited 0, writing a two-case G8 denominator and claiming provider-error rows were excluded.",
+    "after": "Only completed rows contribute to complete-family selection; the same partial family yields no selected family and is rejected before output. A duplicate pair CLI fixture exits 1 with checkpoint_pair_duplicate_identity and writes no output."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_prepare_g8_inputs.py tests/test_g7_scientific_selection.py tests/test_g7_g8_handoff_contract.py tests/test_g7_protocol.py",
+      "result": "39 passed in 1.34s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "192 passed in 20.64s"
+    },
+    "real_source_only_probe": {
+      "command": "Read-only temporary execution of prepare_g8_inputs.py on results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl and g7_checkpoints.jsonl; temporary output removed",
+      "result": "exit=0; selected 9 families and 18 CF1/CF2 public cases; excluded_status_counts={provider_error:31}; CF3/CF4 rows were not included; no raw result was changed"
+    },
+    "independent_read_only_review": {
+      "command": "AST inspection, valid/partial/duplicate synthetic probes, post-repair duplicate CLI probe, and git diff --check",
+      "result": "PASS: no case-id suffix parsing remains; non-completed rows cannot complete a family; duplicate identities fail before output; unique complete inputs remain selectable; formatting check passes"
+    }
+  },
+  "remaining_boundary": {
+    "source_only_reduced_denominator_is_confirmatory": false,
+    "dependency_edges_available": false,
+    "q_independent_verification_available": false,
+    "scientific_release_allowed": false,
+    "note": "The real source-only builder now reports a truthful reduced structural denominator, but the underlying G7 run retains 31 provider-error checkpoints, missing dependency edges, missing independent Q/math review, and unresolved provenance/billing/model gates. No G8 causal or Agent-superiority claim is made."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G7/G8 denominator and failure-exclusion review",
+    "findings": [
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "fingerprint": "g7_dependency_edges_absent",
+        "severity": "P1",
+        "evidence": "Cycle 63 repairs status-blind G8 family selection and duplicate checkpoint identity acceptance. The real source-only probe selects only 9 complete CF1/CF2 families from the historical run and explicitly excludes 31 provider_error checkpoints; dependency-edge/state-transition evidence and independent mathematical/Q review remain unavailable.",
+        "remediation": "Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.",
+        "blocker": "Required replacement evidence and external review are unavailable."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "4a5a871",
+    "commit": "pending",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "Commit and remote verification are pending. No provider or paid experiment was started."
+  }
+}
