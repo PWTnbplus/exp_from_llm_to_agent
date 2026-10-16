@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:47:09+00:00
+生成时间（UTC）：2026-10-16T07:54:56+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -59,11 +59,11 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made.
-- 必需修复：Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators.
-- 尝试次数：20
+- 证据：Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made.
+- 必需修复：Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.
+- 尝试次数：21
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.
+- 阻塞原因：Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present

@@ -1,0 +1,107 @@
+{
+  "cycle": "20261016T075322Z-61",
+  "scope": "Repair G7 trace identity, request-response pairing, append-only retry sequencing, and collision-safe trace/Q indexing",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery"
+  ],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_retained": [
+      "G7 must preserve observable D0-D3 and V/L/U/Q execution evidence rather than infer hidden model state",
+      "All planned rows, failures, malformed responses, and missing checkpoint pairs remain in the denominator",
+      "G7 is diagnostic and cannot be upgraded to a G8 causal claim without complete independently reviewed handoff evidence",
+      "A trace/Q audit is read-only and does not retry a provider or pool historical runs"
+    ],
+    "alignment_conclusion": "The repair strengthens the auditability required by the G7 design, but the historical corrected run still fails the strengthened trace contract and remains non-confirmatory."
+  },
+  "repair": {
+    "sources": [
+      "scripts/audit_g7_trace_q_consistency.py",
+      "scripts/run_g7_failure_localization.py"
+    ],
+    "tests": [
+      "tests/test_g7_trace_q_consistency.py"
+    ],
+    "change": "The trace audit now requires unique event_id and step_id values, explicit model/tool parent pairing, collision-safe state/Q indexes, unique checkpoint identifiers, and boolean Q validity. The G7 runner now emits immutable identities and resumes sequence numbers from an existing append-only trace before a retry.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "before": [
+      "Two state rows with the same run_id were indexed by a last-row-wins dict; a valid Q row was therefore reviewed against the wrong state status before the overall duplicate guard blocked reuse.",
+      "Missing event_id/step_id fields were accepted because the audit only checked duplicates among IDs that happened to be present.",
+      "A non-boolean string such as is_valid='false' was counted as valid through Python truthiness.",
+      "Optional duplicate checkpoint IDs were not represented as a collision guard in the trace/Q conclusion."
+    ],
+    "after": [
+      "Ambiguous identifiers are omitted from indexes and reported as missing/non-bijective; no last-row overwrite is used.",
+      "Missing or duplicated event/step IDs and wrong parent_step_id values make the trace inconsistent.",
+      "Only is_valid is exactly True counts as Q-valid; malformed validity is separately reported and blocks confirmatory reuse.",
+      "Duplicate checkpoint identifiers are recorded and block confirmatory reuse.",
+      "New G7 events contain event_id, step_id, and response/result parent_step_id; retries continue after the existing maximum sequence."
+    ]
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_trace_q_consistency.py tests/test_provider_trace.py",
+      "result": "53 passed in 2.72s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "185 passed in 32.20s"
+    },
+    "real_corrected_trace_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g7_trace_q_consistency.py --states results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_states.jsonl --q results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_q_audit.jsonl --checkpoints results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_checkpoints.jsonl --trace-root results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers --out <temporary-file>",
+      "result": "1288 states, 184 checkpoints, 1288 Q rows; 1288 state traces and 184 checkpoint traces fail the strengthened identity/parent contract because the immutable historical trace format has no event/step identities; 20 previously Q-valid rows are invalidated by trace review; 3 provider_error states remain; confirmatory_reuse_allowed=false; temporary output removed"
+    },
+    "independent_read_only_review": {
+      "command": "AST/index guard review plus synthetic new-trace pairing, duplicate-state, malformed-Q, and sequence-resume probes; git diff --check",
+      "result": "PASS: no last-row state/Q index remains; new emitted traces validate; collision and malformed-input probes fail closed; formatting check passes"
+    }
+  },
+  "remaining_boundary": {
+    "historical_trace_identity_verified": false,
+    "q_independent_verification_available": false,
+    "dependency_edges_available": false,
+    "scientific_release_allowed": false,
+    "note": "The repair hardens future G7 traces and the derived audit only. It cannot retroactively add identities to immutable historical raw traces. The corrected run has 3 terminal provider failures, 20 Q-valid rows before trace review but 0 trace-backed valid rows after the strengthened audit, and no independently reviewed Q standard or dependency-edge data. No V/L/U/Q, causal, or Agent-superiority claim is made."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G7 trace/Q identity and lifecycle review",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "fingerprint": "g7_provider_errors_low_q_coverage",
+        "severity": "P1",
+        "evidence": "Cycle 61 strengthens the G7 trace contract and re-audits the immutable corrected run: 1288/1288 state traces and 184/184 checkpoint traces lack required event/step identities, 20 Q-valid rows are invalidated by trace review, 3 provider_error states remain, and confirmatory_reuse_allowed=false. This is additional evidence that the historical provider/Q result cannot support V/L/U/Q inference.",
+        "remediation": "Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.",
+        "blocker": "Historical raw traces cannot be retroactively repaired; provider authorization and independent Q/dependency review are external and unavailable."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "4bf2cc0",
+    "commit": "pending",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "Commit and remote verification are pending. No provider or paid experiment was started."
+  }
+}

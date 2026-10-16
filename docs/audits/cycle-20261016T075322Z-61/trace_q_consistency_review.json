@@ -1,0 +1,22 @@
+{
+  "status": "BLOCKED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 trace/Q identity and lifecycle review",
+  "findings": [
+    {
+      "id": "ISSUE-3d7a9c1e5b20",
+      "severity": "P1",
+      "verdict": "BLOCKED",
+      "evidence": "The repaired code fails closed on missing/duplicate event and step identities, parent mismatches, state/Q collisions, duplicate checkpoint IDs, and malformed Q validity. The immutable corrected run still has 1288/1288 state traces and 184/184 checkpoint traces without the required identities, 20 Q-valid rows invalidated by trace review, and 3 provider_error states.",
+      "remediation": "Keep the historical run non-confirmatory; obtain an authorized, separately frozen run with the repaired trace contract plus independent Q and dependency/state review."
+    }
+  ],
+  "independent_checks": [
+    "AST confirms collision-safe indexes and strict trace identity/parent guards",
+    "Synthetic emitted trace passes lifecycle validation",
+    "Synthetic duplicate-state and malformed-Q probes fail closed",
+    "Full host regression reports 185 passed",
+    "git diff --check passes"
+  ],
+  "scientific_truth_decision_made": false
+}

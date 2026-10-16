@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:47:09+00:00",
+  "updated_at": "2026-10-16T07:54:56+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -449,13 +449,13 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made.",
-      "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators.",
+      "evidence": "Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made.",
+      "remediation": "Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T07:46:39+00:00",
+      "last_seen": "2026-10-16T07:54:50+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
-      "attempts": 20,
-      "blocked_reason": "Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.",
+      "attempts": 21,
+      "blocked_reason": "Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.",
       "verification": null,
       "history": [
         {
@@ -612,6 +612,18 @@
           "event": "BLOCKED",
           "reason": "Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.",
           "evidence": "Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made."
+        },
+        {
+          "time": "2026-10-16T07:54:56+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 61 repaired future G7 trace identity and collision handling; auditing the immutable corrected run exposed non-confirmatory historical trace evidence.",
+          "evidence": "Cycle 61: focused G7 trace/protocol tests 53 passed and host suite 185 passed. The immutable corrected run has 1288/1288 state traces and 184/184 checkpoint traces without event/step identities, 20 Q-valid rows invalidated by trace review, and 3 provider_error states."
+        },
+        {
+          "time": "2026-10-16T07:54:56+00:00",
+          "event": "BLOCKED",
+          "reason": "Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.",
+          "evidence": "Cycle 61 strengthened the fail-closed trace contract and confirmed confirmatory_reuse_allowed=false on the historical corrected run. No V/L/U/Q or scientific claim is made."
         }
       ]
     },
@@ -849,7 +861,8 @@
     "docs/audits/cycle-20261016T073248Z-57/audit.json",
     "docs/audits/cycle-20261016T073921Z-58/audit.json",
     "docs/audits/cycle-20261016T074311Z-59/audit.json",
-    "docs/audits/cycle-20261016T074534Z-60/audit.json"
+    "docs/audits/cycle-20261016T074534Z-60/audit.json",
+    "docs/audits/cycle-20261016T075322Z-61/audit.json"
   ],
   "current_focus": null
 }

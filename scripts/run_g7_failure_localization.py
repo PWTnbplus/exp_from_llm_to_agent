@@ -231,10 +231,41 @@ def validate_paid_evidence(model_id: str, snapshot_manifest: Path | None,
     }
 
 
-def emit(path: Path, seq: int, run_id: str, event_type: str, status: str, payload: dict[str, Any]) -> int:
+def existing_trace_sequence(path: Path) -> int:
+    """Return the last persisted sequence for an append-only retry trace."""
+    if not path.is_file():
+        return 0
+    values = readl(path)
+    sequences: list[int] = []
+    for index, value in enumerate(values, 1):
+        sequence = value.get("seq")
+        if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence < 1:
+            raise RuntimeError(f"existing trace has invalid sequence at line {index}: {path}")
+        sequences.append(sequence)
+    if len(sequences) != len(set(sequences)):
+        raise RuntimeError(f"existing trace has duplicate sequence values: {path}")
+    return max(sequences, default=0)
+
+
+def emit(path: Path, seq: int, run_id: str, event_type: str, status: str,
+         payload: dict[str, Any]) -> int:
     seq += 1
-    append_jsonl(path, {"seq": seq, "ts_utc": utc_now(), "run_id": run_id,
-                        "event_type": event_type, "status": status, "payload": payload})
+    event = {
+        "seq": seq,
+        "event_id": f"{run_id}:event-{seq:06d}",
+        "step_id": f"{run_id}:step-{seq:06d}",
+        "parent_step_id": (
+            f"{run_id}:step-{seq - 1:06d}"
+            if event_type in {"MODEL_RESPONSE", "TOOL_RESULT", "TOOL_ERROR"}
+            else None
+        ),
+        "ts_utc": utc_now(),
+        "run_id": run_id,
+        "event_type": event_type,
+        "status": status,
+        "payload": payload,
+    }
+    append_jsonl(path, event)
     return seq
 
 
@@ -912,7 +943,7 @@ def main() -> int:
             continue
         trace_id = "checkpoint_" + cp_id
         event_path = out / "checkpoint_traces" / trace_id / "events.jsonl"
-        seq = 0
+        seq = existing_trace_sequence(event_path)
         started = time.monotonic()
         try:
             seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
@@ -947,7 +978,7 @@ def main() -> int:
             continue
         trace_id = row["run_id"]
         event_path = out / "traces" / trace_id / "events.jsonl"
-        seq = 0
+        seq = existing_trace_sequence(event_path)
         injection: dict[str, Any] = {"applied_stages": row["inject_stages"]}
         try:
             seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",

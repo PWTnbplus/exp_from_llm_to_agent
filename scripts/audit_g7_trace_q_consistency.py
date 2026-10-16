@@ -96,6 +96,33 @@ def _error_text(events: list[dict[str, Any]]) -> list[str]:
     return [value for value in values if value and value.lower() != "none"]
 
 
+def _canonical_id(value: Any) -> str:
+    """Return a usable persisted identifier, or the empty sentinel."""
+    return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
+def _duplicate_ids(values: list[str]) -> list[str]:
+    counts = collections.Counter(values)
+    return sorted(value for value, count in counts.items() if count > 1 or not value)
+
+
+def _unique_index(values: list[str], rows: list[dict[str, Any]],
+                  duplicate_ids: list[str]) -> dict[str, dict[str, Any]]:
+    """Index only unambiguous, non-empty IDs.
+
+    A dict comprehension would silently select the last duplicate row. That
+    is unsafe for a derived audit because a later malformed row could replace
+    the trace/Q evidence belonging to an earlier row. Ambiguous IDs are
+    deliberately omitted and are reported by the caller as non-bijective.
+    """
+    duplicate_set = set(duplicate_ids)
+    return {
+        identifier: row
+        for identifier, row in zip(values, rows)
+        if identifier and identifier not in duplicate_set
+    }
+
+
 def _segments(events: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     """Split append-only history at a new run after the previous run ended.
 
@@ -173,11 +200,29 @@ def validate_lifecycle(events: list[dict[str, Any]], expected_run_ids: set[str])
         if any(current <= previous for previous, current in zip(sequences, sequences[1:])):
             reasons.append("sequence_not_strictly_increasing")
 
-    # Stringify malformed IDs so the audit reports an integrity failure rather
-    # than crashing on an unhashable provider payload.
-    event_ids = [str(event.get("event_id")) for event in events if event.get("event_id") is not None]
+    # Event and step identities are part of the immutable pairing contract.
+    # Missing IDs used to pass because the duplicate check only considered IDs
+    # that happened to be present.
+    event_ids: list[str] = []
+    step_ids: list[str] = []
+    for index, event in enumerate(events, 1):
+        event_id = _canonical_id(event.get("event_id"))
+        step_id = _canonical_id(event.get("step_id"))
+        if not event_id:
+            reasons.append(f"missing_event_id:{index}")
+        else:
+            event_ids.append(event_id)
+        if not step_id:
+            reasons.append(f"missing_step_id:{index}")
+        else:
+            step_ids.append(step_id)
+        parent_step_id = event.get("parent_step_id")
+        if parent_step_id is not None and not _canonical_id(parent_step_id):
+            reasons.append(f"invalid_parent_step_id:{index}")
     if len(event_ids) != len(set(event_ids)):
         reasons.append("duplicate_event_id")
+    if len(step_ids) != len(set(step_ids)):
+        reasons.append("duplicate_step_id")
 
     observed_run_ids = {str(event.get("run_id", "")) for event in events}
     if not observed_run_ids.issubset(expected_run_ids):
@@ -201,6 +246,37 @@ def validate_lifecycle(events: list[dict[str, Any]], expected_run_ids: set[str])
                 reasons.append("orphan_tool_result")
             else:
                 pending_tools -= 1
+
+    # A count-only check permits a response to be paired with the wrong
+    # request when events are reordered or duplicated. Validate the explicit
+    # parent step IDs as well. The runner emits one request/call before each
+    # corresponding response/result, so FIFO pairing is deterministic.
+    pending_model_steps: list[str] = []
+    pending_tool_steps: list[str] = []
+    for index, event in enumerate(events, 1):
+        event_type = event.get("event_type")
+        step_id = _canonical_id(event.get("step_id"))
+        parent_step_id = _canonical_id(event.get("parent_step_id"))
+        if event_type == "MODEL_REQUEST":
+            if step_id:
+                pending_model_steps.append(step_id)
+        elif event_type == "MODEL_RESPONSE":
+            if pending_model_steps:
+                expected = pending_model_steps.pop(0)
+                if not parent_step_id:
+                    reasons.append(f"missing_model_response_parent:{index}")
+                elif parent_step_id != expected:
+                    reasons.append(f"model_response_parent_mismatch:{index}")
+        elif event_type == "TOOL_CALL":
+            if step_id:
+                pending_tool_steps.append(step_id)
+        elif event_type in {"TOOL_RESULT", "TOOL_ERROR"}:
+            if pending_tool_steps:
+                expected = pending_tool_steps.pop(0)
+                if not parent_step_id:
+                    reasons.append(f"missing_tool_result_parent:{index}")
+                elif parent_step_id != expected:
+                    reasons.append(f"tool_result_parent_mismatch:{index}")
     if end_status == "completed":
         if pending_models:
             reasons.append("unmatched_model_request")
@@ -298,45 +374,49 @@ def audit_trace_reference(root: Path, record: dict[str, Any]) -> dict[str, Any]:
 def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
                  trace_root: Path, checkpoints: list[dict[str, Any]] | None = None,
                  input_hashes: dict[str, str | None] | None = None) -> dict[str, Any]:
-    state_ids = [str(row.get("run_id", "")) for row in states]
-    state_id_counts = collections.Counter(state_ids)
-    duplicate_state_ids = sorted(run_id for run_id, count in state_id_counts.items()
-                                 if count > 1 or not run_id)
-    state_by_id = {run_id: row for run_id, row in zip(state_ids, states)}
+    state_ids = [_canonical_id(row.get("run_id")) for row in states]
+    duplicate_state_ids = _duplicate_ids(state_ids)
+    state_by_id = _unique_index(state_ids, states, duplicate_state_ids)
     state_reviews = [audit_trace_reference(trace_root, row) for row in states]
-    state_review_by_id = {row["run_id"]: row for row in state_reviews}
-    q_ids = [str(row.get("run_id", "")) for row in q_rows]
-    q_id_counts = collections.Counter(q_ids)
-    duplicate_q_ids = sorted(run_id for run_id, count in q_id_counts.items()
-                             if count > 1 or not run_id)
+    state_review_by_id = _unique_index(state_ids, state_reviews, duplicate_state_ids)
+    q_ids = [_canonical_id(row.get("run_id")) for row in q_rows]
+    duplicate_q_ids = _duplicate_ids(q_ids)
     state_id_set = set(state_ids)
     q_id_set = set(q_ids)
     q_missing_for_state = sorted(state_id_set - q_id_set)
     q_extra_rows = sorted(q_id_set - state_id_set)
-    q_original_valid = sum(bool(row.get("is_valid")) for row in q_rows)
+    q_original_valid = sum(row.get("is_valid") is True for row in q_rows)
+    q_malformed_validity = sum(not isinstance(row.get("is_valid"), bool) for row in q_rows)
     q_trace_backed_valid = 0
     q_invalidated = 0
     q_missing_state = 0
     q_review_statuses: collections.Counter[str] = collections.Counter()
     for row in q_rows:
-        run_id = str(row.get("run_id", ""))
+        run_id = _canonical_id(row.get("run_id"))
         state = state_by_id.get(run_id)
         review = state_review_by_id.get(run_id)
         if state is None or review is None:
             q_missing_state += 1
             q_review_statuses["missing_state"] += 1
-        elif row.get("is_valid") and review.get("trace_ok"):
+        elif row.get("is_valid") is True and review.get("trace_ok"):
             q_trace_backed_valid += 1
             q_review_statuses["trace_backed_valid"] += 1
-        elif row.get("is_valid"):
+        elif row.get("is_valid") is True:
             q_invalidated += 1
             q_review_statuses[str(review.get("trace_status"))] += 1
+        elif not isinstance(row.get("is_valid"), bool):
+            q_review_statuses["malformed_validity"] += 1
         else:
             q_review_statuses["q_invalid_preserved"] += 1
 
     checkpoint_reviews = []
     if checkpoints is not None:
         checkpoint_reviews = [audit_trace_reference(trace_root, row) for row in checkpoints]
+    checkpoint_ids = [
+        _canonical_id(row.get("checkpoint_id", row.get("run_id")))
+        for row in checkpoints or []
+    ]
+    duplicate_checkpoint_ids = _duplicate_ids(checkpoint_ids) if checkpoints is not None else []
     state_status_counts = collections.Counter(str(row.get("status")) for row in states)
     trace_status_counts = collections.Counter(str(row.get("trace_status")) for row in state_reviews)
     failure_category_counts = collections.Counter(str(row.get("failure_category")) for row in state_reviews)
@@ -350,9 +430,9 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
     state_trace_integrity_failures = sum(not row.get("trace_ok") for row in state_reviews)
     checkpoint_trace_integrity_failures = sum(not row.get("trace_ok") for row in checkpoint_reviews)
     return {
-        "audit_version": "g7-trace-q-consistency-v3",
+        "audit_version": "g7-trace-q-consistency-v4",
         "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
-        "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; retain_prior_history_count",
+        "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; require_unique_event_step_ids_and_parent_pairing; retain_prior_history_count",
         "inputs": input_hashes or {},
         "states": {
             "rows": len(states),
@@ -368,6 +448,8 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
         "checkpoints": {
             "provided": checkpoints is not None,
             "rows": len(checkpoints or []),
+            "unique_ids": len(set(checkpoint_ids)),
+            "duplicate_ids": duplicate_checkpoint_ids,
             "status_counts": dict(checkpoint_status_counts),
             "trace_status_counts": dict(checkpoint_trace_status_counts),
             "recorded_failure_category_counts": dict(checkpoint_failure_category_counts),
@@ -385,14 +467,12 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
             "states_missing_q_row": len(q_missing_for_state),
             "q_rows_without_state": len(q_extra_rows),
             "duplicate_run_ids": duplicate_q_ids,
+            "malformed_validity_rows": q_malformed_validity,
             "review_status_counts": dict(q_review_statuses),
         },
         "conclusion": {
             "terminal_failures_retained": terminal_states > 0 or terminal_checkpoints > 0,
-            "q_invalidity_retained": (
-                bool(q_rows)
-                and q_original_valid + sum(1 for row in q_rows if not row.get("is_valid")) == len(q_rows)
-            ),
+            "q_invalidity_retained": bool(q_rows) and not q_malformed_validity,
             "retries_pooled": False,
             "confirmatory_reuse_allowed": not any((
                 terminal_states,
@@ -403,6 +483,8 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
                 q_missing_state,
                 bool(duplicate_state_ids),
                 bool(duplicate_q_ids),
+                bool(duplicate_checkpoint_ids),
+                q_malformed_validity,
                 bool(q_missing_for_state),
                 bool(q_extra_rows),
                 len(q_rows) != len(states),
