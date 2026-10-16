@@ -1,0 +1,109 @@
+{
+  "cycle": "20261016T094408Z-81",
+  "scope": "G7 complete-plan source G6 arm to diagnostic-group identity gate",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 diagnostic forks must retain the G6 group identity and source-arm provenance.",
+      "The complete formal plan must be structurally auditable before any provider creation.",
+      "A protocol repair must not be interpreted as a scientific truth or release decision."
+    ],
+    "alignment_conclusion": "The complete-plan gate now verifies the explicit G3/G4 to G6 source-arm mapping while preserving the seven-arm coverage and same-case shared-checkpoint rules repaired in the previous cycle."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c import valid formal fixture; mutate all G3 source_g6_arm_id values to G6_B_G4_GIVEN; call protocol_preflight(..., require_complete_plan=True)",
+      "result": "PASS for the regression probe before implementation repair: formal_run_allowed_by_protocol=true; errors=[]; the wrong source-arm/group mapping was accepted."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 42 tests, including rejection of the wrong source-arm/group mapping and controls for correct G3/G4 mappings, dropped cases, duplicate case/group checkpoints, cross-case collisions, and same-case shared checkpoints."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py", "tests/test_g7_protocol_preflight.py"],
+    "change": "Added the explicit G7_SOURCE_G6_ARM_BY_GROUP contract and a complete-plan error/count for source-arm mismatches; corrected the preflight fixture so G3 uses G6_A_G3_GIVEN and G4 uses G6_B_G4_GIVEN.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "e5bc327"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "42 passed in 5.57s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "232 passed in 23.48s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_plan_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+        "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      },
+      "command": "scripts/g7_protocol_preflight.py with worker_count=16 and require_complete_plan=true",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public_cases=92; labels=92; plan_rows=1288; g7_plan_group_arm_mismatches=[]; incomplete_case_group_coverage=[]; duplicate_case_group_checkpoints=[]; checkpoint_identity_collisions=[]; unique_checkpoint_ids=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate PowerShell data-only reconstruction, not the runner preflight",
+      "result": "PASS: rows=1288; case_group_keys=184; G3 rows=644; G4 rows=644; source_arm_mismatches=0; duplicate_run_id_groups=0; plan SHA256 matches the immutable preflight input."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 source-arm identity review",
+    "findings": [
+      {
+        "id": "ISSUE-42e2f49eb73e",
+        "fingerprint": "g7-source-arm-group-mapping-v1",
+        "severity": "P1",
+        "title": "G7 complete preflight accepted a source G6 arm inconsistent with the diagnostic group",
+        "evidence": "The pre-repair mutation probe returned formal_run_allowed_by_protocol=true for swapped G3 source-arm identifiers.",
+        "remediation": "Enforce the explicit source G6 arm mapping for every complete-plan G3/G4 row and test the adversarial swap."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-42e2f49eb73e",
+        "verdict": "VERIFIED",
+        "evidence": "The guard, adversarial test, full suite, immutable preflight, and independent data-only reconstruction all pass.",
+        "reason": "Local structural defect fixed; external and scientific gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "d6e642d",
+    "code_commit": "e5bc327",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "Remote delivery will be attempted after local audit/state ingestion; no remote success is claimed here."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-42e2f49eb73e",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only G7 source-arm identity structure was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}

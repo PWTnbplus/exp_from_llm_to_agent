@@ -1,0 +1,13 @@
+{
+  "id": "ISSUE-42e2f49eb73e",
+  "fingerprint": "g7-source-arm-group-mapping-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted a source G6 arm inconsistent with the diagnostic group",
+  "evidence": "Before repair, a read-only probe built from the valid formal G7 case fixture and changed every G3 row from G6_A_G3_GIVEN to G6_B_G4_GIVEN. protocol_preflight(..., require_complete_plan=True) returned formal_run_allowed_by_protocol=true with errors=[], so a group/source-arm identity swap could pass the structural gate.",
+  "remediation": "Define the documented G3/G4 source-arm mapping in the runner and reject every complete-plan row whose source_g6_arm_id does not match its group_id. Add an adversarial regression test, correct the preflight test fixture, and rerun the immutable formal plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "docs/state/gates.json"
+  ]
+}

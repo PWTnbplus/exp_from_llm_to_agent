@@ -466,3 +466,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit files: `docs/audits/cycle-20261016T094500Z-78/audit.json`, `g7_handoff_boundary_finding.json`, and `g7_handoff_boundary_review.json`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 81 G7 source G6 arm/group identity repair (2026-10-16T09:44Z)
+
+- Re-read the three user-design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) and the V2 state/gate requirements before selecting the next local P1.
+- Independently reproduced a structural fail-open in `scripts/run_g7_failure_localization.py::protocol_preflight`: after changing every G3 plan row's `source_g6_arm_id` from `G6_A_G3_GIVEN` to `G6_B_G4_GIVEN`, the old complete-plan preflight still returned `formal_run_allowed_by_protocol=true` and `errors=[]`.
+- Repaired the complete-plan gate with explicit `G7_SOURCE_G6_ARM_BY_GROUP`: G3 must bind to `G6_A_G3_GIVEN` and G4 to `G6_B_G4_GIVEN`; mismatches now emit `g7_plan_group_arm_mismatch` and are listed in counts. Corrected the preflight fixture so it no longer masks the G3 mapping defect.
+- Added an adversarial regression test. Focused G7 tests pass `42/42`; full repository suite passes `232/232`; py_compile and `git diff --check` pass.
+- Re-ran the immutable formal plan preflight with `92` public cases, `92` labels, and `1288` plan rows: `formal_run_allowed_by_protocol=true`, `errors=[]`, `g7_plan_group_arm_mismatches=[]`, `incomplete_case_group_coverage=[]`, `duplicate_case_group_checkpoints=[]`, `checkpoint_identity_collisions=[]`, and `184` unique checkpoints.
+- Independent read-only PowerShell reconstruction confirms `1288` rows, `184` case/group keys, `644` G3 rows, `644` G4 rows, zero source-arm mismatches, zero duplicate run-id groups, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- `ISSUE-42e2f49eb73e` is `VERIFIED` for this local source-arm/group identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, and scientific validity remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T094408Z-81/audit.json`, `g7_source_arm_mapping_finding.json`, and `g7_source_arm_mapping_review.json`.
+- Local repair commit: `e5bc327`. Audit/state commit and delivery-blocker bookkeeping are still pending in this cycle. Do not stage the user-owned untracked `research_data_summary_G0_G7/` directory.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. A remote push must be attempted and verified with `git ls-remote`; do not claim success if the proxy remains unavailable.
+

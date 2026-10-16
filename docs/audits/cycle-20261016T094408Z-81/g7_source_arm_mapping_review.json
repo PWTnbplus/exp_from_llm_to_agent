@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 source-arm identity review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-42e2f49eb73e",
+      "verdict": "VERIFIED",
+      "evidence": "The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[].",
+      "reason": "The local source-arm identity fail-open is closed. This verifies only structural protocol integrity; it does not establish provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

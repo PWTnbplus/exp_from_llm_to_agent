@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:39:46+00:00",
+  "updated_at": "2026-10-16T09:44:58+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1356,6 +1356,38 @@
           "evidence": "The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage."
         }
       ]
+    },
+    {
+      "id": "ISSUE-42e2f49eb73e",
+      "severity": "P1",
+      "title": "G7 complete preflight accepted a source G6 arm inconsistent with the diagnostic group",
+      "status": "VERIFIED",
+      "evidence": "The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[].",
+      "remediation": "Enforce the explicit source G6 arm mapping for every complete-plan G3/G4 row and test the adversarial swap.",
+      "first_seen": "2026-10-16T09:44:53+00:00",
+      "last_seen": "2026-10-16T09:44:58+00:00",
+      "source": "docs/audits/cycle-20261016T094408Z-81/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:44:58+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[].",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:44:53+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T094408Z-81/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:44:58+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[]."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1452,7 +1484,8 @@
     "docs/audits/cycle-20261016T091032Z-77/audit.json",
     "docs/audits/cycle-20261016T094500Z-78/audit.json",
     "docs/audits/cycle-20261016T092700Z-79/audit.json",
-    "docs/audits/cycle-20261016T093500Z-80/audit.json"
+    "docs/audits/cycle-20261016T093500Z-80/audit.json",
+    "docs/audits/cycle-20261016T094408Z-81/audit.json"
   ],
   "current_focus": null
 }
