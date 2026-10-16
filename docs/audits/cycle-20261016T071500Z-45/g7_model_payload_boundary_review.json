@@ -1,0 +1,15 @@
+{
+  "audit_version": "g7-model-payload-boundary-review-v1",
+  "reviewer": "independent_g7_model_payload_boundary_check_v11",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "audit_metadata_retained": true,
+  "model_visible_stages": ["L", "U", "V"],
+  "forbidden_audit_metadata_in_model_payload": [],
+  "model_payload_contains_only_preregistered_vlu": true,
+  "historical_artifacts_rewritten": false,
+  "provider_calls_made": false,
+  "formal_preflight_errors": ["ineligible_u_diagnostic_arm"],
+  "formal_run_allowed_by_protocol": false,
+  "source_report": "docs/audits/cycle-20261016T071500Z-45/g7_protocol_preflight.json",
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}

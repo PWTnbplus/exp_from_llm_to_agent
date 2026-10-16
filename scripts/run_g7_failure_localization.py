@@ -683,6 +683,27 @@ def injection_for(row: dict[str, Any], label: dict[str, Any]) -> dict[str, Any]:
     return injection
 
 
+def model_visible_diagnostic_information(injection: dict[str, Any]) -> dict[str, Any]:
+    """Return only the preregistered V/L/U labels for the model-facing message.
+
+    Provenance, eligibility, and source markers are retained in the append-only
+    ``INJECTION_APPLIED`` audit event, but are not experimental information
+    supplied to the model. This keeps oracle-assisted diagnosis limited to the
+    requested intermediate labels rather than exposing audit metadata.
+    """
+    visible: dict[str, Any] = {}
+    if isinstance(injection.get("V"), dict):
+        visible["V"] = {"verdict": injection["V"].get("verdict")}
+    if isinstance(injection.get("L"), dict):
+        visible["L"] = {
+            "nodes": injection["L"].get("nodes", []),
+            "edges": injection["L"].get("edges", []),
+        }
+    if isinstance(injection.get("U"), dict):
+        visible["U"] = {"node_changes": injection["U"].get("node_changes", [])}
+    return visible
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--public", type=Path, required=True)
@@ -821,7 +842,8 @@ def main() -> int:
                         {"role": "user", "content": case_prompt(case)},
                         {"role": "assistant", "content": json.dumps(cp["checkpoint_payload"], ensure_ascii=False)},
                         {"role": "user", "content": json.dumps({"diagnostic_arm": row["diagnostic_arm"],
-                           "inject_stages": row["inject_stages"], "diagnostic_information": injection,
+                           "inject_stages": row["inject_stages"],
+                           "diagnostic_information": model_visible_diagnostic_information(injection),
                            "instruction": "Re-evaluate the case with only these supplied diagnostic stages. Return the required JSON."}, ensure_ascii=False)}]
             payload, seq = public_tool_loop(provider, messages, row["group_id"], limits, event_path, trace_id, seq, False)
             stages = normalize_stages(payload)

@@ -14,6 +14,7 @@ from scripts.run_g7_failure_localization import (
     case_prompt,
     effective_worker_cost_cap,
     injection_for,
+    model_visible_diagnostic_information,
     normalize_stages,
     parse_payload,
     persisted_usage,
@@ -267,6 +268,27 @@ def test_g7_injection_source_distinguishes_oracle_assistance_from_d0() -> None:
     assert d0 == {"applied_stages": [], "source": "D0_NEUTRAL_PLACEHOLDER"}
     assert d1["source"] == "ORACLE_ASSISTED_DIAGNOSIS"
     assert d1["label_source"] == "independently_verified_g7_local_labels"
+
+
+def test_g7_model_message_excludes_oracle_audit_metadata() -> None:
+    label = {
+        "v": {"verdict": "SUPPORTED"},
+        "l": {"nodes": ["claim-1"], "edges": [{"from": "claim-1", "to": "claim-2"}]},
+        "u": {"node_changes": [{"claim_id": "claim-2", "to_status": "supported"}]},
+        "eligible_u": True,
+        "verifier_ref": "private-verifier-ref",
+        "u_ineligibility_reason": "should-not-be-model-visible",
+    }
+    audit_payload = injection_for({"inject_stages": ["V", "L", "U"]}, label)
+    visible_payload = model_visible_diagnostic_information(audit_payload)
+    assert visible_payload == {
+        "V": {"verdict": "SUPPORTED"},
+        "L": {"nodes": ["claim-1"], "edges": [{"from": "claim-1", "to": "claim-2"}]},
+        "U": {"node_changes": [{"claim_id": "claim-2", "to_status": "supported"}]},
+    }
+    assert "verifier_ref" not in json.dumps(visible_payload)
+    assert "eligible" not in json.dumps(visible_payload)
+    assert "source" not in json.dumps(visible_payload)
 
 
 def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

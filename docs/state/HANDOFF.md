@@ -18,7 +18,7 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=16：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Retain all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures, eligibility failures, and budget failures in the denominator. Do not select a mechanism or make L/U clai
+- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=17：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Retain all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures, eligibility failures, and budget failures in the denominator. Do not select a mechanism or make L/U clai
 - ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=1：Real-provider pilot and retry/cost behavior are unverified；修复=Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.
