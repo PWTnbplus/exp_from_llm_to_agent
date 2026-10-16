@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 cross-repeat lineage review",
+  "findings": [
+    {
+      "id": "ISSUE-8c2f6d1a4b70",
+      "severity": "P1",
+      "title": "G6 validation did not enforce one task lineage across repeats and counterfactual variants",
+      "evidence": "Before this cycle, G3/G4 identity was checked only within each (family, CF, replicate) key. A malformed plan could therefore use different case_id values across repeats of one family/CF or different paired_set_id values across CF variants while still producing locally complete G3/G4 pairs. The design requires paired_set_id to bind the four versions of one base task and repeats to be repeated observations of that task.",
+      "remediation": "Require one paired_set_id per theory_family_id and one (case_id, paired_set_id) lineage per theory_family_id×cf_type across all arms and repeats. Preserve the all-planned denominator and never rewrite historical artifacts."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

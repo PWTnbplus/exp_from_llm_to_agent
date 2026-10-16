@@ -45,6 +45,8 @@ def validate_statistical_inputs(
     """Reject collisions and, for formal runs, any incomplete frozen layout."""
 
     plan_cf_by_case: dict[str, str] = {}
+    family_paired_set: dict[str, str] = {}
+    family_cf_lineage: dict[tuple[str, str], tuple[str, str]] = {}
     for row in plan:
         for field in ("run_id", "case_id", "paired_set_id", "theory_family_id", "cf_type", "group_id"):
             value = row.get(field)
@@ -53,10 +55,23 @@ def validate_statistical_inputs(
         replicate = row.get("replicate")
         if isinstance(replicate, bool) or not isinstance(replicate, int):
             raise SystemExit(f"invalid plan replicate for run_id: {row.get('run_id')!r}: {replicate!r}")
-        prior_cf_type = plan_cf_by_case.get(row["case_id"])
-        if prior_cf_type is not None and prior_cf_type != row["cf_type"]:
-            raise SystemExit(f"plan case_id maps to multiple cf_type values: {row['case_id']!r}")
-        plan_cf_by_case[row["case_id"]] = row["cf_type"]
+        family = row["theory_family_id"]
+        cf_type = row["cf_type"]
+        case_id = row["case_id"]
+        paired_set_id = row["paired_set_id"]
+        prior_paired_set = family_paired_set.get(family)
+        if prior_paired_set is not None and prior_paired_set != paired_set_id:
+            raise SystemExit(f"family paired_set_id changes across CF variants: {family!r}")
+        family_paired_set[family] = paired_set_id
+        lineage_key = (family, cf_type)
+        prior_lineage = family_cf_lineage.get(lineage_key)
+        if prior_lineage is not None and prior_lineage != (case_id, paired_set_id):
+            raise SystemExit(f"plan task lineage changes across replicates: {lineage_key!r}")
+        family_cf_lineage[lineage_key] = (case_id, paired_set_id)
+        prior_cf_type = plan_cf_by_case.get(case_id)
+        if prior_cf_type is not None and prior_cf_type != cf_type:
+            raise SystemExit(f"plan case_id maps to multiple cf_type values: {case_id!r}")
+        plan_cf_by_case[case_id] = cf_type
 
     plan_by_run = _index_unique(plan, lambda row: row["run_id"], "plan run_id")
     seen_arm_keys: set[tuple[Any, ...]] = set()

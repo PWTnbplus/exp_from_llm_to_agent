@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 cross-repeat lineage review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-8c2f6d1a4b70",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222.",
+      "reason": "The local cross-repeat and cross-CF task-lineage guard is independently verified; formal statistical/mathematical review and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

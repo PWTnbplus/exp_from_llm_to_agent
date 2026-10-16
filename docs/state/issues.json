@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:00:22+00:00",
+  "updated_at": "2026-10-16T09:02:54+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1110,6 +1110,38 @@
           "evidence": "The repaired validator rejects string/boolean replicate probes and rejects a private CF mismatch against the plan. It also enforces nonempty typed plan identifiers, valid private CF/decision fields, and same-case CF consistency. The immutable corrected inputs pass formal validation with 552 plan rows, 92 private rows, 552 responses, replicate values [0,1,2], and all registered statuses/decisions. Focused G6 tests pass 19/19 and the full host suite passes 220/220."
         }
       ]
+    },
+    {
+      "id": "ISSUE-8c2f6d1a4b70",
+      "severity": "P1",
+      "title": "G6 validation did not enforce one task lineage across repeats and counterfactual variants",
+      "status": "VERIFIED",
+      "evidence": "The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222.",
+      "remediation": "Require stable paired_set_id per family and stable case/paired-set lineage per family×CF.",
+      "first_seen": "2026-10-16T09:02:54+00:00",
+      "last_seen": "2026-10-16T09:02:54+00:00",
+      "source": "docs/audits/cycle-20261016T090232Z-75/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:02:54+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+        "evidence": "The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:02:54+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T090232Z-75/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:02:54+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1200,7 +1232,8 @@
     "docs/audits/cycle-20261016T084740Z-71/audit.json",
     "docs/audits/cycle-20261016T085230Z-72/audit.json",
     "docs/audits/cycle-20261016T085638Z-73/audit.json",
-    "docs/audits/cycle-20261016T085921Z-74/audit.json"
+    "docs/audits/cycle-20261016T085921Z-74/audit.json",
+    "docs/audits/cycle-20261016T090232Z-75/audit.json"
   ],
   "current_focus": null
 }

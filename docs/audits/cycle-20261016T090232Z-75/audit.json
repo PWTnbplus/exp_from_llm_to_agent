@@ -1,0 +1,82 @@
+{
+  "cycle": "20261016T090232Z-75",
+  "scope": "G6 cross-repeat and cross-counterfactual task-lineage guard",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:327-348",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:352-364",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:561-615"
+    ],
+    "relevant_controls_reviewed": [
+      "paired_set_id binds the four counterfactual variants of one base task.",
+      "Repeated runs are repeated observations of the same task and remain clustered within theory_family_id.",
+      "The primary G3/G4 comparison is same-task paired and does not treat task variants or replicates as independent natural laws."
+    ],
+    "alignment_conclusion": "The validator now enforces the task lineage required by the design both within G3/G4 pairs and across all repeats/CF variants before analysis."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only synthetic plans with a different case_id across repeats or a different paired_set_id across CF variants",
+      "result": "FAIL_OPEN: each local G3/G4 pair could pass without stable cross-level lineage"
+    },
+    "after_repair": {
+      "command": "Read-only cross-repeat case-lineage and cross-CF paired-set probes",
+      "result": "Both fail closed with explicit lineage errors"
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/analyze_g6_clustered.py"],
+    "tests_added_or_changed": ["tests/test_analyze_g6_clustered.py"],
+    "change": "Added one paired_set_id per theory family and one stable case/paired-set lineage per family×CF across all arms and repeats.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+      "result": "21 passed in 0.21s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "222 passed in 23.39s"
+    },
+    "real_corrected_lineage_probe": {
+      "command": "Read-only formal validation plus family and family×CF lineage scan of the corrected G6 run plan",
+      "result": "PASS: 552 plan rows, 92 private rows, 552 responses, 276 complete pairs, zero family paired_set_id violations, zero family×CF task-lineage violations"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G6 cross-repeat lineage review",
+    "findings": [
+      {
+        "id": "ISSUE-8c2f6d1a4b70",
+        "severity": "P1",
+        "title": "G6 validation did not enforce one task lineage across repeats and counterfactual variants",
+        "evidence": "The pre-repair validator checked only each local family×CF×replicate G3/G4 pair and did not enforce stable cross-repeat/cross-CF task lineage.",
+        "remediation": "Require stable paired_set_id per family and stable case/paired-set lineage per family×CF."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-8c2f6d1a4b70",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "This is a local task-lineage repair only; provider authorization, provenance, independent statistical/mathematical/dependency review, historical G7 validity, and remote delivery remain unresolved."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "e856f51",
+    "remote_updated": false,
+    "note": "Commit and push status will be recorded after the audit/state update; no remote update is presumed."
+  }
+}

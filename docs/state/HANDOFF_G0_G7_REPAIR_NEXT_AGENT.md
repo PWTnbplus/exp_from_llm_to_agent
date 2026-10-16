@@ -398,5 +398,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `10` open/blocked/unverified issues and `10` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 75 G6 cross-repeat/cross-CF lineage repair (2026-10-16T09:02Z)
+
+- Compared the G6 pairing contract with the user design documents under `D:/硕士/prj1_ai_cal/writing/实验设计`: one `paired_set_id` binds the four CF variants of one base task, and repeats are repeated observations of the same task within a theory-family cluster.
+- Independently reproduced the remaining fail-open: the prior validator checked only each local family×CF×replicate G3/G4 pair, so different `case_id` values could be used across repeats and different `paired_set_id` values across CF variants.
+- Repaired `validate_statistical_inputs` to require one `paired_set_id` per `theory_family_id` and one stable `(case_id, paired_set_id)` lineage per family×CF across all arms and repeats. Historical G6 artifacts were not modified.
+- Added adversarial cross-repeat and cross-CF tests. Focused G6 input tests: `21 passed`; full host suite: `222 passed`; `git diff --check`: PASS.
+- Read-only validation of the immutable corrected G6 inputs passes: `552` plan rows, `92` private rows, `552` responses, `276` complete pairs, zero family-level paired-set violations, and zero family×CF task-lineage violations.
+- `ISSUE-8c2f6d1a4b70` is `VERIFIED` for this local lineage guard only. `ISSUE-000000000004` remains `BLOCKED`: independent formal statistical/mathematical review is still absent, so no confirmatory inference or scientific release is allowed.
+- Audit files: `docs/audits/cycle-20261016T090232Z-75/audit.json`, `g6_cross_repeat_lineage_finding.json`, and `g6_cross_repeat_lineage_review.json`.
+- Current ledger after this cycle: `10` open/blocked/unverified issues and `11` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

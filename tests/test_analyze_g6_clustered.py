@@ -52,14 +52,17 @@ def test_duplicate_plan_arm_key_is_rejected() -> None:
 
 
 @pytest.mark.parametrize(
-    ("field", "g4_value"),
-    [("case_id", "c2"), ("paired_set_id", "p2")],
+    ("field", "g4_value", "error"),
+    [
+        ("case_id", "c2", "plan task lineage changes across replicates"),
+        ("paired_set_id", "p2", "family paired_set_id changes across CF variants"),
+    ],
 )
-def test_mismatched_g3_g4_task_lineage_is_rejected(field: str, g4_value: str) -> None:
+def test_mismatched_g3_g4_task_lineage_is_rejected(field: str, g4_value: str, error: str) -> None:
     plan = _plan()
     plan[1][field] = g4_value
     private = _private() + ([{"case_id": "c2", "expected_decision": "MAINTAIN"}] if field == "case_id" else [])
-    with pytest.raises(SystemExit, match="mismatched G3/G4 task lineage"):
+    with pytest.raises(SystemExit, match=error):
         analysis.validate_statistical_inputs(plan, private, _responses())
 
 
@@ -94,6 +97,34 @@ def test_private_cf_type_must_match_plan() -> None:
     private = [{"case_id": "c1", "cf_type": "CF2", "expected_decision": "MAINTAIN"}]
     with pytest.raises(SystemExit, match="private cf_type mismatch"):
         analysis.validate_statistical_inputs(_plan(), private, _responses())
+
+
+def test_task_lineage_must_be_stable_across_replicates() -> None:
+    plan = _plan() + [
+        {"run_id": "r2-g3", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G3"},
+        {"run_id": "r2-g4", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G4"},
+    ]
+    private = _private() + [{"case_id": "c2", "cf_type": "CF1", "expected_decision": "MAINTAIN"}]
+    responses = _responses() + [
+        {"run_id": "r2-g3", "decision": "MAINTAIN", "status": "completed"},
+        {"run_id": "r2-g4", "decision": "MAINTAIN", "status": "completed"},
+    ]
+    with pytest.raises(SystemExit, match="plan task lineage changes across replicates"):
+        analysis.validate_statistical_inputs(plan, private, responses)
+
+
+def test_family_paired_set_must_be_stable_across_counterfactuals() -> None:
+    plan = _plan() + [
+        {"run_id": "r-cf2-g3", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G3"},
+        {"run_id": "r-cf2-g4", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G4"},
+    ]
+    private = _private() + [{"case_id": "c2", "cf_type": "CF2", "expected_decision": "MAINTAIN"}]
+    responses = _responses() + [
+        {"run_id": "r-cf2-g3", "decision": "MAINTAIN", "status": "completed"},
+        {"run_id": "r-cf2-g4", "decision": "MAINTAIN", "status": "completed"},
+    ]
+    with pytest.raises(SystemExit, match="family paired_set_id changes across CF variants"):
+        analysis.validate_statistical_inputs(plan, private, responses)
 
 
 def test_missing_and_unexpected_responses_are_rejected() -> None:
