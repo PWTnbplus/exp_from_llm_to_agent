@@ -3,8 +3,8 @@
 生成日期：2026-10-16（Asia/Hong_Kong）  
 仓库：`E:/master_exp/nature_prj1_cal/from_llm_to_agent`  
 分支：`autopilot/scientific-law-discovery`  
-最新已提交版本：`90d34be Record cycle 51 delivery blocker`；cycle 51 Q-validity semantic repair is committed as `52aee13`
-当前宿主回归：`156 passed`
+最新已提交版本：`d1ad59b Repair V2 state evidence propagation`；cycle 51 Q-validity semantic repair is committed as `52aee13`
+当前宿主回归：`157 passed`
 
 ## 0. 交接结论
 
