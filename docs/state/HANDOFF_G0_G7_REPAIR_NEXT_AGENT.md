@@ -407,7 +407,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Read-only validation of the immutable corrected G6 inputs passes: `552` plan rows, `92` private rows, `552` responses, `276` complete pairs, zero family-level paired-set violations, and zero family×CF task-lineage violations.
 - `ISSUE-8c2f6d1a4b70` is `VERIFIED` for this local lineage guard only. `ISSUE-000000000004` remains `BLOCKED`: independent formal statistical/mathematical review is still absent, so no confirmatory inference or scientific release is allowed.
 - Audit files: `docs/audits/cycle-20261016T090232Z-75/audit.json`, `g6_cross_repeat_lineage_finding.json`, and `g6_cross_repeat_lineage_review.json`.
-- Current ledger after this cycle: `10` open/blocked/unverified issues and `11` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- Current ledger after this cycle: `9` open/blocked/unverified issues and `12` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
