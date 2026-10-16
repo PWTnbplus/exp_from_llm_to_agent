@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import subprocess
 import sys
 
@@ -15,11 +16,15 @@ def _public_case(model_visible: dict) -> dict:
     }
 
 
-def _label() -> dict:
+def _label(public: dict | None = None) -> dict:
+    public = public or _public_case({"problem": "public"})
+    public_hash = hashlib.sha256(
+        json.dumps(public, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
     return {
         "case_id": "case-1", "v": {"verdict": "SUPPORTED"},
         "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
-        "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": "1" * 64,
+        "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": public_hash,
         "verification_grade": "C", "verification_method": "test_rulebook",
         "independent_verified": True, "synthetic_demo": False,
     }
@@ -43,11 +48,12 @@ def test_g7_preflight_blocks_routing_metadata_in_model_visible_prompt(tmp_path) 
     labels = tmp_path / "labels.jsonl"
     plan = tmp_path / "plan.jsonl"
     out = tmp_path / "preflight.json"
+    public_row = _public_case({"cf_type": "CF1"})
     public.write_text(
-        json.dumps(_public_case({"cf_type": "CF1"})) + "\n",
+        json.dumps(public_row) + "\n",
         encoding="utf-8",
     )
-    labels.write_text(json.dumps(_label()) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps(_label(public_row)) + "\n", encoding="utf-8")
     plan.write_text(json.dumps(_plan_row("run-1", "V_ONLY", "G4", ["V"])) + "\n", encoding="utf-8")
 
     result = subprocess.run(
@@ -79,8 +85,9 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
     labels = tmp_path / "labels.jsonl"
     plan = tmp_path / "plan.jsonl"
     out = tmp_path / "preflight.json"
-    public.write_text(json.dumps(_public_case({"problem": "public"})) + "\n", encoding="utf-8")
-    labels.write_text(json.dumps(_label()) + "\n", encoding="utf-8")
+    public_row = _public_case({"problem": "public"})
+    public.write_text(json.dumps(public_row) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps(_label(public_row)) + "\n", encoding="utf-8")
     arm_specs = [
         ("D0", "G4", []), ("D1", "G3", ["V"]), ("D2", "G4", ["V", "L"]),
         ("D3", "G4", ["V", "L", "U"]), ("L_ONLY", "G3", ["L"]),

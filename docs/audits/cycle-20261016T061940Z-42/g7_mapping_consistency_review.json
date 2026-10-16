@@ -1,0 +1,31 @@
+{
+  "audit_version": "g7-mapping-consistency-review-v1",
+  "reviewer": "independent_g7_raw_mapping_consistency_check_v8",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "public_rows": 92,
+  "label_rows": 92,
+  "plan_rows": 1288,
+  "unique_run_ids": 1288,
+  "unique_checkpoints": 184,
+  "arm_counts": {
+    "D0": 184,
+    "D1": 184,
+    "D2": 184,
+    "D3": 184,
+    "L_ONLY": 184,
+    "U_ONLY": 184,
+    "V_ONLY": 184
+  },
+  "incomplete_or_duplicate_arm_sets": {},
+  "invalid_arm_stage_rows": [],
+  "plan_public_mapping_mismatches": [],
+  "label_public_hash_mismatches": [],
+  "preflight_report_pass": true,
+  "provider_calls_made_by_preflight": false,
+  "source_contracts_present": {
+    "public_case_hash_check": true,
+    "plan_public_mapping_gate": true,
+    "label_public_hash_gate": true
+  },
+  "historical_data_not_rewritten": true
+}

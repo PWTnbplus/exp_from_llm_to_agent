@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:15:13+00:00
+生成时间（UTC）：2026-10-16T06:20:38+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Against all three experiment-design documents, the formal G7 preflight now enforces G6 mapping/design metadata, non-mock independent labels, the seven-arm D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY contract for every checkpoint, and explicit future injection provenance. The current corrected plan passes with 92 public cases, 92 labels, 1288 rows, 184 checkpoints, 184 rows per arm, zero routing/private hits, and provider_calls_made=false. Independent raw-plan review also passes all design fields and exact arm coverage. The immutable corrected provider run still has 1285 completed and 3 provider_error rows; Q valid is 20/1288; dependency edges are 0/92 and eligible U cases are 0/92. The historical traces contain 1371 injection events with the older source marker and are not reclassified.
-- 必需修复：Keep provider failures, invalid Q rows, trace-integrity failures, malformed-input failures, arm-contract failures, budget failures, and design-scale deviations in the denominator. Do not select a G8 mechanism or make L/U claims. Obtain an independently reviewed provider/Q diagnosis, replacement independently audited dependency/state data, and a separately frozen explicitly authorized retry with immutable model and billing evidence; justify any deviation from the design proposal before confirmatory use. Do not pool retries or rewrite historical traces.
-- 尝试次数：13
+- 证据：The new consistency gates pass the actual corrected inputs: 92 public cases, 92 labels, 1288 unique plan rows, 184 checkpoints, exact seven-arm coverage with 184 rows per arm, zero plan/public mapping mismatches, zero label/public hash mismatches, zero routing/private hits, and provider_calls_made=false. The historical corrected run remains 1285 completed plus 3 provider_error rows with Q valid 20/1288; dependency edges remain 0/92 and eligible U cases remain 0/92.
+- 必需修复：Keep all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures and budget failures in the denominator. Do not select a mechanism or make L/U claims until independently audited dependency/state data and provider/Q diagnosis exist. Any future retry must be separately frozen, explicitly authorized, billed, model-snapshotted, and run through the full consistency gate; do not pool or rewrite historical traces.
+- 尝试次数：14
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

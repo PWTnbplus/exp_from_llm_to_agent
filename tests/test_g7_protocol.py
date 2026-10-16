@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 import sys
 
@@ -142,15 +143,17 @@ def test_g7_runner_preflight_rejects_arm_stage_mismatch() -> None:
 
 
 def test_g7_formal_preflight_requires_all_diagnostic_arms_per_checkpoint() -> None:
+    public = {"case_id": "case-1", "paired_set_id": "family-1", "source_task_id": "task-1",
+              "theory_family_id": "family-1", "domain": "theoretical_biology", "cf_type": "CF1",
+              "split": "final_test", "quantifier": "forall_allowed_parameters",
+              "model_visible": {"problem": "public"}, "source_g5_graph_sha256": "0" * 64,
+              "verification_grade": "C"}
+    public_hash = hashlib.sha256(json.dumps(public, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
     report = protocol_preflight(
-        [{"case_id": "case-1", "paired_set_id": "family-1", "source_task_id": "task-1",
-          "theory_family_id": "family-1", "domain": "theoretical_biology", "cf_type": "CF1",
-          "split": "final_test", "quantifier": "forall_allowed_parameters",
-          "model_visible": {"problem": "public"}, "source_g5_graph_sha256": "0" * 64,
-          "verification_grade": "C"}],
+        [public],
         [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
           "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
-          "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": "1" * 64,
+          "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": public_hash,
           "verification_grade": "C", "verification_method": "test_rulebook",
           "independent_verified": True, "synthetic_demo": False}],
         [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
@@ -184,6 +187,31 @@ def test_g7_formal_preflight_requires_design_metadata_contract() -> None:
     assert "invalid_g7_public_metadata" in report["errors"]
     assert "invalid_g7_label_metadata" in report["errors"]
     assert "invalid_g7_plan_metadata" in report["errors"]
+
+
+def test_g7_formal_preflight_rejects_public_plan_and_label_hash_mismatch() -> None:
+    public = {"case_id": "case-1", "paired_set_id": "family-1", "source_task_id": "task-1",
+              "theory_family_id": "family-1", "domain": "theoretical_biology", "cf_type": "CF1",
+              "split": "final_test", "quantifier": "forall_allowed_parameters",
+              "model_visible": {"problem": "public"}, "source_g5_graph_sha256": "0" * 64,
+              "verification_grade": "C"}
+    label = {"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+             "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+             "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": "1" * 64,
+             "verification_grade": "C", "verification_method": "test_rulebook",
+             "independent_verified": True, "synthetic_demo": False}
+    plan = {"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+            "group_id": "G4", "diagnostic_arm": "D0", "inject_stages": [],
+            "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF2",
+            "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
+            "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
+            "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+            "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
+            "replicate": 0, "arm_eligible_for_diagnostic": True}
+    report = protocol_preflight([public], [label], [plan], worker_count=1, require_complete_plan=True)
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_plan_public_mapping_mismatch" in report["errors"]
+    assert "g7_label_public_hash_mismatch" in report["errors"]
 
 
 def test_g7_injection_source_distinguishes_oracle_assistance_from_d0() -> None:
