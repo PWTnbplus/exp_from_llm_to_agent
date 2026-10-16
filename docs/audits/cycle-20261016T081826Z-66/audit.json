@@ -69,11 +69,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "d8320f5",
-    "commit": "pending",
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
-    "commit_or_push_by_agent": false,
+    "commit": "6a7feb4",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "Local fail-closed repair and independent verification are complete; no provider or paid experiment was started."
+    "note": "Local fail-closed repair and independent verification are complete in commit 6a7feb4. Push and ls-remote both failed because the GitHub endpoint was unreachable through the configured proxy; no provider or paid experiment was started."
   }
 }
