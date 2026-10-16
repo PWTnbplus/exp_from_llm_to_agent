@@ -12,9 +12,10 @@
       "scope": "scientific_provenance",
       "evidence": [
         "Local NewtonBench commit 912a4ba5f4356ddd06acc16e44460ca30be4abc2 is recorded, but remote provenance and license verification are blocked by network failure.",
+        "The vendored archive is locally pinned as third_party/NewtonBench.zip SHA-256 f69e409e9e9332530dee04ed5c3175c7bba1d083dea4ab02ebffe6733115246e; the local MIT LICENSE is SHA-256 47158d3a1eb6cbebe82fab657c11d4959c453f4d803b103a132b4627b63719f0. This is local lineage evidence only, not independent upstream confirmation.",
         "The current report records official_numeric_evaluator=false; the local evaluator is not treated as the official upstream evaluator."
       ],
-      "verification_command": "git ls-remote origin HEAD (exit 128: proxy connection failure)",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py (local archive/license pin check; remote git ls-remote remains blocked)",
       "blocking_issues": ["ISSUE-000000000003"],
       "scientific_release_allowed": false
     },

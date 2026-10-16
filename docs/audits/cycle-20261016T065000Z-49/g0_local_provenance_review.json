@@ -1,0 +1,24 @@
+{
+  "audit_version": "g0-local-provenance-review-v1",
+  "reviewer": "independent_g0_local_provenance_boundary_review_v1",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "report": "docs/state/gates.json",
+  "independent_checks": [
+    "the configured upstream commit is present in the local configuration",
+    "the vendored NewtonBench archive SHA-256 matches the attestation",
+    "the vendored LICENSE SHA-256 matches the attestation and begins with MIT License",
+    "the archive contains NewtonBench-main/LICENSE",
+    "G0 remains BLOCKED because local hashes cannot establish remote provenance",
+    "no historical G6/G7 artifact was modified and no provider was called"
+  ],
+  "remote_verification": {
+    "attempted": false,
+    "reason": "The same configured network/proxy blocker is already recorded and no new network authorization or connectivity exists in this cycle.",
+    "status": "UNVERIFIED"
+  },
+  "scientific_status": {
+    "g0_pass": false,
+    "formal_release_allowed": false
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}

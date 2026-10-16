@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import zipfile
 from pathlib import Path
 
 
@@ -31,3 +33,19 @@ def test_gate_attestation_does_not_turn_mock_or_engineering_evidence_into_scienc
     assert all(gate["scientific_release_allowed"] is False for gate in payload["gates"].values())
     assert payload["gates"]["G1"]["scope"] == "engineering_protocol_only"
     assert payload["gates"]["G5"]["scope"] == "smoke_and_engineering_only"
+
+
+def test_local_newtonbench_artifacts_are_pinned_without_claiming_remote_provenance() -> None:
+    archive = ROOT / "third_party/NewtonBench.zip"
+    license_path = ROOT / "third_party/NewtonBench/LICENSE"
+    assert hashlib.sha256(archive.read_bytes()).hexdigest() == (
+        "f69e409e9e9332530dee04ed5c3175c7bba1d083dea4ab02ebffe6733115246e"
+    )
+    assert hashlib.sha256(license_path.read_bytes()).hexdigest() == (
+        "47158d3a1eb6cbebe82fab657c11d4959c453f4d803b103a132b4627b63719f0"
+    )
+    assert license_path.read_text(encoding="utf-8").startswith("MIT License")
+    with zipfile.ZipFile(archive) as handle:
+        assert "NewtonBench-main/LICENSE" in handle.namelist()
+    payload = json.loads((ROOT / "docs/state/gates.json").read_text(encoding="utf-8"))
+    assert payload["gates"]["G0"]["status"] == "BLOCKED"

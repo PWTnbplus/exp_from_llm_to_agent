@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:47:25+00:00
+生成时间（UTC）：2026-10-16T06:50:23+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,8 +11,8 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The gate attestation correctly records G7 as BLOCKED: corrected G7 retains 3 provider errors, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows; the separate cycle-46 all-planned metric audit remains non-confirmatory. The G7 schema tests pass, but they do not create provider/Q evidence.
-- 必需修复：Retain all planned, failed, and invalid rows; obtain an independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through a separately frozen and explicitly authorized run before formal G7 inference.
+- 证据：This local G0 repair does not alter the corrected G7 provider/Q records: 3 provider errors, 1268 invalid Q rows, 20 valid Q rows, and 368 ineligible U-stage rows remain as audited in cycle 46.
+- 必需修复：Keep all failures and invalid Q rows in the denominator; obtain independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through an explicitly authorized, separately frozen run before formal G7 inference.
 - 尝试次数：18
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
@@ -27,8 +27,8 @@
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：The gate attestation correctly records G0 as BLOCKED because remote provenance verification still fails through the configured proxy; local commit metadata is not treated as independent upstream confirmation.
-- 必需修复：Restore network/Git credentials, verify the upstream simulator commit and license independently, then re-run the provenance gate and confirm remote delivery.
+- 证据：The local archive hash, LICENSE hash, and archive LICENSE entry are reproducibly checked by tests/test_gate_attestation.py, but git ls-remote to the configured upstream and origin remains externally blocked. The G0 gate therefore remains BLOCKED and no independent remote provenance claim is made.
+- 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：GitHub feature-branch delivery is verified at 106e5b6; NewtonBench upstream provenance and license verification remain externally unverified.
