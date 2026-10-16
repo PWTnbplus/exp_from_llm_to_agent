@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 report-provenance review",
+  "findings": [
+    {
+      "id": "ISSUE-2d7c9a4e1f60",
+      "severity": "P1",
+      "title": "G6 report table mixed formal-run metrics with the protocol-v2 artifact root",
+      "evidence": "The G6 section of docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md names results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z as its artifact root but reports CF1=37/43, CF3=44/25, and ALL=191/186. Read-only reruns prove those values come from the older formal-20261013 verified23 input, while the named v2 plan/private/responses produce CF1=39/45, CF3=32/30, and ALL=181/194. The same stale table is duplicated in G0_G7_METRICS_CN_REPORT.md and G0_G8_TABULAR_DATA_CN.md.",
+      "remediation": "Do not overwrite raw or historical files. Add a separately sourced protocol-v2 re-audit report with input paths, hashes, command, current metrics, and an explicit non-confirmatory status; retain the old reports as historical snapshots and mark their table provenance clearly in the issue ledger."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

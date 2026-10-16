@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:08:34+00:00",
+  "updated_at": "2026-10-16T09:10:56+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1186,6 +1186,38 @@
           "evidence": "The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225."
         }
       ]
+    },
+    {
+      "id": "ISSUE-2d7c9a4e1f60",
+      "severity": "P1",
+      "title": "G6 report table mixed formal-run metrics with the protocol-v2 artifact root",
+      "status": "VERIFIED",
+      "evidence": "Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.",
+      "remediation": "Add a source-explicit v2 re-audit report and preserve historical files without pooling.",
+      "first_seen": "2026-10-16T09:10:56+00:00",
+      "last_seen": "2026-10-16T09:10:56+00:00",
+      "source": "docs/audits/cycle-20261016T091032Z-77/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:10:56+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:10:56+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T091032Z-77/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:10:56+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1278,7 +1310,8 @@
     "docs/audits/cycle-20261016T085638Z-73/audit.json",
     "docs/audits/cycle-20261016T085921Z-74/audit.json",
     "docs/audits/cycle-20261016T090232Z-75/audit.json",
-    "docs/audits/cycle-20261016T090727Z-76/audit.json"
+    "docs/audits/cycle-20261016T090727Z-76/audit.json",
+    "docs/audits/cycle-20261016T091032Z-77/audit.json"
   ],
   "current_focus": null
 }

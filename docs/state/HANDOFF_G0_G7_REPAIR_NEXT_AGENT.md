@@ -422,5 +422,15 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `10` open/blocked/unverified issues and `12` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 77 G6 derived-report provenance correction (2026-10-16T09:10Z)
+
+- Compared the G6 report tables against their named artifact roots. The old tables in `G0_G7_COMPLETE_DATA_CN_20261015.md`, `G0_G7_METRICS_CN_REPORT.md`, and `G0_G8_TABULAR_DATA_CN.md` report the older formal-20261013 metrics while the first report names the protocol-v2 root.
+- Independently reran the analyzer on both immutable input sets: formal-20261013 reproduces CF1 `37/43`, CF3 `44/25`, ALL `191/186`; protocol-v2 produces CF1 `39/45`, CF3 `32/30`, ALL `181/194`.
+- Added `docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md` with explicit v2 input paths, release-review hashes, counts, resource totals, current paired metrics, non-confirmatory status, and a clear historical-report boundary. No raw result or old report was overwritten.
+- Full host suite remains `225 passed`; `git diff --check`: PASS. `ISSUE-2d7c9a4e1f60` is `VERIFIED` for derived-report provenance only; no confirmatory statistic or scientific claim was made.
+- Audit files: `docs/audits/cycle-20261016T091032Z-77/audit.json`, `g6_report_provenance_finding.json`, and `g6_report_provenance_review.json`.
+- Current ledger after this cycle: `10` open/blocked/unverified issues and `13` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical raw-result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

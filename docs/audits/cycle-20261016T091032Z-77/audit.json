@@ -1,0 +1,81 @@
+{
+  "cycle": "20261016T091032Z-77",
+  "scope": "G6 derived-report provenance correction for protocol-v2 metrics",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:285-290,327-364",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:134-175"
+    ],
+    "relevant_controls_reviewed": [
+      "Derived reports must identify the frozen input, denominator, pairing unit, and failure status they summarize.",
+      "Historical and retry batches cannot be silently pooled or represented as one scientific estimate.",
+      "Diagnostic metrics remain non-confirmatory until independent statistical and mathematical review."
+    ],
+    "alignment_conclusion": "The new report separates the protocol-v2 metric source from the older formal snapshot and retains the non-confirmatory scientific status."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only analyzer runs against formal-20261013 verified23 inputs and protocol-g3tools-v2 inputs, compared with the named report table",
+      "result": "FAIL: old report table matches formal values, not the v2 artifact root named in that report"
+    },
+    "after_repair": {
+      "command": "Read-only analyzer rerun plus inspection of G6_PROTOCOL_V2_REAUDIT_CN_20261016.md",
+      "result": "PASS: v2 report records v2 inputs/hashes/metrics and explicitly excludes confirmatory use; historical reports/raw artifacts remain unchanged"
+    }
+  },
+  "repair": {
+    "source_changed": ["docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md"],
+    "tests_added_or_changed": [],
+    "change": "Added a source-explicit protocol-v2 derived report without overwriting historical reports or raw result files.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "old_snapshot_rerun": {
+      "command": "Temporary-output analyze_g6_clustered.py run on formal-20261013T000000Z/run_plan_verified23.jsonl, private_oracle_verified23.jsonl, responses_verified23.jsonl",
+      "result": "CF1 37/43; CF2 69/69; CF3 44/25; CF4 41/49; ALL 191/186"
+    },
+    "current_v2_rerun": {
+      "command": "Temporary-output analyze_g6_clustered.py run on protocol-g3tools-v2-20261014T030000Z/run_plan.jsonl, private_oracle.jsonl, responses_audited.jsonl",
+      "result": "CF1 39/45; CF2 69/69; CF3 32/30; CF4 41/50; ALL 181/194; scientific_status=ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "225 passed in 23.66s"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G6 report-provenance review",
+    "findings": [
+      {
+        "id": "ISSUE-2d7c9a4e1f60",
+        "severity": "P1",
+        "title": "G6 report table mixed formal-run metrics with the protocol-v2 artifact root",
+        "evidence": "The old named-root table matches formal-20261013 values but not the v2 three-file input values.",
+        "remediation": "Add a source-explicit v2 re-audit report and preserve historical files without pooling."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-2d7c9a4e1f60",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only derived-report provenance was corrected; no scientific truth decision was made."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "b17c788",
+    "remote_updated": false,
+    "note": "Commit and push status will be recorded after the audit/state update; no remote update is presumed."
+  }
+}

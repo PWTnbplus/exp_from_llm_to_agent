@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 report-provenance review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-2d7c9a4e1f60",
+      "verdict": "VERIFIED",
+      "evidence": "Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.",
+      "reason": "The local report-provenance correction is independently verified; independent statistical/mathematical review and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}
