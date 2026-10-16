@@ -102,7 +102,7 @@
       "status": "BLOCKED",
       "scope": "formal_scientific_release",
       "evidence": [
-        "The corrected plan has 1288/1288 planned rows, 184/184 checkpoints, seven arms per checkpoint, zero routing/private prompt hits, and explicit non-pooled failure accounting.",
+        "The current executable preflight for the corrected plan has 1288/1288 planned rows, 184/184 checkpoints, seven arms per checkpoint, zero routing/private hits in the constructed model-visible payload, and explicit non-pooled failure accounting. The immutable historical corrected trace contains 4222 verifier_ref hits and remains non-confirmatory.",
         "The immutable historical Q audit remains 1268 invalid and 20 valid rows; its SHA-256 is unchanged.",
         "A separate schema-repaired derived audit retains all 1288 rows and reports 316 rows with independent V/L/U/final-decision label consistency plus complete Q record strings. This is not external mathematical verification and does not replace the historical audit.",
         "Under the design rule that model Q self-report without a separate external Q verifier is NOT_SCORED, the cycle-51 formal Q validity result is 0/1288 scored rows; the 316 count remains only a structural diagnostic.",
