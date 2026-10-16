@@ -528,7 +528,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only Python reconstruction confirms `92` public rows across `23` families, each with exactly `CF1`-`CF4` and `final_test`; duplicate public case IDs `0`; `1288` plan rows; duplicate run IDs `0`; wrong protocol/profile/retry/experiment/split/CF metadata `0`; and mixed source-checkpoint groups `0`.
 - `ISSUE-53e9722cb252` is `VERIFIED` for this local formal public-input guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, and scientific validity remain unresolved.
 - Audit files: `docs/audits/cycle-20261016T154007Z-87/audit.json`, `g7_public_contract_finding.json`, and `g7_public_contract_review.json`.
-- Local repair commit: `7bc22e2`. State/audit and delivery bookkeeping commits are still pending in this cycle. Do not stage the user-owned untracked `research_data_summary_G0_G7/` directory.
+- Local repair commit: `7bc22e2`; audit/state commit: `479a67e`; delivery-blocker state commit: `81ab8ce`. Both push and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Do not stage the user-owned untracked `research_data_summary_G0_G7/` directory.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Both remote push and `git ls-remote` must be attempted and independently verified; never claim GitHub delivery from a failed or unverified command.
 
 ## Cycle 86 G7 strict protocol-version identity repair (2026-10-16T10:01Z)
