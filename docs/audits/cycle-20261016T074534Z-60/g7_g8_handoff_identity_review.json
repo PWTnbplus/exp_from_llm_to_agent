@@ -1,0 +1,23 @@
+{
+  "scope": "Independent read-only review of source-only G7-to-G8 identity guards",
+  "synthetic_checks": {
+    "duplicate_public_case_id": "rejected",
+    "duplicate_checkpoint_case_group": "rejected",
+    "duplicate_checkpoint_id": "rejected",
+    "verdict": "PASS"
+  },
+  "real_source_only_probe": {
+    "public_cases": 92,
+    "theory_families": 23,
+    "checkpoint_rows": 184,
+    "completed_checkpoints": 153,
+    "provider_error_checkpoints": 31,
+    "g8_cf1_cf2_completed_rows": 75,
+    "missing_cf1_cf2_pairs": 17,
+    "private_oracle_loaded": false,
+    "answer_key_loaded": false,
+    "provider_calls_made": false
+  },
+  "dependency_edges_available": false,
+  "external_review_present": false
+}

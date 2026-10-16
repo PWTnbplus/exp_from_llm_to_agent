@@ -278,5 +278,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T074311Z-59/audit.json` and `g7_metrics_input_review.json`.
 - Cycle 59 delivery: local repair commit `b65433a`; `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed because the configured proxy could not connect to GitHub port 443. Remote update is not claimed and remains unverified under `ISSUE-000000000003`.
 
+## Cycle 60 G7-to-G8 checkpoint identity repair (2026-10-16T07:45Z)
+
+- Repaired `scripts/review_g7_g8_handoff.py`: duplicate public case IDs, duplicate checkpoint `(case_id, group_id)` pairs, duplicate checkpoint IDs, and malformed identifiers now fail closed before deriving G8 checkpoints.
+- Reproduction before repair: duplicate checkpoint rows collapsed in the missing-pair set and could still be emitted while the audit remained `REAL_TRACE_AUDITED`.
+- Added `tests/test_g7_g8_handoff_contract.py`; focused tests: `36 passed`; full host suite: `179 passed`.
+- Real source-only audit remains incomplete but truthful: `92` public cases, `184` checkpoints, `153` completed, `31` provider_error, `75` completed CF1/CF2 rows, and `17` missing CF1/CF2 pairs; no private oracle or answer key loaded.
+- `ISSUE-1f8c2b6a4d90` and `ISSUE-3d7a9c1e5b20` remain BLOCKED. No dependency-edge, Q, L/U, causal, or scientific superiority claim is allowed.
+- No provider call, paid run, retry, confirmatory inference, or superiority/scientific claim was made.
+- Audit: `docs/audits/cycle-20261016T074534Z-60/audit.json` and `g7_g8_handoff_identity_review.json`.
+- Delivery is pending the Cycle 60 local commit; push and `git ls-remote` must be attempted and truthfully recorded afterward.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

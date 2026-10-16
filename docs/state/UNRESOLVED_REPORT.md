@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:44:09+00:00
+生成时间（UTC）：2026-10-16T07:46:40+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -51,19 +51,19 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：The G7 audit remains edge_count_distribution={0:92} with eligible_u_cases=0. G8 therefore executed only the externally reviewed V mechanism and did not fabricate L/U edges or state transitions.
-- 必需修复：Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims.
+- 证据：Cycle 60: duplicate public/checkpoint identities now fail closed; real source-only audit has 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, and 17 missing CF1/CF2 pairs. No independently audited dependency edges are available; no L/U or G8 causal claim is made.
+- 必需修复：Obtain independently audited replacement dependency-edge/state-transition data with source hashes and complete the separately frozen checkpoint denominator before making edge-level L/U or G8 causal claims.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
-- 阻塞原因：G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.
+- 阻塞原因：Cycle 60 repaired G7-to-G8 checkpoint identity collisions; dependency-edge/state-transition evidence remains unavailable.
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made.
-- 必需修复：Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.
+- 证据：Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made.
+- 必需修复：Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators.
 - 尝试次数：20
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.
+- 阻塞原因：Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present

@@ -1,0 +1,96 @@
+{
+  "cycle": "20261016T074534Z-60",
+  "scope": "Repair duplicate checkpoint acceptance in the source-only G7-to-G8 handoff review",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "design_alignment_review": {
+    "reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+    "relevant_controls_retained": [
+      "G7 checkpoint/trace lineage must be auditable",
+      "missing or failed checkpoint pairs remain explicit",
+      "G8 may not treat a partial source-only handoff as complete causal evidence",
+      "public-only handoff must not load private oracle or answer key"
+    ],
+    "alignment_conclusion": "Cycle 60 makes duplicate public/checkpoint identities fail closed and preserves the incomplete G7-to-G8 denominator as a structural blocker."
+  },
+  "repair": {
+    "source": "scripts/review_g7_g8_handoff.py",
+    "tests": "tests/test_g7_g8_handoff_contract.py",
+    "change": "The source-only handoff now rejects duplicate public case IDs, duplicate checkpoint case/group pairs, duplicate checkpoint IDs, and malformed identifiers before deriving G8 checkpoints.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "Two checkpoint rows with the same case_id and group_id",
+    "before": "The checkpoint index was a set used only for missing-pair detection; two rows collapsed to one index entry while both could still be emitted in the derived handoff and the audit could remain REAL_TRACE_AUDITED.",
+    "after": "The input index rejects duplicate checkpoint case/group and checkpoint_id before trace derivation."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_g8_handoff_contract.py tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py",
+      "result": "36 passed in 2.86s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "179 passed in 31.42s"
+    },
+    "real_source_only_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/review_g7_g8_handoff.py --g7-root results/g7_failure_localization/formal-20261014T030000Z-16workers --out-dir <temporary-dir>",
+      "result": "REAL_TRACE_AUDITED: 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, 17 missing CF1/CF2 pairs, errors=0, trace_errors=0; private_oracle_loaded=false; answer_key_loaded=false; temporary output removed"
+    },
+    "independent_read_only_review": {
+      "command": "duplicate case/group set-collapse probe plus focused contract tests and git diff --check",
+      "result": "PASS: duplicate checkpoint rows are now rejected before derivation; no historical artifact changed"
+    }
+  },
+  "remaining_boundary": {
+    "complete_g7_to_g8_handoff_present": false,
+    "dependency_edges_available": false,
+    "scientific_release_allowed": false,
+    "note": "The review is source-only and structural. The real run retains 31 provider errors and 17 missing CF1/CF2 checkpoint pairs; it does not establish mathematical truth, Q validity, dependency edges, causal mechanism, or scientific superiority."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G7-to-G8 handoff identity review",
+    "findings": [
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "fingerprint": "g7_dependency_edges_absent",
+        "severity": "P1",
+        "evidence": "Cycle 60 adds fail-closed public/checkpoint identity guards. The real source-only audit still has 17 missing CF1/CF2 checkpoint pairs and the broader corrected G7 evidence still has no independently audited dependency edges for L/U localization; no G8 causal or L/U claim is made.",
+        "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes and complete the separately frozen checkpoint denominator before making edge-level L/U or G8 causal claims.",
+        "blocker": "Replacement dependency/state data and complete independent review are external and unavailable."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "fingerprint": "g7_provider_errors_low_q_coverage",
+        "severity": "P1",
+        "evidence": "The source-only real audit retains 31 provider_error checkpoints in the historical G7 run; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. Duplicate checkpoint protection does not repair provider/Q evidence, and no V/L/U/Q claim is made.",
+        "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators.",
+        "blocker": "Provider authorization and independent Q/dependency review are external and unavailable."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "b073ae8",
+    "commit": "PENDING_LOCAL_COMMIT",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no G7/G8 scientific conclusion was claimed. Commit and remote verification are recorded after the state/report update."
+  }
+}

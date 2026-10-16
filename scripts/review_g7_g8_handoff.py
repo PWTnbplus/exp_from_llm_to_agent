@@ -53,6 +53,23 @@ def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     )
 
 
+def _required_id(row: dict[str, Any], field: str, label: str) -> str:
+    value = row.get(field)
+    if not isinstance(value, str) or not value:
+        raise ValueError(f"{label} has missing or invalid {field}")
+    return value
+
+
+def index_unique(rows: list[dict[str, Any]], key, label: str) -> dict[Any, dict[str, Any]]:
+    indexed: dict[Any, dict[str, Any]] = {}
+    for row in rows:
+        value = key(row)
+        if value in indexed:
+            raise ValueError(f"duplicate {label}: {value!r}")
+        indexed[value] = row
+    return indexed
+
+
 def find_forbidden(value: Any, path: str = "$") -> list[str]:
     errors: list[str] = []
     if isinstance(value, dict):
@@ -133,7 +150,25 @@ def main() -> int:
     public = read_jsonl(public_path)
     checkpoints = read_jsonl(checkpoints_path)
     errors: list[str] = []
-    case_ids = {row.get("case_id") for row in public}
+    public_by_case = index_unique(
+        public,
+        lambda row: _required_id(row, "case_id", "public row"),
+        "public case_id",
+    )
+    checkpoint_by_pair = index_unique(
+        checkpoints,
+        lambda row: (
+            _required_id(row, "case_id", "checkpoint row"),
+            _required_id(row, "group_id", "checkpoint row"),
+        ),
+        "checkpoint case/group",
+    )
+    index_unique(
+        checkpoints,
+        lambda row: _required_id(row, "checkpoint_id", "checkpoint row"),
+        "checkpoint_id",
+    )
+    case_ids = set(public_by_case)
     families = {row.get("theory_family_id") for row in public}
     if len(public) != 92:
         errors.append(f"expected 92 public cases, found {len(public)}")
@@ -146,12 +181,11 @@ def main() -> int:
             errors.append(f"mock/demo public case: {row.get('case_id')}")
         errors.extend(find_forbidden(row.get("model_visible", {}), f"$.{row.get('case_id')}.model_visible"))
 
-    public_by_case = {row["case_id"]: row for row in public}
     checkpoint_rows: list[dict[str, Any]] = []
     trace_status = Counter()
     trace_errors: list[str] = []
     completed_by_cf = Counter()
-    for row in checkpoints:
+    for row in checkpoint_by_pair.values():
         case_id = row.get("case_id")
         if case_id not in public_by_case:
             errors.append(f"checkpoint references unknown case: {case_id}")

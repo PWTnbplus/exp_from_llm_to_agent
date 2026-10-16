@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:44:09+00:00",
+  "updated_at": "2026-10-16T07:46:40+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -410,13 +410,13 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "The G7 audit remains edge_count_distribution={0:92} with eligible_u_cases=0. G8 therefore executed only the externally reviewed V mechanism and did not fabricate L/U edges or state transitions.",
-      "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims.",
+      "evidence": "Cycle 60: duplicate public/checkpoint identities now fail closed; real source-only audit has 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, and 17 missing CF1/CF2 pairs. No independently audited dependency edges are available; no L/U or G8 causal claim is made.",
+      "remediation": "Obtain independently audited replacement dependency-edge/state-transition data with source hashes and complete the separately frozen checkpoint denominator before making edge-level L/U or G8 causal claims.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-15T03:03:41+00:00",
+      "last_seen": "2026-10-16T07:46:39+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
       "attempts": 0,
-      "blocked_reason": "G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.",
+      "blocked_reason": "Cycle 60 repaired G7-to-G8 checkpoint identity collisions; dependency-edge/state-transition evidence remains unavailable.",
       "verification": null,
       "history": [
         {
@@ -429,6 +429,12 @@
           "event": "BLOCKED",
           "reason": "G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:46:39+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 60 repaired G7-to-G8 checkpoint identity collisions; dependency-edge/state-transition evidence remains unavailable.",
+          "evidence": "Cycle 60: duplicate public/checkpoint identities now fail closed; real source-only audit has 92 public cases, 184 checkpoints, 153 completed, 31 provider_error, 75 completed CF1/CF2 rows, and 17 missing CF1/CF2 pairs. No independently audited dependency edges are available; no L/U or G8 causal claim is made."
         }
       ]
     },
@@ -437,13 +443,13 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made.",
-      "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.",
+      "evidence": "Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made.",
+      "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T07:43:40+00:00",
+      "last_seen": "2026-10-16T07:46:39+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 20,
-      "blocked_reason": "Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.",
+      "blocked_reason": "Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.",
       "verification": null,
       "history": [
         {
@@ -594,6 +600,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.",
           "evidence": "Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made."
+        },
+        {
+          "time": "2026-10-16T07:46:40+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 60 confirms source-only G7-to-G8 handoff remains incomplete and provider/Q evidence remains external.",
+          "evidence": "Cycle 60: identity guards pass, but the historical source-only audit retains 31 provider_error checkpoints and 17 missing CF1/CF2 pairs; corrected G7 metrics retain 3 terminal failures and 1268 invalid Q rows. No V/L/U/Q claim is made."
         }
       ]
     },
@@ -830,7 +842,8 @@
     "docs/audits/cycle-20261016T072546Z-56/audit.json",
     "docs/audits/cycle-20261016T073248Z-57/audit.json",
     "docs/audits/cycle-20261016T073921Z-58/audit.json",
-    "docs/audits/cycle-20261016T074311Z-59/audit.json"
+    "docs/audits/cycle-20261016T074311Z-59/audit.json",
+    "docs/audits/cycle-20261016T074534Z-60/audit.json"
   ],
   "current_focus": null
 }
