@@ -3,8 +3,8 @@
 生成日期：2026-10-16（Asia/Hong_Kong）  
 仓库：`E:/master_exp/nature_prj1_cal/from_llm_to_agent`  
 分支：`autopilot/scientific-law-discovery`  
-最新本地提交：`c62987a Add data-first G0-G7 ledger report`  
-当前宿主回归：`108 passed`
+最新已提交版本：`bee4dee Record cycle 49 delivery blocker`；cycle 50 Q-contract repair is currently in the working tree
+当前宿主回归：`155 passed`
 
 ## 0. 交接结论
 
@@ -23,7 +23,7 @@
 | G6 corrected | plan/response/handoff `552/552`；2 workers | 结构完整，科学发布仍禁止 |
 | G6 CF3 revision | `0/138` valid | 修订结论不可支持 |
 | G7 原始批次 | completed `993/1288`；Q valid `3/1288`；路由元数据 `2960/2960` model calls 命中 | 原始批次非确认 |
-| G7 corrected retry | state `1288/1288`；completed `1285/1288`；provider error `3/1288`；Q valid `20/1288=1.553%` | 执行覆盖高，确认性诊断有效率不足 |
+| G7 corrected retry | state `1288/1288`；completed `1285/1288`；provider error `3/1288`；immutable historical Q audit `20/1288=1.553%`；new schema-repaired derived audit `316/1288` | 新值只表示独立 V/L/U/final label consistency + complete Q record，不是外部数学证明；确认性诊断仍被阻断 |
 | G7 corrected 分臂 score | `0/14` 可确认分臂 score | 诊断性分组结论不能确认 |
 | G6/G7 外部发布门禁 | `0/1 allowed` | 当前禁止科学发布 |
 
@@ -50,18 +50,18 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 6. `.agents/skills/scientific-law-autopilot/references/supervision_original.md`。
 7. `docs/audits/cycle-*/` 中 issue ledger 引用的证据。
 
-`docs/state/gates.json` 当前不存在。下一个 Agent 不得因该文件缺失而推断门禁通过；应以审计证据逐项判定 `PASS / FAIL / NOT TESTED / BLOCKED`。
+`docs/state/gates.json` 已生成并明确记录 G0/G6/G7 BLOCKED、G1–G5 仅 engineering/smoke scope；下一个 Agent 仍不得因本地测试通过而推断科学门禁通过，应以审计证据逐项判定 `PASS / FAIL / NOT TESTED / BLOCKED`。
 
 不要重新下载上游、重建 NewtonBench、重跑已验证的 G1–G5 policy 或重新生成已有 canonical trace，除非有新的回归证据。
 
 ## 2. 当前 issue ledger 摘要
 
-截至当前台账：`VERIFIED=2`，`RESOLVED_UNVERIFIED=6`，`BLOCKED=2`，`OPEN=1`，`IN_PROGRESS=2`。
+截至当前台账：`VERIFIED=2`，`RESOLVED_UNVERIFIED=10`，`BLOCKED=2`，`OPEN=1`，`IN_PROGRESS=1`。
 
 | 优先级 | Issue | 状态 | 当前问题 | 下一步 |
 |---|---|---|---|---|
 | P1 | `ISSUE-3d7a9c1e5b20` | IN_PROGRESS | G7 有 `3/1288` provider error；Q valid `20/1288`；无确认分臂 score | 诊断 failure；独立审查 trace/Q 或另行冻结 retry；不得静默合并 |
-| P1 | `ISSUE-0f2cb195c681` | IN_PROGRESS | 原始 G7 model prompt 有 `2960/2960` 路由元数据命中 | 原始产物永久非确认；未来 paid run preflight 必须 `0` 命中 |
+| P1 | `ISSUE-0f2cb195c681` | RESOLVED_UNVERIFIED | 原始 G7 model prompt 有 `2960/2960` 路由元数据命中；修正版 preflight 已为 `0` 命中 | 原始产物永久非确认；未来 paid run preflight 必须 `0` 命中 |
 | P1 | `ISSUE-000000000003` | BLOCKED | 上游 provenance 和 GitHub delivery 外部阻断 | 恢复凭据后验证 commit/license/remote；否则保持 BLOCKED |
 | P1 | `ISSUE-1f8c2b6a4d90` | BLOCKED | dependency edge `0/92`，eligible U `0/92` | 获取独立审计 replacement edge/state 数据；不得伪造 L/U |
 | P1 | `ISSUE-000000000002` | RESOLVED_UNVERIFIED | 无 immutable model snapshot、外部 billing | 获取 gateway weight fingerprint 与 billing export |
@@ -145,7 +145,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 #### protocol-corrected retry：仍未达到确认使用条件
 
 - state `1288/1288=100%`；completed `1285/1288=99.767%`；provider error `3/1288=0.233%`。
-- checkpoints `184/184=100%`；Q rows `1288/1288`；Q valid `20/1288=1.553%`；Q invalid `1268/1288=98.447%`。
+- checkpoints `184/184=100%`；Q rows `1288/1288`；immutable historical Q audit `20/1288=1.553%`；schema-repaired derived label-consistency audit `316/1288`；Q record incomplete `7`。
 - corrected route metadata `0/3774`；private-prompt hits `0/3774`；format retry `302/302`。
 - corrected confirmatory per-arm score `0/14`。
 
@@ -173,7 +173,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 
 - 不覆盖、删除或修改原始 G6/G7 traces、plans、states、Q audits、retry manifests。
 - 不合并原始 G7 `2960/2960` 路由泄漏批次；不静默 pooled retry1/retry2/retry3/corrected retry。
-- 不把 `Q valid=20/1288` 解释成 20 个 confirmed scientific cases。
+- 不把 historical `Q valid=20/1288` 或 derived `316/1288` 解释成 confirmed scientific cases；derived audit 明确不是外部数学证明。
 - 不把 `0/92` edges 或 `0/92` eligible U 补成可用 L/U 数据。
 - 不把 mock、engineering、smoke 或 restricted evaluator 当正式 VLDR。
 - 不把 provider metadata 当 immutable weights；不把 local trace cost 当外部 billing。

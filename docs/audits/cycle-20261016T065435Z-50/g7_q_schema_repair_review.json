@@ -1,0 +1,50 @@
+{
+  "review_version": "g7-q-schema-repair-read-only-v1",
+  "scope": "Independent read-only review of the G7 Q contract repair and derived audit; no provider call and no historical artifact rewrite.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md: G7 Q is an independently audited verification stage.",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md: stages.Q.verdict and stages.Q.reason are strings.",
+    "G7_Failure_Localization_Skill/SKILL.md section 3: Q validity is determined by a post-run independent audit, not by model self-report."
+  ],
+  "checks": {
+    "runtime_requires_nonempty_q_verdict_and_reason": {
+      "status": "PASS",
+      "evidence": "scripts/run_g7_failure_localization.py::normalize_stages now rejects missing, non-string, and blank Q.verdict/Q.reason values."
+    },
+    "audit_does_not_hardcode_pass_enum": {
+      "status": "PASS",
+      "evidence": "scripts/audit_g7_q.py::q_record_is_complete checks the frozen string fields only; it does not require PASS/OK/VALID/SUPPORTED."
+    },
+    "q_scope_is_explicit": {
+      "status": "PASS",
+      "evidence": "Derived rows carry assessment_scope=label_consistency_and_q_record_completeness;_not_external_proof."
+    },
+    "historical_q_audit_unchanged": {
+      "status": "PASS",
+      "sha256": "95349ef7fa28b9e3a63290c5bda4e67be007027b2f12cce29aa656bc252543",
+      "path": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_q_audit.jsonl"
+    },
+    "derived_audit_accounting": {
+      "status": "PASS",
+      "rows": 1288,
+      "valid_label_consistent_and_q_complete": 316,
+      "invalid": 972,
+      "q_record_complete": 1278,
+      "q_record_incomplete": 7,
+      "terminal_rows_retained": 3,
+      "path": "docs/audits/cycle-20261016T065435Z-50/g7_q_audit_schema_repaired.jsonl"
+    },
+    "regression_tests": {
+      "status": "PASS",
+      "targeted": "31 passed",
+      "full_suite": "155 passed"
+    }
+  },
+  "limitations": [
+    "The derived 316-row value is not a replacement for the immutable historical 20/1288 Q audit.",
+    "No persisted row proves an external mathematical verifier executed; the repaired audit explicitly does not make that claim.",
+    "The three provider_error rows and seven incomplete Q records remain in the planned denominator.",
+    "G7 remains blocked by provider/Q execution evidence, dependency-edge eligibility, model snapshot/billing, and external review gates."
+  ],
+  "review_status": "PASS_LOCAL_ONLY_NOT_SCIENTIFIC_RELEASE"
+}

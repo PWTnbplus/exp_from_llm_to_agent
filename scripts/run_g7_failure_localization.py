@@ -262,7 +262,10 @@ def normalize_stages(value: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("invalid L stage")
     if not isinstance(stages["U"].get("node_changes"), list):
         raise ValueError("invalid U stage")
-    if not isinstance(stages["Q"].get("verdict", ""), str):
+    q_verdict = stages["Q"].get("verdict")
+    q_reason = stages["Q"].get("reason")
+    if (not isinstance(q_verdict, str) or not q_verdict.strip()
+            or not isinstance(q_reason, str) or not q_reason.strip()):
         raise ValueError("invalid Q stage")
     return stages
 

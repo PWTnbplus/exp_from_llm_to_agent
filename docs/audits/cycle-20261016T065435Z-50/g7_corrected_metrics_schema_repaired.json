@@ -1,0 +1,417 @@
+{
+  "audit_version": "g7-corrected-metrics-v1",
+  "audit_scope": "read_only_non_confirmatory_all_planned_diagnostic_metrics",
+  "denominator_policy": "all planned rows; terminal failures and invalid Q rows remain in every planned denominator",
+  "scientific_truth_decision_made": false,
+  "confirmatory_reuse_allowed": false,
+  "pooling_used": false,
+  "inputs": {
+    "plan": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+    "states": "45fa85c25fada1fe6653d582e7167b1f54bf7551f80c2b847ca5badddec93bc2",
+    "q": "9cc67d7231371712a290586aabb7d46b10659a899aa710d8ae2ce83449a1dca2",
+    "oracle": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+    "preflight": "4a9f4576edb124744c218eada76650335b2f8e861821cc8e81518af8185c80a8"
+  },
+  "counts": {
+    "plan_rows": 1288,
+    "state_rows": 1288,
+    "q_rows": 1288,
+    "oracle_rows_scored": 92,
+    "terminal_failures": 3,
+    "invalid_q_rows": 972,
+    "preflight_errors": [
+      "ineligible_u_diagnostic_arm"
+    ],
+    "ineligible_u_rows": 368
+  },
+  "by_arm": {
+    "G3__D0": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 66,
+      "all_planned_accuracy": 0.717391304347826,
+      "valid_only_accuracy": 0.717391304347826,
+      "W_to_C": 0,
+      "C_to_W": 3,
+      "q_rows": 92,
+      "q_valid": 3,
+      "first_observable_error": {
+        "L": 48,
+        "NONE": 3,
+        "U": 22,
+        "V": 19
+      }
+    },
+    "G3__D1": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 79,
+      "all_planned_accuracy": 0.8586956521739131,
+      "valid_only_accuracy": 0.8586956521739131,
+      "W_to_C": 11,
+      "C_to_W": 1,
+      "q_rows": 92,
+      "q_valid": 6,
+      "first_observable_error": {
+        "L": 55,
+        "NONE": 6,
+        "U": 31
+      }
+    },
+    "G3__D2": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 76,
+      "all_planned_accuracy": 0.8260869565217391,
+      "valid_only_accuracy": 0.8260869565217391,
+      "W_to_C": 9,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 24,
+      "first_observable_error": {
+        "FINAL_DECISION": 2,
+        "L": 1,
+        "NONE": 24,
+        "U": 65
+      }
+    },
+    "G3__D3": {
+      "planned": 92,
+      "completed": 91,
+      "completion_rate": 0.9891304347826086,
+      "valid_answer_rows": 91,
+      "missing_or_invalid": 1,
+      "all_planned_correct": 75,
+      "all_planned_accuracy": 0.8152173913043478,
+      "valid_only_accuracy": 0.8241758241758241,
+      "W_to_C": 10,
+      "C_to_W": 3,
+      "q_rows": 92,
+      "q_valid": 73,
+      "first_observable_error": {
+        "FINAL_DECISION": 13,
+        "MISSING_OR_TERMINAL_FAILURE": 1,
+        "NONE": 73,
+        "U": 4,
+        "V": 1
+      }
+    },
+    "G3__L_ONLY": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 66,
+      "all_planned_accuracy": 0.717391304347826,
+      "valid_only_accuracy": 0.717391304347826,
+      "W_to_C": 1,
+      "C_to_W": 4,
+      "q_rows": 92,
+      "q_valid": 22,
+      "first_observable_error": {
+        "NONE": 22,
+        "U": 43,
+        "V": 27
+      }
+    },
+    "G3__U_ONLY": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 69,
+      "all_planned_accuracy": 0.75,
+      "valid_only_accuracy": 0.75,
+      "W_to_C": 2,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 36,
+      "first_observable_error": {
+        "FINAL_DECISION": 6,
+        "L": 31,
+        "NONE": 36,
+        "V": 19
+      }
+    },
+    "G3__V_ONLY": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 76,
+      "all_planned_accuracy": 0.8260869565217391,
+      "valid_only_accuracy": 0.8260869565217391,
+      "W_to_C": 10,
+      "C_to_W": 3,
+      "q_rows": 92,
+      "q_valid": 12,
+      "first_observable_error": {
+        "FINAL_DECISION": 1,
+        "L": 52,
+        "NONE": 12,
+        "U": 27
+      }
+    },
+    "G4__D0": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 51,
+      "all_planned_accuracy": 0.5543478260869565,
+      "valid_only_accuracy": 0.5543478260869565,
+      "W_to_C": 1,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 1,
+      "first_observable_error": {
+        "L": 58,
+        "NONE": 1,
+        "U": 15,
+        "V": 18
+      }
+    },
+    "G4__D1": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 64,
+      "all_planned_accuracy": 0.6956521739130435,
+      "valid_only_accuracy": 0.6956521739130435,
+      "W_to_C": 16,
+      "C_to_W": 4,
+      "q_rows": 92,
+      "q_valid": 7,
+      "first_observable_error": {
+        "FINAL_DECISION": 1,
+        "L": 65,
+        "NONE": 7,
+        "U": 19
+      }
+    },
+    "G4__D2": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 62,
+      "all_planned_accuracy": 0.6739130434782609,
+      "valid_only_accuracy": 0.6739130434782609,
+      "W_to_C": 12,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 24,
+      "first_observable_error": {
+        "FINAL_DECISION": 2,
+        "NONE": 24,
+        "U": 66
+      }
+    },
+    "G4__D3": {
+      "planned": 92,
+      "completed": 91,
+      "completion_rate": 0.9891304347826086,
+      "valid_answer_rows": 91,
+      "missing_or_invalid": 1,
+      "all_planned_correct": 62,
+      "all_planned_accuracy": 0.6739130434782609,
+      "valid_only_accuracy": 0.6813186813186813,
+      "W_to_C": 15,
+      "C_to_W": 4,
+      "q_rows": 92,
+      "q_valid": 62,
+      "first_observable_error": {
+        "FINAL_DECISION": 26,
+        "MISSING_OR_TERMINAL_FAILURE": 1,
+        "NONE": 62,
+        "Q": 2,
+        "U": 1
+      }
+    },
+    "G4__L_ONLY": {
+      "planned": 92,
+      "completed": 91,
+      "completion_rate": 0.9891304347826086,
+      "valid_answer_rows": 91,
+      "missing_or_invalid": 1,
+      "all_planned_correct": 52,
+      "all_planned_accuracy": 0.5652173913043478,
+      "valid_only_accuracy": 0.5714285714285714,
+      "W_to_C": 3,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 18,
+      "first_observable_error": {
+        "FINAL_DECISION": 3,
+        "MISSING_OR_TERMINAL_FAILURE": 1,
+        "NONE": 18,
+        "U": 43,
+        "V": 27
+      }
+    },
+    "G4__U_ONLY": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 50,
+      "all_planned_accuracy": 0.5434782608695652,
+      "valid_only_accuracy": 0.5434782608695652,
+      "W_to_C": 4,
+      "C_to_W": 6,
+      "q_rows": 92,
+      "q_valid": 17,
+      "first_observable_error": {
+        "FINAL_DECISION": 14,
+        "L": 33,
+        "NONE": 17,
+        "U": 1,
+        "V": 27
+      }
+    },
+    "G4__V_ONLY": {
+      "planned": 92,
+      "completed": 92,
+      "completion_rate": 1.0,
+      "valid_answer_rows": 92,
+      "missing_or_invalid": 0,
+      "all_planned_correct": 69,
+      "all_planned_accuracy": 0.75,
+      "valid_only_accuracy": 0.75,
+      "W_to_C": 19,
+      "C_to_W": 2,
+      "q_rows": 92,
+      "q_valid": 11,
+      "first_observable_error": {
+        "FINAL_DECISION": 4,
+        "L": 57,
+        "NONE": 11,
+        "U": 20
+      }
+    }
+  },
+  "paired_diagnostic_status": {
+    "G3:D0_minus_D1": {
+      "left_arm": "D0",
+      "right_arm": "D1",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 117,
+      "right_correct_on_both_completed": 143
+    },
+    "G3:D1_minus_D2": {
+      "left_arm": "D1",
+      "right_arm": "D2",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 143,
+      "right_correct_on_both_completed": 138
+    },
+    "G3:D2_minus_D3": {
+      "left_arm": "D2",
+      "right_arm": "D3",
+      "status": "NOT_COMPUTABLE_INELIGIBLE_U",
+      "reason": "one paired arm requires a non-final U state, but no eligible U labels exist",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 182,
+      "left_correct_on_both_completed": 136,
+      "right_correct_on_both_completed": 137
+    },
+    "G3:U_ONLY_minus_D0": {
+      "left_arm": "U_ONLY",
+      "right_arm": "D0",
+      "status": "NOT_COMPUTABLE_INELIGIBLE_U",
+      "reason": "one paired arm requires a non-final U state, but no eligible U labels exist",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 119,
+      "right_correct_on_both_completed": 117
+    },
+    "G3:V_ONLY_minus_D0": {
+      "left_arm": "V_ONLY",
+      "right_arm": "D0",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 145,
+      "right_correct_on_both_completed": 117
+    },
+    "G4:D0_minus_D1": {
+      "left_arm": "D0",
+      "right_arm": "D1",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 117,
+      "right_correct_on_both_completed": 143
+    },
+    "G4:D1_minus_D2": {
+      "left_arm": "D1",
+      "right_arm": "D2",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 143,
+      "right_correct_on_both_completed": 138
+    },
+    "G4:D2_minus_D3": {
+      "left_arm": "D2",
+      "right_arm": "D3",
+      "status": "NOT_COMPUTABLE_INELIGIBLE_U",
+      "reason": "one paired arm requires a non-final U state, but no eligible U labels exist",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 182,
+      "left_correct_on_both_completed": 136,
+      "right_correct_on_both_completed": 137
+    },
+    "G4:U_ONLY_minus_D0": {
+      "left_arm": "U_ONLY",
+      "right_arm": "D0",
+      "status": "NOT_COMPUTABLE_INELIGIBLE_U",
+      "reason": "one paired arm requires a non-final U state, but no eligible U labels exist",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 119,
+      "right_correct_on_both_completed": 117
+    },
+    "G4:V_ONLY_minus_D0": {
+      "left_arm": "V_ONLY",
+      "right_arm": "D0",
+      "status": "NON_CONFIRMATORY_PREFLIGHT_FAILURE",
+      "reason": "formal preflight has errors",
+      "planned_matched_checkpoints": 184,
+      "both_completed": 184,
+      "left_correct_on_both_completed": 145,
+      "right_correct_on_both_completed": 117
+    }
+  },
+  "limitations": [
+    "This report is not a formal result and cannot support mechanism, superiority, causal, or L/U claims.",
+    "Q-invalid, terminal, and ineligible-U rows are not silently repaired or removed.",
+    "Private oracle values are used only to derive aggregate correctness counts and are not persisted."
+  ]
+}

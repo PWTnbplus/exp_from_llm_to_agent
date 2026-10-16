@@ -430,6 +430,18 @@ def test_g7_malformed_stage_contract_is_retained_as_failure() -> None:
         normalize_stages({"stages": {"V": {}, "L": {}, "U": {}}})
 
 
+def test_g7_q_requires_nonempty_verdict_and_reason_strings() -> None:
+    base = {
+        "V": {"verdict": "SUPPORTED"},
+        "L": {"nodes": [], "edges": []},
+        "U": {"node_changes": []},
+    }
+    with pytest.raises(ValueError, match="invalid Q stage"):
+        normalize_stages({"stages": {**base, "Q": {"verdict": "SUPPORTED"}}})
+    with pytest.raises(ValueError, match="invalid Q stage"):
+        normalize_stages({"stages": {**base, "Q": {"verdict": "", "reason": "present"}}})
+
+
 def test_g7_invalid_decision_is_not_silently_repaired() -> None:
     with pytest.raises(ValueError, match="invalid decision"):
         parse_payload('{"decision":"guess"}')

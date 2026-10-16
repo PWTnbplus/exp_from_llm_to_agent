@@ -19,6 +19,22 @@ def changes(items: list[dict]) -> set[tuple[str, str]]:
     return {(str(x.get("claim_id")), str(x.get("to_status"))) for x in items if isinstance(x, dict)}
 
 
+def q_record_is_complete(q: object) -> bool:
+    """Check only the frozen public Q record schema.
+
+    The G7 design specifies Q.verdict and Q.reason as strings; it does not
+    prescribe a PASS/OK enum.  A model's Q text is not treated as an external
+    mathematical proof here.  Scientific consistency is still decided by the
+    independent V/L/U labels and expected final decision below.
+    """
+    if not isinstance(q, dict):
+        return False
+    verdict = q.get("verdict")
+    reason = q.get("reason")
+    return (isinstance(verdict, str) and bool(verdict.strip())
+            and isinstance(reason, str) and bool(reason.strip()))
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--states", type=Path, nargs="+", required=True)
@@ -34,7 +50,7 @@ def main() -> int:
     for path in args.states:
         for row in readl(path):
             states[row["run_id"]] = row
-    verifier_ref = "g7-q-independent-audit:" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    verifier_ref = "g7-q-label-consistency-audit:" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     out = []
     for run_id, plan in plans.items():
         state = states.get(run_id)
@@ -46,7 +62,6 @@ def main() -> int:
             continue
         stages = state.get("stages") or {}
         q = stages.get("Q") or {}
-        qv = str(q.get("verdict", "")).upper()
         final_ok = state.get("final_decision") in DECISION and state.get("final_decision") == expected
         v_ok = (stages.get("V") or {}).get("verdict") == label["v"]["verdict"]
         l = stages.get("L") or {}
@@ -54,12 +69,14 @@ def main() -> int:
             (x.get("from"), x.get("to")) for x in l.get("edges", []) if isinstance(x, dict)
         } == {(x.get("from"), x.get("to")) for x in label["l"]["edges"] if isinstance(x, dict)}
         u_ok = changes((stages.get("U") or {}).get("node_changes", [])) == changes(label["u"]["node_changes"])
-        q_ok = qv in {"PASS", "OK", "VALID", "SUPPORTED"}
+        q_ok = q_record_is_complete(q)
         out.append({"run_id": run_id, "is_valid": bool(final_ok and v_ok and l_ok and u_ok and q_ok),
                     "independent_verifier_ref": verifier_ref,
-                    "checks": {"final_decision": final_ok, "V": v_ok, "L": l_ok, "U": u_ok, "Q": q_ok},
+                    "checks": {"final_decision": final_ok, "V": v_ok, "L": l_ok, "U": u_ok,
+                               "Q": q_ok, "Q_record_complete": q_ok},
                     "expected_decision": expected, "observed_decision": state.get("final_decision"),
-                    "q_verdict": q.get("verdict")})
+                    "q_verdict": q.get("verdict"),
+                    "assessment_scope": "label_consistency_and_q_record_completeness;_not_external_proof"})
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", encoding="utf-8", newline="\n") as handle:
         for row in out:
