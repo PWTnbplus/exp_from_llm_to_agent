@@ -19,7 +19,7 @@
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：Cycle 72 local repair/audit/state commit 834cfa9 was created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated.
+- 证据：Cycle 72 local repair/audit commit 834cfa9 and delivery-state commit 7adc4a3 were created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated.
 - 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md

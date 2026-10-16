@@ -82,6 +82,6 @@
     "ls_remote_exit_code": 1,
     "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "Local repair/audit/state commit 834cfa9 was created. git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; the remote branch was not updated or verified."
+    "note": "Local repair/audit commit 834cfa9 and delivery-state commit 7adc4a3 were created. git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; the remote branch was not updated or verified."
   }
 }
