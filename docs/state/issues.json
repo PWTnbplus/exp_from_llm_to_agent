@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T15:41:37+00:00",
+  "updated_at": "2026-10-16T15:48:39+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1622,6 +1622,38 @@
           "evidence": "The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata."
         }
       ]
+    },
+    {
+      "id": "ISSUE-136c15318a59",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted incomplete public-label, family-CF, and retry-scope contracts",
+      "status": "VERIFIED",
+      "evidence": "Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes.",
+      "remediation": "Enable and test the strict formal-input contract in the real runner and formal preflight.",
+      "first_seen": "2026-10-16T15:48:32+00:00",
+      "last_seen": "2026-10-16T15:48:39+00:00",
+      "source": "docs/audits/cycle-20261016T154759Z-88/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T15:48:39+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T15:48:32+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T154759Z-88/audit.json"
+        },
+        {
+          "time": "2026-10-16T15:48:39+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1725,7 +1757,8 @@
     "docs/audits/cycle-20261016T095537Z-84/audit.json",
     "docs/audits/cycle-20261016T095836Z-85/audit.json",
     "docs/audits/cycle-20261016T100123Z-86/audit.json",
-    "docs/audits/cycle-20261016T154007Z-87/audit.json"
+    "docs/audits/cycle-20261016T154007Z-87/audit.json",
+    "docs/audits/cycle-20261016T154759Z-88/audit.json"
   ],
   "current_focus": null
 }

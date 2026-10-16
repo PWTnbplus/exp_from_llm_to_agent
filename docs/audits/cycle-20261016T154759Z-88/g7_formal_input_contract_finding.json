@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-136c15318a59",
+  "fingerprint": "g7-formal-input-contract-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight accepted incomplete public-label, family-CF, and retry-scope contracts",
+  "evidence": "Before repair, three read-only mutations returned formal_run_allowed_by_protocol=true with errors=[]: adding a valid label for a case absent from public cases; changing every complete-plan retry_scope to an unrelated nonempty value; and removing one CF4 public case together with its label and plan rows so one theory family no longer covered CF1-CF4. The former preflight only checked the remaining case/group grid and nonempty metadata.",
+  "remediation": "Add an explicit formal-input contract for the production runner and formal preflight: require exact public/label case-set equality, exact full-plan retry_scope=all_original_rows_protocol_corrected, CF1-CF4 coverage for every theory family, and one paired_set_id per family with one family per paired set; add adversarial tests and recheck immutable inputs.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

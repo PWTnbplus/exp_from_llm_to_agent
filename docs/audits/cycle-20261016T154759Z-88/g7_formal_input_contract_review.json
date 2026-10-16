@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 formal-input-contract review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-136c15318a59",
+      "verdict": "VERIFIED",
+      "evidence": "Production G7 execution and scripts/g7_protocol_preflight.py now enable require_formal_input_contract=true. Adversarial tests reject extra labels, wrong full-plan retry scope, incomplete family CF coverage, and paired-set drift; focused G7 tests pass 52/52 and the full repository suite passes 242/242. Strict immutable preflight passes 92 public cases, 92 labels, 1288 plan rows, 23 families each covering CF1-CF4, exact label/public case sets, exact retry scope, 184 checkpoints, and no prior routing/lineage errors. An independent data-only scan reproduces the same zero-defect counts and immutable hashes.",
+      "reason": "The local formal-input completeness fail-open is closed. This verifies only the engineering/input contract; it does not establish provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

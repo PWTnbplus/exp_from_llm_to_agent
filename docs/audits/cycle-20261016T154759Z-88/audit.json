@@ -1,0 +1,117 @@
+{
+  "cycle": "20261016T154759Z-88",
+  "scope": "G7 production formal-input completeness: public/label sets, family CF coverage, paired-set lineage, and full retry scope",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 must retain the complete public case set and independently scored private V/L/U labels rather than allowing orphan labels or a changed denominator.",
+      "The formal public input is organized by theory family and CF1-CF4 counterfactual conditions; paired-set identity must remain stable across those conditions.",
+      "The full protocol-corrected retry is a separate frozen retry of all original rows, and its scope must not be silently relabeled.",
+      "These are preregistration/input safeguards only; they do not turn the current non-confirmatory artifacts into scientific evidence."
+    ],
+    "alignment_conclusion": "The production runner and formal preflight now apply the complete formal public/label/family/retry contract before any provider construction."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c mutate a valid fixture by adding an orphan label, set all retry_scope values to another nonempty value, or remove one family's CF4 public/label/plan rows; call protocol_preflight(..., require_complete_plan=True)",
+      "result": "PASS for all three regression probes before implementation repair: formal_run_allowed_by_protocol=true and errors=[]; the incomplete formal denominator and mislabeled retry scope were accepted."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 52 tests, including rejection of orphan labels, wrong retry scope, incomplete family CF coverage, paired-set drift, prior CF/split/identity/protocol/lineage mutations, and model-visible isolation controls."
+    }
+  },
+  "repair": {
+    "source_changed": [
+      "scripts/run_g7_failure_localization.py",
+      "scripts/g7_protocol_preflight.py"
+    ],
+    "tests_added_or_changed": [
+      "tests/test_g7_protocol.py",
+      "tests/test_g7_protocol_preflight.py"
+    ],
+    "change": "Added require_formal_input_contract for production/formal preflight; it checks exact public/label case-set equality, G7_FORMAL_RETRY_SCOPE=all_original_rows_protocol_corrected, every theory family covering CF1-CF4, and bijective family/paired-set lineage. Added report counts and adversarial tests.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "de7581f"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "52 passed in 2.77s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "242 passed in 18.90s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py scripts/g7_protocol_preflight.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_formal_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+        "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+        "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      },
+      "command": "direct protocol_preflight(..., worker_count=16, require_complete_plan=true, require_formal_input_contract=true)",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public=92; labels=92; plan=1288; strict=true; exact public/label case set; retry_scope mismatches=[]; family CF mismatches=[]; family/paired-set lineage mismatches=[]; source checkpoint mismatches=[]; group-arm mismatches=[]; unique_checkpoints=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate Python data-only reconstruction, not the runner preflight",
+      "result": "PASS: public_rows=92; label_rows=92; plan_rows=1288; families=23; every family has exactly CF1-CF4 and four rows; public/label sets match; duplicate public/label/run IDs=0; wrong retry scope/protocol/version=0; mixed source-checkpoint groups=0; public and plan SHA256 match the immutable inputs."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 formal-input-contract review",
+    "findings": [
+      {
+        "id": "ISSUE-136c15318a59",
+        "fingerprint": "g7-formal-input-contract-v1",
+        "severity": "P1",
+        "title": "G7 formal preflight accepted incomplete public-label, family-CF, and retry-scope contracts",
+        "evidence": "The pre-repair mutation probes accepted an orphan label, an unrelated nonempty retry_scope, and a family with its CF4 case removed while returning formal_run_allowed_by_protocol=true.",
+        "remediation": "Enable and test the strict formal-input contract in the real runner and formal preflight."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-136c15318a59",
+        "verdict": "VERIFIED",
+        "evidence": "The fixed strict contract, four adversarial regression tests, focused suite, full suite, immutable strict preflight, and independent reconstruction all pass.",
+        "reason": "Local structural defect fixed; external provider, provenance, mathematical, statistical, and scientific-release gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "9e1c9d3",
+    "code_commit": "de7581f",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "State and delivery commits, plus push and ls-remote outcomes, will be filled after the audit/state handoff cycle."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-136c15318a59",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only the local G7 formal-input completeness contract was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}
