@@ -1,0 +1,97 @@
+{
+  "cycle": "20261016T093500Z-80",
+  "scope": "G7 complete-plan case/group/checkpoint coverage gate",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 formal execution covers the public cases across G3/G4 and all seven D0-D3/V_ONLY/L_ONLY/U_ONLY arms.",
+      "The same public task must remain paired across diagnostic forks; incomplete or duplicated coverage cannot be silently treated as a complete run.",
+      "Technical failures and external/statistical limitations remain visible and are not converted into scientific claims."
+    ],
+    "alignment_conclusion": "The preflight now checks case/group coverage independently of checkpoint aggregation while preserving the documented shared-checkpoint fork semantics."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py::test_g7_formal_preflight_reproducer_accepts_a_dropped_public_case",
+      "result": "PASS for the regression probe before the implementation repair: the old preflight incorrectly allowed a valid two-case input whose plan contained only case-1."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 41 tests, including dropped-case, duplicate case/group checkpoint, cross-case checkpoint collision, and shared same-case fork controls."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py", "tests/test_g7_protocol_preflight.py"],
+    "change": "The complete-plan gate now requires every public case to have one complete seven-arm checkpoint per G3/G4 group, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and permits a shared checkpoint between the two forks of one case.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_g8_handoff_contract.py tests/test_prepare_g8_inputs.py",
+      "result": "49 passed"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "231 passed in 25.32s"
+    },
+    "immutable_plan_preflight": {
+      "command": "scripts/g7_protocol_preflight.py on the 92-case public/label inputs and frozen 1288-row protocol-corrected retry plan",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; incomplete_case_group_coverage=[]; duplicate_case_group_checkpoints=[]; checkpoint_identity_collisions=[]; unique_checkpoint_ids=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate source/data-only coverage audit plus PowerShell reconstruction of case/group/checkpoint counts",
+      "result": "PASS: public_cases=92, plan_rows=1288, case_group_keys=184, missing_or_bad=0, duplicate_case_group_checkpoints=0, checkpoint_identity_collisions=0."
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py scripts/g7_protocol_preflight.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 formal-plan coverage review",
+    "findings": [
+      {
+        "id": "ISSUE-dad1d3f0293e",
+        "fingerprint": "g7-formal-plan-coverage-v1",
+        "severity": "P1",
+        "title": "G7 formal preflight could accept a plan that silently dropped an entire public case",
+        "evidence": "The pre-repair two-case probe returned formal_run_allowed_by_protocol=true when all seven arms were present only for case-1.",
+        "remediation": "Require complete per-public-case, per-G3/G4 seven-arm coverage and reject duplicate/cross-case checkpoint identity misuse."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-dad1d3f0293e",
+        "verdict": "VERIFIED",
+        "evidence": "Coverage and identity guards are implemented and pass focused/full tests plus an independent immutable-plan scan.",
+        "reason": "Local structural defect fixed; external and scientific gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "32a9fff",
+    "code_commit": "776285b",
+    "remote_updated": false,
+    "note": "Remote delivery will be attempted after the audit/state commit and recorded only from push plus git ls-remote exit codes."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-dad1d3f0293e",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only G7 complete-plan structural coverage was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}

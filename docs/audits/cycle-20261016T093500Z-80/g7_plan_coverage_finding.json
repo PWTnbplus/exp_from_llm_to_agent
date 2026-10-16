@@ -1,0 +1,8 @@
+{
+  "id": "ISSUE-dad1d3f0293e",
+  "fingerprint": "g7-formal-plan-coverage-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight could accept a plan that silently dropped an entire public case",
+  "evidence": "Before repair, protocol_preflight(..., require_complete_plan=True) checked only the set of arms aggregated under checkpoint IDs. A read-only regression probe with two valid public cases and a complete seven-arm G3/G4 plan for only case-1 returned formal_run_allowed_by_protocol=true, so case-2 could be omitted without an error.",
+  "remediation": "For a complete G7 plan, require every valid public case to have exactly one checkpoint and all seven diagnostic arms independently for both G3 and G4; reject duplicate case/group checkpoints and checkpoint IDs shared across different public cases while allowing one case's G3/G4 forks to share a source checkpoint. Add adversarial tests and rerun the immutable plan preflight."
+}

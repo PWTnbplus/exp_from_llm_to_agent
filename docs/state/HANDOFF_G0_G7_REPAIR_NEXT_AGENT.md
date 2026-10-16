@@ -374,6 +374,18 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `9` open/blocked/unverified issues and `9` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 80 G7 complete-plan case/group coverage repair (2026-10-16T09:35Z)
+
+- Compared the executable G7 preflight with `D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md` G7.3–G7.7: a complete formal plan must retain every public case in both G3 and G4 and all seven diagnostic arms D0/D1/D2/D3/V_ONLY/L_ONLY/U_ONLY; checkpoint sharing is allowed only for the two forks of the same case.
+- Independently reproduced a local fail-open before repair: a valid two-case public/label input with all seven arms for case-1 but no plan rows for case-2 returned `formal_run_allowed_by_protocol=true` under `require_complete_plan=True`.
+- Repaired `scripts/run_g7_failure_localization.py::protocol_preflight` to check per-case/per-group coverage independently of aggregate checkpoint IDs, require exactly one checkpoint and the complete seven-arm set for each case/G3 and case/G4, reject duplicate case/group checkpoints and cross-case checkpoint reuse, and preserve same-case G3/G4 shared-checkpoint compatibility.
+- Added adversarial tests for dropped public cases, duplicate case/group checkpoints, cross-case checkpoint collisions, and updated the shared-checkpoint control. Focused protocol tests pass `41/41`; the full repository suite passes `231/231`; py_compile and `git diff --check` pass.
+- Re-ran the immutable protocol-corrected G7 plan preflight: `92` public cases, `1288` plan rows, `184` case/group keys, all complete; `incomplete_case_group_coverage=[]`, `duplicate_case_group_checkpoints=[]`, and `checkpoint_identity_collisions=[]`.
+- `ISSUE-dad1d3f0293e` is `VERIFIED` for this local formal-plan coverage guard only. `ISSUE-000000000002`, `ISSUE-000000000003`, `ISSUE-000000000004`, `ISSUE-1f8c2b6a4d90`, and `ISSUE-3d7a9c1e5b20` remain externally or scientifically blocked; G0/G6/G7 remain `BLOCKED` and `scientific_release_allowed=false`.
+- Audit files: `docs/audits/cycle-20261016T093500Z-80/audit.json`, `g7_plan_coverage_finding.json`, and `g7_plan_coverage_review.json`.
+- Local code commit: `776285b` (`Enforce complete G7 case-group coverage`). State/audit commit is pending. Push and `ls-remote` must be attempted after it and recorded truthfully; no remote success may be claimed without verification.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. The user-owned untracked `research_data_summary_G0_G7/` remains preserved and unstaged.
+
 ## Cycle 79 V2 ledger chronology repair (2026-10-16T09:27Z)
 
 - During the post-cycle-78 state review, `ISSUE-000000000003` had a newer append-only BLOCKED history event but a stale top-level `last_seen`, weakening handoff chronology.

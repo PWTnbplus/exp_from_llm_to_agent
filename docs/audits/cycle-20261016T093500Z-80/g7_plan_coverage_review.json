@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 formal-plan coverage review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-dad1d3f0293e",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage.",
+      "reason": "The local formal-plan coverage fail-open is closed. This verifies only the structural preflight; it does not verify paid provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:26:28+00:00",
+  "updated_at": "2026-10-16T09:38:10+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1312,6 +1312,38 @@
           "evidence": "update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass."
         }
       ]
+    },
+    {
+      "id": "ISSUE-dad1d3f0293e",
+      "severity": "P1",
+      "title": "G7 formal preflight could accept a plan that silently dropped an entire public case",
+      "status": "VERIFIED",
+      "evidence": "The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage.",
+      "remediation": "Require complete per-public-case, per-G3/G4 seven-arm coverage and reject duplicate/cross-case checkpoint identity misuse.",
+      "first_seen": "2026-10-16T09:38:04+00:00",
+      "last_seen": "2026-10-16T09:38:10+00:00",
+      "source": "docs/audits/cycle-20261016T093500Z-80/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:38:10+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:38:04+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T093500Z-80/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:38:10+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1407,7 +1439,8 @@
     "docs/audits/cycle-20261016T090727Z-76/audit.json",
     "docs/audits/cycle-20261016T091032Z-77/audit.json",
     "docs/audits/cycle-20261016T094500Z-78/audit.json",
-    "docs/audits/cycle-20261016T092700Z-79/audit.json"
+    "docs/audits/cycle-20261016T092700Z-79/audit.json",
+    "docs/audits/cycle-20261016T093500Z-80/audit.json"
   ],
   "current_focus": null
 }

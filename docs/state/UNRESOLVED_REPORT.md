@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:26:29+00:00
+生成时间（UTC）：2026-10-16T09:38:10+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**16**
+- 已验证修复：**17**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -99,6 +99,7 @@
 - **ISSUE-2d7c9a4e1f60**（P1）：G6 report table mixed formal-run metrics with the protocol-v2 artifact root——`E:/resources/python/python.exe -X utf8 -m pytest -q`；Independent CLI reruns reproduce the old table from formal-20261013 verified23 inputs and reproduce the current v2 metrics from protocol-g3tools-v2 inputs. A new source-explicit report docs/reports/G6_PROTOCOL_V2_REAUDIT_CN_20261016.md records the v2 paths, release-review hashes, 552/552/92/552 counts, 1,826 model requests, 1,796 tool calls, 3,454,449 tokens, USD 6.057783 trace cost, current CF metrics, and ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Existing historical reports and raw artifacts were not overwritten. Full host tests pass 225/225.
 - **ISSUE-4a8f6c2e1d90**（P1）：Independent G7-to-G8 handoff review could miss case-variant private or routing metadata keys——`python -m pytest -q`；find_forbidden now recursively casefolds dictionary keys against the complete private/routing metadata boundary. The new adversarial tests detect nested Verifier_Ref, Eligible_U, CF_TYPE, and Theory_Family_Id; public prose mentioning reserved words remains accepted. Focused G7 tests pass 77/77, py_compile passes, and git diff --check passes.
 - **ISSUE-7b3e9a1c5d20**（P2）：Issue status transitions did not refresh top-level last_seen——`python -m pytest -q`；update_status now stores one transition_time in last_seen and the append-only history event. The new stale-timestamp test passes, recovery_state.py tests pass 13/13, the full host suite passes 228/228, and py_compile/diff-check pass.
+- **ISSUE-dad1d3f0293e**（P1）：G7 formal preflight could accept a plan that silently dropped an entire public case——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The repaired preflight computes case/group coverage independently of the aggregate checkpoint view, requires exactly one checkpoint and the complete D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY arm set for every public case in both G3 and G4, rejects duplicate case/group checkpoints and cross-case checkpoint reuse, and still allows the same source checkpoint to be shared by one case's G3/G4 forks. Adversarial protocol tests pass 41/41; the full repository suite passes 231/231; the immutable 92-case/1288-row plan preflight reports no missing, duplicate, or colliding coverage.
 
 ## 可复用的已验证完成工作（不要重新构建）
 
