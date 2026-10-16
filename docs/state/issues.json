@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:43:41+00:00",
+  "updated_at": "2026-10-16T07:44:09+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 58 commit b60063a is present locally, but git push origin autopilot/scientific-law-discovery and git ls-remote origin refs/heads/autopilot/scientific-law-discovery both failed: unable to connect to github.com port 443 via 127.0.0.1. Remote branch was not verified or claimed updated.",
+      "evidence": "Cycle 59 commit b65433a is present locally, but git push origin autopilot/scientific-law-discovery and git ls-remote origin refs/heads/autopilot/scientific-law-discovery both failed: unable to connect to github.com port 443 via 127.0.0.1. Remote branch was not verified or claimed updated.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 58 GitHub delivery remains externally blocked after local statistical-layout repair commit.",
+      "blocked_reason": "Cycle 59 GitHub delivery remains externally blocked after local G7 metrics repair commit.",
       "verification": null,
       "history": [
         {
@@ -199,6 +199,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 58 GitHub delivery remains externally blocked after local statistical-layout repair commit.",
           "evidence": "Cycle 58 commit b60063a is present locally, but git push origin autopilot/scientific-law-discovery and git ls-remote origin refs/heads/autopilot/scientific-law-discovery both failed: unable to connect to github.com port 443 via 127.0.0.1. Remote branch was not verified or claimed updated."
+        },
+        {
+          "time": "2026-10-16T07:44:09+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 59 GitHub delivery remains externally blocked after local G7 metrics repair commit.",
+          "evidence": "Cycle 59 commit b65433a is present locally, but git push origin autopilot/scientific-law-discovery and git ls-remote origin refs/heads/autopilot/scientific-law-discovery both failed: unable to connect to github.com port 443 via 127.0.0.1. Remote branch was not verified or claimed updated."
         }
       ]
     },
