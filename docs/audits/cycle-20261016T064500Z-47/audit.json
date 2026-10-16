@@ -1,0 +1,99 @@
+{
+  "cycle": 47,
+  "timestamp_utc": "2026-10-16T06:45:00+00:00",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "repair": {
+    "issue": "ISSUE-000000000002",
+    "change": "Added a fail-closed G7 paid-evidence preflight before provider key reading or provider construction. It validates a model-id-bound immutable snapshot hash and non-false gateway weight fingerprint plus a structured USD billing export, retains only file hashes and boolean checks, and labels structurally complete local evidence PRESENT_UNVERIFIED_EXTERNAL. Added missing, malformed, privacy-boundary, and runner-order regression tests.",
+    "historical_artifacts_rewritten": false
+  },
+  "test": {
+    "targeted_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q", "tests/test_g7_protocol.py", "tests/test_g7_corrected_metrics.py"],
+    "targeted_exit_code": 0,
+    "targeted_output_tail": "29 passed in 1.18s\n",
+    "full_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "full_exit_code": 0,
+    "full_output_tail": "149 passed in 18.41s\n",
+    "py_compile_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "py_compile", "scripts/run_g7_failure_localization.py", "tests/test_g7_protocol.py"],
+    "py_compile_exit_code": 0,
+    "git_diff_check_exit_code": 0
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "reviewer": "independent_g7_paid_evidence_boundary_check_v1",
+    "independent_review_status": "PASS_READ_ONLY_LOCAL",
+    "findings": [
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "evidence": "The read-only AST/order review found validate_paid_evidence() at scripts/run_g7_failure_localization.py:124, its call at :857, and key-file reading/provider construction only at :901; the runner-level regression asserts that missing evidence exits with provider_calls_made=false and never constructs the provider. Structurally valid temporary manifests retain only file SHA-256 values in the report and remain PRESENT_UNVERIFIED_EXTERNAL. No real provider call or paid experiment was launched.",
+        "remediation": "Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as external verification; do not launch a paid run without separate explicit authorization and a hard positive USD ceiling."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "This repair did not change the immutable corrected G7 provider history: the cycle-46 corrected metrics audit retains 3 terminal failures, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows. No provider/Q rerun was authorized or launched in cycle 47.",
+        "remediation": "Keep all failures and invalid Q rows in the all-planned denominator, use the metrics only non-confirmatorily, and obtain independently reviewed provider/Q diagnosis plus eligible non-final dependency/state data before any formal G7 inference or L/U claim."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-000000000002",
+        "verdict": "FIXED_UNVERIFIED",
+        "evidence": "The local machine gate and adversarial boundary tests are present and passing, but external billing and immutable model verification remain unavailable.",
+        "reason": "The implementation defect is repaired locally; the scientific/provider acceptance issue remains externally unverified."
+      }
+    ],
+    "verified_commands": [
+      "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py (exit 0, 29 passed)",
+      "E:/resources/python/python.exe -X utf8 -m pytest -q (exit 0, 149 passed in 18.41s)",
+      "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py tests/test_g7_protocol.py (exit 0)",
+      "git diff --check (exit 0)",
+      "independent AST/order/privacy boundary review (exit 0; paid evidence before key/provider; raw billing values absent from report fields)"
+    ]
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "git": {
+    "commit": "pending-local-commit",
+    "push_command": "git push origin autopilot/scientific-law-discovery",
+    "push_exit_code": null,
+    "push_output": "pending",
+    "remote_verification_command": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery",
+    "remote_verification_exit_code": null,
+    "remote_verification_output": "pending",
+    "remote_updated": false
+  },
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "paid_authorization_present": false,
+  "mandatory_completion_missing": [
+    "explicit_paid_authorization_and_hard_usd_ceiling",
+    "independently_verified_provider_Q_diagnosis",
+    "independently_audited_dependency_edges_and_nonfinal_U_states",
+    "independent_billing_export",
+    "immutable_model_snapshot_or_gateway_weight_fingerprint",
+    "upstream_provenance",
+    "formal_statistical_review",
+    "external_mathematical_review",
+    "design_scale_or_power_justification",
+    "machine_gate_attestation"
+  ],
+  "unresolved_issue_ids": [
+    "ISSUE-3d7a9c1e5b20",
+    "ISSUE-000000000002",
+    "ISSUE-000000000003",
+    "ISSUE-000000000004",
+    "ISSUE-ff97c7c89112",
+    "ISSUE-ad61f025976a",
+    "ISSUE-1f8c2b6a4d90",
+    "ISSUE-f9171bb760b1",
+    "ISSUE-0f2cb195c681",
+    "ISSUE-28ed827e40a9",
+    "ISSUE-ab0746b86bf9",
+    "ISSUE-0786397621a0",
+    "ISSUE-000000000005",
+    "ISSUE-6b3a9e1d4f20"
+  ]
+}

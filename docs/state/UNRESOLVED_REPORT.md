@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:36:26+00:00
+生成时间（UTC）：2026-10-16T06:41:46+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,17 +11,17 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The corrected metric report covers 1288 plan/state/Q rows, 92 aggregate-scored oracle cases, retains 3 terminal failures and 1268 invalid Q rows, and reports 20 independently valid Q rows. Its confirmatory_reuse_allowed flag is false because formal preflight has ineligible_u_diagnostic_arm and 368 U-stage rows are not eligible. U-dependent pairs are explicitly NOT_COMPUTABLE_INELIGIBLE_U; all other pairs are NON_CONFIRMATORY_PREFLIGHT_FAILURE. The independent boundary check found no private raw values or private field names in the persisted report.
-- 必需修复：Use these metrics only as non-confirmatory diagnostics. Retain all failed and invalid rows in the denominator, do not make mechanism or L/U claims, and obtain independently audited non-final dependency/state data plus provider/Q, billing, immutable-model, and external review evidence before any formal score or scientific inference.
+- 证据：This repair did not change the immutable corrected G7 provider history: the cycle-46 corrected metrics audit retains 3 terminal failures, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows. No provider/Q rerun was authorized or launched in cycle 47.
+- 必需修复：Keep all failures and invalid Q rows in the all-planned denominator, use the metrics only non-confirmatorily, and obtain independently reviewed provider/Q diagnosis plus eligible non-final dependency/state data before any formal G7 inference or L/U claim.
 - 尝试次数：18
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：The original raw run retains provider-error history and the corrected trace audit passes. Provider model identity metadata is now recorded, but no billing export or immutable weight snapshot is available for independent verification.
-- 必需修复：Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.
-- 尝试次数：1
+- 证据：The read-only AST/order review found validate_paid_evidence() at scripts/run_g7_failure_localization.py:124, its call at :857, and key-file reading/provider construction only at :901; the runner-level regression asserts that missing evidence exits with provider_calls_made=false and never constructs the provider. Structurally valid temporary manifests retain only file SHA-256 values in the report and remain PRESENT_UNVERIFIED_EXTERNAL. No real provider call or paid experiment was launched.
+- 必需修复：Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as external verification; do not launch a paid run without separate explicit authorization and a hard positive USD ceiling.
+- 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：未记录
 

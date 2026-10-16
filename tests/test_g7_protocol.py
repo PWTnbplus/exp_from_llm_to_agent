@@ -20,6 +20,7 @@ from scripts.run_g7_failure_localization import (
     persisted_usage,
     public_tool_loop,
     protocol_preflight,
+    validate_paid_evidence,
 )
 import scripts.run_g7_failure_localization as g7_runner
 
@@ -329,6 +330,98 @@ def test_g7_runner_rejects_multiworker_without_aggregate_cap_before_key_read(
     with pytest.raises(SystemExit, match="explicit aggregate cost cap"):
         g7_runner.main()
     assert not out.exists()
+
+
+def test_g7_paid_evidence_gate_rejects_missing_files_without_provider_setup(tmp_path: Path) -> None:
+    report = validate_paid_evidence("model-x", tmp_path / "missing-snapshot.json", tmp_path / "missing-billing.json")
+    assert report["formal_paid_run_allowed_by_evidence"] is False
+    assert report["evidence_status"] == "MISSING_OR_INVALID"
+    assert report["errors"] == ["model_snapshot_manifest_not_found", "billing_export_not_found"]
+
+
+def test_g7_paid_evidence_gate_accepts_structure_but_keeps_external_status_unverified(tmp_path: Path) -> None:
+    snapshot = tmp_path / "snapshot.json"
+    billing = tmp_path / "billing.json"
+    snapshot.write_text(json.dumps({
+        "model_id": "model-x",
+        "gateway_weight_fingerprint": "gateway-fp-123",
+        "snapshot_sha256": "a" * 64,
+    }), encoding="utf-8")
+    billing.write_text(json.dumps({
+        "receipt_id": "receipt-1",
+        "currency": "USD",
+        "total_cost_usd": 1.25,
+        "exported_at_utc": "2026-10-16T08:00:00+00:00",
+    }), encoding="utf-8")
+    report = validate_paid_evidence("model-x", snapshot, billing)
+    assert report["errors"] == []
+    assert report["formal_paid_run_allowed_by_evidence"] is True
+    assert report["evidence_status"] == "PRESENT_UNVERIFIED_EXTERNAL"
+    assert report["external_verification_claimed"] is False
+    assert report["model_snapshot_manifest"]["checks"]["file_sha256"] == hashlib.sha256(snapshot.read_bytes()).hexdigest()
+    assert report["billing_export"]["checks"]["file_sha256"] == hashlib.sha256(billing.read_bytes()).hexdigest()
+    serialized = json.dumps(report)
+    assert "receipt-1" not in serialized
+    assert "1.25" not in serialized
+
+
+def test_g7_paid_evidence_gate_rejects_false_snapshot_and_invalid_billing(tmp_path: Path) -> None:
+    snapshot = tmp_path / "snapshot.json"
+    billing = tmp_path / "billing.json"
+    snapshot.write_text(json.dumps({
+        "model_id": "other-model",
+        "gateway_weight_fingerprint": False,
+        "snapshot_sha256": "not-a-sha256",
+    }), encoding="utf-8")
+    billing.write_text(json.dumps({
+        "receipt_id": "",
+        "currency": "CNY",
+        "total_cost_usd": float("nan"),
+        "exported_at_utc": "not-a-time",
+    }, allow_nan=True), encoding="utf-8")
+    report = validate_paid_evidence("model-x", snapshot, billing)
+    assert report["formal_paid_run_allowed_by_evidence"] is False
+    assert report["errors"] == [
+        "model_snapshot_model_id_mismatch",
+        "model_snapshot_gateway_weight_fingerprint_missing",
+        "model_snapshot_sha256_invalid",
+        "billing_receipt_id_missing",
+        "billing_currency_must_be_usd",
+        "billing_total_cost_invalid",
+        "billing_exported_at_utc_invalid",
+    ]
+
+
+def test_g7_runner_paid_evidence_gate_stops_before_key_or_provider(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    public = tmp_path / "public.jsonl"
+    labels = tmp_path / "labels.jsonl"
+    plan = tmp_path / "plan.jsonl"
+    public.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    plan.write_text(json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n", encoding="utf-8")
+    out = tmp_path / "out"
+    monkeypatch.setattr(g7_runner, "protocol_preflight", lambda *args, **kwargs: {
+        "provider_calls_made": False,
+        "formal_run_allowed_by_protocol": True,
+        "errors": [],
+        "counts": {},
+        "routing_metadata_model_prompt_hits": {},
+        "forbidden_model_prompt_hits": {},
+        "scientific_truth_decision_made": False,
+    })
+    monkeypatch.setattr(g7_runner, "OpenAICompatibleProvider", lambda **kwargs: pytest.fail("provider constructed"))
+    monkeypatch.setattr(sys, "argv", [
+        "run_g7_failure_localization.py", "--public", str(public), "--labels", str(labels),
+        "--plan", str(plan), "--out", str(out), "--model-id", "model-x",
+        "--key-file", str(tmp_path / "missing-key"), "--allow-paid",
+        "--model-snapshot-manifest", str(tmp_path / "missing-snapshot.json"),
+        "--billing-export", str(tmp_path / "missing-billing.json"),
+    ])
+    with pytest.raises(SystemExit, match="paid-evidence preflight failed"):
+        g7_runner.main()
+    report = json.loads((out / "g7_protocol_preflight.json").read_text(encoding="utf-8"))
+    assert report["provider_calls_made"] is False
+    assert report["paid_evidence"]["errors"] == ["model_snapshot_manifest_not_found", "billing_export_not_found"]
 
 
 def test_g7_malformed_stage_contract_is_retained_as_failure() -> None:

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T06:36:26+00:00",
+  "updated_at": "2026-10-16T06:41:46+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -51,12 +51,12 @@
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
       "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The original raw run retains provider-error history and the corrected trace audit passes. Provider model identity metadata is now recorded, but no billing export or immutable weight snapshot is available for independent verification.",
-      "remediation": "Retain an independently verifiable provider billing export and immutable model snapshot, then repeat the final acceptance review.",
+      "evidence": "The read-only AST/order review found validate_paid_evidence() at scripts/run_g7_failure_localization.py:124, its call at :857, and key-file reading/provider construction only at :901; the runner-level regression asserts that missing evidence exits with provider_calls_made=false and never constructs the provider. Structurally valid temporary manifests retain only file SHA-256 values in the report and remain PRESENT_UNVERIFIED_EXTERNAL. No real provider call or paid experiment was launched.",
+      "remediation": "Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as external verification; do not launch a paid run without separate explicit authorization and a hard positive USD ceiling.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-13T17:19:31+00:00",
+      "last_seen": "2026-10-16T06:41:41+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
-      "attempts": 1,
+      "attempts": 2,
       "blocked_reason": null,
       "verification": null,
       "history": [
@@ -87,6 +87,18 @@
           "time": "2026-10-13T17:06:46+00:00",
           "event": "RESOLVED_UNVERIFIED",
           "reason": "Real-provider G6 requests, hard-limit accounting, canonical trace audit, and provider-error history are now locally persisted; external billing and immutable snapshot verification remain unavailable.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-16T06:41:13+00:00",
+          "event": "IN_PROGRESS",
+          "reason": "Cycle 47 added a fail-closed G7 paid-evidence machine gate; external billing and immutable model verification remain unproven.",
+          "evidence": ""
+        },
+        {
+          "time": "2026-10-16T06:41:46+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Cycle 47 local machine gate and boundary tests pass; external billing and immutable model verification remain unavailable, so this stays RESOLVED_UNVERIFIED.",
           "evidence": ""
         }
       ]
@@ -335,10 +347,10 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "IN_PROGRESS",
-      "evidence": "The corrected metric report covers 1288 plan/state/Q rows, 92 aggregate-scored oracle cases, retains 3 terminal failures and 1268 invalid Q rows, and reports 20 independently valid Q rows. Its confirmatory_reuse_allowed flag is false because formal preflight has ineligible_u_diagnostic_arm and 368 U-stage rows are not eligible. U-dependent pairs are explicitly NOT_COMPUTABLE_INELIGIBLE_U; all other pairs are NON_CONFIRMATORY_PREFLIGHT_FAILURE. The independent boundary check found no private raw values or private field names in the persisted report.",
-      "remediation": "Use these metrics only as non-confirmatory diagnostics. Retain all failed and invalid rows in the denominator, do not make mechanism or L/U claims, and obtain independently audited non-final dependency/state data plus provider/Q, billing, immutable-model, and external review evidence before any formal score or scientific inference.",
+      "evidence": "This repair did not change the immutable corrected G7 provider history: the cycle-46 corrected metrics audit retains 3 terminal failures, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows. No provider/Q rerun was authorized or launched in cycle 47.",
+      "remediation": "Keep all failures and invalid Q rows in the all-planned denominator, use the metrics only non-confirmatorily, and obtain independently reviewed provider/Q diagnosis plus eligible non-final dependency/state data before any formal G7 inference or L/U claim.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T06:36:26+00:00",
+      "last_seen": "2026-10-16T06:41:41+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 18,
       "blocked_reason": null,
@@ -691,7 +703,8 @@
     "docs/audits/cycle-20261016T062314Z-43/audit.json",
     "docs/audits/cycle-20261016T070000Z-44/audit.json",
     "docs/audits/cycle-20261016T071500Z-45/audit.json",
-    "docs/audits/cycle-20261016T080000Z-46/audit.json"
+    "docs/audits/cycle-20261016T080000Z-46/audit.json",
+    "docs/audits/cycle-20261016T064500Z-47/audit.json"
   ],
   "current_focus": null
 }

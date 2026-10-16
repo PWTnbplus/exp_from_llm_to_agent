@@ -121,6 +121,116 @@ def sha256_file(path: Path) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
+def validate_paid_evidence(model_id: str, snapshot_manifest: Path | None,
+                            billing_export: Path | None) -> dict[str, Any]:
+    """Validate local evidence required before any real G7 provider call.
+
+    This is a fail-closed machine gate, not an external attestation. The raw
+    manifest/export contents are never copied into the run report; only
+    structural checks and file hashes are retained. Structurally valid local
+    files remain explicitly marked as PRESENT_UNVERIFIED_EXTERNAL until an
+    independent reviewer verifies them.
+    """
+
+    def load_object(path: Path | None, kind: str) -> tuple[dict[str, Any] | None, list[str], str | None]:
+        errors: list[str] = []
+        if path is None:
+            errors.append(f"{kind}_required")
+            return None, errors, None
+        if not path.is_file():
+            errors.append(f"{kind}_not_found")
+            return None, errors, None
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            errors.append(f"{kind}_invalid_json")
+            return None, errors, sha256_file(path)
+        if not isinstance(value, dict):
+            errors.append(f"{kind}_must_be_object")
+            return None, errors, sha256_file(path)
+        return value, errors, sha256_file(path)
+
+    snapshot, snapshot_errors, snapshot_file_sha256 = load_object(snapshot_manifest, "model_snapshot_manifest")
+    billing, billing_errors, billing_file_sha256 = load_object(billing_export, "billing_export")
+    errors = [*snapshot_errors, *billing_errors]
+
+    snapshot_checks = {
+        "file_sha256": snapshot_file_sha256,
+        "model_id_matches": False,
+        "gateway_weight_fingerprint_present": False,
+        "snapshot_sha256_valid": False,
+    }
+    if snapshot is not None:
+        snapshot_checks["model_id_matches"] = snapshot.get("model_id") == model_id
+        if not snapshot_checks["model_id_matches"]:
+            errors.append("model_snapshot_model_id_mismatch")
+        fingerprint = snapshot.get("gateway_weight_fingerprint")
+        false_like = {"", "false", "none", "null", "n/a", "na", "unknown", "missing"}
+        snapshot_checks["gateway_weight_fingerprint_present"] = (
+            isinstance(fingerprint, str) and fingerprint.strip().casefold() not in false_like
+        )
+        if not snapshot_checks["gateway_weight_fingerprint_present"]:
+            errors.append("model_snapshot_gateway_weight_fingerprint_missing")
+        snapshot_checks["snapshot_sha256_valid"] = _valid_sha256(snapshot.get("snapshot_sha256"))
+        if not snapshot_checks["snapshot_sha256_valid"]:
+            errors.append("model_snapshot_sha256_invalid")
+
+    billing_checks = {
+        "file_sha256": billing_file_sha256,
+        "receipt_id_present": False,
+        "currency_usd": False,
+        "total_cost_usd_valid": False,
+        "exported_at_utc_valid": False,
+    }
+    if billing is not None:
+        receipt_id = billing.get("receipt_id")
+        billing_checks["receipt_id_present"] = isinstance(receipt_id, str) and bool(receipt_id.strip())
+        if not billing_checks["receipt_id_present"]:
+            errors.append("billing_receipt_id_missing")
+        currency = billing.get("currency")
+        billing_checks["currency_usd"] = isinstance(currency, str) and currency.upper() == "USD"
+        if not billing_checks["currency_usd"]:
+            errors.append("billing_currency_must_be_usd")
+        total_cost = billing.get("total_cost_usd")
+        billing_checks["total_cost_usd_valid"] = (
+            isinstance(total_cost, (int, float))
+            and not isinstance(total_cost, bool)
+            and math.isfinite(float(total_cost))
+            and float(total_cost) >= 0
+        )
+        if not billing_checks["total_cost_usd_valid"]:
+            errors.append("billing_total_cost_invalid")
+        exported_at = billing.get("exported_at_utc")
+        try:
+            parsed_exported_at = datetime.fromisoformat(exported_at) if isinstance(exported_at, str) else None
+        except ValueError:
+            parsed_exported_at = None
+        billing_checks["exported_at_utc_valid"] = (
+            parsed_exported_at is not None
+            and parsed_exported_at.tzinfo is not None
+            and parsed_exported_at.utcoffset() == timezone.utc.utcoffset(parsed_exported_at)
+        )
+        if not billing_checks["exported_at_utc_valid"]:
+            errors.append("billing_exported_at_utc_invalid")
+
+    return {
+        "required": True,
+        "evidence_status": "PRESENT_UNVERIFIED_EXTERNAL" if not errors else "MISSING_OR_INVALID",
+        "formal_paid_run_allowed_by_evidence": not errors,
+        "errors": errors,
+        "model_snapshot_manifest": {
+            "path": str(snapshot_manifest) if snapshot_manifest is not None else None,
+            "checks": snapshot_checks,
+        },
+        "billing_export": {
+            "path": str(billing_export) if billing_export is not None else None,
+            "checks": billing_checks,
+        },
+        "external_verification_claimed": False,
+        "scientific_truth_decision_made": False,
+    }
+
+
 def emit(path: Path, seq: int, run_id: str, event_type: str, status: str, payload: dict[str, Any]) -> int:
     seq += 1
     append_jsonl(path, {"seq": seq, "ts_utc": utc_now(), "run_id": run_id,
@@ -714,6 +824,8 @@ def main() -> int:
     p.add_argument("--key-file", type=Path, required=True)
     p.add_argument("--base-url", default="https://token.ctflow.cn/v1")
     p.add_argument("--allow-paid", action="store_true")
+    p.add_argument("--model-snapshot-manifest", type=Path)
+    p.add_argument("--billing-export", type=Path)
     p.add_argument("--worker-index", type=int, default=0)
     p.add_argument("--worker-count", type=int, default=1)
     p.add_argument("--limit", type=int, default=0)
@@ -742,10 +854,12 @@ def main() -> int:
     plan = readl(args.plan)
     preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count,
                                    require_complete_plan=True)
+    paid_evidence = validate_paid_evidence(args.model_id, args.model_snapshot_manifest, args.billing_export)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     write_json(out / "g7_protocol_preflight.json", {
         **preflight,
+        "paid_evidence": paid_evidence,
         "input_hashes": {
             "public": sha256_file(args.public),
             "labels": sha256_file(args.labels),
@@ -762,6 +876,8 @@ def main() -> int:
     })
     if preflight["errors"]:
         raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
+    if paid_evidence["errors"]:
+        raise SystemExit("G7 paid-evidence preflight failed: " + ", ".join(paid_evidence["errors"]))
     public = {x["case_id"]: x for x in public_rows}
     labels = {x["case_id"]: x for x in label_rows}
     for row in plan:

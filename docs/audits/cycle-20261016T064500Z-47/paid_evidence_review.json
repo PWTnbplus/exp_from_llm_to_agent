@@ -1,0 +1,25 @@
+{
+  "audit_version": "g7-paid-evidence-review-v1",
+  "reviewer": "independent_g7_paid_evidence_boundary_check_v1",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "report": "docs/audits/cycle-20261016T064500Z-47/audit.json",
+  "independent_checks": [
+    "validate_paid_evidence is syntactically defined and invoked before key-file read and OpenAICompatibleProvider construction",
+    "missing snapshot or billing files produce a fail-closed error before provider setup",
+    "model-id mismatch, false-like fingerprint, invalid snapshot hash, invalid receipt/currency/cost/timestamp are rejected",
+    "valid temporary manifests retain only file hashes and boolean checks; raw receipt ID and cost are absent from the serialized report",
+    "PRESENT_UNVERIFIED_EXTERNAL is preserved even when local structure checks pass",
+    "the full host suite passes and no provider call or historical artifact rewrite occurred"
+  ],
+  "privacy_boundary": {
+    "raw_billing_fields_persisted": false,
+    "raw_model_manifest_fields_persisted": false,
+    "file_hashes_persisted": true
+  },
+  "scientific_status": {
+    "formal_paid_run_allowed": false,
+    "external_verification_complete": false,
+    "confirmatory_g7_allowed": false
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}
