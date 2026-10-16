@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only result-artifact privacy review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-ab0746b86bf9",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.",
+      "reason": "The locally testable ordinary artifact privacy contract is independently verified; scientific release remains blocked by unrelated external gates."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:04:04+00:00",
+  "updated_at": "2026-10-16T08:07:41+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -784,15 +784,20 @@
       "id": "ISSUE-ab0746b86bf9",
       "severity": "P1",
       "title": "The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel",
-      "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source field, recursively strips private evaluator keys from ordinary result artifacts, and adds adversarial tests; the full host suite passes 122 tests.",
+      "status": "VERIFIED",
+      "evidence": "Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.",
       "remediation": "Retain the privacy boundary and obtain a separate read-only review of result/trace artifacts before accepting this as fully verified.",
       "first_seen": "2026-10-15T17:14:40+00:00",
       "last_seen": "2026-10-15T17:14:57+00:00",
       "source": "docs/audits/cycle-20261016T014500Z-31/audit.json",
       "attempts": 0,
       "blocked_reason": null,
-      "verification": null,
+      "verification": {
+        "time": "2026-10-16T08:07:41+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_result_recorder_privacy.py tests/test_observability.py tests/test_evaluator.py",
+        "evidence": "Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.",
+        "reason": "Independent reviewer verification"
+      },
       "history": [
         {
           "time": "2026-10-15T17:14:40+00:00",
@@ -804,6 +809,12 @@
           "event": "RESOLVED_UNVERIFIED",
           "reason": "The ordinary result-artifact leakage path was removed and tested, but a separate review is still required before verification.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T08:07:41+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field."
         }
       ]
     },
@@ -912,7 +923,8 @@
     "docs/audits/cycle-20261016T074534Z-60/audit.json",
     "docs/audits/cycle-20261016T075322Z-61/audit.json",
     "docs/audits/cycle-20261016T075850Z-62/audit.json",
-    "docs/audits/cycle-20261016T080255Z-63/audit.json"
+    "docs/audits/cycle-20261016T080255Z-63/audit.json",
+    "docs/audits/cycle-20261016T080638Z-64/audit.json"
   ],
   "current_focus": null
 }
