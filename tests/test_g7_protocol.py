@@ -157,6 +157,24 @@ def test_g7_formal_preflight_rejects_checkpoint_shared_between_public_cases() ->
     ]
 
 
+def test_g7_formal_preflight_rejects_wrong_source_arm_group_mapping() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    mismatched_run_ids = []
+    for row in plan:
+        if row["group_id"] == "G3":
+            row["source_g6_arm_id"] = "G6_B_G4_GIVEN"
+            mismatched_run_ids.append(row["run_id"])
+
+    report = protocol_preflight(
+        [public], [label], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_plan_group_arm_mismatch" in report["errors"]
+    assert report["counts"]["g7_plan_group_arm_mismatches"] == mismatched_run_ids
+
+
 def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
     report = protocol_preflight(
         [{"case_id": "case-1", "model_visible": {"problem": "public", "cf_type": "CF1"}}],

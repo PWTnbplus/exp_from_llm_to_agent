@@ -69,6 +69,10 @@ FORMAT_RETRY_INSTRUCTION = (
     "L={nodes,edges}, U={node_changes}, and stages.Q={verdict,reason}; use empty arrays for genuinely empty L/U fields."
 )
 G7_GROUPS = {"G3", "G4"}
+G7_SOURCE_G6_ARM_BY_GROUP = {
+    "G3": "G6_A_G3_GIVEN",
+    "G4": "G6_B_G4_GIVEN",
+}
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -607,6 +611,16 @@ def protocol_preflight(
                     for field in ("paired_set_id", "theory_family_id", "cf_type", "split"))
         )
     })
+    design_plan_group_arm_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            isinstance(row.get("group_id"), str)
+            and row.get("group_id") in G7_SOURCE_G6_ARM_BY_GROUP
+            and row.get("source_g6_arm_id")
+                != G7_SOURCE_G6_ARM_BY_GROUP[row["group_id"]]
+        )
+    })
     design_label_public_hash_mismatches = sorted({
         _row_identifier(row.get("case_id"), index)
         for index, row in enumerate(label_rows)
@@ -729,6 +743,8 @@ def protocol_preflight(
         errors.append("invalid_g7_plan_metadata")
     if require_complete_plan and design_plan_mapping_mismatches:
         errors.append("g7_plan_public_mapping_mismatch")
+    if require_complete_plan and design_plan_group_arm_mismatches:
+        errors.append("g7_plan_group_arm_mismatch")
     if require_complete_plan and design_label_public_hash_mismatches:
         errors.append("g7_label_public_hash_mismatch")
     if require_complete_plan and ineligible_u_diagnostic_rows:
@@ -778,6 +794,7 @@ def protocol_preflight(
             "invalid_g7_label_metadata": invalid_design_label_cases,
             "invalid_g7_plan_metadata": invalid_design_plan_rows,
             "g7_plan_public_mapping_mismatches": design_plan_mapping_mismatches,
+            "g7_plan_group_arm_mismatches": design_plan_group_arm_mismatches,
             "g7_label_public_hash_mismatches": design_label_public_hash_mismatches,
             "ineligible_u_diagnostic_rows": ineligible_u_diagnostic_rows,
             "g7_plan_label_eligibility_mismatches": plan_label_eligibility_mismatches,
