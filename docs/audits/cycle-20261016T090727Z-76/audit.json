@@ -1,0 +1,85 @@
+{
+  "cycle": "20261016T090727Z-76",
+  "scope": "G6 formal frozen-plan experiment/arm/split identity guard",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:327-364",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:568-585"
+    ],
+    "relevant_controls_reviewed": [
+      "The frozen plan schema includes experiment_id, arm_id, group_id, replicate, and split.",
+      "G6 compares the derived G3 and G4 arms under the same public task and budget conditions.",
+      "The corrected 23-family result remains structural and pending independent statistical review."
+    ],
+    "alignment_conclusion": "The repaired validator now checks the formal plan identity fields before the paired-family analysis."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only probes changing experiment_id, arm_id, or split while preserving family/CF/replicate/group keys",
+      "result": "FAIL_OPEN: malformed formal identity fields were ignored"
+    },
+    "after_repair": {
+      "command": "Read-only wrong experiment, wrong arm/group mapping, and non-final split probes",
+      "result": "All fail closed with explicit identity errors"
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/analyze_g6_clustered.py"],
+    "tests_added_or_changed": ["tests/test_analyze_g6_clustered.py"],
+    "change": "Added required plan experiment_id, arm_id/group_id, and final_test split checks aligned with the frozen G6 schema.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+      "result": "24 passed in 0.23s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "225 passed in 23.66s"
+    },
+    "real_corrected_cli_probe": {
+      "command": "Temporary-output CLI run of scripts/analyze_g6_clustered.py on protocol-g3tools-v2-20261014T030000Z plan/private/responses",
+      "result": "PASS exit 0; 552 plan rows; output scientific_status=ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW; temporary output removed"
+    },
+    "real_plan_identity_scan": {
+      "command": "Read-only scan of corrected v2 run_plan.jsonl",
+      "result": "552 rows; experiment_id only g6_counterfactual; G3 only G6_A_G3_GIVEN; G4 only G6_B_G4_GIVEN; split only final_test"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G6 frozen-plan identity review",
+    "findings": [
+      {
+        "id": "ISSUE-5f7a1c9d3e20",
+        "severity": "P1",
+        "title": "G6 statistical analysis did not validate formal experiment, arm, and split identity fields",
+        "evidence": "The pre-repair validator ignored experiment_id, arm_id, and split while constructing formal paired summaries.",
+        "remediation": "Validate the design-aligned experiment, arm, and split identity fields before analysis."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-5f7a1c9d3e20",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "This is a local frozen-plan identity repair only; no provider call or scientific inference was made."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "3940052",
+    "remote_updated": false,
+    "note": "Commit and push status will be recorded after the audit/state update; no remote update is presumed."
+  }
+}

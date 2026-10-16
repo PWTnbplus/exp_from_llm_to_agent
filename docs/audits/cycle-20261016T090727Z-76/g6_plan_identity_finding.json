@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 frozen-plan identity review",
+  "findings": [
+    {
+      "id": "ISSUE-5f7a1c9d3e20",
+      "severity": "P1",
+      "title": "G6 statistical analysis did not validate formal experiment, arm, and split identity fields",
+      "evidence": "Before this cycle, validate_statistical_inputs used group_id and the pairing dimensions but ignored experiment_id, arm_id, and split. A malformed row could therefore retain a G3/G4 key while carrying a different experiment, wrong arm label, or non-final split. The design-aligned G6 schema requires experiment_id=g6_counterfactual, arm_id corresponding to G3/G4, and the frozen formal split.",
+      "remediation": "Require nonempty and design-aligned experiment_id, arm_id/group_id mapping, and final_test split on every formal G6 plan row before any statistical summary. Preserve historical artifacts and do not infer scientific validity from this engineering guard."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:03:33+00:00",
+  "updated_at": "2026-10-16T09:07:51+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1148,6 +1148,38 @@
           "evidence": "The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222."
         }
       ]
+    },
+    {
+      "id": "ISSUE-5f7a1c9d3e20",
+      "severity": "P1",
+      "title": "G6 statistical analysis did not validate formal experiment, arm, and split identity fields",
+      "status": "VERIFIED",
+      "evidence": "The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.",
+      "remediation": "Validate the design-aligned experiment, arm, and split identity fields before analysis.",
+      "first_seen": "2026-10-16T09:07:51+00:00",
+      "last_seen": "2026-10-16T09:07:51+00:00",
+      "source": "docs/audits/cycle-20261016T090727Z-76/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:07:51+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+        "evidence": "The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:07:51+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T090727Z-76/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:07:51+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1239,7 +1271,8 @@
     "docs/audits/cycle-20261016T085230Z-72/audit.json",
     "docs/audits/cycle-20261016T085638Z-73/audit.json",
     "docs/audits/cycle-20261016T085921Z-74/audit.json",
-    "docs/audits/cycle-20261016T090232Z-75/audit.json"
+    "docs/audits/cycle-20261016T090232Z-75/audit.json",
+    "docs/audits/cycle-20261016T090727Z-76/audit.json"
   ],
   "current_focus": null
 }

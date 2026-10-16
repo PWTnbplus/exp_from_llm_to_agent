@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:03:33+00:00
+生成时间（UTC）：2026-10-16T09:07:51+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**12**
+- 已验证修复：**13**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -95,6 +95,7 @@
 - **ISSUE-6a4e8b2c1d90**（P1）：G6 clustered analysis could count a failed response with a matching decision as correct——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects missing response status and unknown completed decisions. The independent response_matches_oracle probe returns false for provider_error with a matching decision and true only for completed with a matching decision. The immutable corrected G6 inputs pass with 552/552 responses status=completed and the full formal input validation. Focused G6 tests pass 16/16 and the full host suite passes 217/217.
 - **ISSUE-0b7d3f91a2c4**（P1）：G6 statistical input validation coerced malformed replicate and oracle alignment fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects string/boolean replicate probes and rejects a private CF mismatch against the plan. It also enforces nonempty typed plan identifiers, valid private CF/decision fields, and same-case CF consistency. The immutable corrected inputs pass formal validation with 552 plan rows, 92 private rows, 552 responses, replicate values [0,1,2], and all registered statuses/decisions. Focused G6 tests pass 19/19 and the full host suite passes 220/220.
 - **ISSUE-8c2f6d1a4b70**（P1）：G6 validation did not enforce one task lineage across repeats and counterfactual variants——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects a case_id change across replicates and a paired_set_id change across CF variants. The immutable corrected 552-row plan has zero family-level paired_set_id violations and zero family×CF task-lineage violations; formal validation passes with 276 complete G3/G4 pairs. Focused G6 tests pass 21/21 and the full host suite passes 222/222.
+- **ISSUE-5f7a1c9d3e20**（P1）：G6 statistical analysis did not validate formal experiment, arm, and split identity fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

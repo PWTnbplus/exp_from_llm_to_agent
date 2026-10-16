@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 frozen-plan identity review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-5f7a1c9d3e20",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired validator rejects wrong experiment_id, wrong arm_id/group_id mapping, and non-final split probes. The immutable corrected v2 plan has 552 rows with experiment_id=g6_counterfactual, G3→G6_A_G3_GIVEN, G4→G6_B_G4_GIVEN, and split=final_test throughout. The temporary real-data CLI run exits 0 and produces the explicitly non-confirmatory ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW status. Focused G6 tests pass 24/24 and the full host suite passes 225/225.",
+      "reason": "The local frozen-plan identity guard is independently verified; formal statistical/mathematical review, provider evidence, provenance, and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

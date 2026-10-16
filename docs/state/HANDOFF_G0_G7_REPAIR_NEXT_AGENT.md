@@ -410,5 +410,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `9` open/blocked/unverified issues and `12` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 76 G6 frozen-plan identity repair (2026-10-16T09:07Z)
+
+- Compared the statistical analyzer with the design-aligned G6 plan schema: formal rows must carry `experiment_id`, `arm_id`, `group_id`, `replicate`, and `split`; G3/G4 arm identity must remain explicit.
+- Independently reproduced a fail-open: before repair, changing `experiment_id`, `arm_id`, or `split` while preserving the family/CF/replicate/group keys did not prevent statistical aggregation.
+- Repaired `validate_statistical_inputs` to require `experiment_id=g6_counterfactual`, `G3→G6_A_G3_GIVEN`, `G4→G6_B_G4_GIVEN`, and `split=final_test` on every plan row.
+- Added adversarial identity tests. Focused G6 tests: `24 passed`; full host suite: `225 passed`; `git diff --check`: PASS.
+- Temporary-output CLI execution on the immutable corrected v2 inputs exits 0 with `552` plan rows and the explicit status `ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW`; output was removed after verification.
+- Read-only plan scan confirms all `552` rows use the required experiment, arm, and split identities. `ISSUE-5f7a1c9d3e20` is `VERIFIED` for this local guard only; `ISSUE-000000000004` remains `BLOCKED` and no confirmatory inference is allowed.
+- Audit files: `docs/audits/cycle-20261016T090727Z-76/audit.json`, `g6_plan_identity_finding.json`, and `g6_plan_identity_review.json`.
+- Current ledger after this cycle: `10` open/blocked/unverified issues and `12` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

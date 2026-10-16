@@ -14,6 +14,9 @@ FORMAL_VERIFIED23_FAMILY_COUNT = 23
 FORMAL_VERIFIED23_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
 FORMAL_VERIFIED23_REPLICATES = frozenset({0, 1, 2})
 FORMAL_VERIFIED23_GROUPS = frozenset({"G3", "G4"})
+G6_EXPERIMENT_ID = "g6_counterfactual"
+G6_GROUP_ARMS = {"G3": "G6_A_G3_GIVEN", "G4": "G6_B_G4_GIVEN"}
+G6_FORMAL_SPLIT = "final_test"
 G6_RESPONSE_STATUSES = frozenset({"completed", "timeout", "provider_error", "policy_violation", "invalid"})
 G6_DECISIONS = frozenset({"REJECT", "MAINTAIN", "REVISE", "UNDETERMINED"})
 
@@ -48,10 +51,19 @@ def validate_statistical_inputs(
     family_paired_set: dict[str, str] = {}
     family_cf_lineage: dict[tuple[str, str], tuple[str, str]] = {}
     for row in plan:
-        for field in ("run_id", "case_id", "paired_set_id", "theory_family_id", "cf_type", "group_id"):
+        for field in (
+            "run_id", "case_id", "paired_set_id", "theory_family_id", "cf_type", "group_id",
+            "experiment_id", "arm_id", "split",
+        ):
             value = row.get(field)
             if not isinstance(value, str) or not value.strip():
                 raise SystemExit(f"invalid plan {field} for run_id: {row.get('run_id')!r}")
+        if row["experiment_id"] != G6_EXPERIMENT_ID:
+            raise SystemExit(f"invalid plan experiment_id for run_id: {row.get('run_id')!r}")
+        if row["arm_id"] != G6_GROUP_ARMS.get(row["group_id"]):
+            raise SystemExit(f"plan arm_id/group_id mismatch for run_id: {row.get('run_id')!r}")
+        if row["split"] != G6_FORMAL_SPLIT:
+            raise SystemExit(f"invalid plan split for run_id: {row.get('run_id')!r}: {row['split']!r}")
         replicate = row.get("replicate")
         if isinstance(replicate, bool) or not isinstance(replicate, int):
             raise SystemExit(f"invalid plan replicate for run_id: {row.get('run_id')!r}: {replicate!r}")

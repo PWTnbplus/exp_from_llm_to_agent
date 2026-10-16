@@ -17,8 +17,8 @@ spec.loader.exec_module(analysis)
 
 def _plan() -> list[dict]:
     return [
-        {"run_id": "r-g3", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G3"},
-        {"run_id": "r-g4", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G4"},
+        {"run_id": "r-g3", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G3", "experiment_id": "g6_counterfactual", "arm_id": "G6_A_G3_GIVEN", "split": "final_test"},
+        {"run_id": "r-g4", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G4", "experiment_id": "g6_counterfactual", "arm_id": "G6_B_G4_GIVEN", "split": "final_test"},
     ]
 
 
@@ -99,10 +99,25 @@ def test_private_cf_type_must_match_plan() -> None:
         analysis.validate_statistical_inputs(_plan(), private, _responses())
 
 
+@pytest.mark.parametrize(
+    ("field", "value", "error"),
+    [
+        ("experiment_id", "other_experiment", "invalid plan experiment_id"),
+        ("arm_id", "G6_B_G4_GIVEN", "plan arm_id/group_id mismatch"),
+        ("split", "dev", "invalid plan split"),
+    ],
+)
+def test_formal_plan_identity_fields_are_checked(field: str, value: str, error: str) -> None:
+    plan = _plan()
+    plan[0][field] = value
+    with pytest.raises(SystemExit, match=error):
+        analysis.validate_statistical_inputs(plan, _private(), _responses())
+
+
 def test_task_lineage_must_be_stable_across_replicates() -> None:
     plan = _plan() + [
-        {"run_id": "r2-g3", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G3"},
-        {"run_id": "r2-g4", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G4"},
+        {"run_id": "r2-g3", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G3", "experiment_id": "g6_counterfactual", "arm_id": "G6_A_G3_GIVEN", "split": "final_test"},
+        {"run_id": "r2-g4", "case_id": "c2", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 1, "group_id": "G4", "experiment_id": "g6_counterfactual", "arm_id": "G6_B_G4_GIVEN", "split": "final_test"},
     ]
     private = _private() + [{"case_id": "c2", "cf_type": "CF1", "expected_decision": "MAINTAIN"}]
     responses = _responses() + [
@@ -115,8 +130,8 @@ def test_task_lineage_must_be_stable_across_replicates() -> None:
 
 def test_family_paired_set_must_be_stable_across_counterfactuals() -> None:
     plan = _plan() + [
-        {"run_id": "r-cf2-g3", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G3"},
-        {"run_id": "r-cf2-g4", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G4"},
+        {"run_id": "r-cf2-g3", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G3", "experiment_id": "g6_counterfactual", "arm_id": "G6_A_G3_GIVEN", "split": "final_test"},
+        {"run_id": "r-cf2-g4", "case_id": "c2", "paired_set_id": "p2", "theory_family_id": "f1", "cf_type": "CF2", "replicate": 0, "group_id": "G4", "experiment_id": "g6_counterfactual", "arm_id": "G6_B_G4_GIVEN", "split": "final_test"},
     ]
     private = _private() + [{"case_id": "c2", "cf_type": "CF2", "expected_decision": "MAINTAIN"}]
     responses = _responses() + [
