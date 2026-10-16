@@ -1,0 +1,16 @@
+{
+  "scope": "Independent read-only review of G6 clustered statistical input uniqueness",
+  "synthetic_regression": {
+    "pre_repair_behavior": "duplicate response run_id was silently overwritten and the analysis reported one matched pair",
+    "post_repair_behavior": "duplicate response run_id raises before output creation",
+    "verdict": "PASS"
+  },
+  "real_verified23_probe": {
+    "plan_rows": 552,
+    "families": 23,
+    "matched_runs_by_cf": 69,
+    "scientific_status": "ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW",
+    "provider_calls_made": false
+  },
+  "external_statistical_review_present": false
+}

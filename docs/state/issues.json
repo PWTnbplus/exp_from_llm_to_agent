@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:17:57+00:00",
+  "updated_at": "2026-10-16T07:22:25+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -182,14 +182,14 @@
       "id": "ISSUE-000000000004",
       "severity": "P1",
       "title": "Formal statistical validity is not established",
-      "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The gate attestation correctly records G6 as BLOCKED despite passing local statistics/metric tests; no independent statistical review has been added and scientific_release_allowed remains false for every gate.",
-      "remediation": "Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference.",
+      "status": "BLOCKED",
+      "evidence": "Cycle 55: duplicate statistical input keys now fail closed; focused 13 tests, full host 162 tests, and real verified23 probe pass (552 plan rows, 23 families, 69 matched runs per CF). The generated analysis remains ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW; no independent preregistration/oracle/paired-denominator/statistical review is available, so no confirmatory inference is allowed.",
+      "remediation": "Retain the fail-closed input contract and obtain an independent review of preregistration, oracle provenance, paired-family construction, all failure denominators, and statistical code before any confirmatory inference.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T06:47:25+00:00",
+      "last_seen": "2026-10-16T07:22:25+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 0,
-      "blocked_reason": null,
+      "blocked_reason": "Cycle 55 statistical input repair leaves independent inferential review as external blocker",
       "verification": null,
       "history": [
         {
@@ -208,6 +208,12 @@
           "event": "RESOLVED_UNVERIFIED",
           "reason": "Frozen G6 denominator and complete score are now persisted; independent oracle and clustered inferential review remain outstanding.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:22:25+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 55 statistical input repair leaves independent inferential review as external blocker",
+          "evidence": "Cycle 55: duplicate statistical input keys now fail closed; focused 13 tests, full host 162 tests, and real verified23 probe pass (552 plan rows, 23 families, 69 matched runs per CF). The generated analysis remains ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW; no independent preregistration/oracle/paired-denominator/statistical review is available, so no confirmatory inference is allowed."
         }
       ]
     },
@@ -759,7 +765,8 @@
     "docs/audits/cycle-20261016T070211Z-51/audit.json",
     "docs/audits/cycle-20261016T070818Z-52/audit.json",
     "docs/audits/cycle-20261016T071456Z-53/audit.json",
-    "docs/audits/cycle-20261016T071631Z-54/audit.json"
+    "docs/audits/cycle-20261016T071631Z-54/audit.json",
+    "docs/audits/cycle-20261016T072158Z-55/audit.json"
   ],
   "current_focus": null
 }

@@ -14,6 +14,47 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def _index_unique(rows: list[dict[str, Any]], key, label: str) -> dict[Any, dict[str, Any]]:
+    indexed: dict[Any, dict[str, Any]] = {}
+    for row in rows:
+        value = key(row)
+        if value in indexed:
+            raise SystemExit(f"duplicate {label}: {value!r}")
+        indexed[value] = row
+    return indexed
+
+
+def validate_statistical_inputs(
+    plan: list[dict[str, Any]],
+    private_rows: list[dict[str, Any]],
+    response_rows: list[dict[str, Any]],
+) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Reject input collisions before any statistical row can be overwritten."""
+
+    plan_by_run = _index_unique(plan, lambda row: row["run_id"], "plan run_id")
+    seen_arm_keys: set[tuple[Any, ...]] = set()
+    for row in plan:
+        arm_key = (
+            row["theory_family_id"], row["cf_type"], int(row["replicate"]), row["group_id"]
+        )
+        if arm_key in seen_arm_keys:
+            raise SystemExit(f"duplicate plan family/CF/replicate/arm: {arm_key!r}")
+        seen_arm_keys.add(arm_key)
+
+    private = _index_unique(private_rows, lambda row: row["case_id"], "private case_id")
+    responses = _index_unique(response_rows, lambda row: row["run_id"], "response run_id")
+    missing_response_ids = sorted(set(plan_by_run) - set(responses))
+    if missing_response_ids:
+        raise SystemExit(f"missing matched response run_id: {missing_response_ids!r}")
+    extra_response_ids = sorted(set(responses) - set(plan_by_run))
+    if extra_response_ids:
+        raise SystemExit(f"unexpected response run_id: {extra_response_ids!r}")
+    missing_cases = sorted({row["case_id"] for row in plan} - set(private))
+    if missing_cases:
+        raise SystemExit(f"missing matched private case_id: {missing_cases!r}")
+    return private, responses
+
+
 def percentile(values: list[float], q: float) -> float:
     values = sorted(values)
     if not values:
@@ -72,8 +113,9 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     plan = read_jsonl(args.plan)
-    private = {row["case_id"]: row for row in read_jsonl(args.private)}
-    responses = {row["run_id"]: row for row in read_jsonl(args.responses)}
+    private, responses = validate_statistical_inputs(
+        plan, read_jsonl(args.private), read_jsonl(args.responses)
+    )
     matched: dict[tuple[str, str, int], dict[str, bool]] = defaultdict(dict)
     for row in plan:
         response = responses.get(row["run_id"])

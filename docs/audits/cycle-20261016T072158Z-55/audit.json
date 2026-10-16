@@ -1,0 +1,74 @@
+{
+  "cycle": "20261016T072158Z-55",
+  "scope": "Repair silent statistical input overwrites and audit G6 clustered analysis against the frozen statistical plan",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "repair": {
+    "source": "scripts/analyze_g6_clustered.py",
+    "tests": "tests/test_analyze_g6_clustered.py",
+    "change": "Added fail-closed uniqueness and completeness checks for plan run IDs, plan family/CF/replicate/arm keys, private case IDs, response run IDs, missing responses, and unexpected responses before statistical aggregation.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "Synthetic plan with two arms and a duplicated response run_id",
+    "before": "The dictionary comprehension silently kept the last duplicate and produced one matched pair with exit code 0.",
+    "after": "The input contract raises duplicate response run_id and writes no output."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_statistics.py",
+      "result": "13 passed"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "162 passed in 31.42s"
+    },
+    "real_verified23_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/analyze_g6_clustered.py --plan results/g6_counterfactual/formal-20261013T000000Z/run_plan_verified23.jsonl --private results/g6_counterfactual/formal-20261013T000000Z/private_oracle_verified23.jsonl --responses results/g6_counterfactual/formal-20261013T000000Z/responses_verified23.jsonl --out <temporary-file>",
+      "result": "PASS: 552 plan rows, 23 families, 69 matched runs per CF, output status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW"
+    },
+    "read_only_review": {
+      "command": "synthetic duplicate-input probe plus real verified23 temporary-output probe",
+      "result": "PASS: duplicates fail closed; valid frozen input is accepted; no provider call"
+    }
+  },
+  "remaining_boundary": {
+    "external_statistical_review_present": false,
+    "scientific_release_allowed": false,
+    "note": "The repair protects the denominator and pairing contract but does not establish formal inferential validity or an Agent-vs-LLM scientific result."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only statistical input-contract review",
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "formal_statistical_validity_not_established",
+        "severity": "P1",
+        "evidence": "The local overwrite defect is repaired and verified, but no independent statistical review has validated preregistration, oracle provenance, paired-family construction, failure denominators, or inferential code. The generated analysis remains explicitly ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW.",
+        "remediation": "Retain the fail-closed input contract and obtain an independent review of preregistration, oracle provenance, paired-family construction, all failure denominators, and statistical code before any confirmatory inference.",
+        "blocker": "Independent statistical review is an external requirement unavailable in the current environment."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000004",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "1d2325d",
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no statistical conclusion was claimed."
+  }
+}

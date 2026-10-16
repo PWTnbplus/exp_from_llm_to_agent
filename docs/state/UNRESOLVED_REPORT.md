@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:17:57+00:00
+生成时间（UTC）：2026-10-16T07:22:25+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -25,13 +25,13 @@
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：Cycle 54 delivery remains externally blocked after the latest local commit
 
-### ISSUE-000000000004 — P1 — RESOLVED_UNVERIFIED
+### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：The gate attestation correctly records G6 as BLOCKED despite passing local statistics/metric tests; no independent statistical review has been added and scientific_release_allowed remains false for every gate.
-- 必需修复：Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference.
+- 证据：Cycle 55: duplicate statistical input keys now fail closed; focused 13 tests, full host 162 tests, and real verified23 probe pass (552 plan rows, 23 families, 69 matched runs per CF). The generated analysis remains ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW; no independent preregistration/oracle/paired-denominator/statistical review is available, so no confirmatory inference is allowed.
+- 必需修复：Retain the fail-closed input contract and obtain an independent review of preregistration, oracle provenance, paired-family construction, all failure denominators, and statistical code before any confirmatory inference.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：未记录
+- 阻塞原因：Cycle 55 statistical input repair leaves independent inferential review as external blocker
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep

@@ -225,5 +225,14 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T071631Z-54/audit.json`.
 - Cycle 54 delivery was attempted after `e19717d`; both `git push` and `git ls-remote` failed through the configured proxy and are recorded under `ISSUE-000000000003`. The remote branch remains unverified.
 
+## Cycle 55 statistical input-contract repair (2026-10-16T07:21Z)
+
+- Repaired `scripts/analyze_g6_clustered.py`: duplicate plan run IDs, duplicate family/CF/replicate/arm keys, duplicate private case IDs, duplicate response IDs, missing responses, and unexpected responses now fail closed instead of silently changing the statistical denominator.
+- Added `tests/test_analyze_g6_clustered.py`; focused tests: `13 passed`; full host suite: `162 passed`.
+- Real verified23 read-only probe accepted `552` plan rows, `23` families, and `69` matched runs per CF. Its output remains `ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW`; this is not a scientific result.
+- `ISSUE-000000000004` is now `BLOCKED` pending independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code.
+- No provider call, paid run, retry, confirmatory inference, or scientific superiority claim was made.
+- Audit: `docs/audits/cycle-20261016T072158Z-55/audit.json` and `statistical_input_contract_review.json`.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
