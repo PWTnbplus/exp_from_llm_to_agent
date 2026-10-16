@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T16:20:47+00:00
+生成时间（UTC）：2026-10-16T16:41:43+00:00
 
 - 开放/阻塞/未验证：**9**
 - 已验证修复：**29**
@@ -11,11 +11,11 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：Cycle 54: tests/test_g7_protocol.py 29 passed; fail-closed paid-evidence gate rejects missing or malformed snapshot/billing before key/provider setup, and structurally valid local manifests remain PRESENT_UNVERIFIED_EXTERNAL. No explicit paid authorization, positive hard USD ceiling, immutable model evidence, independent billing, or external isolation review is available; no provider call was made.
-- 必需修复：Keep the paid gate closed. Obtain explicit authorization, a positive hard USD ceiling, independently verifiable model/billing evidence, and an independent isolation review before any real-provider pilot.
+- 证据：docs/audits/cycle-20261016T163912Z-94/audit.json; docs/provider/CTFLOW_LIVE_PREFLIGHT_20261016.md; qwen3.5-plus and glm-5.2 minimal preflight PASS, deepseek-v3.2 FAILED; no formal scientific run.
+- 必需修复：Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard cap, obtain immutable model identity evidence, and complete independent isolation/statistical review before any formal G0-G7 claim.
 - 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 54 paid-evidence review confirms external authorization and verification blocker
+- 阻塞原因：Cycle 94: user authorization and USD 200 ceiling are now explicit; live CTFlow docs/catalog/minimal preflight are partially verified, but provider pricing/billing is not independently verifiable and the matrix scientific runner remains fail-closed (runner_command empty, runner_supports_budget_enforcement=false). Formal G0-G7 execution remains blocked.
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked

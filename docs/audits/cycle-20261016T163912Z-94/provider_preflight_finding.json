@@ -1,0 +1,23 @@
+{
+  "finding_id": "cycle-20261016T163912Z-94-provider-preflight",
+  "severity": "P1",
+  "status": "BLOCKED_EXTERNAL",
+  "title": "Live CTFlow compatibility is partially verified, but a hard provider spending bound and scientific runner are absent",
+  "evidence": [
+    "The official CTFlow documentation page was fetched over HTTPS and documents the tested base, catalog, chat route, and Bearer authentication.",
+    "A same-origin unauthenticated catalog probe returned HTTP 401; authenticated discovery returned 243 exact model IDs.",
+    "Minimal live generation preflight passed for qwen3.5-plus and glm-5.2 and failed for deepseek-v3.2.",
+    "The user's explicit USD 200 ceiling is now recorded in the matrix config, but CTFlow does not expose verifiable pricing or billing semantics in the documentation.",
+    "The matrix still fails closed because no validated scientific runner or runner-level hard budget contract exists."
+  ],
+  "not_a_resolution": [
+    "The minimal preflight is not a G0-G7 scientific evaluation.",
+    "No formal G7 rows, scientific scores, or causal conclusions were generated.",
+    "The failed DeepSeek preflight was not silently converted to a usable model."
+  ],
+  "required_next_evidence": [
+    "Provider-verifiable price/usage or billing export sufficient for a conservative hard USD cap.",
+    "A thin, tested adapter to the existing scientific runner with exact paired LLM-only/Agent result contracts.",
+    "Independent isolation and mathematical/statistical review before formal release."
+  ]
+}

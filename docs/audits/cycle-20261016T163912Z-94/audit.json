@@ -1,0 +1,97 @@
+{
+  "cycle": "20261016T163912Z-94",
+  "audit_scope": "CTFlow live documentation, catalog, compatibility preflight, and paid G0-G7 release boundary",
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot",
+    "scientific-law-ctflow-matrix"
+  ],
+  "status": "BLOCKED_EXTERNAL",
+  "scientific_release_allowed": false,
+  "user_authorization": {
+    "paid_calls_authorized": true,
+    "aggregate_usd_ceiling": 200.0,
+    "scope": "G0-G7 continuation; formal release remains subject to all scientific gates"
+  },
+  "provider_evidence": {
+    "documentation_url": "https://token.ctflow.cn/tokendocs",
+    "documentation_retrieved_over_https": true,
+    "base_url": "https://token.ctflow.cn/v1",
+    "chat_endpoint": "/chat/completions",
+    "catalog_endpoint": "/models",
+    "unauthenticated_catalog_probe": "HTTP 401",
+    "catalog_model_count": 243,
+    "live_generation_preflight": {
+      "qwen3.5-plus": true,
+      "glm-5.2": true,
+      "deepseek-v3.2": false
+    },
+    "preflight_request": {
+      "stream": false,
+      "max_tokens": 8,
+      "purpose": "minimum compatibility check only"
+    },
+    "provider_pricing_or_billing_contract": "not documented or independently verifiable"
+  },
+  "repair": {
+    "source_changes": [
+      "configs/model_matrix.json now points at the existing root task_manifest.json instead of the nonexistent configs/task_manifest.json.",
+      "configs/model_matrix.json records the user-authorized USD 200 aggregate ceiling while retaining runner_supports_budget_enforcement=false."
+    ],
+    "formal_paid_g0_g7_run_started": false,
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": true,
+    "formal_scientific_results_created": false,
+    "retry_pooled": false
+  },
+  "verification": {
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "247 passed in 29.87s"
+    },
+    "ctflow_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_ctflow_matrix.py",
+      "result": "14 passed in 3.85s"
+    },
+    "matrix_plan": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/model_matrix.py plan --config configs/model_matrix.json --selected-file configs/selected_models.json",
+      "result": "exit 0; task_manifest.json resolved; runner_integrated=false"
+    },
+    "syntax_and_diff": {
+      "command": "E:/resources/python/python.exe -X utf8 -m py_compile scripts/ctflow_models.py scripts/model_matrix.py; git diff --check",
+      "result": "exit 0"
+    },
+    "strict_g7_input_preflight": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/g7_protocol_preflight.py --public results/g7_failure_localization/formal-20261014T030000Z/g7_public_cases.jsonl --labels results/g7_failure_localization/formal-20261014T030000Z/g7_vlu_private.jsonl --plan results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl --worker-count 16",
+      "result": "exit 0; 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero errors, provider_calls_made=false"
+    },
+    "independent_reviews": {
+      "g0_g8_integrity": "exit 0; COMPLETED_WITH_EXTERNAL_REVIEW_CAVEATS",
+      "g7_failure_taxonomy": "exit 0; COMPLETED_WITH_G7_PROTOCOL_CAVEAT",
+      "g6_release": "exit 0; structural_review_pass=true; scientific_release_allowed=false"
+    }
+  },
+  "independent_read_only_review": {
+    "status": "BLOCKED_WITH_LOCAL_PROGRESS",
+    "verified": [
+      "The official documentation route and same-origin API routes are reachable over HTTPS.",
+      "The live catalog contains the exact tested model IDs; two minimal generations passed and one failed.",
+      "The matrix task-manifest path now resolves and the matrix remains fail-closed for paid execution."
+    ],
+    "not_verified": [
+      "Provider price/usage/billing semantics and a hard external USD spend bound.",
+      "Immutable model-weight identity or gateway fingerprint for the selected models.",
+      "The validated scientific matrix runner sub-command and result contract.",
+      "Independent isolation, mathematical, statistical, upstream provenance, and remote-delivery reviews.",
+      "Any scientific superiority, causal mechanism, or formal G0-G7 release claim."
+    ],
+    "release_decision": "BLOCKED"
+  },
+  "remaining_blockers": [
+    "No provider-verifiable pricing/usage/billing contract; local token estimates cannot be claimed as the USD 200 hard provider cap.",
+    "configs/model_matrix.json still has runner_command=[] and runner_supports_budget_enforcement=false by design.",
+    "Formal G7 runner requires independently auditable model snapshot and billing evidence; historical metadata is not an immutable weight snapshot and not a billing receipt.",
+    "G0 upstream provenance, independent mathematical/statistical review, dependency/state truth, and remote GitHub delivery remain blocked."
+  ],
+  "decision": "Record live preflight and authorization, keep formal paid G0-G7 execution blocked, and do not synthesize results or change scientific gate statuses."
+}

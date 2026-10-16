@@ -1,0 +1,17 @@
+{
+  "review_id": "cycle-20261016T163912Z-94-provider-preflight-read-only",
+  "reviewer_mode": "independent_read_only_reproduction",
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "verified": [
+    "The live endpoint and catalog behavior are reproducible without printing credentials.",
+    "The exact model IDs and minimal preflight outcomes are persisted without keys.",
+    "The matrix config path fix is validated by an offline plan and the existing adversarial CTFlow suite."
+  ],
+  "not_verified": [
+    "A provider-side billing receipt or price contract.",
+    "An immutable model-weight fingerprint.",
+    "A completed paired scientific evaluation or formal G0-G7 release."
+  ],
+  "release_decision": "BLOCKED",
+  "review_note": "User authorization removes the prior authorization blocker, but it does not establish provider pricing, immutable weights, runner-level hard-cap enforcement, or scientific validity."
+}

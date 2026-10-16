@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "provider": "ctflow",
-  "manifest": "configs/task_manifest.json",
+  "manifest": "task_manifest.json",
   "max_parallel_models": 2,
   "max_experiments_per_task": 6,
-  "max_total_cost_usd": 0.0,
+  "max_total_cost_usd": 200.0,
   "runner_command": [],
   "runner_supports_budget_enforcement": false,
-  "notes": "Codex must implement and test project CLI adapter before enabling real API runs. The external runner MUST enforce budget and both LLM-only/Agent experiment protocols."
+  "notes": "User-authorized aggregate ceiling is USD 200. Codex must still implement and test the project CLI adapter before enabling real API runs. The external runner MUST enforce a provider-verifiable or conservative worst-case budget and both LLM-only/Agent experiment protocols; until then runner_supports_budget_enforcement remains false and paid runs are blocked."
 }
