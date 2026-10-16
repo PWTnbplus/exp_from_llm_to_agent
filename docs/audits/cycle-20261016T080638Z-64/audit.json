@@ -79,11 +79,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "1005ebc",
-    "commit": "pending",
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
-    "commit_or_push_by_agent": false,
+    "commit": "64c36d2",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "This cycle contains an audit/state verification update only; no provider or paid experiment was started."
+    "note": "Audit/state verification was committed locally. Push and ls-remote both failed because the GitHub endpoint was unreachable through the configured proxy; no provider or paid experiment was started."
   }
 }
