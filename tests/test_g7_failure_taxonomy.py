@@ -15,3 +15,17 @@ def test_failure_taxonomy_detects_routing_metadata_in_model_requests() -> None:
         },
     ]
     assert count_model_key_hits(events, ("cf_type", "theory_family_id")) == {"cf_type": 1}
+
+
+def test_failure_taxonomy_detects_private_diagnostic_metadata_in_model_requests() -> None:
+    events = [
+        {
+            "event_type": "MODEL_REQUEST",
+            "payload": {"messages": [{"role": "user", "content": "verifier_ref=private"}]},
+        },
+        {
+            "event_type": "MODEL_REQUEST",
+            "payload": {"messages": [{"role": "user", "content": "public only"}]},
+        },
+    ]
+    assert count_model_key_hits(events, ("verifier_ref", "eligible_u")) == {"verifier_ref": 1}

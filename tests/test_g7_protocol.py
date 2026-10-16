@@ -442,6 +442,28 @@ def test_g7_q_requires_nonempty_verdict_and_reason_strings() -> None:
         normalize_stages({"stages": {**base, "Q": {"verdict": "", "reason": "present"}}})
 
 
+@pytest.mark.parametrize(
+    ("stage", "value", "message"),
+    [
+        ("V", {"verdict": "SUPPORTED", "ground_truth": "hidden"}, "invalid V verdict"),
+        ("L", {"nodes": [{"ground_truth": "hidden"}], "edges": []}, "invalid L stage"),
+        ("L", {"nodes": ["C1"], "edges": [{"from": "C1", "to": {"answer_key": "hidden"}}]}, "invalid L stage"),
+        ("U", {"node_changes": [{"claim_id": "C1", "to_status": "supported", "private": "hidden"}]}, "invalid U stage"),
+        ("Q", {"verdict": "PASS", "reason": "ok", "verifier_ref": "hidden"}, "invalid Q stage"),
+    ],
+)
+def test_g7_nested_stage_contract_rejects_private_or_malformed_fields(stage, value, message) -> None:
+    valid = {
+        "V": {"verdict": "SUPPORTED"},
+        "L": {"nodes": [], "edges": []},
+        "U": {"node_changes": []},
+        "Q": {"verdict": "PASS", "reason": "ok"},
+    }
+    valid[stage] = value
+    with pytest.raises(ValueError, match=message):
+        normalize_stages({"stages": valid})
+
+
 def test_g7_invalid_decision_is_not_silently_repaired() -> None:
     with pytest.raises(ValueError, match="invalid decision"):
         parse_payload('{"decision":"guess"}')

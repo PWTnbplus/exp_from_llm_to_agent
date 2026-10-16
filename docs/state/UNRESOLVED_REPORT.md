@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T08:36:33+00:00
+生成时间（UTC）：2026-10-16T08:42:16+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**7**
+- 已验证修复：**8**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -90,6 +90,7 @@
 - **ISSUE-28ed827e40a9**（P1）：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_trace_q_consistency.py tests/test_g7_failure_taxonomy.py tests/test_g7_terminal_retry.py`；Historical malformed output is retained; subsequent valid audit exit_code=0 and independent review pass; current G7 protocol/trace/taxonomy/terminal-retry focused tests pass 54/54.
 - **ISSUE-ab0746b86bf9**（P1）：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_result_recorder_privacy.py tests/test_observability.py tests/test_evaluator.py`；Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.
 - **ISSUE-0786397621a0**（P1）：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_llm_isolation.py tests/test_no_leakage.py`；Both arms expose the same public initial observation to their model-facing prompt and persist the same normalized initial_observations metadata field. Focused tests 10/10 and full host suite 192/192 pass; the paired temporary probe passes.
+- **ISSUE-4c7e2a91d6f0**（P1）：G7 model-output stage parser accepted malformed nested V/L/U fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py`；normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

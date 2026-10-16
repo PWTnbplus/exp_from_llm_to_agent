@@ -19,6 +19,9 @@ FORBIDDEN_MODEL_KEYS = (
     "correct_revised_claim",
     "private_oracle",
     "g6_private_oracle",
+    "verifier_ref",
+    "eligible_u",
+    "u_ineligibility_reason",
 )
 ROUTING_METADATA_KEYS = ("cf_type", "theory_family_id")
 

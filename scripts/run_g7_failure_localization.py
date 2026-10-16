@@ -290,14 +290,47 @@ def normalize_stages(value: dict[str, Any]) -> dict[str, Any]:
     for stage in ("V", "L", "U", "Q"):
         if stage not in stages or not isinstance(stages[stage], dict):
             raise ValueError(f"missing stage {stage}")
-    if stages["V"].get("verdict") not in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}:
+    if (
+        set(stages["V"]) != {"verdict"}
+        or stages["V"].get("verdict") not in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}
+    ):
         raise ValueError("invalid V verdict")
-    if not isinstance(stages["L"].get("nodes"), list) or not isinstance(stages["L"].get("edges"), list):
+    l_stage = stages["L"]
+    if (
+        set(l_stage) != {"nodes", "edges"}
+        or not isinstance(l_stage.get("nodes"), list)
+        or not all(isinstance(node, str) and bool(node.strip()) for node in l_stage["nodes"])
+        or not isinstance(l_stage.get("edges"), list)
+        or not all(
+            isinstance(edge, dict)
+            and set(edge) == {"from", "to"}
+            and isinstance(edge["from"], str)
+            and bool(edge["from"].strip())
+            and isinstance(edge["to"], str)
+            and bool(edge["to"].strip())
+            for edge in l_stage["edges"]
+        )
+    ):
         raise ValueError("invalid L stage")
-    if not isinstance(stages["U"].get("node_changes"), list):
+    u_stage = stages["U"]
+    if (
+        set(u_stage) != {"node_changes"}
+        or not isinstance(u_stage.get("node_changes"), list)
+        or not all(
+            isinstance(change, dict)
+            and set(change) == {"claim_id", "to_status"}
+            and isinstance(change["claim_id"], str)
+            and bool(change["claim_id"].strip())
+            and change["to_status"] in {"supported", "rejected", "uncertain"}
+            for change in u_stage["node_changes"]
+        )
+    ):
         raise ValueError("invalid U stage")
-    q_verdict = stages["Q"].get("verdict")
-    q_reason = stages["Q"].get("reason")
+    q_stage = stages["Q"]
+    if set(q_stage) != {"verdict", "reason"}:
+        raise ValueError("invalid Q stage")
+    q_verdict = q_stage.get("verdict")
+    q_reason = q_stage.get("reason")
     if (not isinstance(q_verdict, str) or not q_verdict.strip()
             or not isinstance(q_reason, str) or not q_reason.strip()):
         raise ValueError("invalid Q stage")

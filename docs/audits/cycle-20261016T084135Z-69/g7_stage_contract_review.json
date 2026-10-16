@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 stage-contract review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.",
+      "reason": "The future-run model-output contract and forensic coverage are independently verified locally; no historical artifact or scientific conclusion was changed."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

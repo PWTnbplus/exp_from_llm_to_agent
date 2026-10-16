@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 stage-contract review",
+  "findings": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
+      "evidence": "Before the repair, normalize_stages accepted a V object containing ground_truth, L nodes containing objects, L edges with non-string endpoints, U node_changes containing private extra fields, and Q containing verifier_ref. A read-only scan of the immutable protocol-corrected states found 7 completed rows with Q missing reason, 3 with V verifier_ref, 2 with L verifier_ref, 8 with U eligibility/provenance fields, and 1 invalid U node change. Historical raw states are preserved and not reclassified.",
+      "remediation": "Require exact public V/L/U/Q nested schemas in normalize_stages and retain malformed provider outputs as failed attempts with bounded format retry; extend the forensic taxonomy to report verifier_ref/eligibility metadata hits. Never repair historical rows in place."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

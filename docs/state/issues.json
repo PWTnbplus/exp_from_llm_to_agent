@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:36:33+00:00",
+  "updated_at": "2026-10-16T08:42:16+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -922,6 +922,38 @@
           "event": "VERIFIED",
           "reason": "Independent reviewer verification",
           "evidence": "Both arms expose the same public initial observation to their model-facing prompt and persist the same normalized initial_observations metadata field. Focused tests 10/10 and full host suite 192/192 pass; the paired temporary probe passes."
+        }
+      ]
+    },
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
+      "status": "VERIFIED",
+      "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.",
+      "remediation": "Require exact public V/L/U/Q nested schemas in normalize_stages and retain malformed provider outputs as failed attempts with bounded format retry; extend the forensic taxonomy to report verifier_ref/eligibility metadata hits. Never repair historical rows in place.",
+      "first_seen": "2026-10-16T08:42:10+00:00",
+      "last_seen": "2026-10-16T08:42:10+00:00",
+      "source": "docs/audits/cycle-20261016T084135Z-69/g7_stage_contract_finding.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T08:42:16+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+        "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T08:42:10+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T084135Z-69/g7_stage_contract_finding.json"
+        },
+        {
+          "time": "2026-10-16T08:42:16+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "normalize_stages now requires exact V={verdict}, L={nodes,edges} with nonempty claim-id strings and exact string endpoints, U={node_changes} with exact claim_id/to_status entries, and Q={verdict,reason} with nonempty strings. Adversarial nested/private-field probes are rejected; the provider loop records a format retry and rejects a repeated malformed response. Focused tests pass 65/65 and the full host suite passes 210/210. The immutable historical malformed rows and verifier_ref hits remain non-confirmatory."
         }
       ]
     }

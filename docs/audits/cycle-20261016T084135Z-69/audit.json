@@ -1,0 +1,94 @@
+{
+  "cycle": "20261016T084135Z-69",
+  "scope": "G7 strict model-output V/L/U/Q stage contract and historical malformed-output audit",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 structured V/L/U/Q records must expose only the registered intermediate fields and must not be treated as hidden model state.",
+      "Malformed provider outputs are retained as failures and may receive only the bounded preregistered format retry.",
+      "Q is not scientific validation without an independent verifier; historical malformed and provider-error rows stay in the denominator.",
+      "No historical raw trace, state, plan, or audit artifact may be rewritten to manufacture a valid result."
+    ],
+    "alignment_conclusion": "The repair enforces the design's structured-output and failure-retention boundary for future G7 runs. It does not convert the existing corrected trace into valid evidence; its malformed rows and metadata leakage remain immutable and non-confirmatory."
+  },
+  "repair": {
+    "source_changed": [
+      "scripts/run_g7_failure_localization.py",
+      "scripts/audit_g7_failure_taxonomy.py"
+    ],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py", "tests/test_g7_failure_taxonomy.py"],
+    "change": "normalize_stages now fails closed on extra or malformed nested V/L/U/Q fields; the forensic taxonomy reports verifier_ref, eligible_u, and u_ineligibility_reason model-request hits; historical artifacts remain read-only.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+      "result": "65 passed"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "210 passed in 25.10s"
+    },
+    "adversarial_parser_probe": {
+      "command": "Read-only normalize_stages probes with hidden V field, object L node, non-string L endpoint, extra U field, and extra Q verifier_ref",
+      "result": "All five malformed shapes are rejected with ValueError; no provider is constructed."
+    },
+    "provider_loop_probe": {
+      "command": "Read-only MockLLMProvider probe with the same malformed response twice",
+      "result": "The first response schedules exactly one FORMAT_RETRY; the repeated malformed response raises ValueError; 2 calls and 2 MODEL_REQUEST events are retained."
+    },
+    "historical_state_probe": {
+      "command": "Read-only normalize_stages scan of results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_states.jsonl",
+      "result": "1288 states, 1285 completed; 7 Q records lack reason, 3 V records contain verifier_ref, 2 L records contain verifier_ref, 8 U records contain eligibility/provenance fields, and 1 U change is malformed. No file was modified."
+    },
+    "forensic_taxonomy_probe": {
+      "command": "Read-only summarize() with the repaired scripts/audit_g7_failure_taxonomy.py on the protocol-corrected trace",
+      "result": "1288 plan rows; 1285 completed and 3 provider_error; 20 historical Q-valid rows; verifier_ref model-request key hits=2771; routing metadata hits=0; format-retry model requests=302. These are execution facts, not scientific claims."
+    },
+    "source_review": {
+      "files": ["scripts/run_g7_failure_localization.py", "scripts/audit_g7_failure_taxonomy.py", "tests/test_g7_protocol.py", "tests/test_g7_failure_taxonomy.py"],
+      "result": "PASS: future malformed stages fail closed after the bounded retry; the forensic audit now exposes the previously invisible verifier_ref/eligibility metadata; raw historical artifacts remain immutable."
+    }
+  },
+  "remaining_boundary": {
+    "scientific_release_allowed": false,
+    "note": "G0/G6/G7 remain blocked. Paid provider authorization, model snapshot, billing, upstream provenance, independent Q/statistical/mathematical/dependency review, and remote delivery remain unresolved. No provider call, paid run, retry, confirmatory inference, or scientific claim was made in this cycle."
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 stage-contract review",
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-4c7e2a91d6f0",
+        "verdict": "VERIFIED",
+        "evidence": "Strict nested V/L/U/Q validation, bounded retry behavior, historical state scan, and forensic key coverage are independently verified by 65 focused tests, 210 full tests, and read-only probes. Historical malformed rows remain unchanged and non-confirmatory.",
+        "reason": "Only the forward local parser/audit remediation is verified; this does not establish Q validity or scientific release."
+      }
+    ]
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "67b95fd",
+    "commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": true,
+    "remote_updated": false,
+    "note": "Filled after the local repair commit and delivery verification attempts."
+  }
+}
