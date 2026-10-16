@@ -26,6 +26,73 @@ from scripts.run_g7_failure_localization import (
 import scripts.run_g7_failure_localization as g7_runner
 
 
+def _formal_g7_case(case_id: str) -> tuple[dict, dict, list[dict]]:
+    public = {
+        "case_id": case_id,
+        "paired_set_id": f"pair-{case_id}",
+        "source_task_id": f"task-{case_id}",
+        "theory_family_id": f"family-{case_id}",
+        "domain": "theoretical_biology",
+        "cf_type": "CF1",
+        "split": "final_test",
+        "quantifier": "forall_allowed_parameters",
+        "model_visible": {"problem": "public"},
+        "source_g5_graph_sha256": "0" * 64,
+        "verification_grade": "C",
+    }
+    public_hash = hashlib.sha256(
+        json.dumps(public, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    label = {
+        "case_id": case_id,
+        "v": {"verdict": "SUPPORTED"},
+        "l": {"nodes": [], "edges": []},
+        "u": {"node_changes": []},
+        "eligible_u": False,
+        "verifier_ref": "ref",
+        "source_public_case_sha256": public_hash,
+        "verification_grade": "C",
+        "verification_method": "test_rulebook",
+        "independent_verified": True,
+        "synthetic_demo": False,
+    }
+    arms = {
+        "D0": [],
+        "D1": ["V"],
+        "D2": ["V", "L"],
+        "D3": ["V", "L", "U"],
+        "L_ONLY": ["L"],
+        "U_ONLY": ["U"],
+        "V_ONLY": ["V"],
+    }
+    plan = []
+    for group in ("G3", "G4"):
+        checkpoint_id = f"checkpoint-{case_id}-{group}"
+        for arm, stages in arms.items():
+            plan.append({
+                "run_id": f"run-{case_id}-{group}-{arm}",
+                "checkpoint_id": checkpoint_id,
+                "case_id": case_id,
+                "group_id": group,
+                "diagnostic_arm": arm,
+                "inject_stages": stages,
+                "paired_set_id": public["paired_set_id"],
+                "theory_family_id": public["theory_family_id"],
+                "cf_type": public["cf_type"],
+                "split": public["split"],
+                "source_g6_arm_id": "G6_A_G3_GIVEN" if group == "G3" else "G6_B_G4_GIVEN",
+                "source_run_id": f"g6-run-{case_id}-{group}",
+                "source_checkpoint_id": f"g6-checkpoint-{case_id}-{group}",
+                "profile": "theory_benchmark",
+                "protocol_version": "g7-test-v1",
+                "retry_scope": "test",
+                "retry_protocol": "separate_frozen_retry_not_pooled",
+                "replicate": 0,
+                "arm_eligible_for_diagnostic": "U" not in stages,
+            })
+    return public, label, plan
+
+
 def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> None:
     prompt = case_prompt(
         {
@@ -39,6 +106,55 @@ def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> Non
     assert payload == {"g7_public_case": {"problem": "public"}, "case_id": "case-1"}
     assert "cf_type" not in prompt
     assert "theory_family_id" not in prompt
+
+
+def test_g7_formal_preflight_rejects_a_dropped_public_case() -> None:
+    public_one, label_one, plan = _formal_g7_case("case-1")
+    public_two, label_two, _ = _formal_g7_case("case-2")
+    report = protocol_preflight(
+        [public_one, public_two], [label_one, label_two], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "incomplete_case_group_coverage" in report["errors"]
+    assert report["counts"]["incomplete_case_group_coverage"] == ["case-2/G3", "case-2/G4"]
+
+
+def test_g7_formal_preflight_rejects_duplicate_checkpoint_for_case_group() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    duplicate = []
+    for row in plan:
+        if row["group_id"] == "G3":
+            copied = dict(row)
+            copied["run_id"] = copied["run_id"] + "-duplicate"
+            copied["checkpoint_id"] = "checkpoint-case-1-G3-duplicate"
+            duplicate.append(copied)
+    report = protocol_preflight(
+        [public], [label], [*plan, *duplicate],
+        worker_count=1, require_complete_plan=True,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "duplicate_case_group_checkpoint" in report["errors"]
+    assert report["counts"]["duplicate_case_group_checkpoints"] == ["case-1/G3"]
+
+
+def test_g7_formal_preflight_rejects_checkpoint_shared_between_public_cases() -> None:
+    public_one, label_one, plan_one = _formal_g7_case("case-1")
+    public_two, label_two, plan_two = _formal_g7_case("case-2")
+    for row in plan_two:
+        row["checkpoint_id"] = (
+            "checkpoint-case-1-G3" if row["group_id"] == "G3"
+            else "checkpoint-case-1-G4"
+        )
+    report = protocol_preflight(
+        [public_one, public_two], [label_one, label_two], [*plan_one, *plan_two],
+        worker_count=1, require_complete_plan=True,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "checkpoint_identity_collision" in report["errors"]
+    assert report["counts"]["checkpoint_identity_collisions"] == [
+        "checkpoint-case-1-G3", "checkpoint-case-1-G4"
+    ]
 
 
 def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
@@ -171,7 +287,7 @@ def test_g7_formal_preflight_requires_all_diagnostic_arms_per_checkpoint() -> No
         require_complete_plan=True,
     )
     assert report["formal_run_allowed_by_protocol"] is False
-    assert report["errors"] == ["incomplete_arm_coverage"]
+    assert report["errors"] == ["incomplete_arm_coverage", "incomplete_case_group_coverage"]
     assert report["counts"]["incomplete_arm_checkpoints"] == ["cp-1"]
 
 

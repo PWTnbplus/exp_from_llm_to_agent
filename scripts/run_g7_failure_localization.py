@@ -642,20 +642,58 @@ def protocol_preflight(
             )
         )
     })
-    checkpoint_arms: dict[str, list[str]] = {}
+    checkpoint_arms: dict[str, set[str]] = {}
+    checkpoint_bindings: dict[str, set[str]] = {}
+    case_group_arms: dict[tuple[str, str], list[str]] = {}
+    case_group_checkpoints: dict[tuple[str, str], set[str]] = {}
     for row in plan_rows:
         checkpoint_id = row.get("checkpoint_id")
+        case_id = row.get("case_id")
+        group_id = row.get("group_id")
         arm = row.get("diagnostic_arm")
         if (
             _valid_identifier(checkpoint_id)
+            and _valid_identifier(case_id)
+            and isinstance(group_id, str)
+            and group_id in G7_GROUPS
             and isinstance(arm, str)
             and arm in G7_ARM_CONTRACT
         ):
-            checkpoint_arms.setdefault(checkpoint_id, []).append(arm)
+            checkpoint_arms.setdefault(checkpoint_id, set()).add(arm)
+            # A source checkpoint may be shared by the G3/G4 diagnostic forks
+            # of one public case, but never by two different public cases.
+            checkpoint_bindings.setdefault(checkpoint_id, set()).add(case_id)
+            case_group = (case_id, group_id)
+            case_group_arms.setdefault(case_group, []).append(arm)
+            case_group_checkpoints.setdefault(case_group, set()).add(checkpoint_id)
     expected_arms = sorted(G7_ARM_CONTRACT)
     incomplete_arm_checkpoints = sorted(
         checkpoint_id for checkpoint_id, arms in checkpoint_arms.items()
         if sorted(arms) != expected_arms
+    )
+    expected_case_groups = {
+        (row.get("case_id"), group)
+        for row in public_rows
+        if _valid_identifier(row.get("case_id"))
+        for group in sorted(G7_GROUPS)
+    }
+    incomplete_case_group_coverage = sorted(
+        f"{case_id}/{group_id}"
+        for case_id, group_id in expected_case_groups
+        if (
+            len(case_group_checkpoints.get((case_id, group_id), set())) != 1
+            or sorted(case_group_arms.get((case_id, group_id), [])) != expected_arms
+        )
+    )
+    duplicate_case_group_checkpoints = sorted(
+        f"{case_id}/{group_id}"
+        for (case_id, group_id), checkpoints in case_group_checkpoints.items()
+        if len(checkpoints) > 1
+    )
+    checkpoint_identity_collisions = sorted(
+        checkpoint_id
+        for checkpoint_id, bindings in checkpoint_bindings.items()
+        if len(bindings) > 1
     )
     invalid_public_cases = sorted({
         _row_identifier(row.get("case_id"), index)
@@ -699,6 +737,12 @@ def protocol_preflight(
         errors.append("g7_plan_label_eligibility_mismatch")
     if require_complete_plan and incomplete_arm_checkpoints:
         errors.append("incomplete_arm_coverage")
+    if require_complete_plan and incomplete_case_group_coverage:
+        errors.append("incomplete_case_group_coverage")
+    if require_complete_plan and duplicate_case_group_checkpoints:
+        errors.append("duplicate_case_group_checkpoint")
+    if require_complete_plan and checkpoint_identity_collisions:
+        errors.append("checkpoint_identity_collision")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -739,6 +783,12 @@ def protocol_preflight(
             "g7_plan_label_eligibility_mismatches": plan_label_eligibility_mismatches,
             "incomplete_arm_checkpoints": incomplete_arm_checkpoints,
             "expected_arms_per_checkpoint": expected_arms,
+            "expected_case_group_coverage": sorted(
+                f"{case_id}/{group_id}" for case_id, group_id in expected_case_groups
+            ),
+            "incomplete_case_group_coverage": incomplete_case_group_coverage,
+            "duplicate_case_group_checkpoints": duplicate_case_group_checkpoints,
+            "checkpoint_identity_collisions": checkpoint_identity_collisions,
             "require_complete_plan": require_complete_plan,
             "duplicate_run_ids": duplicate_plan_ids,
             "duplicate_public_case_ids": duplicate_public_case_ids,

@@ -91,12 +91,16 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
     label_row["eligible_u"] = True
     labels.write_text(json.dumps(label_row) + "\n", encoding="utf-8")
     arm_specs = [
-        ("D0", "G4", []), ("D1", "G3", ["V"]), ("D2", "G4", ["V", "L"]),
-        ("D3", "G4", ["V", "L", "U"]), ("L_ONLY", "G3", ["L"]),
-        ("U_ONLY", "G4", ["U"]), ("V_ONLY", "G4", ["V"]),
+        (arm, group, stages)
+        for group in ("G3", "G4")
+        for arm, stages in [
+            ("D0", []), ("D1", ["V"]), ("D2", ["V", "L"]),
+            ("D3", ["V", "L", "U"]), ("L_ONLY", ["L"]),
+            ("U_ONLY", ["U"]), ("V_ONLY", ["V"]),
+        ]
     ]
     plan.write_text(
-        "\n".join(json.dumps(_plan_row(f"run-{arm}", arm, group, stages))
+        "\n".join(json.dumps(_plan_row(f"run-{group}-{arm}", arm, group, stages))
                   for arm, group, stages in arm_specs) + "\n",
         encoding="utf-8",
     )
