@@ -289,5 +289,19 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T074534Z-60/audit.json` and `g7_g8_handoff_identity_review.json`.
 - Cycle 60 delivery: local repair commit `67f113d`; `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed because the configured proxy could not connect to GitHub port 443. Remote update is not claimed and remains unverified under `ISSUE-000000000003`.
 
+## Cycle 64 ordinary-result privacy independent verification (2026-10-16T08:06Z)
+
+- Independently reviewed `ResultRecorder`, `TraceRecorder`, and `law_recovery.py`; focused privacy/observability/evaluator tests passed `14/14`, and a temporary nested/list mixed-case probe confirmed hidden evaluator values do not enter ordinary result artifacts.
+- `ISSUE-ab0746b86bf9` is now `VERIFIED`. This is only a local artifact-privacy verification; it does not change G0/G6/G7 or permit scientific release.
+- Local commits: `64c36d2` and delivery-state record `3dc761c`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
+
+## Cycle 65 initial-observation parity repair and independent verification (2026-10-16T08:11Z)
+
+- Repaired `src/scientific_discovery/runners/llm_only.py` so the frozen-plan arm persists the same normalized public `initial_observations` metadata field already used by the Agent arm; added a regression assertion.
+- Focused tests passed `10/10`; full host suite passed `192/192`; an independent paired probe confirmed identical model-visible initial observation content and metadata in both arms.
+- `ISSUE-0786397621a0` is now `VERIFIED`. No provider call, paid run, historical artifact edit, or scientific truth decision was made.
+- Local commits: `d28b9c6` and delivery-state record `9384a9a`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
+- Current state: `12` open/blocked/unverified issues, `4` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
