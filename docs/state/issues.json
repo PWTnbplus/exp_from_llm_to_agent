@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:07:51+00:00",
+  "updated_at": "2026-10-16T09:08:34+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 75 local repair/audit/state commit 76df862 was created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated.",
+      "evidence": "Cycle 76 local repair/audit/state commit 851c596 was created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 75 GitHub delivery remains externally blocked after the G6 cross-repeat lineage repair.",
+      "blocked_reason": "Cycle 76 GitHub delivery remains externally blocked after the G6 frozen-plan identity repair.",
       "verification": null,
       "history": [
         {
@@ -307,6 +307,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 75 GitHub delivery remains externally blocked after the G6 cross-repeat lineage repair.",
           "evidence": "Cycle 75 local repair/audit/state commit 76df862 was created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated."
+        },
+        {
+          "time": "2026-10-16T09:08:34+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 76 GitHub delivery remains externally blocked after the G6 frozen-plan identity repair.",
+          "evidence": "Cycle 76 local repair/audit/state commit 851c596 was created on autopilot/scientific-law-discovery, but git push and git ls-remote both failed with exit 1 because the configured proxy could not connect to github.com:443; remote branch is not verified or claimed updated."
         }
       ]
     },
