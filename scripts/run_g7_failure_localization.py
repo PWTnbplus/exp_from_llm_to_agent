@@ -216,7 +216,7 @@ def validate_paid_evidence(model_id: str, snapshot_manifest: Path | None,
     return {
         "required": True,
         "evidence_status": "PRESENT_UNVERIFIED_EXTERNAL" if not errors else "MISSING_OR_INVALID",
-        "formal_paid_run_allowed_by_evidence": not errors,
+        "local_evidence_schema_valid": not errors,
         "errors": errors,
         "model_snapshot_manifest": {
             "path": str(snapshot_manifest) if snapshot_manifest is not None else None,

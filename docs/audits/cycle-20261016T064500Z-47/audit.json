@@ -4,7 +4,7 @@
   "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
   "repair": {
     "issue": "ISSUE-000000000002",
-    "change": "Added a fail-closed G7 paid-evidence preflight before provider key reading or provider construction. It validates a model-id-bound immutable snapshot hash and non-false gateway weight fingerprint plus a structured USD billing export, retains only file hashes and boolean checks, and labels structurally complete local evidence PRESENT_UNVERIFIED_EXTERNAL. Added missing, malformed, privacy-boundary, and runner-order regression tests.",
+    "change": "Added a fail-closed G7 paid-evidence preflight before provider key reading or provider construction. It validates a model-id-bound immutable snapshot hash and non-false gateway weight fingerprint plus a structured USD billing export, retains only file hashes and boolean checks, and labels structurally complete local evidence PRESENT_UNVERIFIED_EXTERNAL. The report uses local_evidence_schema_valid rather than a formal-approval name. Added missing, malformed, privacy-boundary, and runner-order regression tests.",
     "historical_artifacts_rewritten": false
   },
   "test": {
@@ -16,7 +16,10 @@
     "full_output_tail": "149 passed in 18.41s\n",
     "py_compile_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "py_compile", "scripts/run_g7_failure_localization.py", "tests/test_g7_protocol.py"],
     "py_compile_exit_code": 0,
-    "git_diff_check_exit_code": 0
+    "git_diff_check_exit_code": 0,
+    "followup_targeted_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q", "tests/test_g7_protocol.py"],
+    "followup_targeted_exit_code": 0,
+    "followup_targeted_output_tail": "28 passed in 1.29s\n"
   },
   "review": {
     "status": "BLOCKED",

@@ -334,7 +334,7 @@ def test_g7_runner_rejects_multiworker_without_aggregate_cap_before_key_read(
 
 def test_g7_paid_evidence_gate_rejects_missing_files_without_provider_setup(tmp_path: Path) -> None:
     report = validate_paid_evidence("model-x", tmp_path / "missing-snapshot.json", tmp_path / "missing-billing.json")
-    assert report["formal_paid_run_allowed_by_evidence"] is False
+    assert report["local_evidence_schema_valid"] is False
     assert report["evidence_status"] == "MISSING_OR_INVALID"
     assert report["errors"] == ["model_snapshot_manifest_not_found", "billing_export_not_found"]
 
@@ -355,7 +355,8 @@ def test_g7_paid_evidence_gate_accepts_structure_but_keeps_external_status_unver
     }), encoding="utf-8")
     report = validate_paid_evidence("model-x", snapshot, billing)
     assert report["errors"] == []
-    assert report["formal_paid_run_allowed_by_evidence"] is True
+    assert report["local_evidence_schema_valid"] is True
+    assert "formal_paid_run_allowed_by_evidence" not in report
     assert report["evidence_status"] == "PRESENT_UNVERIFIED_EXTERNAL"
     assert report["external_verification_claimed"] is False
     assert report["model_snapshot_manifest"]["checks"]["file_sha256"] == hashlib.sha256(snapshot.read_bytes()).hexdigest()
@@ -380,7 +381,7 @@ def test_g7_paid_evidence_gate_rejects_false_snapshot_and_invalid_billing(tmp_pa
         "exported_at_utc": "not-a-time",
     }, allow_nan=True), encoding="utf-8")
     report = validate_paid_evidence("model-x", snapshot, billing)
-    assert report["formal_paid_run_allowed_by_evidence"] is False
+    assert report["local_evidence_schema_valid"] is False
     assert report["errors"] == [
         "model_snapshot_model_id_mismatch",
         "model_snapshot_gateway_weight_fingerprint_missing",
