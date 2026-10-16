@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T08:20:01+00:00
+生成时间（UTC）：2026-10-16T08:22:37+00:00
 
-- 开放/阻塞/未验证：**11**
-- 已验证修复：**5**
+- 开放/阻塞/未验证：**10**
+- 已验证修复：**6**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -81,32 +81,6 @@
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
-### ISSUE-28ed827e40a9 — P1 — RESOLVED_UNVERIFIED
-- 描述：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ
-- 证据：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independently_verified_g7_local_labels"}, "run_id": "g7full_73f3c3a5bd3823bdb85c", "status": "provider_error", "trace_ref": "traces\\g7full_73f3c3a5bd3823bdb85c\\events.jsonl"}
-events [('MODEL_RESPONSE', 'COMPLETED', None, None), ('MODEL_REQUEST', 'RUNNING', None, None), ('MODEL_RESPONSE', 'COMPLETED', None, None), ('ERROR', 'FAILED', 'ValueError', 'missing stages object'), ('RUN_END', 'FAILED', None, None)]
-
-2026-10-15T17:06:43.791296Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 216ms)... turn_id=01a1407e-9393-7fb2-a2f2-b19efae12fb4 retries=1 max_retries=5 sampling_error=stream disconnected before completion: idle timeout waiting for SSE
-ERROR: Reconnecting... 1/5
-exec
-"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
-import json
-from pathlib import Path
-base=Path('results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers')
-states=[json.loads(x) for x in (base/'g7_full_retry_states.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
-for s in states:
- if s.get('status')"'!='"'completed':
-  p=base/s['trace_ref'].replace('\\\\\\\\','/')
-  ev=[json.loads(x) for x in p.read_text(encoding='utf-8').splitlines() if x.strip()]
-  print(s['run_id'], [(e.get('event_type'), (e.get('payload') or {}).get('call_index'), (e.get('payload') or {}).get('error')) for e in ev])
-'@ | E:/resources/python/python.exe -" in E:\master_exp\nature_prj1_cal\from_llm_to_agent
- succeeded in 612ms:
-g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', None, None), ('MODEL_REQUEST', 1, None), ('MODEL_RESPONSE', 1, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 2, None), ('MODEL_RESPONSE', 2, None), ('TOOL_CALL', None, None), ('TOOL_RESULT', None, None), ('MODEL_REQUEST', 3, None), ('MODEL_RESPONSE', 3, None), ('TOOL
-- 必需修复：Resolve environment/format/test blocker; rerun audit
-- 尝试次数：0
-- 来源：cycle-20261015T161447Z-01
-- 阻塞原因：未记录
-
 ### ISSUE-000000000005 — P2 — OPEN
 - 描述：Classical baseline is only an extension interface
 - 证据：src/scientific_discovery/evaluation/classical.py retains NotImplementedError.
@@ -120,6 +94,7 @@ g7full_dff0dae5a314dd9fb081 [('RUN_START', None, None), ('INJECTION_APPLIED', No
 - **ISSUE-000000000001**（P1）：Formal scientific scoring is incomplete——`python -m pytest -q`；Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure.
 - **ISSUE-6b3a9e1d4f20**（P2）：Raw G6 traces contain noncanonical retry segments that require a derived audit view——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g6_resume_sequence.py tests/test_g7_trace_q_consistency.py tests/test_g7_protocol.py`；existing_event_seq accepts only contiguous integer sequence prefixes and fails closed on malformed JSONL, non-object rows, gaps, duplicates, and invalid sequence types. Focused tests 56/56, full host suite 198/198, and an independent temporary probe pass. Raw historical traces remain immutable and canonical derived traces remain the scoring boundary.
 - **ISSUE-7e3d4a91c2f0**（P1）：G6 A arm execution semantics do not match the G6/G7 protocol——`E:/resources/python/python.exe -m pytest -q`；Corrected G6 protocol profile executed with exactly 2 workers on the verified 23-family denominator; final audit passes 552/552 plan/response/trace rows with no failures; independent release review structural_pass=true and corrected handoff is used by G7.
+- **ISSUE-28ed827e40a9**（P1）：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_trace_q_consistency.py tests/test_g7_failure_taxonomy.py tests/test_g7_terminal_retry.py`；Historical malformed output is retained; subsequent valid audit exit_code=0 and independent review pass; current G7 protocol/trace/taxonomy/terminal-retry focused tests pass 54/54.
 - **ISSUE-ab0746b86bf9**（P1）：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_result_recorder_privacy.py tests/test_observability.py tests/test_evaluator.py`；Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.
 - **ISSUE-0786397621a0**（P1）：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_llm_isolation.py tests/test_no_leakage.py`；Both arms expose the same public initial observation to their model-facing prompt and persist the same normalized initial_observations metadata field. Focused tests 10/10 and full host suite 192/192 pass; the paired temporary probe passes.
 

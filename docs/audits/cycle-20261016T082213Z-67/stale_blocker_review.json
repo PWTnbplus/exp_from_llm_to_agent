@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only stale-blocker review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-28ed827e40a9",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "Historical malformed output is retained; subsequent valid audit exit_code=0 and independent review pass; current G7 protocol/trace/taxonomy/terminal-retry focused tests pass 54/54.",
+      "reason": "The stale workflow blocker is no longer a current host failure; unrelated scientific gates remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -14,7 +14,7 @@
 
 ## 当前状态摘要
 
-开放/未验证：11。已验证：5。
+开放/未验证：10。已验证：6。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
@@ -27,7 +27,6 @@
 - ISSUE-3d7a9c1e5b20 P1 BLOCKED 尝试次数=21：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and 
 - ISSUE-f9171bb760b1 P1 RESOLVED_UNVERIFIED 尝试次数=0：No frozen, auditable G8 real/sham/off/extra adapter is present；修复=Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
 - ISSUE-0f2cb195c681 P1 RESOLVED_UNVERIFIED 尝试次数=3：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.
-- ISSUE-28ed827e40a9 P1 RESOLVED_UNVERIFIED 尝试次数=0：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-C；修复=Resolve environment/format/test blocker; rerun audit
 - ISSUE-000000000005 P2 OPEN 尝试次数=0：Classical baseline is only an extension interface；修复=Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
 已验证的已完成工作（避免重复）：
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.
