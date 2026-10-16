@@ -342,5 +342,15 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local commits: `32af428` (repair) and `7365e22` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
 - Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider or paid experiment was started.
 
+## Cycle 70 G7 arm-specific top-level output repair (2026-10-16T08:45Z)
+
+- Independently reproduced a second fail-open path in the same G7 output contract: before this cycle `public_tool_loop(..., checkpoint=true)` accepted a checkpoint response containing diagnostic `stages`. The immutable corrected checkpoint artifact has `128/184` rows with stages even though checkpoint messages are specified to contain only decision, affected_claim_ids, revised_claim, and supporting_evidence.
+- Repaired `scripts/run_g7_failure_localization.py` with exact checkpoint/diagnostic top-level key contracts and `affected_claim_ids` validation. Checkpoint responses carrying stages now receive the bounded format retry and cannot enter the diagnostic context; diagnostic responses must contain the stages object before strict V/L/U/Q validation.
+- Added direct contract and checkpoint retry tests. Focused G7 regression: `67 passed`; full host suite: `212 passed`; `git diff --check`: PASS. Independent post-repair probe confirms one format retry followed by acceptance of a valid four-field checkpoint.
+- `ISSUE-4c7e2a91d6f0` remains `VERIFIED` only for the forward parser remediation. The immutable `128/184` historical checkpoint-shape discrepancy remains non-confirmatory; no historical trace or result was modified.
+- Audit files: `docs/audits/cycle-20261016T084506Z-70/audit.json`, `g7_top_level_contract_finding.json`, and `g7_top_level_contract_review.json`.
+- Local commits: `2f69df9` (repair) and `68b65b4` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
+- Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, confirmatory inference, or scientific claim was made.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
