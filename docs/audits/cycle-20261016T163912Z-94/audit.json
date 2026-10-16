@@ -93,5 +93,15 @@
     "Formal G7 runner requires independently auditable model snapshot and billing evidence; historical metadata is not an immutable weight snapshot and not a billing receipt.",
     "G0 upstream provenance, independent mathematical/statistical review, dependency/state truth, and remote GitHub delivery remain blocked."
   ],
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "local_commit_before_delivery_retry": "a345621",
+    "push_command": "git push origin autopilot/scientific-law-discovery",
+    "push_exit_code": 1,
+    "ls_remote_command": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery",
+    "ls_remote_exit_code": 1,
+    "remote_updated": false,
+    "failure": "Configured proxy could not connect to github.com port 443."
+  },
   "decision": "Record live preflight and authorization, keep formal paid G0-G7 execution blocked, and do not synthesize results or change scientific gate statuses."
 }

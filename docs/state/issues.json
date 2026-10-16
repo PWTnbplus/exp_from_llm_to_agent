@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T16:41:43+00:00",
+  "updated_at": "2026-10-16T16:42:44+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -120,13 +120,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "Cycle 93 local audit commit 9ead89c is local; git push and git ls-remote both exited 128 because the configured proxy could not connect to github.com:443; remote branch update is not verified.",
+      "evidence": "docs/audits/cycle-20261016T163912Z-94/audit.json; git push exit 1; git ls-remote exit 1",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T16:20:47+00:00",
+      "last_seen": "2026-10-16T16:42:38+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "GitHub delivery remains externally blocked after cycle 93 final integrity audit",
+      "blocked_reason": "Cycle 94 push and independent git ls-remote both exited 1: configured proxy could not connect to github.com port 443. Local commit a345621 exists, but remote branch update is unverified.",
       "verification": null,
       "history": [
         {
@@ -439,6 +439,12 @@
           "event": "BLOCKED",
           "reason": "GitHub delivery remains externally blocked after cycle 93 final integrity audit",
           "evidence": "Cycle 93 local audit commit 9ead89c is present, but git push origin autopilot/scientific-law-discovery and git ls-remote origin refs/heads/autopilot/scientific-law-discovery both exited 128 because the configured proxy could not connect to github.com:443; remote branch update is not verified."
+        },
+        {
+          "time": "2026-10-16T16:42:38+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 94 push and independent git ls-remote both exited 1: configured proxy could not connect to github.com port 443. Local commit a345621 exists, but remote branch update is unverified.",
+          "evidence": "docs/audits/cycle-20261016T163912Z-94/audit.json; git push exit 1; git ls-remote exit 1"
         }
       ]
     },
