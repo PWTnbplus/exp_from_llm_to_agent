@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T10:02:21+00:00",
+  "updated_at": "2026-10-16T15:40:54+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1584,6 +1584,38 @@
           "evidence": "The complete-plan contract now requires protocol_version=g7-public-case-format-retry-v1. The adversarial wrong-version test passes; the focused G7 suite passes 47/47; the full repository suite passes 237/237; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong protocol versions, wrong profiles, retry violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints."
         }
       ]
+    },
+    {
+      "id": "ISSUE-53e9722cb252",
+      "severity": "P1",
+      "title": "G7 complete preflight accepted nonformal public CF types or split values",
+      "status": "VERIFIED",
+      "evidence": "The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata.",
+      "remediation": "Require CF1-CF4 and final_test for formal public and plan rows and test both mutations.",
+      "first_seen": "2026-10-16T15:40:50+00:00",
+      "last_seen": "2026-10-16T15:40:54+00:00",
+      "source": "docs/audits/cycle-20261016T154007Z-87/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T15:40:54+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T15:40:50+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T154007Z-87/audit.json"
+        },
+        {
+          "time": "2026-10-16T15:40:54+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1686,7 +1718,8 @@
     "docs/audits/cycle-20261016T095127Z-83/audit.json",
     "docs/audits/cycle-20261016T095537Z-84/audit.json",
     "docs/audits/cycle-20261016T095836Z-85/audit.json",
-    "docs/audits/cycle-20261016T100123Z-86/audit.json"
+    "docs/audits/cycle-20261016T100123Z-86/audit.json",
+    "docs/audits/cycle-20261016T154007Z-87/audit.json"
   ],
   "current_focus": null
 }

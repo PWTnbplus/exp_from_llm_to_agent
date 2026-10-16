@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-53e9722cb252",
+  "fingerprint": "g7-public-cf-split-contract-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted nonformal public CF types or split values",
+  "evidence": "Before repair, a valid complete G7 fixture with public and plan cf_type changed to CF5, or split changed to dev with the label public-case hash recalculated, returned formal_run_allowed_by_protocol=true with errors=[] under require_complete_plan=True.",
+  "remediation": "Require every formal G7 public and plan row to use cf_type in CF1-CF4 and split=final_test, add adversarial rejection tests, and independently verify the immutable formal inputs.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

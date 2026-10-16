@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T10:02:21+00:00
+生成时间（UTC）：2026-10-16T15:40:54+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**23**
+- 已验证修复：**24**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -106,6 +106,7 @@
 - **ISSUE-508d66813a87**（P1）：G7 complete preflight accepted mixed source checkpoints within one diagnostic case/group——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.
 - **ISSUE-6bd0c43fb941**（P1）：G7 complete preflight accepted a plan profile inconsistent with the executable protocol——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires profile=theory_benchmark. The adversarial wrong-profile test passes; the focused G7 suite passes 46/46; the full repository suite passes 236/236; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong profiles, retry-protocol violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints.
 - **ISSUE-5788b5a4ed09**（P1）：G7 complete preflight accepted a protocol version inconsistent with the strict retry contract——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires protocol_version=g7-public-case-format-retry-v1. The adversarial wrong-version test passes; the focused G7 suite passes 47/47; the full repository suite passes 237/237; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong protocol versions, wrong profiles, retry violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints.
+- **ISSUE-53e9722cb252**（P1）：G7 complete preflight accepted nonformal public CF types or split values——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 formal public-contract review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-53e9722cb252",
+      "verdict": "VERIFIED",
+      "evidence": "The complete-plan contract now requires cf_type in CF1-CF4 and split=final_test. The adversarial CF/split rejection test passes; the focused G7 suite passes 48/48; the full repository suite passes 238/238; the immutable formal preflight reports no invalid public or plan metadata, no source-checkpoint mismatch, no group-arm mismatch, and 184 unique checkpoints. An independent data-only scan reports 92 public rows across 23 families with exactly CF1-CF4/final_test and zero wrong formal-plan metadata.",
+      "reason": "The local formal-public-input fail-open is closed. This verifies only the G7 input contract; it does not establish provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

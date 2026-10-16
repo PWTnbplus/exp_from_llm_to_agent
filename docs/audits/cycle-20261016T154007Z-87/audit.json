@@ -1,0 +1,110 @@
+{
+  "cycle": "20261016T154007Z-87",
+  "scope": "G7 complete-plan strict formal public CF-type and split gate",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "The formal G7 public cases are restricted to the declared CF1-CF4 benchmark conditions and final_test split.",
+      "The frozen formal plan must preserve the public case contract before any provider run is allowed.",
+      "A public-input contract gate is engineering evidence only and does not certify provider, statistical, mathematical, or scientific validity."
+    ],
+    "alignment_conclusion": "The complete-plan preflight now rejects nonformal cf_type and split values while preserving the immutable CF1-CF4/final_test formal input contract."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c import valid formal fixture; set public and plan cf_type to CF5, or split to dev; recalculate the label public-case hash; call protocol_preflight(..., require_complete_plan=True)",
+      "result": "PASS for the regression probe before implementation repair: formal_run_allowed_by_protocol=true; errors=[] in both mutations; nonformal public inputs were accepted."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 48 tests, including rejection of CF5 and dev split and controls for exact experiment, profile, protocol, retry, arm, source checkpoint, coverage, and model-visible isolation contracts."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py"],
+    "change": "Added G7_CF_TYPES={CF1,CF2,CF3,CF4} and G7_FORMAL_SPLIT=final_test; required exact membership/equality in _formal_public_contract_valid; added an adversarial test for CF5 and dev split mutations.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "7bc22e2"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "48 passed in 4.00s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "238 passed in 25.15s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py tests/test_g7_protocol.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_plan_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+        "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+        "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      },
+      "command": "direct protocol_preflight with worker_count=16 and require_complete_plan=true",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public_cases=92; labels=92; plan_rows=1288; invalid_g7_public_metadata=[]; invalid_g7_plan_metadata=[]; g7_plan_source_checkpoint_mismatches=[]; g7_plan_group_arm_mismatches=[]; incomplete_case_group_coverage=[]; duplicate_case_group_checkpoints=[]; checkpoint_identity_collisions=[]; unique_checkpoint_ids=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate Python data-only reconstruction, not the runner preflight",
+      "result": "PASS: public_rows=92; families=23; every family has exactly CF1-CF4 with split=final_test; duplicate public case IDs=0; plan_rows=1288; duplicate run IDs=0; wrong protocol/profile/retry/experiment/split/CF metadata=0; mixed source-checkpoint groups=0; plan SHA256 matches the immutable preflight input."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 formal public-contract review",
+    "findings": [
+      {
+        "id": "ISSUE-53e9722cb252",
+        "fingerprint": "g7-public-cf-split-contract-v1",
+        "severity": "P1",
+        "title": "G7 complete preflight accepted nonformal public CF types or split values",
+        "evidence": "The pre-repair mutation probes accepted CF5 and dev split with formal_run_allowed_by_protocol=true.",
+        "remediation": "Require CF1-CF4 and final_test for formal public and plan rows and test both mutations."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-53e9722cb252",
+        "verdict": "VERIFIED",
+        "evidence": "The fixed guard, adversarial test, full suite, immutable preflight, and independent data-only reconstruction all pass.",
+        "reason": "Local structural defect fixed; external and scientific gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "a3c8491",
+    "code_commit": "7bc22e2",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "State and delivery commits, plus push and ls-remote outcomes, will be filled after the audit/state handoff cycle."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-53e9722cb252",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only the G7 formal public CF/split contract was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}

@@ -518,6 +518,19 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `d9e6b7f`; audit/state commit: `8a7468d`; delivery-blocker state commit: `b41043c`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
+## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
+
+- Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) together with `docs/state/gates.json`. The formal G7 input contract is the CF1-CF4 `final_test` public benchmark set; this is a precondition for any frozen provider plan, not a scientific result.
+- Independently reproduced another local fail-open before repair: changing a valid complete fixture's public and plan `cf_type` to `CF5`, or its `split` to `dev` while recalculating the label public-case hash, still returned `formal_run_allowed_by_protocol=true` and `errors=[]` under `require_complete_plan=True`.
+- Repaired `scripts/run_g7_failure_localization.py` with exact `G7_CF_TYPES={CF1,CF2,CF3,CF4}` and `G7_FORMAL_SPLIT=final_test` checks in `_formal_public_contract_valid`; added an adversarial test covering both mutations in `tests/test_g7_protocol.py`.
+- Focused G7 tests pass `48/48`; full repository suite passes `238/238`; py_compile and `git diff --check` pass.
+- Immutable formal preflight passes with `92` public cases, `92` labels, `1288` plan rows, `formal_run_allowed_by_protocol=true`, `errors=[]`, empty invalid public/plan metadata, empty source-checkpoint and group-arm mismatches, complete coverage, no collisions, and `184` unique checkpoints. Public SHA256 is `1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f`; plan SHA256 remains `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- Independent read-only Python reconstruction confirms `92` public rows across `23` families, each with exactly `CF1`-`CF4` and `final_test`; duplicate public case IDs `0`; `1288` plan rows; duplicate run IDs `0`; wrong protocol/profile/retry/experiment/split/CF metadata `0`; and mixed source-checkpoint groups `0`.
+- `ISSUE-53e9722cb252` is `VERIFIED` for this local formal public-input guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, and scientific validity remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T154007Z-87/audit.json`, `g7_public_contract_finding.json`, and `g7_public_contract_review.json`.
+- Local repair commit: `7bc22e2`. State/audit and delivery bookkeeping commits are still pending in this cycle. Do not stage the user-owned untracked `research_data_summary_G0_G7/` directory.
+- No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Both remote push and `git ls-remote` must be attempted and independently verified; never claim GitHub delivery from a failed or unverified command.
+
 ## Cycle 86 G7 strict protocol-version identity repair (2026-10-16T10:01Z)
 
 - Compared the formal plan with the current strict G7 response/retry contract and the three design documents. The executable corrected plan uses `g7-public-case-format-retry-v1`, but the old preflight accepted any nonempty version.
