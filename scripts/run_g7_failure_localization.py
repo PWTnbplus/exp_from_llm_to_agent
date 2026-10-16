@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -348,6 +349,8 @@ class Limits:
     def before_model(self) -> None:
         if self.model_calls >= self.max_model_calls:
             raise RuntimeError("global model-call hard limit exceeded")
+        if self.total_tokens >= self.max_total_tokens or self.cost_usd >= self.max_cost_usd:
+            raise RuntimeError("G7 hard budget exceeded before model call")
         self.model_calls += 1
 
     def before_tool(self) -> None:
@@ -360,6 +363,27 @@ class Limits:
         self.cost_usd += float(response.usage.cost_usd)
         if self.total_tokens > self.max_total_tokens or self.cost_usd > self.max_cost_usd:
             raise RuntimeError("G7 hard budget exceeded")
+
+
+def effective_worker_cost_cap(worker_count: int, worker_cap_usd: float,
+                              aggregate_cap_usd: float | None) -> float:
+    """Return a worker cap whose sum cannot exceed the declared aggregate cap.
+
+    A multi-worker paid run must state its aggregate ceiling explicitly.  The
+    historical runner only enforced ``worker_cap_usd`` independently, which
+    could multiply the intended ceiling by the worker count.
+    """
+    if worker_count < 1:
+        raise ValueError("worker_count must be positive")
+    if not math.isfinite(worker_cap_usd) or worker_cap_usd <= 0:
+        raise ValueError("worker cost cap must be a finite positive number")
+    if worker_count > 1 and aggregate_cap_usd is None:
+        raise ValueError("multi-worker G7 requires an explicit aggregate cost cap")
+    if aggregate_cap_usd is None:
+        return worker_cap_usd
+    if not math.isfinite(aggregate_cap_usd) or aggregate_cap_usd <= 0:
+        raise ValueError("aggregate cost cap must be a finite positive number")
+    return min(worker_cap_usd, aggregate_cap_usd / worker_count)
 
 
 def persisted_usage(out: Path, input_rate: float, output_rate: float, max_output_tokens: int,
@@ -421,11 +445,18 @@ def main() -> int:
     p.add_argument("--max-tool-calls", type=int, default=3456)
     p.add_argument("--max-total-tokens", type=int, default=4608000)
     p.add_argument("--max-cost-usd", type=float, default=200.0)
+    p.add_argument("--aggregate-max-cost-usd", type=float)
     args = p.parse_args()
     if not args.allow_paid:
         raise SystemExit("real G7 requires explicit --allow-paid")
     if args.worker_count < 1 or args.worker_count > 16 or not 0 <= args.worker_index < args.worker_count:
         raise SystemExit("worker_count must be between 1 and 16 and worker_index must be in range")
+    try:
+        effective_max_cost_usd = effective_worker_cost_cap(
+            args.worker_count, args.max_cost_usd, args.aggregate_max_cost_usd
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     public_rows = readl(args.public)
     label_rows = readl(args.labels)
     public = {x["case_id"]: x for x in public_rows}
@@ -444,6 +475,13 @@ def main() -> int:
             "plan": sha256_file(args.plan),
         },
         "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+        "budget_policy": {
+            "worker_count": args.worker_count,
+            "configured_worker_max_cost_usd": args.max_cost_usd,
+            "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+            "effective_worker_max_cost_usd": effective_max_cost_usd,
+            "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+        },
     })
     if preflight["errors"]:
         raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
@@ -463,12 +501,12 @@ def main() -> int:
     prior_states = {x["run_id"]: x for x in readl(state_path)}
     prior_cp = {x["checkpoint_id"]: x for x in readl(checkpoint_path) if x.get("status") == "completed"}
     usage = persisted_usage(out, args.input_cost_per_1k, args.output_cost_per_1k, 1024, trace_ids)
-    limits = Limits(args.max_model_calls, args.max_tool_calls, args.max_total_tokens, args.max_cost_usd,
+    limits = Limits(args.max_model_calls, args.max_tool_calls, args.max_total_tokens, effective_max_cost_usd,
                     int(usage["model_calls"]), int(usage["tool_calls"]), int(usage["total_tokens"]), float(usage["cost_usd"]))
     provider = OpenAICompatibleProvider(api_key=args.key_file.read_text(encoding="utf-8").strip(), base_url=args.base_url,
                                         model_name=args.model_id, timeout=args.provider_timeout, max_retries=args.provider_retries,
                                         input_cost_per_1k=args.input_cost_per_1k, output_cost_per_1k=args.output_cost_per_1k,
-                                        max_cost_usd=args.max_cost_usd, max_output_tokens=1024)
+                                        max_cost_usd=effective_max_cost_usd, max_output_tokens=1024)
     # Checkpoints are assigned as units, so all diagnostic forks from one
     # checkpoint remain on exactly one worker and have one immutable initial answer.
     for cp_id, row in selected_cps.items():
@@ -552,6 +590,10 @@ def main() -> int:
                "worker_count": args.worker_count, "plan_count": len(plan), "selected_rows": len(rows_for_worker),
                "states_count": len(readl(state_path)), "checkpoints_count": len(readl(checkpoint_path)),
                "limits": limits.__dict__, "model_id": args.model_id, "base_url": args.base_url,
+               "budget_policy": {"configured_worker_max_cost_usd": args.max_cost_usd,
+                                 "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                                 "effective_worker_max_cost_usd": effective_max_cost_usd,
+                                 "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count},
                "public_sha256": sha256_file(args.public), "labels_sha256": sha256_file(args.labels),
                "plan_sha256": sha256_file(args.plan), "completed_at_utc": utc_now()}
     write_json(out / f"runner_summary.worker-{args.worker_count}-{args.worker_index}.json", summary)

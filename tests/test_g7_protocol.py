@@ -11,6 +11,7 @@ from scripts.run_g7_failure_localization import (
     FORMAT_RETRY_INSTRUCTION,
     Limits,
     case_prompt,
+    effective_worker_cost_cap,
     normalize_stages,
     parse_payload,
     persisted_usage,
@@ -92,6 +93,26 @@ def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path,
     assert "routing_metadata_in_model_prompt" in report["errors"]
 
 
+def test_g7_runner_rejects_multiworker_without_aggregate_cap_before_key_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    public = tmp_path / "public.jsonl"
+    labels = tmp_path / "labels.jsonl"
+    plan = tmp_path / "plan.jsonl"
+    public.write_text(json.dumps({"case_id": "case-1", "model_visible": {"problem": "public"}}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    plan.write_text(json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n", encoding="utf-8")
+    out = tmp_path / "out"
+    monkeypatch.setattr(sys, "argv", [
+        "run_g7_failure_localization.py", "--public", str(public), "--labels", str(labels),
+        "--plan", str(plan), "--out", str(out), "--model-id", "unused",
+        "--key-file", str(tmp_path / "missing-key"), "--allow-paid", "--worker-count", "2",
+    ])
+    with pytest.raises(SystemExit, match="explicit aggregate cost cap"):
+        g7_runner.main()
+    assert not out.exists()
+
+
 def test_g7_malformed_stage_contract_is_retained_as_failure() -> None:
     with pytest.raises(ValueError, match="missing stage Q"):
         normalize_stages({"stages": {"V": {}, "L": {}, "U": {}}})
@@ -145,3 +166,20 @@ def test_g7_persisted_budget_is_scoped_to_worker_trace_ids(tmp_path: Path) -> No
     assert usage["model_calls"] == 1
     assert usage["total_tokens"] == 15
     assert usage["cost_usd"] == 0.25
+
+
+def test_g7_multiworker_requires_explicit_aggregate_cost_cap() -> None:
+    with pytest.raises(ValueError, match="explicit aggregate cost cap"):
+        effective_worker_cost_cap(16, 200.0, None)
+
+
+def test_g7_aggregate_cost_cap_is_partitioned_across_workers() -> None:
+    assert effective_worker_cost_cap(16, 200.0, 200.0) == pytest.approx(12.5)
+    assert effective_worker_cost_cap(2, 1.0, 200.0) == pytest.approx(1.0)
+
+
+def test_g7_budget_is_checked_before_a_new_model_request() -> None:
+    limits = g7_runner.Limits(10, 10, 100, 1.0, total_tokens=100, cost_usd=1.0)
+    with pytest.raises(RuntimeError, match="before model call"):
+        limits.before_model()
+    assert limits.model_calls == 0

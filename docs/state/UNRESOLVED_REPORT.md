@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T05:39:50+00:00
+生成时间（UTC）：2026-10-16T05:43:18+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The v3 trace/Q audit now fail-closes on any state or checkpoint trace integrity failure, retains 4 state trace-integrity failures, requires exact state-to-Q coverage, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false. No provider call was made in this cycle.
-- 必需修复：Keep failures, invalid Q rows, and trace-integrity failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries. Billing export, immutable model snapshot, and external provider review remain required.
-- 尝试次数：8
+- 证据：G7 runner budget hardening now rejects multi-worker paid runs without an explicit aggregate cost cap, partitions a USD 200 aggregate cap into USD 12.50 per worker for 16 workers, and checks persisted cost/token limits before a new model request. The corrected historical G7 retry remains 1285 completed, 3 provider_error, and Q valid 20/1288; no provider call was made in this cycle.
+- 必需修复：Keep failures, invalid Q rows, trace-integrity failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.
+- 尝试次数：9
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
