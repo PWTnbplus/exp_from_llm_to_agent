@@ -1,0 +1,8 @@
+{
+  "id": "ISSUE-a9c2ef769cad",
+  "fingerprint": "g7-formal-input-canonical-hash-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight accepted public source-task lineage mutation",
+  "evidence": "Before repair, changing one formal source_task_id and synchronizing the affected label public hash still passed strict formal preflight with no case-set, family-set, or label-hash errors.",
+  "remediation": "Freeze and enforce canonical SHA-256 identities for the exact public cases, private labels, and corrected retry plan; add an adversarial source-task mutation test."
+}

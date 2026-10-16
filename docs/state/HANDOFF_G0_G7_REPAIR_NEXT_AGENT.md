@@ -551,6 +551,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit files: `docs/audits/cycle-20261016T160121Z-91/audit.json`, `g7_formal_case_denominator_finding.json`, and `g7_formal_case_denominator_review.json`.
 - Local repair commit: `95a5a70`; audit/state commit: `7cc33fb`; delivery-blocker state commit: `bd89c50`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
 
+## Cycle 92 G7 canonical frozen-input identity repair (2026-10-16T16:04Z)
+
+- Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the V2 state. The G7 public cases, private labels, and corrected retry plan are frozen inputs; field-level structural checks alone must not allow synchronized source-task or content mutations.
+- Independently reproduced a local fail-open before repair: changing one public `source_task_id` and recomputing the affected label public hash still returned `formal_run_allowed_by_protocol=true` and `errors=[]`.
+- Repaired `scripts/run_g7_failure_localization.py` with canonical compact sorted-key JSONL SHA-256 checks for the exact public, private-label, and retry-plan row sequences; added an adversarial source-task mutation test. The strict report now exposes canonical hashes and mismatch names.
+- Focused G7 tests pass `57/57`; full repository suite passes `247/247`; py_compile and `git diff --check` pass.
+- Immutable strict preflight passes: `92` public cases, `92` labels, `1288` plan rows, exact case/family sets, canonical hash mismatches `[]`, public hash `b0ff3d3c9178cc068b0399f073981f990e313677536b6799cc170ecd2c6db597`, labels hash `bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70`, plan hash `a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3`, `1288` unique source runs, and `184` unique checkpoints. Independent read-only reconstruction matches.
+- `ISSUE-a9c2ef769cad` is `VERIFIED` for this local frozen-input hash guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T160431Z-92/audit.json`, `g7_formal_input_hash_finding.json`, and `g7_formal_input_hash_review.json`.
+- Local repair commit: `aeb5375`; audit/state and delivery-blocker commits are pending. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
+
 ## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
 
 - Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) together with `docs/state/gates.json`. The formal G7 input contract is the CF1-CF4 `final_test` public benchmark set; this is a precondition for any frozen provider plan, not a scientific result.

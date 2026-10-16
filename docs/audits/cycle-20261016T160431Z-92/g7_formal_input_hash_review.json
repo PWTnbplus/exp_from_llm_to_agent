@@ -1,0 +1,24 @@
+{
+  "review_version": "g7-formal-input-canonical-hash-review-v1",
+  "reviewer": "independent read-only G7 frozen-input review",
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "findings": [
+    {
+      "id": "ISSUE-a9c2ef769cad",
+      "fingerprint": "g7-formal-input-canonical-hash-v1",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted public source-task lineage mutation",
+      "evidence": "The pre-repair source-task mutation preserved all structural identity checks after recomputing the label hash and was accepted by strict preflight.",
+      "remediation": "Freeze and enforce canonical SHA-256 identities for the exact public cases, private labels, and corrected retry plan; add an adversarial source-task mutation test."
+    }
+  ],
+  "resolutions": [
+    {
+      "id": "ISSUE-a9c2ef769cad",
+      "verdict": "VERIFIED",
+      "evidence": "Strict preflight now computes and compares canonical hashes for public, labels, and plan rows. The source-task mutation test passes; focused G7 tests pass 57/57; the full suite passes 247/247; immutable preflight reports all three expected hashes with no mismatch.",
+      "reason": "Local frozen-input lineage defect fixed; provider, provenance, mathematical, statistical, and scientific-release gates remain external or blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

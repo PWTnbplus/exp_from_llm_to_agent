@@ -1,0 +1,112 @@
+{
+  "cycle": "20261016T160431Z-92",
+  "scope": "G7 canonical frozen public/label/retry input identity",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 inputs are frozen before costly formal testing and must preserve public/private case lineage.",
+      "source_task_id, model-visible public content, private labels, and retry-plan metadata are immutable input identity, not merely descriptive fields.",
+      "Input hashes are engineering/pre-registration evidence only and do not establish a scientific result."
+    ],
+    "alignment_conclusion": "The strict formal-input preflight now rejects any canonical content mutation across public cases, private labels, or the corrected retry plan."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c load immutable public/label/plan rows; mutate one source_task_id and recompute the corresponding label public hash; call strict protocol_preflight",
+      "result": "FAIL-OPEN reproduced: formal_run_allowed_by_protocol=true; errors=[]; label hash, case-set, family-set, and checkpoint checks all remained empty."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 57 tests, including canonical-hash rejection of source_task mutation."
+    }
+  },
+  "repair": {
+    "source_changed": [
+      "scripts/run_g7_failure_localization.py"
+    ],
+    "tests_added_or_changed": [
+      "tests/test_g7_protocol.py"
+    ],
+    "change": "Added canonical compact sorted-key JSONL SHA-256 constants and strict mismatch reporting for the exact public, private-label, and corrected retry-plan inputs.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "aeb5375"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "57 passed in 2.76s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "247 passed in 17.50s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py scripts/g7_protocol_preflight.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_formal_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl"
+      },
+      "command": "direct protocol_preflight(..., worker_count=16, require_complete_plan=true, require_formal_input_contract=true)",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public=92; labels=92; plan=1288; exact case/family sets; canonical input hash mismatches=[]; public=b0ff3d3c9178cc068b0399f073981f990e313677536b6799cc170ecd2c6db597; labels=bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70; plan=a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3; unique source runs=1288; unique checkpoints=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate Python data-only reconstruction, not the runner preflight",
+      "result": "PASS: immutable row counts and exact case/family sets match; canonical hashes match the frozen constants; source_run_id collisions=0; unique source checkpoints=184."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 frozen-input review",
+    "findings": [
+      {
+        "id": "ISSUE-a9c2ef769cad",
+        "fingerprint": "g7-formal-input-canonical-hash-v1",
+        "severity": "P1",
+        "title": "G7 formal preflight accepted public source-task lineage mutation",
+        "evidence": "The pre-repair source-task mutation preserved all structural identity checks after recomputing the label hash and was accepted by strict preflight.",
+        "remediation": "Freeze and enforce canonical SHA-256 identities for the exact public cases, private labels, and corrected retry plan; add an adversarial source-task mutation test."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-a9c2ef769cad",
+        "verdict": "VERIFIED",
+        "evidence": "Strict preflight now computes and compares canonical hashes for public, labels, and plan rows. The source-task mutation test passes; focused G7 tests pass 57/57; the full suite passes 247/247; immutable preflight reports all three expected hashes with no mismatch.",
+        "reason": "Local frozen-input lineage defect fixed; provider, provenance, mathematical, statistical, and scientific-release gates remain external or blocked."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "21d9a35",
+    "code_commit": "aeb5375",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "State and delivery commits, plus push and ls-remote outcomes, will be filled after the audit/state handoff cycle."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-a9c2ef769cad",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only the local G7 frozen-input hash guard was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}
