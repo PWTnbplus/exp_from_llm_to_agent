@@ -331,5 +331,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `1829293`. `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This is recorded under `ISSUE-000000000003`.
 - Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 are engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, retry, confirmatory inference, or scientific claim was made.
 
+## Cycle 69 G7 strict stage-contract repair (2026-10-16T08:41Z)
+
+- Independently reproduced a fail-open parser defect: before this cycle `normalize_stages()` accepted extra/private fields in V/L/U/Q, object-valued L nodes, non-string edge endpoints, and malformed U changes. A read-only scan of the immutable protocol-corrected states found 7 completed rows with Q missing `reason`, 3 V rows with `verifier_ref`, 2 L rows with `verifier_ref`, 8 U rows with eligibility/provenance fields, and 1 malformed U change. Historical raw states remain unchanged and non-confirmatory.
+- Repaired `scripts/run_g7_failure_localization.py` so future model responses require exact V/L/U/Q nested schemas; malformed output receives only the bounded format retry and then remains a failure. Extended `scripts/audit_g7_failure_taxonomy.py` to report `verifier_ref`, `eligible_u`, and `u_ineligibility_reason` request hits.
+- Added adversarial tests for all malformed/private stage shapes and forensic detection. Focused G7 regression: `65 passed`; full host suite: `210 passed`; `git diff --check`: PASS. A read-only provider-loop probe produced one format-retry event and rejected a repeated malformed response after two retained model requests.
+- Repaired forensic scan of the historical protocol-corrected trace reports `1288` planned, `1285` completed, `3` provider_error, `20` historical Q-valid rows, `2771` `verifier_ref` payload-key hits, zero routing hits, and `302` format-retry model requests. These are execution facts only; no Q/scientific claim is made.
+- `ISSUE-4c7e2a91d6f0` is `VERIFIED` for the forward parser/audit remediation only. G0/G6/G7 remain blocked; paid provider authorization, immutable model/billing evidence, upstream provenance, independent Q/statistical/mathematical/dependency review, and historical trace contamination remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T084135Z-69/audit.json`, `g7_stage_contract_finding.json`, and `g7_stage_contract_review.json`.
+- Local commits: `32af428` (repair) and `7365e22` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
+- Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider or paid experiment was started.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

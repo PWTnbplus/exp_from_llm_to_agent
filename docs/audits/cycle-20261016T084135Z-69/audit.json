@@ -85,10 +85,10 @@
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "67b95fd",
     "commit": "32af428",
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
+    "push_exit_code": 128,
+    "ls_remote_exit_code": 128,
     "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "Local repair commit 32af428 was created; push and ls-remote verification are recorded after the delivery attempt."
+    "note": "Local repair commit 32af428 and audit/state commit 7365e22 were created. Push and ls-remote both failed through the configured proxy with exit 128; the remote branch was not updated or verified."
   }
 }
