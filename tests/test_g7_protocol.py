@@ -427,6 +427,37 @@ def test_g7_formal_input_contract_rejects_family_paired_set_drift() -> None:
     assert report["counts"]["g7_public_family_paired_set_mismatches"] == ["family-1"]
 
 
+def test_g7_formal_input_contract_rejects_replacement_family(monkeypatch: pytest.MonkeyPatch) -> None:
+    public, label, plan = _formal_g7_family()
+    monkeypatch.setattr(g7_runner, "G7_FORMAL_THEORY_FAMILIES", frozenset({"family-1"}))
+    replacement = "replacement-family"
+    for row in public:
+        row["theory_family_id"] = replacement
+        row["paired_set_id"] = replacement
+    for row in label:
+        matching = next(item for item in public if item["case_id"] == row["case_id"])
+        row["source_public_case_sha256"] = hashlib.sha256(
+            json.dumps(matching, ensure_ascii=False, sort_keys=True).encode("utf-8")
+        ).hexdigest()
+    for row in plan:
+        row["theory_family_id"] = replacement
+        row["paired_set_id"] = replacement
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_formal_family_set_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_formal_family_set_mismatch"] == {
+        "missing": ["family-1"],
+        "extra": [replacement],
+    }
+
+
 def test_g7_formal_preflight_rejects_mixed_source_checkpoint_within_case_group() -> None:
     public, label, plan = _formal_g7_case("case-1")
     plan[0]["source_checkpoint_id"] = "different-source-checkpoint"

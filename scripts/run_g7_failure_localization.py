@@ -80,6 +80,17 @@ G7_FORMAL_RETRY_SCOPE = "all_original_rows_protocol_corrected"
 G7_RETRY_PROTOCOL = "separate_frozen_retry_not_pooled"
 G7_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
 G7_FORMAL_SPLIT = "final_test"
+# The formal G7 input is the frozen corrected 23-family denominator.  Keep
+# the exact family set here so a replacement family cannot preserve only the
+# superficial 23 x CF1-CF4 shape while changing the audited population.
+G7_FORMAL_THEORY_FAMILIES = frozenset({
+    "G6F-TB-L1-001", "G6F-TB-L1-002", "G6F-TB-L1-003", "G6F-TB-L1-004",
+    "G6F-TB-L1-005", "G6F-TB-L1-006", "G6F-TB-L1-007", "G6F-TB-L1-008",
+    "G6F-TB-L1-009", "G6F-TB-L1-011", "G6F-TB-L1-012",
+    "G6F-TC-L1-001", "G6F-TC-L1-002", "G6F-TC-L1-003", "G6F-TC-L1-004",
+    "G6F-TC-L1-005", "G6F-TC-L1-006", "G6F-TC-L1-007", "G6F-TC-L1-008",
+    "G6F-TC-L1-009", "G6F-TC-L1-010", "G6F-TC-L1-011", "G6F-TC-L1-012",
+})
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -792,6 +803,13 @@ def protocol_preflight(
         paired_set for paired_set, families in paired_set_families.items()
         if len(families) != 1
     )
+    formal_family_ids = {
+        row.get("theory_family_id")
+        for row in public_rows
+        if _valid_identifier(row.get("theory_family_id"))
+    }
+    formal_family_set_missing = sorted(G7_FORMAL_THEORY_FAMILIES - formal_family_ids)
+    formal_family_set_extra = sorted(formal_family_ids - G7_FORMAL_THEORY_FAMILIES)
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
@@ -849,6 +867,10 @@ def protocol_preflight(
         formal_family_paired_set_mismatches or formal_paired_set_family_mismatches
     ):
         errors.append("g7_public_pair_lineage_mismatch")
+    if require_formal_input_contract and (
+        formal_family_set_missing or formal_family_set_extra
+    ):
+        errors.append("g7_public_formal_family_set_mismatch")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -911,6 +933,10 @@ def protocol_preflight(
             "g7_public_family_case_count_mismatches": formal_family_case_count_mismatches,
             "g7_public_family_paired_set_mismatches": formal_family_paired_set_mismatches,
             "g7_public_paired_set_family_mismatches": formal_paired_set_family_mismatches,
+            "g7_public_formal_family_set_mismatch": {
+                "missing": formal_family_set_missing,
+                "extra": formal_family_set_extra,
+            },
             "require_formal_input_contract": require_formal_input_contract,
             "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
             "unique_checkpoint_ids": len({
