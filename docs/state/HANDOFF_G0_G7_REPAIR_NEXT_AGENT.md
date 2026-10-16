@@ -374,5 +374,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Current ledger after this cycle: `9` open/blocked/unverified issues and `9` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
 
+## Cycle 73 G6 response-status and failure-denominator repair (2026-10-16T08:56Z)
+
+- Compared the response-analysis path with the user design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the data report: response statuses must distinguish completed and technical failures, and failures must remain in the all-planned denominator.
+- Independently reproduced a fail-open in `scripts/analyze_g6_clustered.py`: a synthetic `provider_error` row carrying the expected decision was accepted by the old decision-only predicate and would be counted as correct; a missing status was also accepted.
+- Repaired the validator with the registered G6 statuses (`completed`, `timeout`, `provider_error`, `policy_violation`, `invalid`) and decision set. Completed rows require a known decision; only `status=completed` plus an oracle match is correct. Non-completed rows remain failures in the denominator.
+- Added adversarial tests for missing status, unknown completed decision, and provider-error-with-matching-decision. Focused G6 input tests: `16 passed`; full host suite: `217 passed`; `git diff --check`: PASS.
+- Read-only validation of the immutable corrected G6 inputs passes: `552` plan rows, `552` responses, all `552` response statuses are `completed`, and the formal input contract remains valid.
+- `ISSUE-6a4e8b2c1d90` is `VERIFIED` for this local response-status guard only. `ISSUE-000000000004` remains `BLOCKED`: independent formal statistical/mathematical review is still absent, so no confirmatory inference or scientific release is allowed.
+- Audit files: `docs/audits/cycle-20261016T085638Z-73/audit.json`, `g6_response_status_finding.json`, and `g6_response_status_review.json`.
+- Current ledger after this cycle: `9` open/blocked/unverified issues and `10` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

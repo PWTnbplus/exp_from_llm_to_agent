@@ -27,7 +27,10 @@ def _private() -> list[dict]:
 
 
 def _responses() -> list[dict]:
-    return [{"run_id": "r-g3", "decision": "MAINTAIN"}, {"run_id": "r-g4", "decision": "MAINTAIN"}]
+    return [
+        {"run_id": "r-g3", "decision": "MAINTAIN", "status": "completed"},
+        {"run_id": "r-g4", "decision": "MAINTAIN", "status": "completed"},
+    ]
 
 
 def test_duplicate_response_run_id_is_rejected() -> None:
@@ -58,6 +61,25 @@ def test_mismatched_g3_g4_task_lineage_is_rejected(field: str, g4_value: str) ->
     private = _private() + ([{"case_id": "c2", "expected_decision": "MAINTAIN"}] if field == "case_id" else [])
     with pytest.raises(SystemExit, match="mismatched G3/G4 task lineage"):
         analysis.validate_statistical_inputs(plan, private, _responses())
+
+
+def test_missing_response_status_is_rejected() -> None:
+    responses = _responses()
+    responses[0].pop("status")
+    with pytest.raises(SystemExit, match="invalid response status"):
+        analysis.validate_statistical_inputs(_plan(), _private(), responses)
+
+
+def test_completed_response_requires_known_decision() -> None:
+    responses = _responses()
+    responses[0]["decision"] = "GUESS"
+    with pytest.raises(SystemExit, match="invalid completed decision"):
+        analysis.validate_statistical_inputs(_plan(), _private(), responses)
+
+
+def test_failed_response_with_matching_decision_is_not_correct() -> None:
+    response = {"run_id": "r-g3", "decision": "MAINTAIN", "status": "provider_error"}
+    assert not analysis.response_matches_oracle(response, _private()[0])
 
 
 def test_missing_and_unexpected_responses_are_rejected() -> None:

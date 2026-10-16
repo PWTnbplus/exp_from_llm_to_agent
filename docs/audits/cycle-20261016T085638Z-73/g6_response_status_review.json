@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 response-status review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-6a4e8b2c1d90",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired validator rejects missing response status and unknown completed decisions. The independent response_matches_oracle probe returns false for provider_error with a matching decision and true only for completed with a matching decision. The immutable corrected G6 inputs pass with 552/552 responses status=completed and the full formal input validation. Focused G6 tests pass 16/16 and the full host suite passes 217/217.",
+      "reason": "The local response-status and failure-denominator guard is independently verified; formal statistical/mathematical review and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

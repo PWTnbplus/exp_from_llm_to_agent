@@ -14,6 +14,8 @@ FORMAL_VERIFIED23_FAMILY_COUNT = 23
 FORMAL_VERIFIED23_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
 FORMAL_VERIFIED23_REPLICATES = frozenset({0, 1, 2})
 FORMAL_VERIFIED23_GROUPS = frozenset({"G3", "G4"})
+G6_RESPONSE_STATUSES = frozenset({"completed", "timeout", "provider_error", "policy_violation", "invalid"})
+G6_DECISIONS = frozenset({"REJECT", "MAINTAIN", "REVISE", "UNDETERMINED"})
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -77,6 +79,15 @@ def validate_statistical_inputs(
     extra_response_ids = sorted(set(responses) - set(plan_by_run))
     if extra_response_ids:
         raise SystemExit(f"unexpected response run_id: {extra_response_ids!r}")
+    for response in responses.values():
+        status = response.get("status")
+        if status not in G6_RESPONSE_STATUSES:
+            raise SystemExit(f"invalid response status for run_id: {response.get('run_id')!r}: {status!r}")
+        if status == "completed" and response.get("decision") not in G6_DECISIONS:
+            raise SystemExit(
+                f"invalid completed decision for run_id: {response.get('run_id')!r}: "
+                f"{response.get('decision')!r}"
+            )
     missing_cases = sorted({row["case_id"] for row in plan} - set(private))
     if missing_cases:
         raise SystemExit(f"missing matched private case_id: {missing_cases!r}")
@@ -118,6 +129,12 @@ def validate_statistical_inputs(
             extra = sorted(seen_arm_keys - expected_arm_keys)
             raise SystemExit(f"statistical layout arm keys mismatch: missing={missing!r} extra={extra!r}")
     return private, responses
+
+
+def response_matches_oracle(response: dict[str, Any], oracle: dict[str, Any]) -> bool:
+    """Count only a completed, parsed response as a correct decision."""
+
+    return response.get("status") == "completed" and response.get("decision") == oracle.get("expected_decision")
 
 
 def percentile(values: list[float], q: float) -> float:
@@ -194,7 +211,7 @@ def main() -> int:
         if response is None or oracle is None:
             raise SystemExit(f"missing matched record: {row['run_id']}")
         key = (row["theory_family_id"], row["cf_type"], int(row["replicate"]))
-        matched[key][row["group_id"]] = response.get("decision") == oracle.get("expected_decision")
+        matched[key][row["group_id"]] = response_matches_oracle(response, oracle)
     if any(set(value) != {"G3", "G4"} for value in matched.values()):
         raise SystemExit("unmatched G3/G4 pair")
     by_cf: dict[str, list[tuple[bool, bool]]] = defaultdict(list)
