@@ -98,6 +98,15 @@ G7_FORMAL_CASE_IDS = frozenset(
     for family in G7_FORMAL_THEORY_FAMILIES
     for cf_type in sorted(G7_CF_TYPES)
 )
+# Canonical hashes freeze the complete public/label/retry inputs, including
+# source_task_id and model-visible content, instead of relying on a growing
+# list of individually checked metadata fields.  The canonical form is one
+# sorted-key compact JSON object per input row, in file order, with a final LF.
+G7_FORMAL_INPUT_CANONICAL_SHA256 = {
+    "public": "b0ff3d3c9178cc068b0399f073981f990e313677536b6791cc170ecd2c6db597",
+    "labels": "bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70",
+    "plan": "a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3",
+}
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -533,6 +542,14 @@ def _public_case_sha256(row: dict[str, Any]) -> str:
     ).hexdigest()
 
 
+def _canonical_rows_sha256(rows: list[dict[str, Any]]) -> str:
+    payload = "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+        for row in rows
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def protocol_preflight(
     public_rows: list[dict[str, Any]],
     label_rows: list[dict[str, Any]],
@@ -824,6 +841,15 @@ def protocol_preflight(
     }
     formal_case_set_missing = sorted(G7_FORMAL_CASE_IDS - formal_case_ids)
     formal_case_set_extra = sorted(formal_case_ids - G7_FORMAL_CASE_IDS)
+    formal_input_hashes = {
+        "public": _canonical_rows_sha256(public_rows),
+        "labels": _canonical_rows_sha256(label_rows),
+        "plan": _canonical_rows_sha256(plan_rows),
+    }
+    formal_input_hash_mismatches = sorted(
+        name for name, expected in G7_FORMAL_INPUT_CANONICAL_SHA256.items()
+        if formal_input_hashes[name] != expected
+    )
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
@@ -889,6 +915,8 @@ def protocol_preflight(
         formal_case_set_missing or formal_case_set_extra
     ):
         errors.append("g7_public_formal_case_set_mismatch")
+    if require_formal_input_contract and formal_input_hash_mismatches:
+        errors.append("g7_formal_input_hash_mismatch")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -959,6 +987,8 @@ def protocol_preflight(
                 "missing": formal_case_set_missing,
                 "extra": formal_case_set_extra,
             },
+            "g7_formal_input_hashes": formal_input_hashes,
+            "g7_formal_input_hash_mismatches": formal_input_hash_mismatches,
             "require_formal_input_contract": require_formal_input_contract,
             "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
             "unique_checkpoint_ids": len({
