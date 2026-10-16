@@ -97,7 +97,7 @@
     "head_before_cycle": "21d9a35",
     "code_commit": "aeb5375",
     "audit_state_commit": "749bfb0",
-    "delivery_state_commit": "52779b9",
+    "delivery_state_commit": "d2a505f",
     "push_exit_code": 1,
     "ls_remote_exit_code": 1,
     "remote_updated": false,
