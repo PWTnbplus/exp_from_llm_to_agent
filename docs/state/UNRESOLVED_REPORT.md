@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T05:59:15+00:00
+生成时间（UTC）：2026-10-16T06:15:13+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：G7 preflight now enforces the frozen diagnostic-arm/stage contract: D0=empty, D1=V, D2=V+L, D3=V+L+U, L_ONLY=L, U_ONLY=U, V_ONLY=V, while permitting both observed G3 and G4 groups. The corrected plan has 1288 rows with 184 rows per arm, zero invalid plan rows, 92 public cases, 92 labels, 184 checkpoints, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.
-- 必需修复：Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, arm-contract failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.
-- 尝试次数：12
+- 证据：Against all three experiment-design documents, the formal G7 preflight now enforces G6 mapping/design metadata, non-mock independent labels, the seven-arm D0/D1/D2/D3/L_ONLY/U_ONLY/V_ONLY contract for every checkpoint, and explicit future injection provenance. The current corrected plan passes with 92 public cases, 92 labels, 1288 rows, 184 checkpoints, 184 rows per arm, zero routing/private hits, and provider_calls_made=false. Independent raw-plan review also passes all design fields and exact arm coverage. The immutable corrected provider run still has 1285 completed and 3 provider_error rows; Q valid is 20/1288; dependency edges are 0/92 and eligible U cases are 0/92. The historical traces contain 1371 injection events with the older source marker and are not reclassified.
+- 必需修复：Keep provider failures, invalid Q rows, trace-integrity failures, malformed-input failures, arm-contract failures, budget failures, and design-scale deviations in the denominator. Do not select a G8 mechanism or make L/U claims. Obtain an independently reviewed provider/Q diagnosis, replacement independently audited dependency/state data, and a separately frozen explicitly authorized retry with immutable model and billing evidence; justify any deviation from the design proposal before confirmatory use. Do not pool retries or rewrite historical traces.
+- 尝试次数：13
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

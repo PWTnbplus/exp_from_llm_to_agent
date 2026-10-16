@@ -35,7 +35,8 @@ def main() -> int:
     public_rows = readl(args.public)
     label_rows = readl(args.labels)
     plan_rows = readl(args.plan)
-    report = protocol_preflight(public_rows, label_rows, plan_rows, args.worker_count)
+    report = protocol_preflight(public_rows, label_rows, plan_rows, args.worker_count,
+                                require_complete_plan=True)
     report.update({
         "input_hashes": {
             "public": sha256(args.public),

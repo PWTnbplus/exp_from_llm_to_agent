@@ -5,17 +5,50 @@ import subprocess
 import sys
 
 
+def _public_case(model_visible: dict) -> dict:
+    return {
+        "case_id": "case-1", "paired_set_id": "family-1", "source_task_id": "task-1",
+        "theory_family_id": "family-1", "domain": "theoretical_biology", "cf_type": "CF1",
+        "split": "final_test", "quantifier": "forall_allowed_parameters",
+        "model_visible": model_visible, "source_g5_graph_sha256": "0" * 64,
+        "verification_grade": "C",
+    }
+
+
+def _label() -> dict:
+    return {
+        "case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+        "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+        "eligible_u": False, "verifier_ref": "ref", "source_public_case_sha256": "1" * 64,
+        "verification_grade": "C", "verification_method": "test_rulebook",
+        "independent_verified": True, "synthetic_demo": False,
+    }
+
+
+def _plan_row(run_id: str, arm: str, group: str, stages: list[str]) -> dict:
+    return {
+        "run_id": run_id, "checkpoint_id": "cp-1", "case_id": "case-1",
+        "group_id": group, "diagnostic_arm": arm, "inject_stages": stages,
+        "paired_set_id": "family-1", "theory_family_id": "family-1", "cf_type": "CF1",
+        "split": "final_test", "source_g6_arm_id": "G6_B_G4_GIVEN",
+        "source_run_id": "g6-run-1", "source_checkpoint_id": "g6-cp-1",
+        "profile": "theory_benchmark", "protocol_version": "g7-test-v1",
+        "retry_scope": "test", "retry_protocol": "separate_frozen_retry_not_pooled",
+        "replicate": 0, "arm_eligible_for_diagnostic": True,
+    }
+
+
 def test_g7_preflight_blocks_routing_metadata_in_model_visible_prompt(tmp_path) -> None:
     public = tmp_path / "public.jsonl"
     labels = tmp_path / "labels.jsonl"
     plan = tmp_path / "plan.jsonl"
     out = tmp_path / "preflight.json"
     public.write_text(
-        json.dumps({"case_id": "case-1", "model_visible": {"cf_type": "CF1"}}) + "\n",
+        json.dumps(_public_case({"cf_type": "CF1"})) + "\n",
         encoding="utf-8",
     )
-    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
-    plan.write_text(json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1"}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps(_label()) + "\n", encoding="utf-8")
+    plan.write_text(json.dumps(_plan_row("run-1", "V_ONLY", "G4", ["V"])) + "\n", encoding="utf-8")
 
     result = subprocess.run(
         [
@@ -46,15 +79,16 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
     labels = tmp_path / "labels.jsonl"
     plan = tmp_path / "plan.jsonl"
     out = tmp_path / "preflight.json"
-    public.write_text(json.dumps({"case_id": "case-1", "model_visible": {"problem": "public"}}) + "\n", encoding="utf-8")
-    labels.write_text(json.dumps({"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
-                                  "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
-                                  "eligible_u": False, "verifier_ref": "ref"}) + "\n", encoding="utf-8")
+    public.write_text(json.dumps(_public_case({"problem": "public"})) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps(_label()) + "\n", encoding="utf-8")
+    arm_specs = [
+        ("D0", "G4", []), ("D1", "G3", ["V"]), ("D2", "G4", ["V", "L"]),
+        ("D3", "G4", ["V", "L", "U"]), ("L_ONLY", "G3", ["L"]),
+        ("U_ONLY", "G4", ["U"]), ("V_ONLY", "G4", ["V"]),
+    ]
     plan.write_text(
-        json.dumps({"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
-                    "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}) + "\n"
-        + json.dumps({"run_id": "run-2", "checkpoint_id": "cp-1", "case_id": "case-1",
-                      "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}) + "\n",
+        "\n".join(json.dumps(_plan_row(f"run-{arm}", arm, group, stages))
+                  for arm, group, stages in arm_specs) + "\n",
         encoding="utf-8",
     )
 

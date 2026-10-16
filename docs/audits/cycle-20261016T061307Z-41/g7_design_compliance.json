@@ -1,0 +1,80 @@
+{
+  "audit_version": "g7-design-compliance-v1",
+  "scope": "G0-G7",
+  "status": "STOP",
+  "design_sources": [
+    {
+      "path": "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "sha256": "fa70da4d3d20d801356fd805f77ac528e6c5bd8f4d4e31572deeedae65d87430"
+    },
+    {
+      "path": "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "sha256": "13308923de38a6713d90c6147d857b9af6be8c9c68df58f7cf8354beaf4287ef"
+    },
+    {
+      "path": "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "sha256": "2bbf1a7d7d22e00f0778213455cff5d169beaf4e5f0d9015de509bbcc81caf97"
+    }
+  ],
+  "local_contracts": {
+    "g6_public_mapping_and_design_metadata": {
+      "status": "PASS",
+      "public_cases": 92,
+      "labels": 92,
+      "plan_rows": 1288,
+      "unique_checkpoints": 184,
+      "invalid_public_metadata": [],
+      "invalid_label_metadata": [],
+      "invalid_plan_metadata": []
+    },
+    "seven_diagnostic_arms_per_checkpoint": {
+      "status": "PASS",
+      "arms": ["D0", "D1", "D2", "D3", "L_ONLY", "U_ONLY", "V_ONLY"],
+      "rows_per_arm": 184,
+      "incomplete_or_duplicate_checkpoints": []
+    },
+    "public_private_and_mock_boundary": {
+      "status": "PASS_LOCAL_ONLY",
+      "independent_nonmock_labels": true,
+      "routing_prompt_hits": 0,
+      "forbidden_private_prompt_hits": 0,
+      "provider_calls_made_by_preflight": false
+    },
+    "injection_provenance_for_future_runs": {
+      "status": "PASS_CODE_TESTED_NOT_HISTORICAL",
+      "oracle_assisted_source": "ORACLE_ASSISTED_DIAGNOSIS",
+      "d0_source": "D0_NEUTRAL_PLACEHOLDER",
+      "historical_corrected_trace_source_markers": {
+        "independently_verified_g7_local_labels": 1371
+      },
+      "historical_traces_are_not_reclassified": true
+    },
+    "failure_denominator": {
+      "status": "PASS_ACCOUNTING",
+      "canonical_states": 1288,
+      "completed": 1285,
+      "provider_error": 3,
+      "q_rows": 1288,
+      "q_valid": 20
+    }
+  },
+  "design_proposal_comparison": {
+    "current_theory_families": 23,
+    "current_replicates": [0],
+    "current_rows": 1288,
+    "suggested_pilot_rows": 64,
+    "suggested_main_rows": 1152,
+    "suggested_only_rows": 288,
+    "suggested_formal_plus_only_rows": 1440,
+    "interpretation": "The design documents call these sample sizes recommendations requiring pilot, power and cost justification; the current one-replicate 1288-row run cannot be treated as equivalent confirmatory coverage without that justification."
+  },
+  "scientific_stop_reasons": [
+    "historical corrected run has 3 provider_error rows",
+    "independently valid Q coverage is 20/1288",
+    "public dependency edges are 0/92 and eligible U cases are 0/92, so L/U recovery effects are not estimable",
+    "corrected run has no g7_error_taxonomy.csv, g7_recovery_effects.csv, or selected-mechanisms artifact",
+    "historical traces predate the explicit ORACLE_ASSISTED_DIAGNOSIS source marker",
+    "provider/Q diagnosis, immutable model snapshot, billing export and external mathematical/statistical review remain missing"
+  ],
+  "go_no_go": "STOP_PENDING_PROVIDER_Q_AND_LU_PROVENANCE_AND_DESIGN_SCALE_JUSTIFICATION"
+}

@@ -70,6 +70,19 @@ G7_ARM_CONTRACT = {
     "U_ONLY": ("U",),
     "V_ONLY": ("V",),
 }
+G7_PUBLIC_METADATA_FIELDS = (
+    "paired_set_id", "source_task_id", "theory_family_id", "domain", "cf_type",
+    "split", "quantifier", "source_g5_graph_sha256", "verification_grade",
+)
+G7_LABEL_METADATA_FIELDS = (
+    "source_public_case_sha256", "verification_grade", "verification_method",
+    "verifier_ref",
+)
+G7_PLAN_METADATA_FIELDS = (
+    "paired_set_id", "theory_family_id", "cf_type", "split", "source_g6_arm_id",
+    "source_run_id", "source_checkpoint_id", "profile", "protocol_version",
+    "retry_scope", "retry_protocol",
+)
 
 
 def utc_now() -> str:
@@ -188,6 +201,10 @@ def _valid_identifier(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _valid_sha256(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"[0-9a-fA-F]{64}", value))
+
+
 def _row_identifier(value: Any, index: int) -> str:
     return value if isinstance(value, str) and value else f"row-{index}"
 
@@ -211,11 +228,44 @@ def _label_contract_valid(row: dict[str, Any]) -> bool:
     )
 
 
+def _formal_public_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        all(_valid_identifier(row.get(field)) for field in G7_PUBLIC_METADATA_FIELDS[:-2])
+        and _valid_sha256(row.get("source_g5_graph_sha256"))
+        and row.get("verification_grade") in {"A", "B", "C"}
+        and isinstance(row.get("model_visible"), dict)
+    )
+
+
+def _formal_label_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        _label_contract_valid(row)
+        and all(_valid_identifier(row.get(field)) for field in G7_LABEL_METADATA_FIELDS[1:])
+        and _valid_sha256(row.get("source_public_case_sha256"))
+        and row.get("verification_grade") in {"A", "B", "C"}
+        and row.get("independent_verified") is True
+        and row.get("synthetic_demo") is False
+        and isinstance(row.get("verification_method"), str)
+        and bool(row.get("verification_method"))
+    )
+
+
+def _formal_plan_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        all(_valid_identifier(row.get(field)) for field in G7_PLAN_METADATA_FIELDS)
+        and isinstance(row.get("replicate"), int)
+        and not isinstance(row.get("replicate"), bool)
+        and row.get("replicate") >= 0
+        and isinstance(row.get("arm_eligible_for_diagnostic"), bool)
+    )
+
+
 def protocol_preflight(
     public_rows: list[dict[str, Any]],
     label_rows: list[dict[str, Any]],
     plan_rows: list[dict[str, Any]],
     worker_count: int,
+    require_complete_plan: bool = False,
 ) -> dict[str, Any]:
     """Validate the exact model-facing G7 contract before provider creation."""
 
@@ -281,6 +331,36 @@ def protocol_preflight(
         for index, row in enumerate(label_rows)
         if not _valid_identifier(row.get("case_id")) or not _label_contract_valid(row)
     })
+    invalid_design_public_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(public_rows)
+        if not _valid_identifier(row.get("case_id")) or not _formal_public_contract_valid(row)
+    })
+    invalid_design_label_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(label_rows)
+        if not _valid_identifier(row.get("case_id")) or not _formal_label_contract_valid(row)
+    })
+    invalid_design_plan_rows = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _formal_plan_contract_valid(row)
+    })
+    checkpoint_arms: dict[str, list[str]] = {}
+    for row in plan_rows:
+        checkpoint_id = row.get("checkpoint_id")
+        arm = row.get("diagnostic_arm")
+        if (
+            _valid_identifier(checkpoint_id)
+            and isinstance(arm, str)
+            and arm in G7_ARM_CONTRACT
+        ):
+            checkpoint_arms.setdefault(checkpoint_id, []).append(arm)
+    expected_arms = sorted(G7_ARM_CONTRACT)
+    incomplete_arm_checkpoints = sorted(
+        checkpoint_id for checkpoint_id, arms in checkpoint_arms.items()
+        if sorted(arms) != expected_arms
+    )
     invalid_public_cases = sorted({
         _row_identifier(row.get("case_id"), index)
         for index, row in enumerate(public_rows)
@@ -307,6 +387,14 @@ def protocol_preflight(
         errors.append("invalid_plan_contract")
     if invalid_label_cases:
         errors.append("invalid_label_contract")
+    if require_complete_plan and invalid_design_public_cases:
+        errors.append("invalid_g7_public_metadata")
+    if require_complete_plan and invalid_design_label_cases:
+        errors.append("invalid_g7_label_metadata")
+    if require_complete_plan and invalid_design_plan_rows:
+        errors.append("invalid_g7_plan_metadata")
+    if require_complete_plan and incomplete_arm_checkpoints:
+        errors.append("incomplete_arm_coverage")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -324,7 +412,7 @@ def protocol_preflight(
     if forbidden_hits:
         errors.append("private_oracle_metadata_in_model_prompt")
     return {
-        "audit_version": "g7-protocol-preflight-v1",
+        "audit_version": "g7-protocol-preflight-v2",
         "provider_calls_made": False,
         "formal_run_allowed_by_protocol": not errors,
         "errors": errors,
@@ -338,6 +426,12 @@ def protocol_preflight(
             "invalid_plan_rows": sorted(set(invalid_plan_rows)),
             "invalid_public_case_ids": invalid_public_cases,
             "invalid_label_cases": invalid_label_cases,
+            "invalid_g7_public_metadata": invalid_design_public_cases,
+            "invalid_g7_label_metadata": invalid_design_label_cases,
+            "invalid_g7_plan_metadata": invalid_design_plan_rows,
+            "incomplete_arm_checkpoints": incomplete_arm_checkpoints,
+            "expected_arms_per_checkpoint": expected_arms,
+            "require_complete_plan": require_complete_plan,
             "duplicate_run_ids": duplicate_plan_ids,
             "duplicate_public_case_ids": duplicate_public_case_ids,
             "duplicate_label_case_ids": duplicate_label_case_ids,
@@ -508,7 +602,12 @@ def persisted_usage(out: Path, input_rate: float, output_rate: float, max_output
 
 def injection_for(row: dict[str, Any], label: dict[str, Any]) -> dict[str, Any]:
     stages = row["inject_stages"]
-    injection: dict[str, Any] = {"applied_stages": [], "source": "independently_verified_g7_local_labels"}
+    injection: dict[str, Any] = {
+        "applied_stages": [],
+        "source": "ORACLE_ASSISTED_DIAGNOSIS" if stages else "D0_NEUTRAL_PLACEHOLDER",
+    }
+    if stages:
+        injection["label_source"] = "independently_verified_g7_local_labels"
     if "V" in stages:
         injection["V"] = {"verdict": label["v"]["verdict"], "verifier_ref": label["verifier_ref"]}
         injection["applied_stages"].append("V")
@@ -558,7 +657,8 @@ def main() -> int:
     public_rows = readl(args.public)
     label_rows = readl(args.labels)
     plan = readl(args.plan)
-    preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count)
+    preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count,
+                                   require_complete_plan=True)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     write_json(out / "g7_protocol_preflight.json", {
