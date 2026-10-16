@@ -1,0 +1,91 @@
+{
+  "cycle": "20261016T083448Z-68",
+  "scope": "G7 forward model-visible label isolation, diagnostic-payload preflight coverage, and independent design-alignment review",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 model-facing inputs must not expose private whole-proof/oracle material or routing strata.",
+      "G7 D0-D3 and V_ONLY/L_ONLY/U_ONLY are information interventions; oracle provenance must not be confused with endogenous model state.",
+      "U-ineligible cases remain in the denominator and U-dependent comparisons remain NOT COMPUTABLE rather than being silently treated as successes.",
+      "V/L/U/Q labels require independent verification; local structural checks do not establish Q mathematical validity or scientific truth.",
+      "Historical raw traces are immutable and a failed or contaminated batch cannot be retroactively repaired into confirmatory evidence."
+    ],
+    "alignment_conclusion": "The repair is limited to the G7 execution boundary required by the design: it prevents audit metadata from entering future model-visible diagnostic information and makes the preflight inspect the exact constructed payload. The fresh protocol preflight passes, but the existing historical corrected trace remains excluded because it contains verifier_ref in model requests; no G7 scientific conclusion is promoted."
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_label_contract.py"],
+    "change": "Added strict nested V/L/U label-contract validation; added verifier_ref, eligibility, and ineligibility-reason keys to the forbidden model-visible set; made protocol_preflight inspect the constructed model-visible diagnostic payload as well as public case prompts; retained explicit arm_eligible_for_diagnostic=false rows for ineligible U cases without claiming diagnostic eligibility.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_label_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+      "result": "59 passed"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "204 passed in 28.82s"
+    },
+    "fresh_protocol_preflight": {
+      "command": "Read-only protocol_preflight(public=old formal public cases, labels=old formal labels, plan=protocol-corrected full retry plan, worker_count=16, require_complete_plan=true)",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public_cases=92; labels=92; plan_rows=1288; unique_checkpoint_ids=184; routing_metadata_model_prompt_hits={}; forbidden_model_prompt_hits={}; provider_calls_made=false"
+    },
+    "adversarial_label_probe": {
+      "command": "Read-only protocol_preflight with a nested ground_truth label node and a verifier_ref-shaped node",
+      "result": "Nested object is rejected as invalid_label_contract; verifier_ref-shaped visible node is rejected as private_oracle_metadata_in_model_prompt; no provider construction occurs."
+    },
+    "historical_trace_probe": {
+      "command": "Read-only scan of all MODEL_REQUEST system/user messages in results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/traces",
+      "result": "3252 MODEL_REQUEST events; routing metadata hits=0; the historical trace contains 4222 verifier_ref hits and is therefore not treated as a clean confirmatory run. affected_claim_ids hits are output-schema instructions and are not classified as private case metadata."
+    },
+    "source_review": {
+      "files": ["scripts/run_g7_failure_localization.py", "tests/test_g7_label_contract.py", "scripts/g7_protocol_preflight.py"],
+      "result": "PASS: future model-visible diagnostic payloads are derived through the stripping function and independently scanned by preflight; the historical artifacts were not edited."
+    },
+    "design_document_review": {
+      "result": "PASS_WITH_EXTERNAL_BOUNDARY: all three user-specified design documents were read; G7's private-label isolation, D0-D3/ONLY arm structure, independent Q limitation, denominator retention, and no-retroactive-repair requirements are reflected in the audit."
+    }
+  },
+  "remaining_boundary": {
+    "scientific_release_allowed": false,
+    "note": "G0/G6/G7 remain blocked. Paid-provider authorization, immutable model snapshot, independent billing, NewtonBench provenance, independent Q/statistical/mathematical/dependency review, historical G7 failures, and GitHub remote delivery remain unresolved. The corrected historical trace is non-confirmatory and no new provider run was authorized or started."
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 prompt-isolation review",
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-0f2cb195c681",
+        "verdict": "VERIFIED",
+        "evidence": "Forward isolation is verified by strict nested-label rejection, model-visible stripping, diagnostic-payload preflight scanning, 59 focused tests, 204 full host tests, and a fresh 92/1288/184 preflight with zero routing/private hits. The immutable corrected historical trace has 4222 verifier_ref hits and remains non-confirmatory; no historical artifact was modified.",
+        "reason": "Only the future-run local containment contract is verified; this does not certify the historical batch, independent Q validity, or scientific release."
+      }
+    ]
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "664cd35",
+    "commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": true,
+    "remote_updated": false,
+    "note": "Filled after the local repair commit and the required push/ls-remote verification attempt."
+  }
+}

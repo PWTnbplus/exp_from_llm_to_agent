@@ -47,6 +47,9 @@ FORBIDDEN_MODEL_KEYS = (
     "verification_code",
     "verification_status",
     "verification_grade",
+    "verifier_ref",
+    "u_ineligibility_reason",
+    "eligible_u",
     "verifier_status",
     "V_true",
     "L_true_impacted_nodes",
@@ -358,15 +361,39 @@ def _label_contract_valid(row: dict[str, Any]) -> bool:
     v = row.get("v")
     l = row.get("l")
     u = row.get("u")
-    return (
+    if not (
         isinstance(v, dict)
+        and set(v) == {"verdict"}
         and v.get("verdict") in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}
         and isinstance(l, dict)
+        and set(l) == {"nodes", "edges"}
         and isinstance(l.get("nodes"), list)
+        and all(isinstance(node, str) and bool(node.strip()) for node in l["nodes"])
         and isinstance(l.get("edges"), list)
+        and all(
+            isinstance(edge, dict)
+            and set(edge) == {"from", "to"}
+            and isinstance(edge["from"], str)
+            and bool(edge["from"].strip())
+            and isinstance(edge["to"], str)
+            and bool(edge["to"].strip())
+            for edge in l["edges"]
+        )
         and isinstance(u, dict)
+        and set(u) == {"node_changes"}
         and isinstance(u.get("node_changes"), list)
-        and isinstance(row.get("eligible_u"), bool)
+        and all(
+            isinstance(change, dict)
+            and set(change) == {"claim_id", "to_status"}
+            and isinstance(change["claim_id"], str)
+            and bool(change["claim_id"].strip())
+            and change["to_status"] in {"supported", "rejected", "uncertain"}
+            for change in u["node_changes"]
+        )
+    ):
+        return False
+    return (
+        isinstance(row.get("eligible_u"), bool)
         and isinstance(row.get("verifier_ref"), str)
         and bool(row.get("verifier_ref"))
     )
@@ -422,16 +449,29 @@ def protocol_preflight(
     public = {row.get("case_id"): row for row in public_rows if _valid_identifier(row.get("case_id"))}
     labels = {row.get("case_id"): row for row in label_rows if _valid_identifier(row.get("case_id"))}
     prompt_parts: list[str] = []
+    diagnostic_prompt_parts: list[str] = []
     invalid_model_visible: list[Any] = []
-    for row in plan_rows:
+    for index, row in enumerate(plan_rows):
         case_id = row.get("case_id")
         if not _valid_identifier(case_id) or case_id not in public:
             continue
         try:
             prompt_parts.append(case_prompt(public[case_id]))
         except (KeyError, TypeError, ValueError):
-            invalid_model_visible.append(case_id)
+            invalid_model_visible.append(_row_identifier(case_id, index))
+            continue
+        if case_id in labels and _label_contract_valid(labels[case_id]):
+            try:
+                injection = injection_for(row, labels[case_id])
+                diagnostic_prompt_parts.append(json.dumps({
+                    "diagnostic_arm": row.get("diagnostic_arm"),
+                    "inject_stages": row.get("inject_stages"),
+                    "diagnostic_information": model_visible_diagnostic_information(injection),
+                }, ensure_ascii=False))
+            except (KeyError, TypeError, ValueError):
+                pass
     prompt_text = "\n".join(prompt_parts)
+    model_visible_text = "\n".join(prompt_parts + diagnostic_prompt_parts)
     missing_cases = sorted({
         _row_identifier(row.get("case_id"), index)
         for index, row in enumerate(plan_rows)
@@ -524,6 +564,7 @@ def protocol_preflight(
             and _valid_identifier(row.get("case_id"))
             and row.get("case_id") in labels
             and labels[row["case_id"]].get("eligible_u") is not True
+            and row.get("arm_eligible_for_diagnostic") is not False
         )
     })
     plan_label_eligibility_mismatches = sorted({
@@ -607,8 +648,8 @@ def protocol_preflight(
         errors.append("invalid_model_visible")
     if worker_count < 1 or worker_count > 16:
         errors.append("worker_count_out_of_range")
-    routing_hits = _key_hits(prompt_text, ROUTING_METADATA_KEYS)
-    forbidden_hits = _key_hits(prompt_text, FORBIDDEN_MODEL_KEYS)
+    routing_hits = _key_hits(model_visible_text, ROUTING_METADATA_KEYS)
+    forbidden_hits = _key_hits(model_visible_text, FORBIDDEN_MODEL_KEYS)
     if routing_hits:
         errors.append("routing_metadata_in_model_prompt")
     if forbidden_hits:

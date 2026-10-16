@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T08:23:27+00:00
+生成时间（UTC）：2026-10-16T08:35:17+00:00
 
-- 开放/阻塞/未验证：**10**
-- 已验证修复：**6**
+- 开放/阻塞/未验证：**9**
+- 已验证修复：**7**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -73,14 +73,6 @@
 - 来源：docs/audits/cycle-20261015T000000Z-21/audit.json
 - 阻塞原因：未记录
 
-### ISSUE-0f2cb195c681 — P1 — RESOLVED_UNVERIFIED
-- 描述：Original G7 model-facing prompt leaked routing metadata
-- 证据：The executable G7 preflight now runs before provider construction and key-file reading, case_prompt rejects malformed model_visible objects, and the preflight recursively scans routing plus private fields case-insensitively. The corrected public input passes with 92 cases, 1288 plan rows, 184 checkpoints, and zero routing/private hits; immutable original contamination remains non-confirmatory.
-- 必需修复：Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.
-- 尝试次数：3
-- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：未记录
-
 ### ISSUE-000000000005 — P2 — OPEN
 - 描述：Classical baseline is only an extension interface
 - 证据：src/scientific_discovery/evaluation/classical.py retains NotImplementedError.
@@ -94,6 +86,7 @@
 - **ISSUE-000000000001**（P1）：Formal scientific scoring is incomplete——`python -m pytest -q`；Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure.
 - **ISSUE-6b3a9e1d4f20**（P2）：Raw G6 traces contain noncanonical retry segments that require a derived audit view——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g6_resume_sequence.py tests/test_g7_trace_q_consistency.py tests/test_g7_protocol.py`；existing_event_seq accepts only contiguous integer sequence prefixes and fails closed on malformed JSONL, non-object rows, gaps, duplicates, and invalid sequence types. Focused tests 56/56, full host suite 198/198, and an independent temporary probe pass. Raw historical traces remain immutable and canonical derived traces remain the scoring boundary.
 - **ISSUE-7e3d4a91c2f0**（P1）：G6 A arm execution semantics do not match the G6/G7 protocol——`E:/resources/python/python.exe -m pytest -q`；Corrected G6 protocol profile executed with exactly 2 workers on the verified 23-family denominator; final audit passes 552/552 plan/response/trace rows with no failures; independent release review structural_pass=true and corrected handoff is used by G7.
+- **ISSUE-0f2cb195c681**（P1）：Original G7 model-facing prompt leaked routing metadata——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_label_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py`；The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory.
 - **ISSUE-28ed827e40a9**（P1）：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-CF2"}, "applied_stages": ["V", "L", "U"], "source": "independ——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_trace_q_consistency.py tests/test_g7_failure_taxonomy.py tests/test_g7_terminal_retry.py`；Historical malformed output is retained; subsequent valid audit exit_code=0 and independent review pass; current G7 protocol/trace/taxonomy/terminal-retry focused tests pass 54/54.
 - **ISSUE-ab0746b86bf9**（P1）：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_result_recorder_privacy.py tests/test_observability.py tests/test_evaluator.py`；Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.
 - **ISSUE-0786397621a0**（P1）：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_llm_isolation.py tests/test_no_leakage.py`；Both arms expose the same public initial observation to their model-facing prompt and persist the same normalized initial_observations metadata field. Focused tests 10/10 and full host suite 192/192 pass; the paired temporary probe passes.

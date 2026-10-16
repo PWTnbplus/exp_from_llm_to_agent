@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 prompt-isolation review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-0f2cb195c681",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory.",
+      "reason": "The future-run isolation and fail-closed preflight remediation is independently verified locally; historical leaked artifacts remain permanently excluded and no scientific gate is lifted."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

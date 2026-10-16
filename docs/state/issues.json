@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:23:27+00:00",
+  "updated_at": "2026-10-16T08:35:17+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -741,15 +741,20 @@
       "id": "ISSUE-0f2cb195c681",
       "severity": "P1",
       "title": "Original G7 model-facing prompt leaked routing metadata",
-      "status": "RESOLVED_UNVERIFIED",
-      "evidence": "The executable G7 preflight now runs before provider construction and key-file reading, case_prompt rejects malformed model_visible objects, and the preflight recursively scans routing plus private fields case-insensitively. The corrected public input passes with 92 cases, 1288 plan rows, 184 checkpoints, and zero routing/private hits; immutable original contamination remains non-confirmatory.",
+      "status": "VERIFIED",
+      "evidence": "The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory.",
       "remediation": "Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.",
       "first_seen": "2026-10-15T05:15:00+00:00",
       "last_seen": "2026-10-15T17:35:08+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 3,
       "blocked_reason": null,
-      "verification": null,
+      "verification": {
+        "time": "2026-10-16T08:35:17+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_label_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+        "evidence": "The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory.",
+        "reason": "Independent reviewer verification"
+      },
       "history": [
         {
           "time": "2026-10-15T05:15:00+00:00",
@@ -785,6 +790,12 @@
           "event": "RESOLVED_UNVERIFIED",
           "reason": "The executable fail-closed boundary is strengthened and tested, but the immutable historical contamination cannot be repaired and no future paid run was authorized.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T08:35:17+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory."
         }
       ]
     },
