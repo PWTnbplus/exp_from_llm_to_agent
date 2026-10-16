@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:59:40+00:00
+生成时间（UTC）：2026-10-16T10:01:49+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**22**
+- 已验证修复：**23**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -105,6 +105,7 @@
 - **ISSUE-57a074f246f3**（P1）：G7 complete preflight accepted a pooled retry protocol——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches.
 - **ISSUE-508d66813a87**（P1）：G7 complete preflight accepted mixed source checkpoints within one diagnostic case/group——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.
 - **ISSUE-6bd0c43fb941**（P1）：G7 complete preflight accepted a plan profile inconsistent with the executable protocol——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires profile=theory_benchmark. The adversarial wrong-profile test passes; the focused G7 suite passes 46/46; the full repository suite passes 236/236; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong profiles, retry-protocol violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints.
+- **ISSUE-5788b5a4ed09**（P1）：G7 complete preflight accepted a protocol version inconsistent with the strict retry contract——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires protocol_version=g7-public-case-format-retry-v1. The adversarial wrong-version test passes; the focused G7 suite passes 47/47; the full repository suite passes 237/237; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong protocol versions, wrong profiles, retry violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

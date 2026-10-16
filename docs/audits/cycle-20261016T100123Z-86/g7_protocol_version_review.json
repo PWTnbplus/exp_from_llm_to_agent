@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 protocol-version identity review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-5788b5a4ed09",
+      "verdict": "VERIFIED",
+      "evidence": "The complete-plan contract now requires protocol_version=g7-public-case-format-retry-v1. The adversarial wrong-version test passes; the focused G7 suite passes 47/47; the full repository suite passes 237/237; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong protocol versions, wrong profiles, retry violations, experiment identity failures, source-arm mismatches, or mixed source checkpoints.",
+      "reason": "The local protocol-version fail-open is closed. This verifies only protocol identity; it does not establish provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-5788b5a4ed09",
+  "fingerprint": "g7-protocol-version-identity-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted a protocol version inconsistent with the strict retry contract",
+  "evidence": "Before repair, a valid complete G7 fixture with every protocol_version changed from g7-public-case-format-retry-v1 to legacy returned formal_run_allowed_by_protocol=true with errors=[] under require_complete_plan=True.",
+  "remediation": "Require exact protocol_version=g7-public-case-format-retry-v1 for every complete-plan row, add an adversarial wrong-version test, and independently verify the immutable formal plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

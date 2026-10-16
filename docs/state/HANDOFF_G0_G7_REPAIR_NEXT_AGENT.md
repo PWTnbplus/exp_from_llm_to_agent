@@ -518,6 +518,19 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `d9e6b7f`; audit/state commit: `8a7468d`; delivery-blocker state commit: `b41043c`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
+## Cycle 86 G7 strict protocol-version identity repair (2026-10-16T10:01Z)
+
+- Compared the formal plan with the current strict G7 response/retry contract and the three design documents. The executable corrected plan uses `g7-public-case-format-retry-v1`, but the old preflight accepted any nonempty version.
+- Independently reproduced the fail-open by changing every valid fixture row to `protocol_version=legacy`; old preflight returned `formal_run_allowed_by_protocol=true` and `errors=[]`.
+- Repaired `scripts/run_g7_failure_localization.py` with `G7_PROTOCOL_VERSION=g7-public-case-format-retry-v1`; wrong versions now fail `invalid_g7_plan_metadata`. Added an adversarial wrong-version test and updated complete-plan fixtures.
+- Focused G7 tests pass `47/47`; full repository suite passes `237/237`; py_compile and `git diff --check` pass.
+- Immutable formal preflight passes: `1288` plan rows, `formal_run_allowed_by_protocol=true`, `errors=[]`, invalid metadata empty, source checkpoint/arm mismatches empty, fixed profile/experiment/retry identities valid, and `184` unique checkpoints.
+- Independent read-only scan confirms `wrong_protocol_version=0`, `wrong_profile=0`, `wrong_retry_protocol=0`, missing/wrong experiment identity `0`, source-arm mismatches `0`, source-checkpoint mismatch groups `0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- `ISSUE-5788b5a4ed09` is `VERIFIED` for this local protocol-version identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider, provenance, Q/math/statistics, dependency-edge, and scientific-release blockers remain.
+- Audit files: `docs/audits/cycle-20261016T100123Z-86/audit.json`, `g7_protocol_version_finding.json`, and `g7_protocol_version_review.json`.
+- Local repair commit: `077c649`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
+
 ## Cycle 85 G7 executable profile identity repair (2026-10-16T09:58Z)
 
 - Compared the plan contract with the actual runner prompt and the three design documents. The runner explicitly executes `profile=theory_benchmark`, but the complete-plan gate previously accepted any nonempty profile.
