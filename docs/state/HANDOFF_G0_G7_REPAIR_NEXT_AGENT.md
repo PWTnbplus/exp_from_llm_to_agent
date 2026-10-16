@@ -527,7 +527,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Immutable strict formal preflight passes: `92` public cases, `92` labels, `1288` plan rows, `23` families, exact CF1-CF4/final-test family coverage, exact public/label sets, fixed retry scope, no source-run collisions, no mixed source checkpoints, and `184` unique case/group checkpoints. Independent read-only scan confirms `1288` unique source-run IDs.
 - `ISSUE-95600eba9ce3` is `VERIFIED` for this local source-run lineage guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
 - Audit files: `docs/audits/cycle-20261016T155220Z-89/audit.json`, `g7_source_run_lineage_finding.json`, and `g7_source_run_lineage_review.json`.
-- Local repair commit: `37acedd`; audit/state and delivery-blocker commits are pending. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
+- Local repair commit: `37acedd`; audit/state commit: `64e7f3a`; delivery-blocker state commit: `9a6ad07`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
 
 ## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
 
