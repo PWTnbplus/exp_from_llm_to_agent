@@ -57,9 +57,14 @@ class LLMOnlyRunner:
         plan_hash: str | None = None
         observations = []
         initial_observations: list[dict[str, Any]] = []
-        metadata: dict[str, Any] = {"protocol": "three_phase_open_loop", "intermediate_observations_sent_to_model": False}
+        metadata: dict[str, Any] = {
+            "protocol": "three_phase_open_loop",
+            "intermediate_observations_sent_to_model": False,
+            "initial_observations": [],
+        }
         try:
             initial_observations = [observation_dict(v) for v in self.oracle.get_initial_observations()]
+            metadata["initial_observations"] = list(initial_observations)
             ensure_provider_call(self.budget)
             planning = self.provider.complete(self._planning_messages(initial_observations), tools=None)
             record_provider_call(self.provider, planning, self.budget)

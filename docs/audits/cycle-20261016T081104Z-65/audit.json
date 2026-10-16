@@ -1,0 +1,86 @@
+{
+  "cycle": "20261016T081104Z-65",
+  "scope": "Repair and independent verification of matched public initial-observation handling across LLM-only and Single-Agent arms",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md"
+    ],
+    "relevant_controls_retained": [
+      "Both arms receive only the same public initial observations before their respective protocol logic",
+      "The non-adaptive arm keeps its frozen-plan boundary and the Agent arm keeps adaptive feedback",
+      "Initial observations are auditable in both RunResult metadata records",
+      "This local protocol repair does not certify provider identity, statistical validity, or scientific superiority"
+    ],
+    "alignment_conclusion": "The two arm implementations now expose the same public initial observations to the model and persist the same normalized metadata field; the formal G0/G6/G7 scientific gates remain separate and blocked."
+  },
+  "repair": {
+    "source_changed": [
+      "src/scientific_discovery/runners/llm_only.py",
+      "tests/test_llm_isolation.py"
+    ],
+    "change": "LLMOnlyRunner now records initial_observations in metadata, including the empty-list failure-safe default; the regression test checks the persisted public result.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_llm_isolation.py tests/test_no_leakage.py",
+      "result": "10 passed in 3.73s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "192 passed in 28.32s"
+    },
+    "independent_read_only_probe": {
+      "command": "Temporary paired FakeOracle/MockLLMProvider probe with one public initial observation, one Agent final-law response, and one frozen-plan plus final-law response",
+      "result": "PASS: both model-facing prompts contain the same sentinel initial observation; both RunResult metadata records contain the same normalized initial_observations value; both runs complete without a provider or paid call"
+    },
+    "source_review": {
+      "files": [
+        "src/scientific_discovery/runners/single_agent.py",
+        "src/scientific_discovery/runners/llm_only.py",
+        "tests/test_agent_actions.py",
+        "tests/test_llm_isolation.py"
+      ],
+      "result": "PASS: Agent history is seeded from get_initial_observations(); LLM-only planning and final inference use the same normalized list; both metadata paths persist the field"
+    }
+  },
+  "remaining_boundary": {
+    "scientific_release_allowed": false,
+    "note": "Paid-provider authorization and billing/model evidence, NewtonBench provenance, independent Q/statistical/mathematical review, dependency edges, and remote delivery remain unresolved."
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only paired-arm protocol review",
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-0786397621a0",
+        "verdict": "VERIFIED",
+        "evidence": "The Agent and LLM-only arms both consume the same public initial observations; the LLM-only arm now persists the normalized list in metadata just like the Agent arm. Focused tests pass 10/10, the full host suite passes 192/192, and an independent paired probe confirms identical model-visible sentinel content and metadata.",
+        "reason": "The former missing-Agent-observation path was repaired in Cycle 32, and this cycle independently verifies both prompt exposure and auditable metadata parity without invoking a real provider or making a scientific decision."
+      }
+    ]
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "3dc761c",
+    "commit": "pending",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "Local protocol repair and independent verification are complete; no provider or paid experiment was started."
+  }
+}

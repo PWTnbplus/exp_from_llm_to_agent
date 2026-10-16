@@ -57,6 +57,7 @@ def test_initial_observations_are_preserved_for_planning_and_final_inference():
     )
     result = LLMOnlyRunner(provider, oracle, oracle.budget).run("fake")
     assert result.status == "completed"
+    assert result.metadata["initial_observations"][0]["result"] == "initial-signal"
     assert "initial-signal" in provider.calls[0]["messages"][1]["content"]
     assert "initial-signal" in provider.calls[1]["messages"][1]["content"]
     assert "1.0" not in provider.calls[0]["messages"][1]["content"]
