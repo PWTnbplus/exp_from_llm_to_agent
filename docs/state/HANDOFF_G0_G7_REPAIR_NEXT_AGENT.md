@@ -303,5 +303,14 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local commits: `d28b9c6` and delivery-state record `9384a9a`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
 - Current state: `12` open/blocked/unverified issues, `4` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
 
+## Cycle 66 G6 resume/sequence fail-closed repair (2026-10-16T08:18Z)
+
+- Repaired `scripts/run_g6_counterfactual.py::existing_event_seq`: malformed JSONL, non-object rows, invalid sequence types, gaps, duplicates, and non-contiguous prefixes now raise before any append; the raw trace is never rewritten.
+- Added `tests/test_g6_resume_sequence.py`; focused G6/G7 tests passed `56/56`, full host suite passed `198/198`, and an independent temporary probe confirmed contiguous input is accepted while gap/malformed inputs fail closed.
+- `ISSUE-6b3a9e1d4f20` is now `VERIFIED` for the local resume/sequence remediation. Historical noncanonical raw segments remain immutable and non-confirmatory; canonical derived views remain the audit boundary.
+- No provider call, paid run, retry, confirmatory inference, or scientific truth decision was made.
+- Local commits: `6a7feb4` and delivery-state record `a5c9f1c`. Push and `git ls-remote` both failed through the configured proxy; remote update remains unverified.
+- Current state: `11` open/blocked/unverified issues, `5` verified issues; G0/G6/G7 remain `BLOCKED`, G1–G5 remain engineering/smoke scope, and `scientific_release_allowed=false`.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 
