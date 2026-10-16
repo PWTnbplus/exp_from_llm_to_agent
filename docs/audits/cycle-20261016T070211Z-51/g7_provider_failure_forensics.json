@@ -1,0 +1,50 @@
+{
+  "audit_version": "g7-provider-failure-forensics-v1",
+  "scope": "Read-only classification of the three canonical corrected-run provider_error rows; no provider call and no retry pooling.",
+  "source_states_sha256": "45fa85c25fada1fe6653d582e7167b1f54bf7551f80c2b847ca5badddec93bc2",
+  "terminal_rows": [
+    {
+      "run_id": "g7full_dff0dae5a314dd9fb081",
+      "case_id": "G6F-TB-L1-009-CF2",
+      "group_id": "G4",
+      "diagnostic_arm": "D3",
+      "recorded_latest_error": "missing stage Q",
+      "recorded_history_errors": ["missing stages object", "G7 hard budget exceeded", "missing stages object", "missing stage Q"],
+      "model_request_events_in_history": 11,
+      "model_response_events_in_history": 10
+    },
+    {
+      "run_id": "g7full_112d048c8fc2d5fc7f7f",
+      "case_id": "G6F-TB-L1-009-CF2",
+      "group_id": "G3",
+      "diagnostic_arm": "D3",
+      "recorded_latest_error": "missing stages object",
+      "recorded_history_errors": ["missing stages object", "missing stages object"],
+      "model_request_events_in_history": 7,
+      "model_response_events_in_history": 7
+    },
+    {
+      "run_id": "g7full_73f3c3a5bd3823bdb85c",
+      "case_id": "G6F-TB-L1-009-CF2",
+      "group_id": "G3",
+      "diagnostic_arm": "D3",
+      "recorded_latest_error": "missing stages object",
+      "recorded_history_errors": ["missing stages object", "missing stage Q", "missing stages object"],
+      "model_request_events_in_history": 7,
+      "model_response_events_in_history": 7
+    }
+  ],
+  "interpretation": {
+    "confirmed": [
+      "All three canonical rows remain provider_error and have no completed state.",
+      "The persisted responses repeatedly violated the top-level staged-output contract, and one persisted attempt recorded a hard budget failure.",
+      "The trace history contains multiple append-only run segments; the audit selects the latest segment and retains prior segment counts."
+    ],
+    "not_established": [
+      "These error strings do not establish an external provider root cause.",
+      "No row is repaired, completed, or removed from the denominator.",
+      "No paid retry is authorized or executed in this cycle."
+    ]
+  },
+  "status": "DIAGNOSED_LOCALLY_UNRESOLVED"
+}

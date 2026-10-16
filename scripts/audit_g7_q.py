@@ -24,8 +24,9 @@ def q_record_is_complete(q: object) -> bool:
 
     The G7 design specifies Q.verdict and Q.reason as strings; it does not
     prescribe a PASS/OK enum.  A model's Q text is not treated as an external
-    mathematical proof here.  Scientific consistency is still decided by the
-    independent V/L/U labels and expected final decision below.
+    mathematical proof here.  Scientific consistency is still reported from
+    the independent V/L/U labels and expected final decision below, while
+    formal Q validity remains NOT_SCORED without a separate Q verifier.
     """
     if not isinstance(q, dict):
         return False
@@ -33,6 +34,15 @@ def q_record_is_complete(q: object) -> bool:
     reason = q.get("reason")
     return (isinstance(verdict, str) and bool(verdict.strip())
             and isinstance(reason, str) and bool(reason.strip()))
+
+
+def assess_q_record(q: object) -> dict[str, object]:
+    """Return the non-scientific assessment for a persisted model Q record."""
+    return {
+        "record_complete": q_record_is_complete(q),
+        "q_validity": "NOT_SCORED",
+        "external_q_verifier_present": False,
+    }
 
 
 def main() -> int:
@@ -58,7 +68,8 @@ def main() -> int:
         expected = oracle[plan["case_id"]]["expected_decision"]
         if not state or state.get("status") != "completed":
             out.append({"run_id": run_id, "is_valid": False, "independent_verifier_ref": verifier_ref,
-                        "reason": "missing_or_incomplete_state"})
+                        "reason": "missing_or_incomplete_state", "q_validity": "NOT_SCORED",
+                        "external_q_verifier_present": False})
             continue
         stages = state.get("stages") or {}
         q = stages.get("Q") or {}
@@ -69,14 +80,22 @@ def main() -> int:
             (x.get("from"), x.get("to")) for x in l.get("edges", []) if isinstance(x, dict)
         } == {(x.get("from"), x.get("to")) for x in label["l"]["edges"] if isinstance(x, dict)}
         u_ok = changes((stages.get("U") or {}).get("node_changes", [])) == changes(label["u"]["node_changes"])
-        q_ok = q_record_is_complete(q)
-        out.append({"run_id": run_id, "is_valid": bool(final_ok and v_ok and l_ok and u_ok and q_ok),
+        q_assessment = assess_q_record(q)
+        q_record_complete = bool(q_assessment["record_complete"])
+        label_consistent = bool(final_ok and v_ok and l_ok and u_ok)
+        # The persisted run has no separate external Q-verifier artifact.  Do
+        # not turn a model self-report or a label-consistency check into a
+        # scientific Q pass; retain those diagnostics under separate fields.
+        out.append({"run_id": run_id, "is_valid": False,
                     "independent_verifier_ref": verifier_ref,
                     "checks": {"final_decision": final_ok, "V": v_ok, "L": l_ok, "U": u_ok,
-                               "Q": q_ok, "Q_record_complete": q_ok},
+                               "Q": q_record_complete, "Q_record_complete": q_record_complete,
+                               "label_consistency": label_consistent},
                     "expected_decision": expected, "observed_decision": state.get("final_decision"),
                     "q_verdict": q.get("verdict"),
-                    "assessment_scope": "label_consistency_and_q_record_completeness;_not_external_proof"})
+                    "q_validity": q_assessment["q_validity"],
+                    "external_q_verifier_present": q_assessment["external_q_verifier_present"],
+                    "assessment_scope": "label_consistency_and_q_record_completeness;_formal_q_validity_not_scored"})
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", encoding="utf-8", newline="\n") as handle:
         for row in out:

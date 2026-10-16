@@ -1,0 +1,37 @@
+{
+  "review_version": "g7-q-not-scored-read-only-v1",
+  "scope": "Independent read-only review of Q validity semantics against the experiment design and G7 Skill.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md: Q is independent final verification; the sample status is verification_status=VERIFIED.",
+    "G7_Failure_Localization_Skill/references/02_G0-G6_真实接口与适配.md: without external Q review, model Q self-report may be retained but Q_validity is NOT_SCORED.",
+    "G7_Failure_Localization_Skill/references/03_实施_评分_统计_门禁.md: Q_validity uses the independent q_audit result, not model self-report."
+  ],
+  "checks": {
+    "historical_q_audit_preserved": {
+      "status": "PASS",
+      "sha256": "95349ef7fa28b9e3a63290c5bda4e67be007027b2f12cce29aa656bc252543"
+    },
+    "new_q_audit_not_scored": {
+      "status": "PASS",
+      "rows": 1288,
+      "q_validity_not_scored": 1288,
+      "formal_is_valid_rows": 0,
+      "q_record_complete": 1278,
+      "path": "docs/audits/cycle-20261016T070211Z-51/g7_q_audit_not_scored.jsonl"
+    },
+    "non_q_label_diagnostic_retained": {
+      "status": "PASS",
+      "description": "V/L/U/final-decision label consistency is retained as a separate diagnostic field and is not promoted to Q validity."
+    },
+    "confirmatory_reuse": {
+      "status": "BLOCKED",
+      "evidence": "terminal_failures=3, invalid_q_rows=1288, q_validity=NOT_SCORED, U-ineligible rows=368"
+    },
+    "regression": {
+      "status": "PASS",
+      "targeted": "32 passed",
+      "full_suite": "156 passed in 20.09s"
+    }
+  },
+  "review_status": "PASS_LOCAL_SEMANTIC_REPAIR_NOT_SCIENTIFIC_RELEASE"
+}

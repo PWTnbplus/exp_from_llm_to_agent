@@ -3,8 +3,8 @@
 生成日期：2026-10-16（Asia/Hong_Kong）  
 仓库：`E:/master_exp/nature_prj1_cal/from_llm_to_agent`  
 分支：`autopilot/scientific-law-discovery`  
-最新已提交版本：`b31ac2f Record cycle 50 delivery blocker`；cycle 50 Q-contract repair is committed as `3f25384`
-当前宿主回归：`155 passed`
+最新已提交版本：`ed7d6dd Refresh cycle 50 handoff`；cycle 51 Q-validity semantic repair is currently in the working tree
+当前宿主回归：`156 passed`
 
 ## 0. 交接结论
 
@@ -23,7 +23,7 @@
 | G6 corrected | plan/response/handoff `552/552`；2 workers | 结构完整，科学发布仍禁止 |
 | G6 CF3 revision | `0/138` valid | 修订结论不可支持 |
 | G7 原始批次 | completed `993/1288`；Q valid `3/1288`；路由元数据 `2960/2960` model calls 命中 | 原始批次非确认 |
-| G7 corrected retry | state `1288/1288`；completed `1285/1288`；provider error `3/1288`；immutable historical Q audit `20/1288=1.553%`；new schema-repaired derived audit `316/1288` | 新值只表示独立 V/L/U/final label consistency + complete Q record，不是外部数学证明；确认性诊断仍被阻断 |
+| G7 corrected retry | state `1288/1288`；completed `1285/1288`；provider error `3/1288`；immutable historical Q audit `20/1288=1.553%`；cycle-51 formal Q validity `NOT_SCORED 1288/1288`；structural diagnostic `316/1288` | 316 只表示 V/L/U/final label consistency + complete Q record，不是外部数学证明；确认性诊断仍被阻断 |
 | G7 corrected 分臂 score | `0/14` 可确认分臂 score | 诊断性分组结论不能确认 |
 | G6/G7 外部发布门禁 | `0/1 allowed` | 当前禁止科学发布 |
 
@@ -145,7 +145,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 #### protocol-corrected retry：仍未达到确认使用条件
 
 - state `1288/1288=100%`；completed `1285/1288=99.767%`；provider error `3/1288=0.233%`。
-- checkpoints `184/184=100%`；Q rows `1288/1288`；immutable historical Q audit `20/1288=1.553%`；schema-repaired derived label-consistency audit `316/1288`；Q record incomplete `7`。
+- checkpoints `184/184=100%`；Q rows `1288/1288`；immutable historical Q audit `20/1288=1.553%`；cycle-51 formal Q validity `NOT_SCORED 1288/1288`；schema-repaired derived label-consistency audit `316/1288`；Q record incomplete `7`。
 - corrected route metadata `0/3774`；private-prompt hits `0/3774`；format retry `302/302`。
 - corrected confirmatory per-arm score `0/14`。
 
