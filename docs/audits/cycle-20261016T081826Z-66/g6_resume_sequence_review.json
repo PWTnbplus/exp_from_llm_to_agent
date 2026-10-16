@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 resume/sequence review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-6b3a9e1d4f20",
+      "severity": "P2",
+      "verdict": "VERIFIED",
+      "evidence": "existing_event_seq accepts only contiguous integer sequence prefixes and fails closed on malformed JSONL, non-object rows, gaps, duplicates, and invalid sequence types. Focused tests 56/56, full host suite 198/198, and an independent temporary probe pass. Raw historical traces remain immutable and canonical derived traces remain the scoring boundary.",
+      "reason": "The local runner resume/sequence contract is independently verified; scientific release remains blocked by unrelated external and mathematical/statistical gates."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

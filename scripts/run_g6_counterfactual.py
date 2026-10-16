@@ -62,14 +62,35 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def existing_event_seq(path: Path) -> int:
-    """Return the last persisted sequence number for an interrupted trace."""
+    """Return the last sequence only when an existing trace is append-safe.
+
+    A resumed G6 invocation must never treat a malformed or non-monotonic
+    trace as a valid prefix.  Returning zero in that situation would append a
+    second ``seq=1`` segment and silently create a non-canonical raw trace.
+    The raw file is intentionally left untouched; the caller fails closed so
+    an operator can preserve it and start a separately identified retry.
+    """
     if not path.is_file():
         return 0
     try:
         events = read_jsonl(path)
-    except (OSError, ValueError, json.JSONDecodeError):
-        return 0
-    return max((int(event.get("seq", 0)) for event in events), default=0)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"existing G6 trace is not valid JSONL: {path}") from exc
+    previous = 0
+    for index, event in enumerate(events, 1):
+        if not isinstance(event, dict):
+            raise RuntimeError(f"existing G6 trace row {index} is not an object: {path}")
+        sequence = event.get("seq")
+        if isinstance(sequence, bool) or not isinstance(sequence, int):
+            raise RuntimeError(f"existing G6 trace row {index} has an invalid sequence: {path}")
+        expected = previous + 1
+        if sequence != expected:
+            raise RuntimeError(
+                f"existing G6 trace sequence is not strictly contiguous at row {index}: "
+                f"expected {expected}, got {sequence}: {path}"
+            )
+        previous = sequence
+    return previous
 
 
 def extract_json(text: str) -> dict[str, Any] | None:
