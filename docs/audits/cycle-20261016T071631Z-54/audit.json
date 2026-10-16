@@ -56,8 +56,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "18cdb09",
-    "commit_or_push_by_agent": false,
+    "commit": "e19717d Classify paid provider evidence blocker",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "No paid provider call or external coordination was initiated."
+    "note": "No paid provider call or external coordination was initiated. Push and independent ls-remote both failed through the configured proxy; remote update is not claimed."
   }
 }
