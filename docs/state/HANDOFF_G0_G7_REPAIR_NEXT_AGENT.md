@@ -529,6 +529,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit files: `docs/audits/cycle-20261016T155220Z-89/audit.json`, `g7_source_run_lineage_finding.json`, and `g7_source_run_lineage_review.json`.
 - Local repair commit: `37acedd`; audit/state commit: `64e7f3a`; delivery-blocker state commit: `9a6ad07`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
 
+## Cycle 90 G7 corrected family-denominator identity repair (2026-10-16T15:57Z)
+
+- Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` and the V2 state. The formal G7 input is the frozen corrected 23-family source-only denominator; `TB-L1-010` remains permanently excluded and must not be replaced by a new family.
+- Independently reproduced a local fail-open before repair: replacing all four CF rows of one audited family with a new family, while synchronizing `paired_set_id`, label public hashes, and plan metadata, still passed strict preflight with `23` families and complete CF1-CF4/pair coverage.
+- Repaired `scripts/run_g7_failure_localization.py` with the exact audited 23-family set and missing/extra family-set reporting under `require_formal_input_contract`; added an adversarial replacement-family regression test in `tests/test_g7_protocol.py`.
+- Focused G7 tests pass `55/55`; full repository suite passes `245/245`; py_compile and `git diff --check` pass.
+- Immutable strict preflight passes: `92` public cases, `92` labels, `1288` plan rows, exact `23`-family set with no missing/extra IDs, every family exactly CF1-CF4, exact public/label sets, no family/pair or source-run collisions, `1288` unique source runs, and `184` unique checkpoints. Independent read-only reconstruction reports the same zero-defect counts.
+- `ISSUE-e83dea5cdd11` is `VERIFIED` for this local corrected-family denominator guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization/billing, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T155738Z-90/audit.json`, `g7_formal_family_denominator_finding.json`, and `g7_formal_family_denominator_review.json`.
+- Local repair commit: `1f3cda2`; audit/state and delivery-blocker commits are pending. Preserve and do not stage the user-owned untracked `research_data_summary_G0_G7/` directory. No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made.
+
 ## Cycle 87 G7 formal public CF/split contract repair (2026-10-16T15:40Z)
 
 - Re-read the three design documents under `D:/硕士/prj1_ai_cal/writing/实验设计` (`全流程实验.md`, `整体思路简化版.md`, and `科学问题到科学假设全思路.md`) together with `docs/state/gates.json`. The formal G7 input contract is the CF1-CF4 `final_test` public benchmark set; this is a precondition for any frozen provider plan, not a scientific result.

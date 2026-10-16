@@ -1,0 +1,96 @@
+{
+  "cycle": "20261016T155738Z-90",
+  "scope": "G7 formal corrected 23-family denominator identity",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 uses the frozen corrected source-only denominator and must permanently exclude TB-L1-010.",
+      "A theory_family_id is the independent unit; CF1-CF4 variants must remain attached to the audited family population.",
+      "Denominator identity is protocol evidence only and does not establish a scientific result."
+    ],
+    "alignment_conclusion": "The formal G7 preflight now rejects replacement families even when superficial family count, CF coverage, pair lineage, and hashes are preserved."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c load immutable public/label/plan rows; replace all four rows of G6F-TC-L1-012 with replacement-family and synchronize paired_set_id, label hashes, and plan metadata; call strict protocol_preflight",
+      "result": "FAIL-OPEN reproduced: formal_run_allowed_by_protocol=true; errors=[]; families=23; every family still had four CF types."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 55 tests, including replacement-family rejection."
+    }
+  },
+  "repair": {
+    "source_changed": [
+      "scripts/run_g7_failure_localization.py"
+    ],
+    "tests_added_or_changed": [
+      "tests/test_g7_protocol.py"
+    ],
+    "change": "Added the frozen corrected 23-family set, strict missing/extra family-set reporting, and a replacement-family adversarial test. TB-L1-010 is not in the allowed set.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "1f3cda2"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "55 passed in 2.84s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "245 passed in 17.77s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py scripts/g7_protocol_preflight.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_formal_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl"
+      },
+      "command": "direct protocol_preflight(..., worker_count=16, require_complete_plan=true, require_formal_input_contract=true)",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public=92; labels=92; plan=1288; families=23; exact family-set missing=[] extra=[]; all family CF sets are CF1-CF4; family/pair mismatches=[]; source_run_id collisions=[]; unique source runs=1288; unique checkpoints=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate Python data-only reconstruction, not the runner preflight",
+      "result": "PASS: public_rows=92; label_rows=92; plan_rows=1288; family_missing=[]; family_extra=[]; every family size=4; every family CF set exactly CF1-CF4; public/label case sets equal; source_run_id collisions=0; unique source checkpoints=184."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 formal family-denominator review",
+    "finding": "docs/audits/cycle-20261016T155738Z-90/g7_formal_family_denominator_finding.json",
+    "review": "docs/audits/cycle-20261016T155738Z-90/g7_formal_family_denominator_review.json"
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "e363a95",
+    "code_commit": "1f3cda2",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "State and delivery commits, plus push and ls-remote outcomes, will be filled after the audit/state handoff cycle."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-e83dea5cdd11",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only the local G7 corrected-family identity guard was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}

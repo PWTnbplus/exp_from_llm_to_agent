@@ -1,0 +1,24 @@
+{
+  "review_version": "g7-formal-family-denominator-review-v1",
+  "reviewer": "independent read-only G7 formal-input review",
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "findings": [
+    {
+      "id": "ISSUE-e83dea5cdd11",
+      "fingerprint": "g7-formal-family-denominator-v1",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted replacement theory family in the corrected denominator",
+      "evidence": "The pre-repair in-memory mutation preserved 23 families, four CF types per family, bijective paired-set lineage, public/label hashes, and complete plan structure while replacing an audited family; strict preflight returned allowed=true and errors=[].",
+      "remediation": "Freeze and enforce the exact audited 23-family corrected denominator, excluding TB-L1-010, and add an adversarial replacement-family regression test."
+    }
+  ],
+  "resolutions": [
+    {
+      "id": "ISSUE-e83dea5cdd11",
+      "verdict": "VERIFIED",
+      "evidence": "The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs.",
+      "reason": "Local formal-denominator identity defect fixed; provider, provenance, mathematical, statistical, and scientific-release gates remain external or blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

@@ -1,0 +1,8 @@
+{
+  "id": "ISSUE-e83dea5cdd11",
+  "fingerprint": "g7-formal-family-denominator-v1",
+  "severity": "P1",
+  "title": "G7 formal preflight accepted replacement theory family in the corrected denominator",
+  "evidence": "Before repair, replacing all four CF rows of one valid family with a new family and synchronizing paired_set_id, labels, and plan rows still passed strict formal preflight with 23 families and CF1-CF4 coverage.",
+  "remediation": "Freeze and enforce the exact audited 23-family corrected denominator, excluding TB-L1-010, and add an adversarial replacement-family regression test."
+}

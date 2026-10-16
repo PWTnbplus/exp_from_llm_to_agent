@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T15:53:55+00:00",
+  "updated_at": "2026-10-16T15:58:46+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1698,6 +1698,38 @@
           "evidence": "The strict formal-input contract now rejects source_run_id collisions while preserving the documented shared source-checkpoint fork boundary. The adversarial collision test passes; focused G7 tests pass 54/54; the full repository suite passes 244/244. Strict immutable preflight reports no source-run collisions, no source-checkpoint/group-arm/label-set/family-layout errors, 1288 plan rows, and 184 checkpoints. An independent scan finds 1288 unique source_run_id values for 1288 plan rows."
         }
       ]
+    },
+    {
+      "id": "ISSUE-e83dea5cdd11",
+      "severity": "P1",
+      "title": "G7 formal preflight accepted replacement theory family in the corrected denominator",
+      "status": "VERIFIED",
+      "evidence": "The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs.",
+      "remediation": "Freeze and enforce the exact audited 23-family corrected denominator, excluding TB-L1-010, and add an adversarial replacement-family regression test.",
+      "first_seen": "2026-10-16T15:58:23+00:00",
+      "last_seen": "2026-10-16T15:58:46+00:00",
+      "source": "docs/audits/cycle-20261016T155738Z-90/g7_formal_family_denominator_review.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T15:58:46+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T15:58:23+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T155738Z-90/g7_formal_family_denominator_review.json"
+        },
+        {
+          "time": "2026-10-16T15:58:46+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The strict contract now compares the public family set with the frozen corrected 23-family set. The replacement-family test passes; focused G7 tests pass 55/55; the full suite passes 245/245; immutable preflight and an independent data-only scan report the exact family set with no missing or extra IDs."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1803,7 +1835,8 @@
     "docs/audits/cycle-20261016T100123Z-86/audit.json",
     "docs/audits/cycle-20261016T154007Z-87/audit.json",
     "docs/audits/cycle-20261016T154759Z-88/audit.json",
-    "docs/audits/cycle-20261016T155220Z-89/audit.json"
+    "docs/audits/cycle-20261016T155220Z-89/audit.json",
+    "docs/audits/cycle-20261016T155738Z-90/audit.json"
   ],
   "current_focus": null
 }
