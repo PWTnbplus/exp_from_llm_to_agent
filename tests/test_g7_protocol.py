@@ -208,6 +208,20 @@ def test_g7_formal_preflight_rejects_pooled_retry_protocol() -> None:
     assert report["counts"]["invalid_g7_plan_metadata"] == [row["run_id"] for row in plan]
 
 
+def test_g7_formal_preflight_rejects_mixed_source_checkpoint_within_case_group() -> None:
+    public, label, plan = _formal_g7_case("case-1")
+    plan[0]["source_checkpoint_id"] = "different-source-checkpoint"
+
+    report = protocol_preflight(
+        [public], [label], plan,
+        worker_count=1, require_complete_plan=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_plan_source_checkpoint_mismatch" in report["errors"]
+    assert report["counts"]["g7_plan_source_checkpoint_mismatches"] == ["case-1/G3"]
+
+
 def test_g7_runner_preflight_rejects_routing_metadata_before_provider_setup() -> None:
     report = protocol_preflight(
         [{"case_id": "case-1", "model_visible": {"problem": "public", "cf_type": "CF1"}}],

@@ -664,6 +664,7 @@ def protocol_preflight(
     checkpoint_bindings: dict[str, set[str]] = {}
     case_group_arms: dict[tuple[str, str], list[str]] = {}
     case_group_checkpoints: dict[tuple[str, str], set[str]] = {}
+    case_group_source_checkpoints: dict[tuple[str, str], set[str]] = {}
     for row in plan_rows:
         checkpoint_id = row.get("checkpoint_id")
         case_id = row.get("case_id")
@@ -684,6 +685,11 @@ def protocol_preflight(
             case_group = (case_id, group_id)
             case_group_arms.setdefault(case_group, []).append(arm)
             case_group_checkpoints.setdefault(case_group, set()).add(checkpoint_id)
+            source_checkpoint_id = row.get("source_checkpoint_id")
+            if _valid_identifier(source_checkpoint_id):
+                case_group_source_checkpoints.setdefault(case_group, set()).add(
+                    source_checkpoint_id
+                )
     expected_arms = sorted(G7_ARM_CONTRACT)
     incomplete_arm_checkpoints = sorted(
         checkpoint_id for checkpoint_id, arms in checkpoint_arms.items()
@@ -706,6 +712,11 @@ def protocol_preflight(
     duplicate_case_group_checkpoints = sorted(
         f"{case_id}/{group_id}"
         for (case_id, group_id), checkpoints in case_group_checkpoints.items()
+        if len(checkpoints) > 1
+    )
+    source_checkpoint_case_groups = sorted(
+        f"{case_id}/{group_id}"
+        for (case_id, group_id), checkpoints in case_group_source_checkpoints.items()
         if len(checkpoints) > 1
     )
     checkpoint_identity_collisions = sorted(
@@ -761,6 +772,8 @@ def protocol_preflight(
         errors.append("incomplete_case_group_coverage")
     if require_complete_plan and duplicate_case_group_checkpoints:
         errors.append("duplicate_case_group_checkpoint")
+    if require_complete_plan and source_checkpoint_case_groups:
+        errors.append("g7_plan_source_checkpoint_mismatch")
     if require_complete_plan and checkpoint_identity_collisions:
         errors.append("checkpoint_identity_collision")
     if duplicate_plan_ids:
@@ -809,6 +822,7 @@ def protocol_preflight(
             ),
             "incomplete_case_group_coverage": incomplete_case_group_coverage,
             "duplicate_case_group_checkpoints": duplicate_case_group_checkpoints,
+            "g7_plan_source_checkpoint_mismatches": source_checkpoint_case_groups,
             "checkpoint_identity_collisions": checkpoint_identity_collisions,
             "require_complete_plan": require_complete_plan,
             "duplicate_run_ids": duplicate_plan_ids,
