@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-6bd0c43fb941",
+  "fingerprint": "g7-profile-identity-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted a plan profile inconsistent with the executable protocol",
+  "evidence": "Before repair, a valid complete G7 fixture with every profile changed from theory_benchmark to law_discovery returned formal_run_allowed_by_protocol=true with errors=[] under require_complete_plan=True, although the runner prompt and immutable formal plan use theory_benchmark.",
+  "remediation": "Require exact profile=theory_benchmark for every complete-plan row, add an adversarial wrong-profile test, and independently verify the immutable formal plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "cycle": "20261016T095836Z-85",
+  "scope": "G7 complete-plan executable profile identity gate",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "The executable G7 runner prompt identifies the study as profile theory_benchmark; plan metadata must not silently point to another protocol namespace.",
+      "G7 complete-plan preflight must bind frozen plan rows to the actual runner contract before provider creation.",
+      "Protocol identity verification is not provider/model verification and is not scientific evidence."
+    ],
+    "alignment_conclusion": "The complete-plan preflight now rejects a wrong profile and preserves the prior experiment, retry, arm, and checkpoint lineage gates."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c import valid formal fixture; set every profile to law_discovery; call protocol_preflight(..., require_complete_plan=True)",
+      "result": "PASS for the regression probe before implementation repair: formal_run_allowed_by_protocol=true; errors=[]; the wrong profile was accepted."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 46 tests, including rejection of wrong profile and controls for exact experiment identity, non-pooled retry, source-arm identity, source-checkpoint lineage, complete coverage, and model-visible isolation."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py"],
+    "change": "Added G7_PROFILE=theory_benchmark and required exact equality in _formal_plan_contract_valid; added an adversarial wrong-profile test.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "4474e95"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "46 passed in 5.54s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "236 passed in 23.50s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_plan_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+        "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      },
+      "command": "scripts/g7_protocol_preflight.py with worker_count=16 and require_complete_plan=true",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; plan_rows=1288; invalid_g7_plan_metadata=[]; g7_plan_source_checkpoint_mismatches=[]; g7_plan_group_arm_mismatches=[]; incomplete_case_group_coverage=[]; duplicate_case_group_checkpoints=[]; checkpoint_identity_collisions=[]; unique_checkpoint_ids=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate PowerShell data-only reconstruction, not the runner preflight",
+      "result": "PASS: rows=1288; wrong_profile=0; wrong_retry_protocol=0; missing/wrong experiment identity=0; source_arm_mismatches=0; source_checkpoint_mismatch_groups=0; plan SHA256 matches the immutable preflight input."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 profile identity review",
+    "findings": [
+      {
+        "id": "ISSUE-6bd0c43fb941",
+        "fingerprint": "g7-profile-identity-v1",
+        "severity": "P1",
+        "title": "G7 complete preflight accepted a plan profile inconsistent with the executable protocol",
+        "evidence": "The pre-repair mutation probe returned formal_run_allowed_by_protocol=true when all profiles were law_discovery.",
+        "remediation": "Require exact profile=theory_benchmark for every complete-plan row and test the wrong-profile mutation."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-6bd0c43fb941",
+        "verdict": "VERIFIED",
+        "evidence": "The fixed profile guard, adversarial test, full suite, immutable preflight, and independent data-only reconstruction all pass.",
+        "reason": "Local structural defect fixed; external and scientific gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "34aa748",
+    "code_commit": "4474e95",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "Remote delivery will be attempted after local audit/state ingestion; no remote success is claimed here."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-6bd0c43fb941",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only G7 executable profile identity was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}
