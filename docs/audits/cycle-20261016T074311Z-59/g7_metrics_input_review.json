@@ -1,0 +1,24 @@
+{
+  "scope": "Independent read-only review of G7 corrected-metrics input identity and denominator guards",
+  "synthetic_checks": {
+    "duplicate_state_run_id": "rejected before report construction",
+    "duplicate_q_run_id": "rejected before report construction",
+    "extra_state_run_id": "rejected by exact plan/state run_id bijection",
+    "duplicate_plan_checkpoint_arm": "rejected before report construction",
+    "duplicate_oracle_case_id": "rejected before oracle scoring",
+    "verdict": "PASS"
+  },
+  "real_corrected_g7_probe": {
+    "plan_rows": 1288,
+    "state_rows": 1288,
+    "q_rows": 1288,
+    "oracle_rows_scored": 92,
+    "terminal_failures": 3,
+    "invalid_q_rows": 1268,
+    "ineligible_u_rows": 368,
+    "confirmatory_reuse_allowed": false,
+    "provider_calls_made": false
+  },
+  "external_q_review_present": false,
+  "external_statistical_review_present": false
+}

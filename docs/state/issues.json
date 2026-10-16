@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:40:22+00:00",
+  "updated_at": "2026-10-16T07:43:41+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -207,13 +207,13 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "BLOCKED",
-      "evidence": "Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed.",
-      "remediation": "Retain the strict frozen-layout and collision guards and obtain independent statistical and mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, bootstrap/McNemar code, and inferential interpretation before scientific release.",
+      "evidence": "Cycle 59: G7 corrected metrics now fail closed on identity collisions and non-bijective inputs; focused G7 tests 20 passed, host suite 176 passed, and corrected probe retained all 1288 rows with confirmatory_reuse_allowed=false. No confirmatory inference or scientific release is allowed.",
+      "remediation": "Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T07:39:48+00:00",
+      "last_seen": "2026-10-16T07:43:40+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 0,
-      "blocked_reason": "Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.",
+      "blocked_reason": "Cycle 59 repaired G7 diagnostic input identity; independent statistical and mathematical review remains unavailable.",
       "verification": null,
       "history": [
         {
@@ -250,6 +250,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.",
           "evidence": "Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed."
+        },
+        {
+          "time": "2026-10-16T07:43:41+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 59 repaired G7 diagnostic input identity; independent statistical and mathematical review remains unavailable.",
+          "evidence": "Cycle 59: G7 corrected metrics now fail closed on identity collisions and non-bijective inputs; focused G7 tests 20 passed, host suite 176 passed, and corrected probe retained all 1288 rows with confirmatory_reuse_allowed=false. No confirmatory inference or scientific release is allowed."
         }
       ]
     },
@@ -425,13 +431,13 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made.",
+      "evidence": "Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made.",
       "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T07:15:26+00:00",
+      "last_seen": "2026-10-16T07:43:40+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 20,
-      "blocked_reason": "Cycle 53 design audit confirms remaining G7 requirements require external evidence",
+      "blocked_reason": "Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.",
       "verification": null,
       "history": [
         {
@@ -576,6 +582,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 53 design audit confirms remaining G7 requirements require external evidence",
           "evidence": "Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made."
+        },
+        {
+          "time": "2026-10-16T07:43:40+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.",
+          "evidence": "Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made."
         }
       ]
     },
@@ -811,7 +823,8 @@
     "docs/audits/cycle-20261016T072158Z-55/audit.json",
     "docs/audits/cycle-20261016T072546Z-56/audit.json",
     "docs/audits/cycle-20261016T073248Z-57/audit.json",
-    "docs/audits/cycle-20261016T073921Z-58/audit.json"
+    "docs/audits/cycle-20261016T073921Z-58/audit.json",
+    "docs/audits/cycle-20261016T074311Z-59/audit.json"
   ],
   "current_focus": null
 }

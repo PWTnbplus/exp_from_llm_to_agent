@@ -267,5 +267,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261016T073921Z-58/audit.json` and `statistical_layout_review.json`.
 - Cycle 58 delivery: local repair commit `b60063a`; `git push origin autopilot/scientific-law-discovery` and `git ls-remote origin refs/heads/autopilot/scientific-law-discovery` both failed because the configured proxy could not connect to GitHub port 443. Remote update is not claimed and remains unverified under `ISSUE-000000000003`.
 
+## Cycle 59 G7 corrected-metrics identity/denominator repair (2026-10-16T07:43Z)
+
+- Repaired `scripts/audit_g7_corrected_metrics.py`: duplicate plan/state/Q/oracle identifiers, duplicate checkpoint-arm keys, missing/extra state or Q run IDs, invalid oracle decisions, and oracle/plan case mismatches now fail closed.
+- Reproduction before repair: duplicate state/Q rows were silently overwritten; an extra state ID could pass the old length-only guard. After repair, identity collisions and non-bijective inputs fail before report construction.
+- Added adversarial coverage; focused G7 tests: `20 passed`; full host suite: `176 passed`.
+- Real corrected G7 probe remains truthful: `1288/1288/1288` plan/state/Q rows, `92` oracle rows, `3` terminal failures, `1268` invalid Q rows, `368` ineligible-U rows, and `confirmatory_reuse_allowed=false`.
+- `ISSUE-3d7a9c1e5b20` and `ISSUE-000000000004` remain BLOCKED: provider/Q and independent statistical/mathematical evidence are still absent. No V/L/U/Q or scientific superiority claim is allowed.
+- No provider call, paid run, retry, confirmatory inference, or superiority/scientific claim was made.
+- Audit: `docs/audits/cycle-20261016T074311Z-59/audit.json` and `g7_metrics_input_review.json`.
+- Delivery is pending the Cycle 59 local commit; push and `git ls-remote` must be attempted and truthfully recorded afterward.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

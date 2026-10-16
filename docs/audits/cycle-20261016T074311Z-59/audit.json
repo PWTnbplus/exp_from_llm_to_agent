@@ -1,0 +1,96 @@
+{
+  "cycle": "20261016T074311Z-59",
+  "scope": "Repair silent G7 corrected-metrics state/Q/oracle collisions and non-bijective input acceptance",
+  "scientific_truth_decision_made": false,
+  "skills_applied": [
+    "scientific-law-recovery",
+    "scientific-law-autopilot"
+  ],
+  "design_alignment_review": {
+    "reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+    "relevant_controls_retained": [
+      "G7 preserves all planned failures in denominators",
+      "V/L/U/Q diagnosis is not a confirmatory result without independent verification",
+      "G6/G7 source lineage and paired checkpoint structure must be auditable",
+      "mechanism claims require later independent causal review"
+    ],
+    "alignment_conclusion": "Cycle 59 strengthens only the G7 diagnostic input contract; it does not convert diagnostic metrics into scientific evidence."
+  },
+  "repair": {
+    "source": "scripts/audit_g7_corrected_metrics.py",
+    "tests": "tests/test_g7_corrected_metrics.py",
+    "change": "G7 metrics now fail closed on duplicate plan run IDs, duplicate checkpoint-arm keys, duplicate state/Q run IDs, missing or extra state/Q run IDs, duplicate oracle case IDs, invalid oracle decisions, and oracle/plan case-set mismatches.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "retry_pooled": false
+  },
+  "reproduction": {
+    "input": "One planned run plus duplicate state and Q rows with the same run_id, including a terminal replacement state",
+    "before": "Dictionary comprehensions silently retained the last state/Q row; build_report returned a diagnostic report instead of rejecting the collision. An extra state run_id could also pass the old length-only confirmatory guard.",
+    "after": "Unique indexes and exact plan/state/Q/oracle bijection checks raise before report construction; duplicate checkpoint-arm keys are also rejected."
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_corrected_metrics.py tests/test_g7_trace_q_consistency.py tests/test_g7_failure_taxonomy.py",
+      "result": "20 passed in 0.34s"
+    },
+    "host_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "176 passed in 31.79s"
+    },
+    "independent_read_only_review": {
+      "command": "git diff --check; AST guard-call review; synthetic extra-state rejection probe",
+      "result": "PASS: 7 guard calls wired; extra state run_id rejected before metrics; no historical artifact changed"
+    },
+    "real_corrected_g7_probe": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g7_corrected_metrics.py --plan <corrected G7 plan> --states <corrected G7 states> --q <corrected G7 Q audit> --oracle <verified23 oracle> --preflight <G7 preflight> --out <temporary-file>",
+      "result": "PASS: plan/state/Q=1288/1288/1288, oracle_rows_scored=92, terminal_failures=3, invalid_q_rows=1268, ineligible_u_rows=368, confirmatory_reuse_allowed=false; temporary output removed"
+    }
+  },
+  "remaining_boundary": {
+    "independent_q_review_present": false,
+    "independent_statistical_or_mathematical_review_present": false,
+    "scientific_release_allowed": false,
+    "note": "The repair prevents diagnostic input collisions and non-bijective state acceptance. It does not determine why provider outputs failed, validate the Q standard, create missing dependency edges, prove upstream provenance, verify model weights/billing, or support V/L/U/Q/Agent-superiority claims."
+  },
+  "review": {
+    "status": "BLOCKED",
+    "reviewer": "independent read-only G7 diagnostic-input review",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "fingerprint": "g7_provider_errors_low_q_coverage",
+        "severity": "P1",
+        "evidence": "Cycle 59 repairs the local G7 metrics overwrite/bijection path and verifies the corrected run at 1288 plan/state/Q rows with 3 terminal failures, 1268 invalid Q rows, and 368 ineligible U rows. The provider failures and lack of an independently reviewed Q standard remain unchanged; no V/L/U/Q claim is made.",
+        "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.",
+        "blocker": "Provider authorization, independent Q review, and replacement dependency/state evidence are external and unavailable."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "fingerprint": "formal_statistical_validity_not_established",
+        "severity": "P1",
+        "evidence": "Cycle 59 strengthens G7 diagnostic input integrity, but independent statistical/mathematical review of preregistration, oracle provenance, paired checkpoints, failure denominators, and inferential code remains absent; confirmatory inference remains prohibited.",
+        "remediation": "Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
+        "blocker": "The required independent review is external and unavailable in the current environment."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": false,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "994fce6",
+    "commit": "PENDING_LOCAL_COMMIT",
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": false,
+    "remote_updated": false,
+    "note": "No provider or paid experiment was started; no G7 scientific conclusion was claimed. Commit and remote verification are recorded after the state/report update."
+  }
+}

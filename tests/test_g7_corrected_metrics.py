@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from scripts.audit_g7_corrected_metrics import build_report
 
 
@@ -48,3 +50,36 @@ def test_corrected_metrics_keep_failed_rows_and_block_confirmatory_reuse() -> No
             return {key for child in value for key in keys(child)}
         return set()
     assert "expected_decision" not in keys(report)
+
+
+def _minimal_inputs() -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    plan = [_plan("run-1", "D0")]
+    states = [{"run_id": "run-1", "status": "completed", "initial_decision": "MAINTAIN", "final_decision": "MAINTAIN"}]
+    q = [{"run_id": "run-1", "is_valid": True, "checks": {"V": True, "L": True, "U": True, "Q": True, "final_decision": True}}]
+    oracle = [{"case_id": "case-1", "expected_decision": "MAINTAIN"}]
+    return plan, states, q, oracle
+
+
+def test_duplicate_state_or_q_run_id_fails_closed() -> None:
+    plan, states, q, oracle = _minimal_inputs()
+    with pytest.raises(ValueError, match="duplicate state run_id"):
+        build_report(plan_rows=plan, state_rows=states + states, q_rows=q, oracle_rows=oracle, preflight={"errors": [], "counts": {}}, input_hashes={})
+    with pytest.raises(ValueError, match="duplicate Q run_id"):
+        build_report(plan_rows=plan, state_rows=states, q_rows=q + q, oracle_rows=oracle, preflight={"errors": [], "counts": {}}, input_hashes={})
+
+
+def test_state_and_q_ids_must_be_exact_plan_bijections() -> None:
+    plan, states, q, oracle = _minimal_inputs()
+    with pytest.raises(ValueError, match="state/plan run_id mismatch"):
+        build_report(plan_rows=plan, state_rows=[{"run_id": "extra", "status": "completed"}], q_rows=q, oracle_rows=oracle, preflight={"errors": [], "counts": {}}, input_hashes={})
+    with pytest.raises(ValueError, match="Q/plan run_id mismatch"):
+        build_report(plan_rows=plan, state_rows=states, q_rows=[{"run_id": "extra"}], oracle_rows=oracle, preflight={"errors": [], "counts": {}}, input_hashes={})
+
+
+def test_duplicate_plan_arm_and_oracle_case_fail_closed() -> None:
+    plan, states, q, oracle = _minimal_inputs()
+    duplicate_arm = {**plan[0], "run_id": "run-duplicate"}
+    with pytest.raises(ValueError, match="duplicate plan group/checkpoint/diagnostic_arm"):
+        build_report(plan_rows=plan + [duplicate_arm], state_rows=states, q_rows=q, oracle_rows=oracle, preflight={"errors": [], "counts": {}}, input_hashes={})
+    with pytest.raises(ValueError, match="duplicate oracle case_id"):
+        build_report(plan_rows=plan, state_rows=states, q_rows=q, oracle_rows=oracle + oracle, preflight={"errors": [], "counts": {}}, input_hashes={})

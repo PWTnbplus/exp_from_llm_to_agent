@@ -47,6 +47,31 @@ def ratio(numerator: int, denominator: int) -> float | None:
     return numerator / denominator if denominator else None
 
 
+def _required_id(row: dict[str, Any], field: str, label: str) -> str:
+    value = row.get(field)
+    if not isinstance(value, str) or not value:
+        raise ValueError(f"{label} has missing or invalid {field}")
+    return value
+
+
+def _index_unique(rows: list[dict[str, Any]], key, label: str) -> dict[Any, dict[str, Any]]:
+    indexed: dict[Any, dict[str, Any]] = {}
+    for row in rows:
+        value = key(row)
+        if value in indexed:
+            raise ValueError(f"duplicate {label}: {value!r}")
+        indexed[value] = row
+    return indexed
+
+
+def _require_bijection(expected: set[str], observed: set[str], label: str) -> None:
+    if expected == observed:
+        return
+    missing = sorted(expected - observed)
+    extra = sorted(observed - expected)
+    raise ValueError(f"{label} run_id mismatch: missing={missing!r} extra={extra!r}")
+
+
 def first_error(q_row: dict[str, Any] | None, state: dict[str, Any]) -> str:
     if state.get("status") != "completed":
         return "MISSING_OR_TERMINAL_FAILURE"
@@ -65,12 +90,18 @@ def _arm_key(row: dict[str, Any]) -> str:
 
 
 def _expected_decisions(oracle_rows: list[dict[str, Any]]) -> dict[str, str]:
-    return {
-        str(row["case_id"]): str(row["expected_decision"]).upper()
-        for row in oracle_rows
-        if isinstance(row.get("case_id"), str)
-        and str(row.get("expected_decision", "")).upper() in DECISIONS
-    }
+    indexed = _index_unique(
+        oracle_rows,
+        lambda row: _required_id(row, "case_id", "oracle row"),
+        "oracle case_id",
+    )
+    expected: dict[str, str] = {}
+    for case_id, row in indexed.items():
+        decision = str(row.get("expected_decision", "")).upper()
+        if decision not in DECISIONS:
+            raise ValueError(f"oracle case_id {case_id!r} has invalid expected_decision")
+        expected[case_id] = decision
+    return expected
 
 
 def _arm_metrics(rows: list[dict[str, Any]], states: dict[str, dict[str, Any]],
@@ -170,14 +201,47 @@ def _paired_metrics(plan_by_checkpoint: dict[tuple[str, str], dict[str, dict[str
 def build_report(*, plan_rows: list[dict[str, Any]], state_rows: list[dict[str, Any]],
                  q_rows: list[dict[str, Any]], oracle_rows: list[dict[str, Any]],
                  preflight: dict[str, Any], input_hashes: dict[str, str]) -> dict[str, Any]:
-    states = {str(row.get("run_id")): row for row in state_rows}
-    q_by_id = {str(row.get("run_id")): row for row in q_rows}
+    plan_by_run = _index_unique(
+        plan_rows,
+        lambda row: _required_id(row, "run_id", "plan row"),
+        "plan run_id",
+    )
+    _index_unique(
+        plan_rows,
+        lambda row: (
+            _required_id(row, "group_id", "plan row"),
+            _required_id(row, "checkpoint_id", "plan row"),
+            _required_id(row, "diagnostic_arm", "plan row"),
+        ),
+        "plan group/checkpoint/diagnostic_arm",
+    )
+    states = _index_unique(
+        state_rows,
+        lambda row: _required_id(row, "run_id", "state row"),
+        "state run_id",
+    )
+    q_by_id = _index_unique(
+        q_rows,
+        lambda row: _required_id(row, "run_id", "Q row"),
+        "Q run_id",
+    )
+    _require_bijection(set(plan_by_run), set(states), "state/plan")
+    _require_bijection(set(plan_by_run), set(q_by_id), "Q/plan")
     expected = _expected_decisions(oracle_rows)
+    plan_case_ids = {
+        _required_id(row, "case_id", "plan row")
+        for row in plan_rows
+    }
+    oracle_case_ids = set(expected)
+    if plan_case_ids != oracle_case_ids:
+        missing = sorted(plan_case_ids - oracle_case_ids)
+        extra = sorted(oracle_case_ids - plan_case_ids)
+        raise ValueError(f"oracle/plan case_id mismatch: missing={missing!r} extra={extra!r}")
     by_arm: dict[str, list[dict[str, Any]]] = collections.defaultdict(list)
     by_checkpoint: dict[tuple[str, str], dict[str, dict[str, Any]]] = collections.defaultdict(dict)
     for row in plan_rows:
         by_arm[_arm_key(row)].append(row)
-        by_checkpoint[(str(row.get("group_id")), str(row.get("checkpoint_id")))][str(row.get("diagnostic_arm"))] = row
+        by_checkpoint[(row["group_id"], row["checkpoint_id"])][row["diagnostic_arm"]] = row
     preflight_errors = [str(error) for error in preflight.get("errors", [])]
     counts = preflight.get("counts") or {}
     u_ineligible = bool(counts.get("ineligible_u_diagnostic_rows"))

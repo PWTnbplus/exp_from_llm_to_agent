@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:40:22+00:00
+生成时间（UTC）：2026-10-16T07:43:41+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -27,11 +27,11 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：Cycle 58: formal G6 analysis now rejects incomplete verified23 layouts and unexpected private cases; focused tests 16 passed, host suite 173 passed, and real verified23 probe retained 552 rows, 23 families, CF1-CF4, replicates 0-2, G3/G4, with status ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW. No confirmatory inference or scientific release is allowed.
-- 必需修复：Retain the strict frozen-layout and collision guards and obtain independent statistical and mathematical review of preregistration, oracle provenance, paired-family construction, failure denominators, bootstrap/McNemar code, and inferential interpretation before scientific release.
+- 证据：Cycle 59: G7 corrected metrics now fail closed on identity collisions and non-bijective inputs; focused G7 tests 20 passed, host suite 176 passed, and corrected probe retained all 1288 rows with confirmatory_reuse_allowed=false. No confirmatory inference or scientific release is allowed.
+- 必需修复：Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 58 repaired a local incomplete-frozen-layout acceptance defect; independent statistical and mathematical review remains unavailable.
+- 阻塞原因：Cycle 59 repaired G7 diagnostic input identity; independent statistical and mathematical review remains unavailable.
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
@@ -59,11 +59,11 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made.
+- 证据：Cycle 59: duplicate plan/state/Q/oracle IDs, checkpoint-arm collisions, missing/extra state/Q IDs, invalid oracle decisions, and oracle/plan mismatches now fail closed. Real corrected G7 probe retained 1288 plan/state/Q rows, 3 terminal failures, 1268 invalid Q rows, 368 ineligible U rows, and confirmatory_reuse_allowed=false. No V/L/U/Q claim is made.
 - 必需修复：Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.
 - 尝试次数：20
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：Cycle 53 design audit confirms remaining G7 requirements require external evidence
+- 阻塞原因：Cycle 59 repaired G7 corrected-metrics identity and denominator guards; provider/Q evidence remains externally blocked.
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present
