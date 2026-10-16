@@ -63,7 +63,7 @@
         "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl"
       },
       "command": "direct protocol_preflight(..., worker_count=16, require_complete_plan=true, require_formal_input_contract=true)",
-      "result": "formal_run_allowed_by_protocol=true; errors=[]; public=92; labels=92; plan=1288; exact case/family sets; canonical input hash mismatches=[]; public=b0ff3d3c9178cc068b0399f073981f990e313677536b6799cc170ecd2c6db597; labels=bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70; plan=a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3; unique source runs=1288; unique checkpoints=184"
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; public=92; labels=92; plan=1288; exact case/family sets; canonical input hash mismatches=[]; public=b0ff3d3c9178cc068b0399f073981f990e313677536b6791cc170ecd2c6db597; labels=bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70; plan=a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3; unique source runs=1288; unique checkpoints=184"
     },
     "independent_read_only_review": {
       "reviewer": "separate Python data-only reconstruction, not the runner preflight",
