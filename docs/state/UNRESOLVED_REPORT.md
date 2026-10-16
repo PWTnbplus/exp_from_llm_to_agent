@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T05:48:47+00:00
+生成时间（UTC）：2026-10-16T05:52:06+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：G7 preflight now validates private V/L/U label shape and plan group/arm/stage shape before provider setup. The corrected inputs pass with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero invalid plan/label rows, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.
+- 证据：G7 preflight now handles malformed/non-string public, label, plan, run, checkpoint, and case identifiers without TypeError, writes a fail-closed report, and only constructs provider-facing maps after preflight passes. Corrected inputs pass with 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero invalid IDs/contracts, zero routing/private prompt hits, and provider_calls_made=false. Historical corrected G7 remains 1285 completed, 3 provider_error, and Q valid 20/1288.
 - 必需修复：Keep failures, invalid Q rows, trace-integrity failures, malformed-input failures, and budget failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry with billing and immutable model evidence before any confirmatory reuse. Do not pool retries.
-- 尝试次数：10
+- 尝试次数：11
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 

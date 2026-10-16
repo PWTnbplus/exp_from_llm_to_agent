@@ -110,6 +110,21 @@ def test_g7_runner_preflight_rejects_invalid_plan_contract() -> None:
     assert report["counts"]["invalid_plan_rows"] == ["run-1"]
 
 
+def test_g7_runner_preflight_rejects_unhashable_identifiers_without_crashing() -> None:
+    report = protocol_preflight(
+        [{"case_id": {"bad": True}, "model_visible": {"problem": "public"}}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": {"bad": True}, "checkpoint_id": ["cp-1"], "case_id": {"bad": True},
+          "group_id": "G4", "diagnostic_arm": "V_ONLY", "inject_stages": ["V"]}],
+        worker_count=1,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_public_case_ids" in report["errors"]
+    assert "invalid_plan_contract" in report["errors"]
+
+
 def test_g7_runner_main_fails_closed_before_reading_provider_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     public = tmp_path / "public.jsonl"
     labels = tmp_path / "labels.jsonl"

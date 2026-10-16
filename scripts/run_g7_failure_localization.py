@@ -95,8 +95,8 @@ def write_json(path: Path, value: Any) -> None:
     os.replace(tmp, path)
 
 
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def sha256_file(path: Path) -> str | None:
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
 def emit(path: Path, seq: int, run_id: str, event_type: str, status: str, payload: dict[str, Any]) -> int:
@@ -175,6 +175,14 @@ def _key_hits(text: str, keys: tuple[str, ...]) -> dict[str, int]:
     return {key: folded.count(key.casefold()) for key in keys if key.casefold() in folded}
 
 
+def _valid_identifier(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _row_identifier(value: Any, index: int) -> str:
+    return value if isinstance(value, str) and value else f"row-{index}"
+
+
 def _label_contract_valid(row: dict[str, Any]) -> bool:
     """Validate private V/L/U label shape before any provider can be called."""
     v = row.get("v")
@@ -202,28 +210,36 @@ def protocol_preflight(
 ) -> dict[str, Any]:
     """Validate the exact model-facing G7 contract before provider creation."""
 
-    public = {row.get("case_id"): row for row in public_rows}
-    labels = {row.get("case_id"): row for row in label_rows}
+    public = {row.get("case_id"): row for row in public_rows if _valid_identifier(row.get("case_id"))}
+    labels = {row.get("case_id"): row for row in label_rows if _valid_identifier(row.get("case_id"))}
     prompt_parts: list[str] = []
     invalid_model_visible: list[Any] = []
     for row in plan_rows:
         case_id = row.get("case_id")
-        if case_id not in public:
+        if not _valid_identifier(case_id) or case_id not in public:
             continue
         try:
             prompt_parts.append(case_prompt(public[case_id]))
         except (KeyError, TypeError, ValueError):
             invalid_model_visible.append(case_id)
     prompt_text = "\n".join(prompt_parts)
-    missing_cases = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in public})
-    missing_labels = sorted({row.get("case_id") for row in plan_rows if row.get("case_id") not in labels})
+    missing_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _valid_identifier(row.get("case_id")) or row.get("case_id") not in public
+    })
+    missing_labels = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _valid_identifier(row.get("case_id")) or row.get("case_id") not in labels
+    })
     required_plan_fields = ("run_id", "checkpoint_id", "case_id")
     missing_required_plan_fields = sorted(
         field for field in required_plan_fields if any(not row.get(field) for row in plan_rows)
     )
     invalid_plan_rows: list[str] = []
     for index, row in enumerate(plan_rows):
-        run_id = str(row.get("run_id") or f"row-{index}")
+        run_id = _row_identifier(row.get("run_id"), index)
         stages = row.get("inject_stages")
         stages_valid = (
             isinstance(stages, list)
@@ -232,6 +248,9 @@ def protocol_preflight(
             and set(stages).issubset(G7_STAGES)
         )
         if (
+            any(field in row and not _valid_identifier(row.get(field))
+                for field in ("run_id", "checkpoint_id", "case_id"))
+            or
             not isinstance(row.get("group_id"), str)
             or row.get("group_id") not in G7_GROUPS
             or not isinstance(row.get("diagnostic_arm"), str)
@@ -239,17 +258,26 @@ def protocol_preflight(
         ):
             invalid_plan_rows.append(run_id)
     invalid_label_cases = sorted({
-        str(row.get("case_id")) for row in label_rows if not _label_contract_valid(row)
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(label_rows)
+        if not _valid_identifier(row.get("case_id")) or not _label_contract_valid(row)
     })
-    run_ids = [row.get("run_id") for row in plan_rows if row.get("run_id")]
+    invalid_public_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(public_rows)
+        if not _valid_identifier(row.get("case_id"))
+    })
+    run_ids = [row.get("run_id") for row in plan_rows if _valid_identifier(row.get("run_id"))]
     duplicate_plan_ids = len(run_ids) - len(set(run_ids))
-    public_case_ids = [row.get("case_id") for row in public_rows if row.get("case_id")]
-    label_case_ids = [row.get("case_id") for row in label_rows if row.get("case_id")]
+    public_case_ids = [row.get("case_id") for row in public_rows if _valid_identifier(row.get("case_id"))]
+    label_case_ids = [row.get("case_id") for row in label_rows if _valid_identifier(row.get("case_id"))]
     duplicate_public_case_ids = len(public_case_ids) - len(set(public_case_ids))
     duplicate_label_case_ids = len(label_case_ids) - len(set(label_case_ids))
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
+    if invalid_public_cases:
+        errors.append("invalid_public_case_ids")
     if missing_cases:
         errors.append("plan_case_missing_from_public")
     if missing_labels:
@@ -289,12 +317,16 @@ def protocol_preflight(
             "missing_labels": len(missing_labels),
             "missing_required_plan_fields": missing_required_plan_fields,
             "invalid_plan_rows": sorted(set(invalid_plan_rows)),
+            "invalid_public_case_ids": invalid_public_cases,
             "invalid_label_cases": invalid_label_cases,
             "duplicate_run_ids": duplicate_plan_ids,
             "duplicate_public_case_ids": duplicate_public_case_ids,
             "duplicate_label_case_ids": duplicate_label_case_ids,
             "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
-            "unique_checkpoint_ids": len({row.get("checkpoint_id") for row in plan_rows}),
+            "unique_checkpoint_ids": len({
+                row.get("checkpoint_id") for row in plan_rows
+                if _valid_identifier(row.get("checkpoint_id"))
+            }),
         },
         "routing_metadata_model_prompt_hits": routing_hits,
         "forbidden_model_prompt_hits": forbidden_hits,
@@ -506,11 +538,7 @@ def main() -> int:
         raise SystemExit(str(exc)) from exc
     public_rows = readl(args.public)
     label_rows = readl(args.labels)
-    public = {x["case_id"]: x for x in public_rows}
-    labels = {x["case_id"]: x for x in label_rows}
     plan = readl(args.plan)
-    if not public or not plan:
-        raise SystemExit("public cases and plan are required")
     preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
@@ -532,6 +560,8 @@ def main() -> int:
     })
     if preflight["errors"]:
         raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
+    public = {x["case_id"]: x for x in public_rows}
+    labels = {x["case_id"]: x for x in label_rows}
     for row in plan:
         if row["case_id"] not in public or row["case_id"] not in labels:
             raise SystemExit(f"plan row lacks public case or G7 label: {row.get('run_id')}")
