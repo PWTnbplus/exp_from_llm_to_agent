@@ -229,3 +229,22 @@ def test_duplicate_q_rows_fail_closed(tmp_path: Path) -> None:
     )
     assert report["q"]["duplicate_run_ids"] == ["run-1"]
     assert report["conclusion"]["confirmatory_reuse_allowed"] is False
+
+
+def test_completed_trace_integrity_failure_blocks_confirmatory_reuse_even_for_invalid_q(tmp_path: Path) -> None:
+    state = {"run_id": "run-1", "status": "completed", "trace_ref": "traces/run-1/events.jsonl"}
+    _write_events(
+        tmp_path / "traces/run-1/events.jsonl",
+        [
+            {"run_id": "run-1", "event_type": "RUN_START", "payload": {}},
+            {"run_id": "run-1", "event_type": "MODEL_RESPONSE", "payload": {}},
+            {"run_id": "run-1", "event_type": "RUN_END", "payload": {"status": "completed"}},
+        ],
+    )
+    report = build_report(
+        states=[state],
+        q_rows=[{"run_id": "run-1", "is_valid": False}],
+        trace_root=tmp_path,
+    )
+    assert report["states"]["trace_integrity_failures"] == 1
+    assert report["conclusion"]["confirmatory_reuse_allowed"] is False

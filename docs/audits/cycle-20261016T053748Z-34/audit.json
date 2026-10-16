@@ -1,0 +1,60 @@
+{
+  "cycle": 34,
+  "timestamp_utc": "2026-10-16T05:39:27+00:00",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "test": {
+    "command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "exit_code": 0,
+    "output_tail": "129 passed in 37.17s\n"
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "reviewer": "independent_raw_artifact_contract_check_v2",
+    "independent_review_status": "PASS_READ_ONLY_LOCAL",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "The corrected G7 retry remains 1288 rows: 1285 completed and 3 provider_error. The v3 trace/Q audit now fail-closes on any state or checkpoint trace integrity failure, retains 4 state trace-integrity failures, requires exact state-to-Q coverage, reports 20 trace-backed Q-valid rows and 1268 invalid rows, and confirmatory_reuse_allowed=false. No provider call was made in this cycle.",
+        "remediation": "Keep failures, invalid Q rows, and trace-integrity failures in the denominator; obtain an independently reviewed provider/Q diagnosis or a separately frozen, explicitly authorized retry before any confirmatory reuse. Do not pool retries. Billing export, immutable model snapshot, and external provider review remain required."
+      }
+    ],
+    "resolutions": [],
+    "verified_commands": [
+      "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_trace_q_consistency.py tests/test_g7_protocol.py (24 passed)",
+      "E:/resources/python/python.exe -X utf8 -m pytest -q (exit 0, 129 passed in 37.17s)",
+      "E:/resources/python/python.exe -X utf8 scripts/g7_protocol_preflight.py --public results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl --labels results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl --plan results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl --worker-count 16 --out docs/audits/cycle-20261016T053748Z-34/g7_protocol_preflight.json (provider_calls_made=false, protocol_allowed=true, 92/1288/184, zero routing/private hits)",
+      "E:/resources/python/python.exe -X utf8 scripts/audit_g7_trace_q_consistency.py --states results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_states.jsonl --q results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_q_audit.jsonl --trace-root results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers --checkpoints results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_checkpoints.jsonl --out docs/audits/cycle-20261016T053748Z-34/g7_trace_q_protocol_corrected_v3.json (1288 rows, 4 trace-integrity failures retained, Q trace-backed 20, confirmatory reuse false)",
+      "E:/resources/python/python.exe -X utf8 - independent_raw_artifact_contract_check_v2 (exit 0, PASS; 1288 states, 1288 Q rows, 184 checkpoints, status-aligned terminal traces)",
+      "E:/resources/python/python.exe -X utf8 -m py_compile scripts/audit_g7_trace_q_consistency.py tests/test_g7_trace_q_consistency.py (exit 0)",
+      "git diff --check (exit 0)"
+    ]
+  },
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "mandatory_completion_missing": [
+    "independently_reviewed_provider_Q_diagnosis",
+    "billing_export",
+    "immutable_model_snapshot",
+    "upstream_provenance",
+    "machine_gate_attestation"
+  ],
+  "unresolved_issue_ids": [
+    "ISSUE-3d7a9c1e5b20",
+    "ISSUE-0f2cb195c681",
+    "ISSUE-0786397621a0",
+    "ISSUE-000000000002",
+    "ISSUE-000000000003",
+    "ISSUE-000000000004",
+    "ISSUE-ff97c7c89112",
+    "ISSUE-ad61f025976a",
+    "ISSUE-1f8c2b6a4d90",
+    "ISSUE-f9171bb760b1",
+    "ISSUE-000000000005",
+    "ISSUE-6b3a9e1d4f20",
+    "ISSUE-ab0746b86bf9",
+    "ISSUE-28ed827e40a9"
+  ]
+}

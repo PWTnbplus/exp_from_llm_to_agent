@@ -347,8 +347,10 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
     )
     terminal_states = sum(count for status, count in state_status_counts.items() if status != "completed")
     terminal_checkpoints = sum(count for status, count in checkpoint_status_counts.items() if status != "completed")
+    state_trace_integrity_failures = sum(not row.get("trace_ok") for row in state_reviews)
+    checkpoint_trace_integrity_failures = sum(not row.get("trace_ok") for row in checkpoint_reviews)
     return {
-        "audit_version": "g7-trace-q-consistency-v2",
+        "audit_version": "g7-trace-q-consistency-v3",
         "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
         "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; retain_prior_history_count",
         "inputs": input_hashes or {},
@@ -359,6 +361,7 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
             "status_counts": dict(state_status_counts),
             "trace_status_counts": dict(trace_status_counts),
             "recorded_failure_category_counts": dict(failure_category_counts),
+            "trace_integrity_failures": state_trace_integrity_failures,
             "reviews": state_reviews,
             "review_samples": [row for row in state_reviews if row.get("record_status") != "completed" or not row.get("trace_ok")][:20],
         },
@@ -368,6 +371,7 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
             "status_counts": dict(checkpoint_status_counts),
             "trace_status_counts": dict(checkpoint_trace_status_counts),
             "recorded_failure_category_counts": dict(checkpoint_failure_category_counts),
+            "trace_integrity_failures": checkpoint_trace_integrity_failures,
             "reviews": checkpoint_reviews,
             "review_samples": [row for row in checkpoint_reviews if row.get("record_status") != "completed" or not row.get("trace_ok")][:20],
         },
@@ -393,6 +397,8 @@ def build_report(*, states: list[dict[str, Any]], q_rows: list[dict[str, Any]],
             "confirmatory_reuse_allowed": not any((
                 terminal_states,
                 terminal_checkpoints,
+                state_trace_integrity_failures,
+                checkpoint_trace_integrity_failures,
                 q_invalidated,
                 q_missing_state,
                 bool(duplicate_state_ids),
