@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:48:48+00:00",
+  "updated_at": "2026-10-16T08:53:01+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -996,6 +996,38 @@
           "evidence": "The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory."
         }
       ]
+    },
+    {
+      "id": "ISSUE-9e31a7c4b2d8",
+      "severity": "P1",
+      "title": "G6 statistical pairing did not enforce same task lineage across G3 and G4",
+      "status": "VERIFIED",
+      "evidence": "The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214.",
+      "remediation": "Require nonempty case_id and paired_set_id and reject mismatched G3/G4 lineage before summaries.",
+      "first_seen": "2026-10-16T08:53:01+00:00",
+      "last_seen": "2026-10-16T08:53:01+00:00",
+      "source": "docs/audits/cycle-20261016T085230Z-72/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T08:53:01+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+        "evidence": "The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T08:53:01+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T085230Z-72/audit.json"
+        },
+        {
+          "time": "2026-10-16T08:53:01+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1083,7 +1115,8 @@
     "docs/audits/cycle-20261016T083448Z-68/audit.json",
     "docs/audits/cycle-20261016T084135Z-69/audit.json",
     "docs/audits/cycle-20261016T084506Z-70/audit.json",
-    "docs/audits/cycle-20261016T084740Z-71/audit.json"
+    "docs/audits/cycle-20261016T084740Z-71/audit.json",
+    "docs/audits/cycle-20261016T085230Z-72/audit.json"
   ],
   "current_focus": null
 }

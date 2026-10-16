@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 statistical input review",
+  "findings": [
+    {
+      "id": "ISSUE-9e31a7c4b2d8",
+      "severity": "P1",
+      "title": "G6 statistical pairing did not enforce same task lineage across G3 and G4",
+      "evidence": "Before this cycle, validate_statistical_inputs grouped rows only by (theory_family_id, cf_type, replicate). A read-only synthetic probe with G3 case_id=c3/paired_set_id=p3 and G4 case_id=c4/paired_set_id=p4 under the same family/CF/replicate was accepted, so responses from different tasks could enter one matched pair. The design requires paired_set_id to bind each counterfactual family and requires the same task to be compared across G3/G4; the corrected 552-row plan currently has 276 complete pairs and zero lineage mismatches.",
+      "remediation": "Require nonempty case_id and paired_set_id on every G6 plan row and reject any G3/G4 pair whose case_id or paired_set_id differs before statistical summaries are constructed. Retain the all-planned denominator and never rewrite historical artifacts."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

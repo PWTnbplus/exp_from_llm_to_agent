@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G6 statistical input review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-9e31a7c4b2d8",
+      "verdict": "VERIFIED",
+      "evidence": "The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214.",
+      "reason": "The local statistical-input lineage guard is independently verified; independent statistical/mathematical review and scientific release remain blocked."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

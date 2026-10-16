@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T08:48:48+00:00
+生成时间（UTC）：2026-10-16T08:53:01+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**8**
+- 已验证修复：**9**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -91,6 +91,7 @@
 - **ISSUE-ab0746b86bf9**（P1）：The prior evaluator returned hidden ground-truth source in validation results and ResultRecorder persisted validation verbatim. Cycle 31 removes the source fiel——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_result_recorder_privacy.py tests/test_observability.py tests/test_evaluator.py`；Focused tests 14/14 pass. A separate temporary probe writes mixed-case nested/list hidden fields through ResultRecorder and hidden values/private keys do not occur in the ordinary result file; TraceRecorder recursively redacts hidden values. Source inspection confirms law_recovery.py does not return a ground_truth source field.
 - **ISSUE-0786397621a0**（P1）：Before this cycle SingleAgentRunner initialized an empty history and did not call get_initial_observations(), while LLMOnlyRunner supplied the same public obser——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_llm_isolation.py tests/test_no_leakage.py`；Both arms expose the same public initial observation to their model-facing prompt and persist the same normalized initial_observations metadata field. Focused tests 10/10 and full host suite 192/192 pass; the paired temporary probe passes.
 - **ISSUE-4c7e2a91d6f0**（P1）：G7 model-output stage parser accepted malformed nested V/L/U fields——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py`；The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory.
+- **ISSUE-9e31a7c4b2d8**（P1）：G6 statistical pairing did not enforce same task lineage across G3 and G4——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py`；The repaired validator rejects both synthetic mismatched case_id and mismatched paired_set_id probes. The immutable corrected G6 plan passes the formal 23-family × CF1–CF4 × replicate 0–2 × G3/G4 layout check with 552 plan rows, 552 responses, 92 private rows, 276 complete pairs, and zero case_id/paired_set_id lineage mismatches. Focused G6 input tests pass 13/13 and the full host suite passes 214/214.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

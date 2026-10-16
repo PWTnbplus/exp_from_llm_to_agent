@@ -44,6 +44,7 @@ def validate_statistical_inputs(
 
     plan_by_run = _index_unique(plan, lambda row: row["run_id"], "plan run_id")
     seen_arm_keys: set[tuple[Any, ...]] = set()
+    pair_lineage: dict[tuple[Any, ...], dict[str, tuple[str, str]]] = defaultdict(dict)
     for row in plan:
         arm_key = (
             row["theory_family_id"], row["cf_type"], int(row["replicate"]), row["group_id"]
@@ -51,6 +52,22 @@ def validate_statistical_inputs(
         if arm_key in seen_arm_keys:
             raise SystemExit(f"duplicate plan family/CF/replicate/arm: {arm_key!r}")
         seen_arm_keys.add(arm_key)
+        case_id = row.get("case_id")
+        paired_set_id = row.get("paired_set_id")
+        if not isinstance(case_id, str) or not case_id.strip():
+            raise SystemExit(f"invalid plan case_id for run_id: {row.get('run_id')!r}")
+        if not isinstance(paired_set_id, str) or not paired_set_id.strip():
+            raise SystemExit(f"invalid plan paired_set_id for run_id: {row.get('run_id')!r}")
+        pair_lineage[arm_key[:3]][row["group_id"]] = (case_id, paired_set_id)
+
+    for pair_key, groups in pair_lineage.items():
+        g3_lineage = groups.get("G3")
+        g4_lineage = groups.get("G4")
+        if g3_lineage is not None and g4_lineage is not None and g3_lineage != g4_lineage:
+            raise SystemExit(
+                f"mismatched G3/G4 task lineage for family/CF/replicate {pair_key!r}: "
+                f"G3={g3_lineage!r} G4={g4_lineage!r}"
+            )
 
     private = _index_unique(private_rows, lambda row: row["case_id"], "private case_id")
     responses = _index_unique(response_rows, lambda row: row["run_id"], "response run_id")
@@ -211,7 +228,7 @@ def main() -> int:
         "plan_rows": len(plan),
         "families": len(all_family_values),
         "primary_unit": "theory_family_id",
-        "pairing": "same family, cf_type, and replicate matched across G3/G4",
+        "pairing": "same family, cf_type, replicate, case_id, and paired_set_id matched across G3/G4",
         "reports": reports,
         "scientific_status": "ANALYZED_PENDING_INDEPENDENT_STATISTICAL_REVIEW",
     }

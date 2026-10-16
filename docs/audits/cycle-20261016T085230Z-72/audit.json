@@ -1,0 +1,83 @@
+{
+  "cycle": "20261016T085230Z-72",
+  "scope": "G6 statistical pairing task-lineage guard and design-alignment review",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md:327-362",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md:47-66",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:561-615"
+    ],
+    "relevant_controls_reviewed": [
+      "G6 is a paired G3/G4 counterfactual comparison and paired_set_id binds variants of one base task.",
+      "The primary statistical unit is theory_family_id, not task variants or replicate rows.",
+      "All planned rows and failures remain in the denominator; no confirmatory conclusion is inferred from engineering tests.",
+      "G7 diagnoses failure locations but does not by itself establish a causal mechanism."
+    ],
+    "alignment_conclusion": "The repaired input guard enforces the task identity needed before the design-specified family-clustered G3/G4 pairing. This is an engineering/statistical-input repair, not evidence that formal statistical validity or a scientific hypothesis has been established."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "Read-only synthetic validate_statistical_inputs probe with same family/CF/replicate but different G3/G4 case_id and paired_set_id",
+      "result": "FAIL_OPEN: the malformed pair was accepted"
+    },
+    "after_repair": {
+      "command": "Read-only synthetic probes for mismatched case_id and mismatched paired_set_id",
+      "result": "Both fail closed with mismatched G3/G4 task lineage"
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/analyze_g6_clustered.py"],
+    "tests_added_or_changed": ["tests/test_analyze_g6_clustered.py"],
+    "change": "validate_statistical_inputs now requires nonempty case_id and paired_set_id and compares both lineage fields across each G3/G4 pair before statistical analysis.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py",
+      "result": "13 passed in 0.20s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "214 passed in 23.57s"
+    },
+    "real_corrected_plan_probe": {
+      "command": "Read-only validate_statistical_inputs on results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z/run_plan.jsonl, private_oracle.jsonl, and responses_audited.jsonl with the formal 23-family layout",
+      "result": "PASS: 552 plan rows, 552 response rows, 92 private rows, replicate values [0,1,2], 276 pair keys, 0 lineage mismatches, 0 missing pair arms"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G6 statistical input review",
+    "findings": [
+      {
+        "id": "ISSUE-9e31a7c4b2d8",
+        "severity": "P1",
+        "title": "G6 statistical pairing did not enforce same task lineage across G3 and G4",
+        "evidence": "The pre-repair synthetic probe accepted different case_id and paired_set_id values for G3 and G4 under one pairing key; the design requires same-task pairing.",
+        "remediation": "Require nonempty case_id and paired_set_id and reject mismatched G3/G4 lineage before summaries."
+      }
+    ],
+    "resolutions": []
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-9e31a7c4b2d8",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "The local input-contract defect is fixed and independently verified; paid-provider, provenance, independent statistical/mathematical/dependency review, historical G7 validity, and remote delivery blockers remain."
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "ef557fb",
+    "remote_updated": false,
+    "note": "Commit and push status will be recorded after the audit/state update; GitHub delivery remains subject to the existing external proxy blocker."
+  }
+}

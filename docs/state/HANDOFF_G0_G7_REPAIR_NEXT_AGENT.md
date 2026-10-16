@@ -362,5 +362,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local commits: `4542ed3` (repair) and `423724c` (audit/state). Push and `ls-remote` both failed through the configured proxy with exit `128`; remote delivery is not claimed. This remains recorded under `ISSUE-000000000003`.
 - Gate conclusion remains truthful: G0/G6/G7 `BLOCKED`; G1–G5 engineering/smoke scope only; `scientific_release_allowed=false`; no provider, paid experiment, confirmatory inference, or scientific claim was made.
 
+## Cycle 72 G6 statistical pair-lineage repair (2026-10-16T08:52Z)
+
+- Compared the G6 statistical input contract with the user design documents under `D:/硕士/prj1_ai_cal/writing/实验设计`, especially the requirement that `paired_set_id` binds variants of one base task, G3/G4 are compared on the same task, and `theory_family_id` is the primary cluster rather than treating variants or replicates as independent laws.
+- Independently reproduced a fail-open in `scripts/analyze_g6_clustered.py`: before repair, G3 `case_id=c3, paired_set_id=p3` and G4 `case_id=c4, paired_set_id=p4` under the same family/CF/replicate were accepted because only `(theory_family_id, cf_type, replicate)` was used as the pair key.
+- Repaired `validate_statistical_inputs` to require nonempty `case_id` and `paired_set_id` on every plan row and reject any G3/G4 pair with mismatched task lineage before constructing statistical summaries. Historical G6 artifacts were not modified.
+- Added adversarial tests for mismatched `case_id` and mismatched `paired_set_id`. Focused G6 input tests: `13 passed`; full host suite: `214 passed`; `git diff --check`: PASS.
+- Read-only validation of the immutable corrected G6 inputs passes: `552` plan rows, `552` responses, `92` private rows, `276` complete G3/G4 pairs, replicate values `[0,1,2]`, zero lineage mismatches, and zero missing pair arms.
+- `ISSUE-9e31a7c4b2d8` is `VERIFIED` for this local statistical-input guard only. `ISSUE-000000000004` remains `BLOCKED`: independent formal statistical/mathematical review is still absent, so no confirmatory inference or scientific release is allowed.
+- Audit files: `docs/audits/cycle-20261016T085230Z-72/audit.json`, `g6_pair_lineage_finding.json`, and `g6_pair_lineage_review.json`.
+- Current ledger after this cycle: `9` open/blocked/unverified issues and `9` verified issues. G0/G6/G7 remain `BLOCKED`; G1–G5 remain engineering/smoke scope; `scientific_release_allowed=false`.
+- No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. GitHub delivery remains externally blocked and must not be claimed until push plus `git ls-remote` succeeds.
+
 本交接文档不是 PASS 证明。`issues.json`、审计 JSON、冻结 plan/hash、独立复核和回归测试才是后续 Agent 可使用的证据。
 

@@ -17,8 +17,8 @@ spec.loader.exec_module(analysis)
 
 def _plan() -> list[dict]:
     return [
-        {"run_id": "r-g3", "case_id": "c1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G3"},
-        {"run_id": "r-g4", "case_id": "c1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G4"},
+        {"run_id": "r-g3", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G3"},
+        {"run_id": "r-g4", "case_id": "c1", "paired_set_id": "p1", "theory_family_id": "f1", "cf_type": "CF1", "replicate": 0, "group_id": "G4"},
     ]
 
 
@@ -46,6 +46,18 @@ def test_duplicate_plan_arm_key_is_rejected() -> None:
     duplicate = _plan() + [{**_plan()[0], "run_id": "r-g3-duplicate"}]
     with pytest.raises(SystemExit, match="duplicate plan family/CF/replicate/arm"):
         analysis.validate_statistical_inputs(duplicate, _private(), _responses())
+
+
+@pytest.mark.parametrize(
+    ("field", "g4_value"),
+    [("case_id", "c2"), ("paired_set_id", "p2")],
+)
+def test_mismatched_g3_g4_task_lineage_is_rejected(field: str, g4_value: str) -> None:
+    plan = _plan()
+    plan[1][field] = g4_value
+    private = _private() + ([{"case_id": "c2", "expected_decision": "MAINTAIN"}] if field == "case_id" else [])
+    with pytest.raises(SystemExit, match="mismatched G3/G4 task lineage"):
+        analysis.validate_statistical_inputs(plan, private, _responses())
 
 
 def test_missing_and_unexpected_responses_are_rejected() -> None:
