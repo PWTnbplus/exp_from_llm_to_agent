@@ -489,6 +489,6 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only scan confirms `1288` rows, `missing_experiment_id=0`, `wrong_experiment_id=0`, `source_arm_mismatches=0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
 - `ISSUE-6f5db82e86c0` is `VERIFIED` for this local formal experiment-identity guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; paid provider authorization, upstream provenance/Git delivery, independent statistical/mathematical review, dependency-edge truth, Q validity, and scientific claims remain unresolved.
 - Audit files: `docs/audits/cycle-20261016T094833Z-82/audit.json`, `g7_experiment_identity_finding.json`, and `g7_experiment_identity_review.json`.
-- Local repair commit: `b84f005`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- Local repair commit: `b84f005`; audit/state commit: `45267ed`; delivery-blocker state commit: `bf9b8d9`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote push plus `git ls-remote` must be attempted and verified before claiming delivery.
 
