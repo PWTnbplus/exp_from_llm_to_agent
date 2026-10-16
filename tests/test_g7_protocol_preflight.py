@@ -5,6 +5,8 @@ import hashlib
 import subprocess
 import sys
 
+from scripts.run_g7_failure_localization import protocol_preflight
+
 
 def _public_case(model_visible: dict) -> dict:
     return {
@@ -107,25 +109,17 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
         encoding="utf-8",
     )
 
-    result = subprocess.run(
-        [
-            sys.executable,
-            "scripts/g7_protocol_preflight.py",
-            "--public",
-            str(public),
-            "--labels",
-            str(labels),
-            "--plan",
-            str(plan),
-            "--out",
-            str(out),
-        ],
-        check=False,
-        capture_output=True,
-        text=True,
+    report = protocol_preflight(
+        [public_row], [label_row],
+        [_plan_row(f"run-{group}-{arm}", arm, group, stages)
+         for group in ("G3", "G4")
+         for arm, stages in [
+             ("D0", []), ("D1", ["V"]), ("D2", ["V", "L"]),
+             ("D3", ["V", "L", "U"]), ("L_ONLY", ["L"]),
+             ("U_ONLY", ["U"]), ("V_ONLY", ["V"]),
+         ]],
+        worker_count=16,
+        require_complete_plan=True,
     )
-
-    report = json.loads(out.read_text(encoding="utf-8"))
-    assert result.returncode == 0
     assert report["formal_run_allowed_by_protocol"] is True
     assert report["counts"]["unique_checkpoint_ids"] == 1

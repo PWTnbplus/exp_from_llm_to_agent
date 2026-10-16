@@ -76,6 +76,7 @@ G7_SOURCE_G6_ARM_BY_GROUP = {
 G7_EXPERIMENT_ID = "g7_failure_localization"
 G7_PROFILE = "theory_benchmark"
 G7_PROTOCOL_VERSION = "g7-public-case-format-retry-v1"
+G7_FORMAL_RETRY_SCOPE = "all_original_rows_protocol_corrected"
 G7_RETRY_PROTOCOL = "separate_frozen_retry_not_pooled"
 G7_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
 G7_FORMAL_SPLIT = "final_test"
@@ -520,6 +521,7 @@ def protocol_preflight(
     plan_rows: list[dict[str, Any]],
     worker_count: int,
     require_complete_plan: bool = False,
+    require_formal_input_contract: bool = False,
 ) -> dict[str, Any]:
     """Validate the exact model-facing G7 contract before provider creation."""
 
@@ -612,6 +614,11 @@ def protocol_preflight(
         _row_identifier(row.get("run_id"), index)
         for index, row in enumerate(plan_rows)
         if not _formal_plan_contract_valid(row)
+    })
+    formal_retry_scope_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if row.get("retry_scope") != G7_FORMAL_RETRY_SCOPE
     })
     design_plan_mapping_mismatches = sorted({
         _row_identifier(row.get("run_id"), index)
@@ -743,6 +750,34 @@ def protocol_preflight(
     label_case_ids = [row.get("case_id") for row in label_rows if _valid_identifier(row.get("case_id"))]
     duplicate_public_case_ids = len(public_case_ids) - len(set(public_case_ids))
     duplicate_label_case_ids = len(label_case_ids) - len(set(label_case_ids))
+    public_case_id_set = set(public_case_ids)
+    label_case_id_set = set(label_case_ids)
+    formal_public_label_missing = sorted(public_case_id_set - label_case_id_set)
+    formal_public_label_extra = sorted(label_case_id_set - public_case_id_set)
+    family_cf_types: dict[str, set[str]] = {}
+    family_paired_sets: dict[str, set[str]] = {}
+    paired_set_families: dict[str, set[str]] = {}
+    for row in public_rows:
+        family = row.get("theory_family_id")
+        paired_set = row.get("paired_set_id")
+        cf_type = row.get("cf_type")
+        if not (_valid_identifier(family) and _valid_identifier(paired_set)):
+            continue
+        family_cf_types.setdefault(family, set()).add(cf_type)
+        family_paired_sets.setdefault(family, set()).add(paired_set)
+        paired_set_families.setdefault(paired_set, set()).add(family)
+    formal_family_cf_coverage_mismatches = sorted(
+        family for family, cf_types in family_cf_types.items()
+        if cf_types != set(G7_CF_TYPES)
+    )
+    formal_family_paired_set_mismatches = sorted(
+        family for family, paired_sets in family_paired_sets.items()
+        if len(paired_sets) != 1
+    )
+    formal_paired_set_family_mismatches = sorted(
+        paired_set for paired_set, families in paired_set_families.items()
+        if len(families) != 1
+    )
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
@@ -784,6 +819,18 @@ def protocol_preflight(
         errors.append("g7_plan_source_checkpoint_mismatch")
     if require_complete_plan and checkpoint_identity_collisions:
         errors.append("checkpoint_identity_collision")
+    if require_formal_input_contract and (
+        formal_public_label_missing or formal_public_label_extra
+    ):
+        errors.append("g7_public_label_case_set_mismatch")
+    if require_formal_input_contract and formal_retry_scope_mismatches:
+        errors.append("invalid_g7_plan_metadata")
+    if require_formal_input_contract and formal_family_cf_coverage_mismatches:
+        errors.append("g7_public_family_cf_coverage_mismatch")
+    if require_formal_input_contract and (
+        formal_family_paired_set_mismatches or formal_paired_set_family_mismatches
+    ):
+        errors.append("g7_public_pair_lineage_mismatch")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -836,6 +883,15 @@ def protocol_preflight(
             "duplicate_run_ids": duplicate_plan_ids,
             "duplicate_public_case_ids": duplicate_public_case_ids,
             "duplicate_label_case_ids": duplicate_label_case_ids,
+            "g7_public_label_case_set_mismatch": {
+                "missing_labels_for_public": formal_public_label_missing,
+                "extra_labels_not_in_public": formal_public_label_extra,
+            },
+            "g7_formal_retry_scope_mismatches": formal_retry_scope_mismatches,
+            "g7_public_family_cf_coverage_mismatches": formal_family_cf_coverage_mismatches,
+            "g7_public_family_paired_set_mismatches": formal_family_paired_set_mismatches,
+            "g7_public_paired_set_family_mismatches": formal_paired_set_family_mismatches,
+            "require_formal_input_contract": require_formal_input_contract,
             "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
             "unique_checkpoint_ids": len({
                 row.get("checkpoint_id") for row in plan_rows
@@ -1082,8 +1138,14 @@ def main() -> int:
     public_rows = readl(args.public)
     label_rows = readl(args.labels)
     plan = readl(args.plan)
-    preflight = protocol_preflight(public_rows, label_rows, plan, args.worker_count,
-                                   require_complete_plan=True)
+    preflight = protocol_preflight(
+        public_rows,
+        label_rows,
+        plan,
+        args.worker_count,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
     paid_evidence = validate_paid_evidence(args.model_id, args.model_snapshot_manifest, args.billing_export)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)

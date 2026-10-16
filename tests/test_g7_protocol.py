@@ -94,6 +94,29 @@ def _formal_g7_case(case_id: str) -> tuple[dict, dict, list[dict]]:
     return public, label, plan
 
 
+def _formal_g7_family() -> tuple[list[dict], list[dict], list[dict]]:
+    public_rows: list[dict] = []
+    label_rows: list[dict] = []
+    plan_rows: list[dict] = []
+    for cf_type in ("CF1", "CF2", "CF3", "CF4"):
+        public, label, plan = _formal_g7_case(f"case-{cf_type}")
+        public["paired_set_id"] = "family-1"
+        public["theory_family_id"] = "family-1"
+        public["cf_type"] = cf_type
+        label["source_public_case_sha256"] = hashlib.sha256(
+            json.dumps(public, ensure_ascii=False, sort_keys=True).encode("utf-8")
+        ).hexdigest()
+        for row in plan:
+            row["paired_set_id"] = "family-1"
+            row["theory_family_id"] = "family-1"
+            row["cf_type"] = cf_type
+            row["retry_scope"] = "all_original_rows_protocol_corrected"
+        public_rows.append(public)
+        label_rows.append(label)
+        plan_rows.extend(plan)
+    return public_rows, label_rows, plan_rows
+
+
 def test_g7_case_prompt_keeps_stratification_metadata_out_of_model_text() -> None:
     prompt = case_prompt(
         {
@@ -267,6 +290,89 @@ def test_g7_formal_preflight_rejects_nonformal_cf_or_split() -> None:
     assert "invalid_g7_public_metadata" in cf_report["errors"]
     assert split_report["formal_run_allowed_by_protocol"] is False
     assert "invalid_g7_public_metadata" in split_report["errors"]
+
+
+def test_g7_formal_input_contract_rejects_extra_label_case() -> None:
+    public, label, plan = _formal_g7_family()
+    extra_label = dict(label[0])
+    extra_label["case_id"] = "case-not-public"
+
+    report = protocol_preflight(
+        public, [*label, extra_label], plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_label_case_set_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_label_case_set_mismatch"] == {
+        "missing_labels_for_public": [],
+        "extra_labels_not_in_public": ["case-not-public"],
+    }
+
+
+def test_g7_formal_input_contract_rejects_wrong_retry_scope() -> None:
+    public, label, plan = _formal_g7_family()
+    for row in plan:
+        row["retry_scope"] = "terminal_provider_error_rows_protocol_corrected"
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "invalid_g7_plan_metadata" in report["errors"]
+    assert report["counts"]["g7_formal_retry_scope_mismatches"] == [
+        row["run_id"] for row in plan
+    ]
+
+
+def test_g7_formal_input_contract_rejects_incomplete_family_cf_coverage() -> None:
+    public, label, plan = _formal_g7_family()
+    removed_case = "case-CF4"
+    public = [row for row in public if row["case_id"] != removed_case]
+    label = [row for row in label if row["case_id"] != removed_case]
+    plan = [row for row in plan if row["case_id"] != removed_case]
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_family_cf_coverage_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_family_cf_coverage_mismatches"] == ["family-1"]
+
+
+def test_g7_formal_input_contract_rejects_family_paired_set_drift() -> None:
+    public, label, plan = _formal_g7_family()
+    drifted = next(row for row in public if row["cf_type"] == "CF4")
+    drifted["paired_set_id"] = "other-pair"
+    drifted["source_task_id"] = "task-drifted"
+    label_for_drifted = next(row for row in label if row["case_id"] == drifted["case_id"])
+    label_for_drifted["source_public_case_sha256"] = hashlib.sha256(
+        json.dumps(drifted, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    for row in plan:
+        if row["case_id"] == drifted["case_id"]:
+            row["paired_set_id"] = drifted["paired_set_id"]
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_pair_lineage_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_family_paired_set_mismatches"] == ["family-1"]
 
 
 def test_g7_formal_preflight_rejects_mixed_source_checkpoint_within_case_group() -> None:
