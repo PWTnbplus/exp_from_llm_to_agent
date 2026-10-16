@@ -86,11 +86,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "b073ae8",
-    "commit": "PENDING_LOCAL_COMMIT",
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
-    "commit_or_push_by_agent": false,
+    "commit": "67f113d Fail closed on G7 G8 checkpoint collisions",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "No provider or paid experiment was started; no G7/G8 scientific conclusion was claimed. Commit and remote verification are recorded after the state/report update."
+    "note": "No provider or paid experiment was started; no G7/G8 scientific conclusion was claimed. Push and independent ls-remote both failed through the configured proxy: unable to connect to github.com port 443 via 127.0.0.1."
   }
 }
