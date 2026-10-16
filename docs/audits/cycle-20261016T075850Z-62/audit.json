@@ -81,11 +81,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "875102a",
-    "commit": "pending",
-    "push_exit_code": null,
-    "ls_remote_exit_code": null,
-    "commit_or_push_by_agent": false,
+    "commit": "c15dc97 Fail closed on G7 scientific selection collisions",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "Commit and remote verification are pending. No provider or paid experiment was started."
+    "note": "Local commit exists. git push and independent git ls-remote both failed through the configured proxy: unable to connect to github.com port 443 via 127.0.0.1. No provider or paid experiment was started."
   }
 }
