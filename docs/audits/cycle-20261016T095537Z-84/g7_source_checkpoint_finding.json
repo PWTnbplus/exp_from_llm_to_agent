@@ -1,0 +1,14 @@
+{
+  "id": "ISSUE-508d66813a87",
+  "fingerprint": "g7-source-checkpoint-lineage-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted mixed source checkpoints within one diagnostic case/group",
+  "evidence": "Before repair, a valid complete G7 fixture with one row's source_checkpoint_id changed to a different nonempty identifier still returned formal_run_allowed_by_protocol=true with errors=[] under require_complete_plan=True. The seven arms therefore could silently refer to different source checkpoint lineage while sharing one G7 checkpoint ID.",
+  "remediation": "Require one stable source_checkpoint_id for all seven diagnostic arms within each case_id/group_id, while allowing the documented source_run_id to remain distinct per diagnostic arm; add an adversarial source-checkpoint test and independently scan the immutable plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+    "docs/state/gates.json"
+  ]
+}

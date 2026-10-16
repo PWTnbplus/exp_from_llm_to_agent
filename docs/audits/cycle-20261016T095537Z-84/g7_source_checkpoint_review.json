@@ -1,0 +1,15 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 source-checkpoint lineage review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-508d66813a87",
+      "verdict": "VERIFIED",
+      "evidence": "The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.",
+      "reason": "The local source-checkpoint lineage fail-open is closed. This verifies only structural handoff integrity; it does not establish provider identity/billing, upstream provenance, Q mathematics, dependency-edge truth, independent statistics, or scientific release."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

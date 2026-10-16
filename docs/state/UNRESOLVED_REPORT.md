@@ -1,9 +1,9 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T09:52:25+00:00
+生成时间（UTC）：2026-10-16T09:56:05+00:00
 
 - 开放/阻塞/未验证：**9**
-- 已验证修复：**20**
+- 已验证修复：**21**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G0, G6, G7**
 
@@ -103,6 +103,7 @@
 - **ISSUE-42e2f49eb73e**（P1）：G7 complete preflight accepted a source G6 arm inconsistent with the diagnostic group——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan gate now requires G3 rows to use G6_A_G3_GIVEN and G4 rows to use G6_B_G4_GIVEN. The adversarial wrong-mapping test passes; the focused G7 suite passes 42/42; the full repository suite passes 232/232; the immutable 1288-row formal plan has zero source-arm mismatches in an independent PowerShell reconstruction and the runner preflight reports formal_run_allowed_by_protocol=true with errors=[].
 - **ISSUE-6f5db82e86c0**（P1）：G7 complete preflight accepted a missing or wrong formal experiment identity——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires experiment_id=g7_failure_localization. The adversarial missing/wrong identity test passes; the focused G7 suite passes 43/43; the full repository suite passes 233/233; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell reconstruction reports zero missing or wrong experiment identities, zero source-arm mismatches, and the expected plan hash.
 - **ISSUE-57a074f246f3**（P1）：G7 complete preflight accepted a pooled retry protocol——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches.
+- **ISSUE-508d66813a87**（P1）：G7 complete preflight accepted mixed source checkpoints within one diagnostic case/group——`E:/resources/python/python.exe -X utf8 -m pytest -q`；The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.
 
 ## 可复用的已验证完成工作（不要重新构建）
 

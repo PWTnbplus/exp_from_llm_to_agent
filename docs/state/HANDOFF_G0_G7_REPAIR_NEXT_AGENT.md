@@ -505,3 +505,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `09432ff`; audit/state commit: `b66936d`; delivery-blocker state commit: `94adb84`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires both successful push and verified `git ls-remote`.
 
+## Cycle 84 G7 source checkpoint lineage repair (2026-10-16T09:55Z)
+
+- During an independent plan-lineage review, reproduced another local fail-open: changing one nonempty `source_checkpoint_id` within a complete G3 fork still returned `formal_run_allowed_by_protocol=true` and `errors=[]`.
+- The intended invariant is one shared source checkpoint per `case_id/group_id`; `source_run_id` is intentionally distinct per diagnostic arm in the actual plan and was not constrained.
+- Repaired `scripts/run_g7_failure_localization.py` to group source checkpoint IDs by case/group and reject mixed values with `g7_plan_source_checkpoint_mismatch`; added an adversarial regression test.
+- Focused G7 tests pass `45/45`; full repository suite passes `235/235`; py_compile and `git diff --check` pass.
+- Immutable preflight passes: `1288` plan rows, `formal_run_allowed_by_protocol=true`, `errors=[]`, source-checkpoint mismatches empty, source-arm mismatches empty, fixed non-pooled retry and experiment identities valid, and `184` unique checkpoints.
+- Independent read-only scan confirms `184` case/group keys, `mixed_source_checkpoint_groups=0`, `wrong_retry_protocol=0`, missing/wrong experiment identity `0`, source-arm mismatches `0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- `ISSUE-508d66813a87` is `VERIFIED` for this local source-checkpoint lineage guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider, provenance, Q/math/statistics, dependency-edge, and scientific-release blockers remain.
+- Audit files: `docs/audits/cycle-20261016T095537Z-84/audit.json`, `g7_source_checkpoint_finding.json`, and `g7_source_checkpoint_review.json`.
+- Local repair commit: `d9e6b7f`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
+

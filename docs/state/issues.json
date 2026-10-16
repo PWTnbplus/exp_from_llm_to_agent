@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:52:25+00:00",
+  "updated_at": "2026-10-16T09:56:05+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1470,6 +1470,38 @@
           "evidence": "The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches."
         }
       ]
+    },
+    {
+      "id": "ISSUE-508d66813a87",
+      "severity": "P1",
+      "title": "G7 complete preflight accepted mixed source checkpoints within one diagnostic case/group",
+      "status": "VERIFIED",
+      "evidence": "The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.",
+      "remediation": "Require one source_checkpoint_id per case/group and retain distinct source_run_id values per diagnostic arm.",
+      "first_seen": "2026-10-16T09:56:00+00:00",
+      "last_seen": "2026-10-16T09:56:05+00:00",
+      "source": "docs/audits/cycle-20261016T095537Z-84/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:56:05+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:56:00+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T095537Z-84/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:56:05+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The complete-plan gate now rejects more than one source_checkpoint_id within a case/group while preserving distinct per-arm source_run_id values. The adversarial mixed-checkpoint test passes; the focused G7 suite passes 45/45; the full repository suite passes 235/235; the immutable 1288-row plan preflight reports no source-checkpoint mismatches, and an independent PowerShell reconstruction reports zero mixed source-checkpoint groups, zero identity failures, zero retry-protocol violations, and zero source-arm mismatches."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1569,7 +1601,8 @@
     "docs/audits/cycle-20261016T093500Z-80/audit.json",
     "docs/audits/cycle-20261016T094408Z-81/audit.json",
     "docs/audits/cycle-20261016T094833Z-82/audit.json",
-    "docs/audits/cycle-20261016T095127Z-83/audit.json"
+    "docs/audits/cycle-20261016T095127Z-83/audit.json",
+    "docs/audits/cycle-20261016T095537Z-84/audit.json"
   ],
   "current_focus": null
 }
