@@ -1,0 +1,25 @@
+{
+  "audit_version": "g7-plan-label-eligibility-review-v1",
+  "reviewer": "independent_g7_plan_label_eligibility_check_v10",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "plan_rows": 1288,
+  "checkpoint_count": 184,
+  "public_cases": 92,
+  "label_cases": 92,
+  "planned_arm_eligibility_mismatches": 0,
+  "ineligible_u_rows": 368,
+  "ineligible_u_arm_counts": {
+    "D3": 184,
+    "U_ONLY": 184
+  },
+  "public_plan_mapping_mismatches": 0,
+  "label_public_hash_mismatches": 0,
+  "formal_preflight_errors": [
+    "ineligible_u_diagnostic_arm"
+  ],
+  "formal_run_allowed_by_protocol": false,
+  "provider_calls_made": false,
+  "historical_artifacts_rewritten": false,
+  "source_report": "docs/audits/cycle-20261016T070000Z-44/g7_protocol_preflight.json",
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}

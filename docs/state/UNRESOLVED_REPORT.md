@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:25:33+00:00
+生成时间（UTC）：2026-10-16T06:28:53+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -11,9 +11,9 @@
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：The corrected inputs contain 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, exact seven-arm coverage, and no public/plan mapping or label/public hash mismatches. However, all 92 labels have eligible_u=false and zero dependency edges, while 368 planned rows in D3 and U_ONLY inject U. The executable preflight now fails closed with ineligible_u_diagnostic_arm before any provider call. The historical corrected run still contains 1285 completed rows, 3 provider_error rows, and Q valid only for 20/1288.
-- 必需修复：Retain all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures, ineligible U arms, and budget failures in the denominator. Do not select a mechanism or make L/U claims. Obtain independently audited replacement dependency/state data with non-final U labels, or run a separately frozen and explicitly authorized replacement experiment after billing, immutable model snapshot, and full preflight evidence; never pool or rewrite historical traces.
-- 尝试次数：15
+- 证据：The actual corrected inputs contain 92 public cases, 92 labels, 1288 plan rows, 184 checkpoints, zero public/plan mapping mismatches, zero label/public hash mismatches, and zero plan-label eligibility mismatches. The plan correctly marks all 368 U-stage rows in D3/U_ONLY as ineligible, but all 92 independently generated labels have eligible_u=false and zero dependency edges. Formal preflight therefore stops with ineligible_u_diagnostic_arm before provider setup, with provider_calls_made=false. Historical execution remains 1285 completed plus 3 provider_error rows and Q valid only for 20/1288.
+- 必需修复：Retain all terminal failures, invalid Q rows, trace-integrity failures, metadata mismatches, arm-contract failures, eligibility failures, and budget failures in the denominator. Do not select a mechanism or make L/U claims. Obtain independently audited replacement dependency/state data with non-final U states, or run a separately frozen and explicitly authorized replacement after billing, immutable model snapshot, and full preflight evidence; never pool or rewrite historical traces.
+- 尝试次数：16
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
 
