@@ -58,7 +58,7 @@
   },
   "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
   "git": {
-    "commit": "ce51fa9",
+    "commit": "41f69d5",
     "push_command": "git push origin autopilot/scientific-law-discovery",
     "push_exit_code": 128,
     "push_output": "fatal: unable to access 'https://github.com/PWTnbplus/exp_from_llm_to_agent.git/': Failed to connect to github.com port 443 via 127.0.0.1 after 2039 ms: Could not connect to server",
