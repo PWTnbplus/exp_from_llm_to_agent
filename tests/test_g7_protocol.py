@@ -458,6 +458,39 @@ def test_g7_formal_input_contract_rejects_replacement_family(monkeypatch: pytest
     }
 
 
+def test_g7_formal_input_contract_rejects_replacement_case(monkeypatch: pytest.MonkeyPatch) -> None:
+    public, label, plan = _formal_g7_family()
+    expected_cases = frozenset(row["case_id"] for row in public)
+    monkeypatch.setattr(g7_runner, "G7_FORMAL_CASE_IDS", expected_cases)
+    old_case_id = "case-CF4"
+    replacement = "replacement-case"
+    public_row = next(row for row in public if row["case_id"] == old_case_id)
+    public_row["case_id"] = replacement
+    public_row["source_task_id"] = "replacement-source-task"
+    label_row = next(row for row in label if row["case_id"] == old_case_id)
+    label_row["case_id"] = replacement
+    label_row["source_public_case_sha256"] = hashlib.sha256(
+        json.dumps(public_row, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    for row in plan:
+        if row["case_id"] == old_case_id:
+            row["case_id"] = replacement
+
+    report = protocol_preflight(
+        public, label, plan,
+        worker_count=1,
+        require_complete_plan=True,
+        require_formal_input_contract=True,
+    )
+
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "g7_public_formal_case_set_mismatch" in report["errors"]
+    assert report["counts"]["g7_public_formal_case_set_mismatch"] == {
+        "missing": [old_case_id],
+        "extra": [replacement],
+    }
+
+
 def test_g7_formal_preflight_rejects_mixed_source_checkpoint_within_case_group() -> None:
     public, label, plan = _formal_g7_case("case-1")
     plan[0]["source_checkpoint_id"] = "different-source-checkpoint"

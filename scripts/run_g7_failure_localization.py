@@ -91,6 +91,13 @@ G7_FORMAL_THEORY_FAMILIES = frozenset({
     "G6F-TC-L1-005", "G6F-TC-L1-006", "G6F-TC-L1-007", "G6F-TC-L1-008",
     "G6F-TC-L1-009", "G6F-TC-L1-010", "G6F-TC-L1-011", "G6F-TC-L1-012",
 })
+# The public case IDs are also frozen: preserving only the family/CF layout is
+# insufficient if a row is silently replaced by another case.
+G7_FORMAL_CASE_IDS = frozenset(
+    f"{family}-{cf_type}"
+    for family in G7_FORMAL_THEORY_FAMILIES
+    for cf_type in sorted(G7_CF_TYPES)
+)
 G7_STAGES = {"V", "L", "U"}
 G7_ARM_CONTRACT = {
     "D0": (),
@@ -810,6 +817,13 @@ def protocol_preflight(
     }
     formal_family_set_missing = sorted(G7_FORMAL_THEORY_FAMILIES - formal_family_ids)
     formal_family_set_extra = sorted(formal_family_ids - G7_FORMAL_THEORY_FAMILIES)
+    formal_case_ids = {
+        row.get("case_id")
+        for row in public_rows
+        if _valid_identifier(row.get("case_id"))
+    }
+    formal_case_set_missing = sorted(G7_FORMAL_CASE_IDS - formal_case_ids)
+    formal_case_set_extra = sorted(formal_case_ids - G7_FORMAL_CASE_IDS)
     errors: list[str] = []
     if not public_rows or not label_rows or not plan_rows:
         errors.append("public_labels_plan_must_be_nonempty")
@@ -871,6 +885,10 @@ def protocol_preflight(
         formal_family_set_missing or formal_family_set_extra
     ):
         errors.append("g7_public_formal_family_set_mismatch")
+    if require_formal_input_contract and (
+        formal_case_set_missing or formal_case_set_extra
+    ):
+        errors.append("g7_public_formal_case_set_mismatch")
     if duplicate_plan_ids:
         errors.append("duplicate_run_id")
     if duplicate_public_case_ids:
@@ -936,6 +954,10 @@ def protocol_preflight(
             "g7_public_formal_family_set_mismatch": {
                 "missing": formal_family_set_missing,
                 "extra": formal_family_set_extra,
+            },
+            "g7_public_formal_case_set_mismatch": {
+                "missing": formal_case_set_missing,
+                "extra": formal_case_set_extra,
             },
             "require_formal_input_contract": require_formal_input_contract,
             "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
