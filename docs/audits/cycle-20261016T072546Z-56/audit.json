@@ -69,8 +69,11 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "f79bfc5",
-    "commit_or_push_by_agent": false,
+    "commit": "b25b76d Fail closed on G6 handoff collisions",
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
     "remote_updated": false,
-    "note": "No provider or paid experiment was started; no scientific conclusion was claimed."
+    "note": "No provider or paid experiment was started; no scientific conclusion was claimed. Push and independent ls-remote failed through the configured proxy."
   }
 }
