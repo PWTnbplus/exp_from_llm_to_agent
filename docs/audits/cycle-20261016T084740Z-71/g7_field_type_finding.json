@@ -1,0 +1,16 @@
+{
+  "status": "FINDING_RECORDED",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 field-type contract review",
+  "findings": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
+      "evidence": "Before the type check was added, the G7 output contract validated only key presence for revised_claim and supporting_evidence. The design-aligned data report requires revised_claim to be string/null and supporting_evidence to be a string; a read-only scan of the immutable protocol-corrected checkpoint payload found 22/184 rows with non-string or empty supporting_evidence (dict/list/None). Historical artifacts remain unchanged and non-confirmatory.",
+      "remediation": "Require revised_claim to be string or null and supporting_evidence to be a nonempty string in the arm-specific output contract; retain invalid responses through the bounded format-retry path and never rewrite historical rows."
+    }
+  ],
+  "resolutions": [],
+  "scientific_truth_decision_made": false
+}

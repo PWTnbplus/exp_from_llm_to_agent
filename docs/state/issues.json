@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T08:46:10+00:00",
+  "updated_at": "2026-10-16T08:48:05+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -942,17 +942,17 @@
       "severity": "P1",
       "title": "G7 model-output stage parser accepted malformed nested V/L/U fields",
       "status": "VERIFIED",
-      "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory.",
-      "remediation": "Enforce exact arm-specific top-level output keys: checkpoint outputs must exclude stages, diagnostic outputs must include stages; preserve malformed outputs through the bounded format-retry path and never rewrite historical checkpoint artifacts.",
+      "evidence": "The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory.",
+      "remediation": "Require revised_claim to be string or null and supporting_evidence to be a nonempty string in the arm-specific output contract; retain invalid responses through the bounded format-retry path and never rewrite historical rows.",
       "first_seen": "2026-10-16T08:42:10+00:00",
-      "last_seen": "2026-10-16T08:45:32+00:00",
+      "last_seen": "2026-10-16T08:48:05+00:00",
       "source": "docs/audits/cycle-20261016T084135Z-69/g7_stage_contract_finding.json",
       "attempts": 0,
       "blocked_reason": null,
       "verification": {
-        "time": "2026-10-16T08:45:32+00:00",
+        "time": "2026-10-16T08:48:05+00:00",
         "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
-        "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory.",
+        "evidence": "The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory.",
         "reason": "Independent reviewer verification"
       },
       "history": [
@@ -977,6 +977,17 @@
           "event": "VERIFIED",
           "reason": "Independent reviewer verification",
           "evidence": "The runner now enforces exact checkpoint versus diagnostic top-level output keys, validates affected_claim_ids, and sends malformed checkpoint output through exactly one bounded format retry. New tests cover direct arm-specific validation and a checkpoint containing stages; focused tests pass 67/67 and the full host suite passes 212/212. The immutable 128/184 historical checkpoint rows containing stages remain unchanged and non-confirmatory."
+        },
+        {
+          "time": "2026-10-16T08:48:05+00:00",
+          "event": "REOPENED",
+          "source": "docs/audits/cycle-20261016T084740Z-71/g7_field_type_finding.json"
+        },
+        {
+          "time": "2026-10-16T08:48:05+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory."
         }
       ]
     }

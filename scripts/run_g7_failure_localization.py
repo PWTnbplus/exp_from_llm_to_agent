@@ -301,6 +301,12 @@ def validate_model_output_contract(value: dict[str, Any], *, checkpoint: bool) -
                for claim_id in affected_claim_ids)
     ):
         raise ValueError("invalid affected_claim_ids")
+    revised_claim = value.get("revised_claim")
+    if revised_claim is not None and not isinstance(revised_claim, str):
+        raise ValueError("invalid revised_claim")
+    supporting_evidence = value.get("supporting_evidence")
+    if not isinstance(supporting_evidence, str) or not supporting_evidence.strip():
+        raise ValueError("invalid supporting_evidence")
     if not checkpoint and not isinstance(value.get("stages"), dict):
         raise ValueError("invalid diagnostic stages")
 

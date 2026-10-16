@@ -1,0 +1,84 @@
+{
+  "cycle": "20261016T084740Z-71",
+  "scope": "G7 arm-specific output field-type contract and historical evidence-shape audit",
+  "scientific_truth_decision_made": false,
+  "skills_applied": ["scientific-law-recovery"],
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md:670-671"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 final_Y fields use affected_claim_ids as a list, revised_claim as string/null, and supporting_evidence as a string.",
+      "Checkpoint and diagnostic output contracts remain arm-specific and exact.",
+      "Malformed provider outputs are retained as failures with only the bounded format retry.",
+      "Historical malformed rows remain immutable and do not become scientific evidence."
+    ],
+    "alignment_conclusion": "The field-type checks now match the repository's design-aligned G7 report and the future output contract. The 22/184 historical type violations remain explicitly excluded from confirmatory use."
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py"],
+    "change": "validate_model_output_contract now requires revised_claim to be string/null and supporting_evidence to be a nonempty string for both checkpoint and diagnostic outputs.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false
+  },
+  "verification": {
+    "focused": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_label_contract.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py",
+      "result": "67 passed in 5.76s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "212 passed in 23.34s"
+    },
+    "adversarial_field_type_probe": {
+      "command": "Read-only validate_model_output_contract probes with revised_claim object and supporting_evidence list",
+      "result": "Both malformed values are rejected before stage handling; no provider/network call occurs."
+    },
+    "historical_checkpoint_probe": {
+      "command": "Read-only type scan of results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_checkpoints.jsonl",
+      "result": "184 checkpoint payloads; 22 have non-string or empty supporting_evidence; all historical rows remain unchanged and non-confirmatory."
+    },
+    "source_review": {
+      "files": ["scripts/run_g7_failure_localization.py", "tests/test_g7_protocol.py", "docs/reports/G0_G7_COMPLETE_DATA_CN_20261015.md"],
+      "result": "PASS: field-type checks match the documented G7 schema and execute before checkpoint acceptance or diagnostic stage validation."
+    }
+  },
+  "remaining_boundary": {
+    "scientific_release_allowed": false,
+    "note": "G0/G6/G7 remain blocked by provider authorization, immutable model/billing evidence, provenance, independent Q/statistical/mathematical/dependency review, and remote delivery. No provider or paid experiment was started."
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 field-type contract review",
+    "findings": [],
+    "resolutions": [
+      {
+        "id": "ISSUE-4c7e2a91d6f0",
+        "verdict": "VERIFIED",
+        "evidence": "Field-type validation is covered by 67 focused tests, 212 full tests, and independent malformed-value probes; the immutable 22/184 historical type violations remain non-confirmatory.",
+        "reason": "Only the forward local field-type remediation is verified; Q validity and scientific release remain blocked."
+      }
+    ]
+  },
+  "ledger": {
+    "highest_priority_issue": "ISSUE-000000000002",
+    "status_after_cycle": "BLOCKED",
+    "resolution_claimed": true,
+    "scientific_release_allowed": false
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "af5e9bd",
+    "commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "commit_or_push_by_agent": true,
+    "remote_updated": false,
+    "note": "Filled after local repair commit and delivery verification attempts."
+  }
+}

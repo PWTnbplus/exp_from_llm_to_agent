@@ -1,0 +1,16 @@
+{
+  "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+  "project_complete": false,
+  "reviewer": "independent read-only G7 field-type contract review",
+  "findings": [],
+  "resolutions": [
+    {
+      "id": "ISSUE-4c7e2a91d6f0",
+      "severity": "P1",
+      "verdict": "VERIFIED",
+      "evidence": "The arm-specific output contract now rejects non-string/nonempty supporting_evidence and non-string/non-null revised_claim. New adversarial assertions pass together with the existing checkpoint and nested-stage tests: 67 focused tests and 212 full host tests. The immutable 22/184 historical malformed checkpoint rows remain unchanged and non-confirmatory.",
+      "reason": "Future-run field-type validation is independently verified locally; no historical artifact or scientific conclusion was changed."
+    }
+  ],
+  "scientific_truth_decision_made": false
+}

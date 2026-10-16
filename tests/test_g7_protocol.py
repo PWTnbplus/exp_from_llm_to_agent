@@ -492,6 +492,10 @@ def test_g7_output_contract_is_arm_specific_and_fail_closed() -> None:
         validate_model_output_contract(diagnostic, checkpoint=True)
     with pytest.raises(ValueError, match="invalid diagnostic output contract"):
         validate_model_output_contract(checkpoint, checkpoint=False)
+    with pytest.raises(ValueError, match="invalid revised_claim"):
+        validate_model_output_contract({**checkpoint, "revised_claim": {"hidden": True}}, checkpoint=True)
+    with pytest.raises(ValueError, match="invalid supporting_evidence"):
+        validate_model_output_contract({**checkpoint, "supporting_evidence": []}, checkpoint=True)
 
 
 def test_g7_checkpoint_stages_are_rejected_then_bounded_retry_can_accept_valid_shape(tmp_path: Path) -> None:
@@ -522,7 +526,7 @@ def test_g7_format_retry_is_bounded_and_audited(tmp_path: Path) -> None:
         "decision": "MAINTAIN",
         "affected_claim_ids": [],
         "revised_claim": "",
-        "supporting_evidence": [],
+        "supporting_evidence": "format contract",
         "stages": {
             "V": {"verdict": "SUPPORTED"},
             "L": {"nodes": [], "edges": []},
