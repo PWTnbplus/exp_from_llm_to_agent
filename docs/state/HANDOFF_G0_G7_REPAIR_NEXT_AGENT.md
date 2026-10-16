@@ -492,3 +492,16 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `b84f005`; audit/state commit: `45267ed`; delivery-blocker state commit: `bf9b8d9`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote push plus `git ls-remote` must be attempted and verified before claiming delivery.
 
+## Cycle 83 G7 non-pooled retry protocol repair (2026-10-16T09:51Z)
+
+- Re-read the design and state controls. G7 terminal retries must remain separately frozen/non-pooled so failures and denominators cannot be hidden by combining batches.
+- Independently reproduced a local fail-open: changing every valid complete-plan row's `retry_protocol` to `pooled` still returned `formal_run_allowed_by_protocol=true` and `errors=[]` under `require_complete_plan=True`.
+- Repaired `scripts/run_g7_failure_localization.py` with `G7_RETRY_PROTOCOL=separate_frozen_retry_not_pooled`; complete-plan rows with any other value now fail `invalid_g7_plan_metadata`. Added an adversarial pooled-retry regression test.
+- Focused G7 tests pass `44/44`; full repository suite passes `234/234`; py_compile and `git diff --check` pass.
+- Re-ran the immutable formal preflight: `1288` plan rows, `formal_run_allowed_by_protocol=true`, `errors=[]`, `invalid_g7_plan_metadata=[]`, source-arm mismatches empty, complete case/group/checkpoint coverage intact, and `184` unique checkpoints.
+- Independent read-only scan confirms `wrong_retry_protocol=0`, `missing_experiment_id=0`, `wrong_experiment_id=0`, `source_arm_mismatches=0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
+- `ISSUE-57a074f246f3` is `VERIFIED` for this local retry-boundary guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; external provider authorization, upstream provenance/Git delivery, Q/math/statistical review, dependency edges, and scientific release remain unresolved.
+- Audit files: `docs/audits/cycle-20261016T095127Z-83/audit.json`, `g7_retry_protocol_finding.json`, and `g7_retry_protocol_review.json`.
+- Local repair commit: `09432ff`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires both successful push and verified `git ls-remote`.
+

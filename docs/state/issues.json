@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:49:36+00:00",
+  "updated_at": "2026-10-16T09:51:54+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1432,6 +1432,38 @@
           "evidence": "The complete-plan contract now requires experiment_id=g7_failure_localization. The adversarial missing/wrong identity test passes; the focused G7 suite passes 43/43; the full repository suite passes 233/233; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell reconstruction reports zero missing or wrong experiment identities, zero source-arm mismatches, and the expected plan hash."
         }
       ]
+    },
+    {
+      "id": "ISSUE-57a074f246f3",
+      "severity": "P1",
+      "title": "G7 complete preflight accepted a pooled retry protocol",
+      "status": "VERIFIED",
+      "evidence": "The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches.",
+      "remediation": "Require exact separate_frozen_retry_not_pooled metadata for every complete-plan row and test the pooled mutation.",
+      "first_seen": "2026-10-16T09:51:48+00:00",
+      "last_seen": "2026-10-16T09:51:54+00:00",
+      "source": "docs/audits/cycle-20261016T095127Z-83/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": {
+        "time": "2026-10-16T09:51:54+00:00",
+        "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+        "evidence": "The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches.",
+        "reason": "Independent reviewer verification"
+      },
+      "history": [
+        {
+          "time": "2026-10-16T09:51:48+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261016T095127Z-83/audit.json"
+        },
+        {
+          "time": "2026-10-16T09:51:54+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent reviewer verification",
+          "evidence": "The complete-plan contract now requires separate_frozen_retry_not_pooled. The adversarial pooled-protocol test passes; the focused G7 suite passes 44/44; the full repository suite passes 234/234; the immutable 1288-row formal plan preflight reports no invalid plan metadata, and an independent PowerShell scan reports zero wrong retry protocols, zero identity failures, and zero source-arm mismatches."
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -1530,7 +1562,8 @@
     "docs/audits/cycle-20261016T092700Z-79/audit.json",
     "docs/audits/cycle-20261016T093500Z-80/audit.json",
     "docs/audits/cycle-20261016T094408Z-81/audit.json",
-    "docs/audits/cycle-20261016T094833Z-82/audit.json"
+    "docs/audits/cycle-20261016T094833Z-82/audit.json",
+    "docs/audits/cycle-20261016T095127Z-83/audit.json"
   ],
   "current_focus": null
 }

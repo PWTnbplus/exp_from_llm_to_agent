@@ -1,0 +1,109 @@
+{
+  "cycle": "20261016T095127Z-83",
+  "scope": "G7 complete-plan non-pooled retry protocol gate",
+  "skills_applied": ["scientific-law-recovery"],
+  "scientific_truth_decision_made": false,
+  "design_alignment_review": {
+    "references": [
+      "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+      "D:/硕士/prj1_ai_cal/writing/实验设计/科学问题到科学假设全思路.md",
+      "docs/state/gates.json"
+    ],
+    "relevant_controls_reviewed": [
+      "G7 formal runs and terminal retries must remain separately frozen and non-pooled so failures and denominators are auditable.",
+      "G7 technical failures remain in the planned denominator and cannot be hidden by silently pooling or replacing batches.",
+      "A structural retry-boundary repair is not a provider, statistical, mathematical, or scientific release decision."
+    ],
+    "alignment_conclusion": "The complete-plan preflight now rejects pooled retry metadata and preserves the separate frozen retry boundary used by the immutable protocol-corrected plan."
+  },
+  "reproduction": {
+    "before_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -c import valid formal fixture; set every retry_protocol to pooled; call protocol_preflight(..., require_complete_plan=True)",
+      "result": "PASS for the regression probe before implementation repair: formal_run_allowed_by_protocol=true; errors=[]; the pooled retry protocol was accepted."
+    },
+    "after_repair": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "PASS: 44 tests, including rejection of pooled retry protocol and controls for correct non-pooled retry metadata, fixed experiment identity, source-arm identity, complete case/group coverage, and checkpoint identity."
+    }
+  },
+  "repair": {
+    "source_changed": ["scripts/run_g7_failure_localization.py"],
+    "tests_added_or_changed": ["tests/test_g7_protocol.py"],
+    "change": "Added G7_RETRY_PROTOCOL=separate_frozen_retry_not_pooled and required exact equality in _formal_plan_contract_valid; added an adversarial pooled-protocol test.",
+    "historical_raw_artifacts_modified": false,
+    "provider_calls_made": false,
+    "paid_experiment_started": false,
+    "code_commit": "09432ff"
+  },
+  "verification": {
+    "focused_tests": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+      "result": "44 passed in 5.66s"
+    },
+    "full_host_suite": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "234 passed in 23.50s"
+    },
+    "syntax_and_whitespace": {
+      "commands": [
+        "E:/resources/python/python.exe -X utf8 -m py_compile scripts/run_g7_failure_localization.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+        "git diff --check"
+      ],
+      "result": "PASS"
+    },
+    "immutable_plan_preflight": {
+      "inputs": {
+        "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+        "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+        "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+        "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+      },
+      "command": "scripts/g7_protocol_preflight.py with worker_count=16 and require_complete_plan=true",
+      "result": "formal_run_allowed_by_protocol=true; errors=[]; plan_rows=1288; invalid_g7_plan_metadata=[]; g7_plan_group_arm_mismatches=[]; incomplete_case_group_coverage=[]; duplicate_case_group_checkpoints=[]; checkpoint_identity_collisions=[]; unique_checkpoint_ids=184"
+    },
+    "independent_read_only_review": {
+      "reviewer": "separate PowerShell data-only reconstruction, not the runner preflight",
+      "result": "PASS: rows=1288; wrong_retry_protocol=0; missing_experiment_id=0; wrong_experiment_id=0; source_arm_mismatches=0; plan SHA256 matches the immutable preflight input."
+    }
+  },
+  "review": {
+    "status": "PASS_WITH_EXTERNAL_BOUNDARY",
+    "reviewer": "independent read-only G7 retry-separation review",
+    "findings": [
+      {
+        "id": "ISSUE-57a074f246f3",
+        "fingerprint": "g7-retry-protocol-separation-v1",
+        "severity": "P1",
+        "title": "G7 complete preflight accepted a pooled retry protocol",
+        "evidence": "The pre-repair mutation probe returned formal_run_allowed_by_protocol=true when all retry_protocol values were pooled.",
+        "remediation": "Require exact separate_frozen_retry_not_pooled metadata for every complete-plan row and test the pooled mutation."
+      }
+    ],
+    "resolutions": [
+      {
+        "id": "ISSUE-57a074f246f3",
+        "verdict": "VERIFIED",
+        "evidence": "The fixed retry guard, adversarial test, full suite, immutable preflight, and independent data-only reconstruction all pass.",
+        "reason": "Local structural defect fixed; external and scientific gates remain unchanged."
+      }
+    ]
+  },
+  "git": {
+    "branch": "autopilot/scientific-law-discovery",
+    "head_before_cycle": "500c757",
+    "code_commit": "09432ff",
+    "audit_state_commit": null,
+    "delivery_state_commit": null,
+    "push_exit_code": null,
+    "ls_remote_exit_code": null,
+    "remote_updated": false,
+    "note": "Remote delivery will be attempted after local audit/state ingestion; no remote success is claimed here."
+  },
+  "ledger": {
+    "new_local_issue": "ISSUE-57a074f246f3",
+    "highest_external_issue": "ISSUE-000000000002",
+    "scientific_release_allowed": false,
+    "note": "Only G7 retry-batch separation was repaired; no provider call, confirmatory inference, or scientific truth decision was made."
+  }
+}

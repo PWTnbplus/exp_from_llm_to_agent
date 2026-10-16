@@ -1,0 +1,13 @@
+{
+  "id": "ISSUE-57a074f246f3",
+  "fingerprint": "g7-retry-protocol-separation-v1",
+  "severity": "P1",
+  "title": "G7 complete preflight accepted a pooled retry protocol",
+  "evidence": "Before repair, a valid complete G7 fixture with every retry_protocol changed to pooled returned formal_run_allowed_by_protocol=true with errors=[] under require_complete_plan=True. That could silently mix a retry batch with the original formal batch instead of preserving the required separate non-pooled boundary.",
+  "remediation": "Require exact retry_protocol=separate_frozen_retry_not_pooled for every complete-plan row, add an adversarial pooled-protocol test, and independently verify the immutable formal plan.",
+  "design_basis": [
+    "D:/硕士/prj1_ai_cal/writing/实验设计/全流程实验.md",
+    "D:/硕士/prj1_ai_cal/writing/实验设计/整体思路简化版.md",
+    "docs/state/gates.json"
+  ]
+}
