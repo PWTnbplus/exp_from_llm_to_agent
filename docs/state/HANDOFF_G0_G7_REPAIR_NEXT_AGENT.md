@@ -383,7 +383,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Re-ran the immutable protocol-corrected G7 plan preflight: `92` public cases, `1288` plan rows, `184` case/group keys, all complete; `incomplete_case_group_coverage=[]`, `duplicate_case_group_checkpoints=[]`, and `checkpoint_identity_collisions=[]`.
 - `ISSUE-dad1d3f0293e` is `VERIFIED` for this local formal-plan coverage guard only. `ISSUE-000000000002`, `ISSUE-000000000003`, `ISSUE-000000000004`, `ISSUE-1f8c2b6a4d90`, and `ISSUE-3d7a9c1e5b20` remain externally or scientifically blocked; G0/G6/G7 remain `BLOCKED` and `scientific_release_allowed=false`.
 - Audit files: `docs/audits/cycle-20261016T093500Z-80/audit.json`, `g7_plan_coverage_finding.json`, and `g7_plan_coverage_review.json`.
-- Local commits: `776285b` (`Enforce complete G7 case-group coverage`) and `83c35e4` (`Record G7 complete-plan coverage audit`). `git push` and `git ls-remote` both exited `1` with a proxy connection failure to `github.com:443`; remote delivery is not claimed or verified.
+- Local commits: `776285b` (`Enforce complete G7 case-group coverage`), `83c35e4` (`Record G7 complete-plan coverage audit`), and `6623a63` (`Record cycle 80 remote delivery blocker`). Final `git push` and `git ls-remote` both exited `1` with a proxy connection failure to `github.com:443`; remote delivery is not claimed or verified.
 - No provider call, paid experiment, retry, historical result edit, confirmatory inference, or scientific claim was made. The user-owned untracked `research_data_summary_G0_G7/` remains preserved and unstaged.
 
 ## Cycle 79 V2 ledger chronology repair (2026-10-16T09:27Z)
