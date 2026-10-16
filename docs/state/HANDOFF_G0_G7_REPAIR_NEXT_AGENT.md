@@ -502,6 +502,6 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only scan confirms `wrong_retry_protocol=0`, `missing_experiment_id=0`, `wrong_experiment_id=0`, `source_arm_mismatches=0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
 - `ISSUE-57a074f246f3` is `VERIFIED` for this local retry-boundary guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; external provider authorization, upstream provenance/Git delivery, Q/math/statistical review, dependency edges, and scientific release remain unresolved.
 - Audit files: `docs/audits/cycle-20261016T095127Z-83/audit.json`, `g7_retry_protocol_finding.json`, and `g7_retry_protocol_review.json`.
-- Local repair commit: `09432ff`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- Local repair commit: `09432ff`; audit/state commit: `b66936d`; delivery-blocker state commit: `94adb84`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires both successful push and verified `git ls-remote`.
 
