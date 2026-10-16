@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-16T06:45:01.631116+00:00",
+  "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
+  "scientific_release_allowed": false,
+  "mock_is_not_science_evidence": true,
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "gates": {
+    "G0": {
+      "name": "pinned true simulator and licensing",
+      "status": "BLOCKED",
+      "scope": "scientific_provenance",
+      "evidence": [
+        "Local NewtonBench commit 912a4ba5f4356ddd06acc16e44460ca30be4abc2 is recorded, but remote provenance and license verification are blocked by network failure.",
+        "The current report records official_numeric_evaluator=false; the local evaluator is not treated as the official upstream evaluator."
+      ],
+      "verification_command": "git ls-remote origin HEAD (exit 128: proxy connection failure)",
+      "blocking_issues": ["ISSUE-000000000003"],
+      "scientific_release_allowed": false
+    },
+    "G1": {
+      "name": "strict LLM-only nonadaptivity",
+      "status": "PASS",
+      "scope": "engineering_protocol_only",
+      "evidence": [
+        "Frozen-plan, no-tool, no-mid-run-feedback, observation-swap, and plan-hash controls are covered by the G1–G5 policy tests and audit reports.",
+        "No formal provider scientific result is claimed; historical formal coverage remains 0/720."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_llm_isolation.py tests/test_reproducibility.py",
+      "scientific_release_allowed": false,
+      "caveats": ["Engineering contract evidence does not establish a real-provider scientific result."]
+    },
+    "G2": {
+      "name": "feedback-dependent Agent action capability",
+      "status": "PASS",
+      "scope": "engineering_protocol_only",
+      "evidence": [
+        "Agent action branching on public observations, allowed-tool boundaries, and unauthorized-tool failures are covered by the Agent action and policy tests.",
+        "No formal provider scientific result is claimed; historical formal coverage remains 0/720."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_experiment_policy.py",
+      "scientific_release_allowed": false,
+      "caveats": ["Mock/engineering action capability is not a superiority result."]
+    },
+    "G3": {
+      "name": "shared budget and hidden-answer isolation",
+      "status": "PASS",
+      "scope": "engineering_protocol_only",
+      "evidence": [
+        "Budget ledger, private-oracle isolation, provider retry policy, and public initial-information handling have passing regression coverage.",
+        "The corrected G6 run has structural traces, but independent statistical/provider acceptance remains open."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_budget.py tests/test_no_leakage.py tests/test_provider_trace.py",
+      "scientific_release_allowed": false,
+      "caveats": ["G3/G4 matched scientific inference is not released by this engineering gate."]
+    },
+    "G4": {
+      "name": "objective evaluator adversarial cases",
+      "status": "PASS",
+      "scope": "engineering_evaluator_only",
+      "evidence": [
+        "Numeric, structural, OOD, malformed, overfit, and illegal-candidate evaluator cases are covered by the verified evaluator tests.",
+        "The evaluator boundary is separate from hidden ground-truth provenance and external scientific review."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_evaluator.py",
+      "scientific_release_allowed": false,
+      "caveats": ["Evaluator tests do not certify upstream simulator provenance or formal model results."]
+    },
+    "G5": {
+      "name": "real simulator plus mock pipeline smoke test",
+      "status": "PASS",
+      "scope": "smoke_and_engineering_only",
+      "evidence": [
+        "The real simulator smoke path and mock pipeline are persisted and covered by the G0–G5 audit inventory.",
+        "The 23/24 corrected source-only family subset and zero dependency edges are retained; no L/U edges are fabricated."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "scientific_release_allowed": false,
+      "caveats": ["Smoke/mock execution is not formal VLDR evidence; upstream provenance remains G0-blocked."]
+    },
+    "G6": {
+      "name": "complete reproducibility, results, statistics, and retry gates",
+      "status": "BLOCKED",
+      "scope": "formal_scientific_release",
+      "evidence": [
+        "Corrected G6 plan/response/handoff coverage is 552/552 with structural review pass and revision-valid count 0.",
+        "Scientific release remains false pending independent mathematical/statistical review, immutable model evidence, billing evidence, and provenance."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_statistics.py tests/test_g7_corrected_metrics.py (engineering checks only)",
+      "blocking_issues": [
+        "ISSUE-ff97c7c89112",
+        "ISSUE-000000000002",
+        "ISSUE-000000000004",
+        "ISSUE-ad61f025976a",
+        "ISSUE-000000000003"
+      ],
+      "scientific_release_allowed": false
+    },
+    "G7": {
+      "name": "frozen preregistration before costly formal testing and V/L/U/Q diagnosis",
+      "status": "BLOCKED",
+      "scope": "formal_scientific_release",
+      "evidence": [
+        "The corrected plan has 1288/1288 planned rows, 184/184 checkpoints, seven arms per checkpoint, zero routing/private prompt hits, and explicit non-pooled failure accounting.",
+        "The corrected result retains 3 provider errors, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows; U-dependent pairs are NOT COMPUTABLE."
+      ],
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py",
+      "blocking_issues": [
+        "ISSUE-3d7a9c1e5b20",
+        "ISSUE-1f8c2b6a4d90",
+        "ISSUE-000000000002"
+      ],
+      "scientific_release_allowed": false,
+      "caveats": ["All failures and invalid Q rows remain in the denominator; no provider/Q or L/U claim is made."]
+    }
+  }
+}

@@ -1,18 +1,18 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T06:41:46+00:00
+生成时间（UTC）：2026-10-16T06:47:25+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
 - 已验证完成里程碑：**2**
-- 未验证科学门禁：**G0, G1, G2, G3, G4, G5, G6, G7**
+- 未验证科学门禁：**G0, G6, G7**
 
 ## 未解决和阻塞问题
 
 ### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：This repair did not change the immutable corrected G7 provider history: the cycle-46 corrected metrics audit retains 3 terminal failures, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows. No provider/Q rerun was authorized or launched in cycle 47.
-- 必需修复：Keep all failures and invalid Q rows in the all-planned denominator, use the metrics only non-confirmatorily, and obtain independently reviewed provider/Q diagnosis plus eligible non-final dependency/state data before any formal G7 inference or L/U claim.
+- 证据：The gate attestation correctly records G7 as BLOCKED: corrected G7 retains 3 provider errors, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows; the separate cycle-46 all-planned metric audit remains non-confirmatory. The G7 schema tests pass, but they do not create provider/Q evidence.
+- 必需修复：Retain all planned, failed, and invalid rows; obtain an independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through a separately frozen and explicitly authorized run before formal G7 inference.
 - 尝试次数：18
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：未记录
@@ -27,16 +27,16 @@
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：Both git ls-remote commands failed with proxy connection errors; vendored NewtonBench is not a separate Git checkout.
-- 必需修复：Restore network/Git credentials, verify the configured upstream commit and license, then push the feature branch and confirm remote state.
+- 证据：The gate attestation correctly records G0 as BLOCKED because remote provenance verification still fails through the configured proxy; local commit metadata is not treated as independent upstream confirmation.
+- 必需修复：Restore network/Git credentials, verify the upstream simulator commit and license independently, then re-run the provenance gate and confirm remote delivery.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：GitHub feature-branch delivery is verified at 106e5b6; NewtonBench upstream provenance and license verification remain externally unverified.
 
 ### ISSUE-000000000004 — P1 — RESOLVED_UNVERIFIED
 - 描述：Formal statistical validity is not established
-- 证据：The 23-family corrected release has 552 matched rows and a deterministic paired-family bootstrap/McNemar analysis. Pooled G4-minus-G3 accuracy difference is -0.01811594202898551 with family-bootstrap 95% CI [-0.07608695652173915, 0.043478260869565216] and exact matched McNemar p=0.6353076420876663. CF3 is a prespecified exploratory stratum with difference -0.2753623188405797 and exact p=0.0005461. The analysis remains pending independent statistical review and does not justify causal or superiority claims.
-- 必需修复：Have an independent reviewer inspect the preregistration, oracle provenance, paired-family construction, and statistical code before any confirmatory inference.
+- 证据：The gate attestation correctly records G6 as BLOCKED despite passing local statistics/metric tests; no independent statistical review has been added and scientific_release_allowed remains false for every gate.
+- 必需修复：Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference.
 - 尝试次数：0
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：未记录

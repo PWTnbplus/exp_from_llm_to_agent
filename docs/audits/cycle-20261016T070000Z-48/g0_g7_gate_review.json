@@ -1,0 +1,32 @@
+{
+  "audit_version": "g0-g7-gate-attestation-review-v1",
+  "reviewer": "independent_g0_g7_gate_attestation_review_v1",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "report": "docs/state/gates.json",
+  "independent_checks": [
+    "all G0-G7 keys are present exactly once",
+    "every gate has an allowed status, nonempty evidence, and a verification command",
+    "all referenced pytest files exist",
+    "G0, G6, and G7 remain BLOCKED",
+    "G1-G5 PASS entries are explicitly scoped to engineering/protocol/smoke checks",
+    "scientific_release_allowed is false at the project and per-gate levels",
+    "mock_is_not_science_evidence is true",
+    "the attestation does not modify any historical G6/G7 artifact or launch a provider"
+  ],
+  "gate_statuses": {
+    "G0": "BLOCKED",
+    "G1": "PASS_ENGINEERING_ONLY",
+    "G2": "PASS_ENGINEERING_ONLY",
+    "G3": "PASS_ENGINEERING_ONLY",
+    "G4": "PASS_ENGINEERING_ONLY",
+    "G5": "PASS_SMOKE_ENGINEERING_ONLY",
+    "G6": "BLOCKED",
+    "G7": "BLOCKED"
+  },
+  "scientific_status": {
+    "formal_release_allowed": false,
+    "confirmatory_inference_allowed": false,
+    "provider_calls_made_by_this_cycle": false
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}

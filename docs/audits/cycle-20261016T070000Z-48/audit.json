@@ -1,0 +1,113 @@
+{
+  "cycle": 48,
+  "timestamp_utc": "2026-10-16T07:00:00+00:00",
+  "phases": ["REPAIRED", "TESTED", "REVIEWED", "BLOCKED"],
+  "repair": {
+    "issue": "machine_gate_attestation_missing",
+    "change": "Added docs/state/gates.json as a truthful machine-readable G0-G7 attestation. G1-G5 are marked PASS only within engineering/protocol/smoke scopes and all scientific_release_allowed fields remain false; G0, G6, and G7 are explicitly BLOCKED with stable issue references. Added schema tests that require all eight gates, evidence, commands, and fail-closed release flags.",
+    "historical_artifacts_rewritten": false
+  },
+  "test": {
+    "gate_commands": [
+      {"gate": "G1", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_llm_isolation.py tests/test_reproducibility.py", "exit_code": 0, "output_tail": "5 passed in 2.77s"},
+      {"gate": "G2", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_experiment_policy.py", "exit_code": 0, "output_tail": "9 passed in 0.42s"},
+      {"gate": "G3", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_budget.py tests/test_no_leakage.py tests/test_provider_trace.py", "exit_code": 0, "output_tail": "7 passed in 2.78s"},
+      {"gate": "G4", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_evaluator.py", "exit_code": 0, "output_tail": "10 passed in 2.73s"},
+      {"gate": "G5", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q", "exit_code": 0, "output_tail": "151 passed in 19.06s"},
+      {"gate": "G6", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_statistics.py tests/test_g7_corrected_metrics.py", "exit_code": 0, "output_tail": "9 passed in 7.92s"},
+      {"gate": "G7", "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py", "exit_code": 0, "output_tail": "29 passed in 1.22s"}
+    ],
+    "attestation_schema_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py",
+    "attestation_schema_exit_code": 0,
+    "attestation_schema_output_tail": "31 passed in 1.41s",
+    "full_command": ["E:/resources/python/python.exe", "-X", "utf8", "-m", "pytest", "-q"],
+    "full_exit_code": 0,
+    "full_output_tail": "151 passed in 18.68s\n",
+    "py_compile_exit_code": 0,
+    "git_diff_check_exit_code": 0
+  },
+  "review": {
+    "status": "BLOCKED",
+    "project_complete": false,
+    "reviewer": "independent_g0_g7_gate_attestation_review_v1",
+    "independent_review_status": "PASS_READ_ONLY_LOCAL",
+    "findings": [
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "The gate attestation correctly records G7 as BLOCKED: corrected G7 retains 3 provider errors, 1268 invalid Q rows, only 20 valid Q rows, and 368 ineligible U-stage rows; the separate cycle-46 all-planned metric audit remains non-confirmatory. The G7 schema tests pass, but they do not create provider/Q evidence.",
+        "remediation": "Retain all planned, failed, and invalid rows; obtain an independently reviewed provider/Q diagnosis and eligible non-final dependency/state data through a separately frozen and explicitly authorized run before formal G7 inference."
+      },
+      {
+        "id": "ISSUE-000000000003",
+        "severity": "P1",
+        "evidence": "The gate attestation correctly records G0 as BLOCKED because remote provenance verification still fails through the configured proxy; local commit metadata is not treated as independent upstream confirmation.",
+        "remediation": "Restore network/Git credentials, verify the upstream simulator commit and license independently, then re-run the provenance gate and confirm remote delivery."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "evidence": "The gate attestation correctly records G6 as BLOCKED despite passing local statistics/metric tests; no independent statistical review has been added and scientific_release_allowed remains false for every gate.",
+        "remediation": "Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference."
+      }
+    ],
+    "resolutions": [],
+    "verified_commands": [
+      "All seven gate-specific commands listed in test.gate_commands (exit 0)",
+      "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py tests/test_g7_protocol.py tests/test_g7_corrected_metrics.py (exit 0, 31 passed)",
+      "E:/resources/python/python.exe -X utf8 -m pytest -q (exit 0, 151 passed in 18.68s)",
+      "independent gate-schema/path review (exit 0; all referenced test files exist; statuses restricted to PASS/FAIL/NOT_TESTED/BLOCKED)"
+    ]
+  },
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "git": {
+    "commit": "pending-local-commit",
+    "push_command": "git push origin autopilot/scientific-law-discovery",
+    "push_exit_code": null,
+    "push_output": "pending",
+    "remote_verification_command": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery",
+    "remote_verification_exit_code": null,
+    "remote_verification_output": "pending",
+    "remote_updated": false
+  },
+  "ready": false,
+  "mock_is_not_science_evidence": true,
+  "paid_experiments_launched_by_runner": false,
+  "mandatory_completion_missing": [
+    "upstream_provenance_and_license_verification",
+    "explicit_paid_authorization_and_hard_usd_ceiling",
+    "independent_provider_Q_diagnosis",
+    "independently_audited_dependency_edges_and_nonfinal_U_states",
+    "independent_billing_export",
+    "immutable_model_snapshot_or_gateway_weight_fingerprint",
+    "independent_statistical_review",
+    "external_mathematical_review",
+    "formal_scientific_G0_G7_release"
+  ],
+  "gate_statuses": {
+    "G0": "BLOCKED",
+    "G1": "PASS_ENGINEERING_ONLY",
+    "G2": "PASS_ENGINEERING_ONLY",
+    "G3": "PASS_ENGINEERING_ONLY",
+    "G4": "PASS_ENGINEERING_ONLY",
+    "G5": "PASS_SMOKE_ENGINEERING_ONLY",
+    "G6": "BLOCKED",
+    "G7": "BLOCKED"
+  },
+  "unresolved_issue_ids": [
+    "ISSUE-3d7a9c1e5b20",
+    "ISSUE-000000000002",
+    "ISSUE-000000000003",
+    "ISSUE-000000000004",
+    "ISSUE-ff97c7c89112",
+    "ISSUE-ad61f025976a",
+    "ISSUE-1f8c2b6a4d90",
+    "ISSUE-f9171bb760b1",
+    "ISSUE-0f2cb195c681",
+    "ISSUE-28ed827e40a9",
+    "ISSUE-ab0746b86bf9",
+    "ISSUE-0786397621a0",
+    "ISSUE-000000000005",
+    "ISSUE-6b3a9e1d4f20"
+  ]
+}
