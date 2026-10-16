@@ -518,7 +518,7 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Local repair commit: `d9e6b7f`; audit/state commit: `8a7468d`; delivery-blocker state commit: `b41043c`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
-## Cycle 93 final G0-G7 integrity audit (2026-10-17T00:00Z)
+## Cycle 93 final G0-G7 integrity audit (2026-10-17T00:20 HKT / 2026-10-16T16:20Z)
 
 - Re-read the V2 recovery skill, the V1 scientific requirements, all three files under `D:/硕士/prj1_ai_cal/writing/实验设计`, `docs/state/issues.json`, `docs/state/UNRESOLVED_REPORT.md`, and `docs/state/gates.json`. The design files explicitly distinguish frozen historical G0-G6 artifacts from proposed G7-G13 protocol extensions; they do not authorize treating mock or historical non-confirmatory runs as new scientific evidence.
 - Full host suite passes `247/247`; the explicit G7/gate/statistics suite passes `113/113`. A failed PowerShell wildcard invocation ran zero tests and is not counted as evidence.
