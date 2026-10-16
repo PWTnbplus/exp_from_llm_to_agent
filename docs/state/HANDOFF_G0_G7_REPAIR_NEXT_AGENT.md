@@ -3,7 +3,7 @@
 生成日期：2026-10-16（Asia/Hong_Kong）  
 仓库：`E:/master_exp/nature_prj1_cal/from_llm_to_agent`  
 分支：`autopilot/scientific-law-discovery`  
-最新已提交版本：`ba7e3f8 Finalize cycle 52 handoff`；cycle 51 Q-validity semantic repair is committed as `52aee13`
+Cycle 52 修复基线提交：`ba7e3f8 Finalize cycle 52 handoff`；cycle 51 Q-validity semantic repair is committed as `52aee13`。后续仅为交接/状态元数据提交。
 当前宿主回归：`157 passed`
 
 ## 0. 交接结论
