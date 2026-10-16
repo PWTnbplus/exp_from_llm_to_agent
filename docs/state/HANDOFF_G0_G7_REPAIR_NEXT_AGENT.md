@@ -515,6 +515,6 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Independent read-only scan confirms `184` case/group keys, `mixed_source_checkpoint_groups=0`, `wrong_retry_protocol=0`, missing/wrong experiment identity `0`, source-arm mismatches `0`, and plan SHA256 `be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5`.
 - `ISSUE-508d66813a87` is `VERIFIED` for this local source-checkpoint lineage guard only. G0/G6/G7 remain `BLOCKED`; `scientific_release_allowed=false`; provider, provenance, Q/math/statistics, dependency-edge, and scientific-release blockers remain.
 - Audit files: `docs/audits/cycle-20261016T095537Z-84/audit.json`, `g7_source_checkpoint_finding.json`, and `g7_source_checkpoint_review.json`.
-- Local repair commit: `d9e6b7f`; audit/state and delivery bookkeeping are pending in this cycle. Preserve and do not stage `research_data_summary_G0_G7/`.
+- Local repair commit: `d9e6b7f`; audit/state commit: `8a7468d`; delivery-blocker state commit: `b41043c`. Both `git push` and `git ls-remote` exited `1` because the configured proxy could not connect to GitHub port 443; remote delivery is not claimed. Preserve and do not stage `research_data_summary_G0_G7/`.
 - No provider call, paid experiment, retry, historical artifact edit, confirmatory inference, or scientific claim was made. Remote delivery requires successful push plus verified `git ls-remote`.
 
