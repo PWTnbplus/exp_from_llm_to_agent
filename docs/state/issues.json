@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:08:57+00:00",
+  "updated_at": "2026-10-16T07:10:24+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -108,13 +108,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "The local archive hash, LICENSE hash, and archive LICENSE entry are reproducibly checked by tests/test_gate_attestation.py, but git ls-remote to the configured upstream and origin remains externally blocked. The G0 gate therefore remains BLOCKED and no independent remote provenance claim is made.",
+      "evidence": "Cycle 52: git push origin autopilot/scientific-law-discovery failed with unable to connect to github.com port 443 via 127.0.0.1; git ls-remote origin refs/heads/autopilot/scientific-law-discovery failed identically. Local commits d1ad59b and 8a2c552 exist; remote update is not verified.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
       "last_seen": "2026-10-16T06:50:23+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 51 push and remote verification remain blocked by the configured proxy/network.",
+      "blocked_reason": "Cycle 52 GitHub delivery remains externally blocked",
       "verification": null,
       "history": [
         {
@@ -157,6 +157,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 51 push and remote verification remain blocked by the configured proxy/network.",
           "evidence": ""
+        },
+        {
+          "time": "2026-10-16T07:10:24+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 52 GitHub delivery remains externally blocked",
+          "evidence": "Cycle 52: git push origin autopilot/scientific-law-discovery failed with unable to connect to github.com port 443 via 127.0.0.1; git ls-remote origin refs/heads/autopilot/scientific-law-discovery failed identically. Local commits d1ad59b and 8a2c552 exist; remote update is not verified."
         }
       ]
     },

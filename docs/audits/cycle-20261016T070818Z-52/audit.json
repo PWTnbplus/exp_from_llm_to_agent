@@ -75,7 +75,14 @@
   "git": {
     "branch": "autopilot/scientific-law-discovery",
     "head_before_cycle": "9fdd710",
-    "commit_or_push_by_agent": false,
-    "note": "Commit and remote verification are attempted after state/report refresh; no remote success is claimed without git ls-remote evidence."
+    "commits": [
+      "d1ad59b Repair V2 state evidence propagation",
+      "8a2c552 Refresh cycle 52 handoff"
+    ],
+    "push_exit_code": 1,
+    "ls_remote_exit_code": 1,
+    "commit_or_push_by_agent": true,
+    "remote_updated": false,
+    "note": "Both git push and git ls-remote failed because the configured proxy could not connect to github.com:443. Local commits exist; no remote success is claimed."
   }
 }
