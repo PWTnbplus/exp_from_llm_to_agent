@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T07:11:23+00:00",
+  "updated_at": "2026-10-16T07:15:34+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -364,14 +364,14 @@
       "id": "ISSUE-3d7a9c1e5b20",
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
-      "status": "IN_PROGRESS",
-      "evidence": "Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run.",
-      "remediation": "Keep all terminal failures and Q NOT_SCORED rows in the denominator. Obtain independently reviewed provider/Q diagnosis and eligible dependency/state data only through an explicitly authorized, separately frozen run before formal G7 inference.",
+      "status": "BLOCKED",
+      "evidence": "Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made.",
+      "remediation": "Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-16T07:08:50+00:00",
+      "last_seen": "2026-10-16T07:15:26+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 20,
-      "blocked_reason": null,
+      "blocked_reason": "Cycle 53 design audit confirms remaining G7 requirements require external evidence",
       "verification": null,
       "history": [
         {
@@ -510,6 +510,12 @@
           "event": "IN_PROGRESS",
           "reason": "Cycle 52 repaired V2 state evidence propagation; G7 scientific blocker remains unresolved",
           "evidence": "Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run."
+        },
+        {
+          "time": "2026-10-16T07:15:34+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 53 design audit confirms remaining G7 requirements require external evidence",
+          "evidence": "Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made."
         }
       ]
     },
@@ -739,7 +745,8 @@
     "docs/audits/cycle-20261016T065000Z-49/audit.json",
     "docs/audits/cycle-20261016T065435Z-50/audit.json",
     "docs/audits/cycle-20261016T070211Z-51/audit.json",
-    "docs/audits/cycle-20261016T070818Z-52/audit.json"
+    "docs/audits/cycle-20261016T070818Z-52/audit.json",
+    "docs/audits/cycle-20261016T071456Z-53/audit.json"
   ],
   "current_focus": null
 }

@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-16T07:11:23+00:00
+生成时间（UTC）：2026-10-16T07:15:34+00:00
 
 - 开放/阻塞/未验证：**14**
 - 已验证修复：**2**
@@ -8,14 +8,6 @@
 - 未验证科学门禁：**G0, G6, G7**
 
 ## 未解决和阻塞问题
-
-### ISSUE-3d7a9c1e5b20 — P1 — IN_PROGRESS
-- 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 52: tests/test_recovery_state.py CLI regression and independent temporary-ledger probe pass; top-level and history evidence now persist. Full host suite 157 passed. G7 remains formal Q_validity NOT_SCORED 1288/1288 without external verifier, 3 provider_error rows, and 368 U-ineligible rows; no provider or paid run.
-- 必需修复：Keep all terminal failures and Q NOT_SCORED rows in the denominator. Obtain independently reviewed provider/Q diagnosis and eligible dependency/state data only through an explicitly authorized, separately frozen run before formal G7 inference.
-- 尝试次数：20
-- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — RESOLVED_UNVERIFIED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
@@ -64,6 +56,14 @@
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：G7 completed without fabricating edges; replacement independently audited dependency-edge data is still required before edge-level L/U claims.
+
+### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
+- 描述：G7 provider execution has terminal failures and low independently valid Q coverage
+- 证据：Cycle 53: design-to-gate probe and G0/G7/Q regression passed (36 tests). Formal Q_validity remains NOT_SCORED for 1288/1288 without an independent Q verifier; 3 provider_error rows remain; public dependency edges are 0/92 and eligible U cases are 0/92. No local-only change can create the required external verifier/provider/dependency evidence; no provider or paid run was made.
+- 必需修复：Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before formal inference.
+- 尝试次数：20
+- 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
+- 阻塞原因：Cycle 53 design audit confirms remaining G7 requirements require external evidence
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present

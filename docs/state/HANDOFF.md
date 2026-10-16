@@ -10,7 +10,7 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-3d7a9c1e5b20 / P1 / G7 provider execution has terminal failures and low independently valid Q coverage
+**下一问题（Next issue:）：** ISSUE-000000000002 / P1 / Real-provider pilot and retry/cost behavior are unverified
 
 ## 当前状态摘要
 
@@ -18,13 +18,13 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-3d7a9c1e5b20 P1 IN_PROGRESS 尝试次数=20：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep all terminal failures and Q NOT_SCORED rows in the denominator. Obtain independently reviewed provider/Q diagnosis and eligible dependency/state data only through an explicitly authorized, separately frozen run befo
 - ISSUE-000000000002 P1 RESOLVED_UNVERIFIED 尝试次数=2：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain independently verifiable external billing and immutable model/gateway-weight evidence, then repeat the final acceptance review. Keep the current local gate and do not treat structurally valid local manifests as ex
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - ISSUE-000000000004 P1 RESOLVED_UNVERIFIED 尝试次数=0：Formal statistical validity is not established；修复=Obtain an independent review of preregistration, oracle provenance, paired-family construction, failure denominators, and statistical code before any confirmatory inference.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Obtain an independent external mathematical review of the verifier and release only the 23-family corrected subset; never restore TB-L1-010 by synthesis or silently include it in the confirmatory denominator.
 - ISSUE-ad61f025976a P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
 - ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=0：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Obtain independently audited replacement dependency-edge/state-transition data with source hashes before making L/U claims.
+- ISSUE-3d7a9c1e5b20 P1 BLOCKED 尝试次数=20：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Restore authorized provider access and obtain an independently reviewed Q standard plus independently audited dependency/state data in a separately frozen, non-pooled run; preserve all failures in denominators before for
 - ISSUE-f9171bb760b1 P1 RESOLVED_UNVERIFIED 尝试次数=0：No frozen, auditable G8 real/sham/off/extra adapter is present；修复=Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
 - ISSUE-0f2cb195c681 P1 RESOLVED_UNVERIFIED 尝试次数=3：Original G7 model-facing prompt leaked routing metadata；修复=Keep the original batch permanently non-confirmatory and require the executable preflight to pass with zero routing/private hits before any future paid run.
 - ISSUE-28ed827e40a9 P1 RESOLVED_UNVERIFIED 尝试次数=0：Last cycle blocked: RuntimeError: Codex exit 4294967295: c94fd2a435478adde6a18079beb:G6F-TB-L1-009-C；修复=Resolve environment/format/test blocker; rerun audit
