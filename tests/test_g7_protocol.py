@@ -214,6 +214,22 @@ def test_g7_formal_preflight_rejects_public_plan_and_label_hash_mismatch() -> No
     assert "g7_label_public_hash_mismatch" in report["errors"]
 
 
+def test_g7_formal_preflight_rejects_ineligible_u_diagnostic_arm() -> None:
+    report = protocol_preflight(
+        [{"case_id": "case-1", "model_visible": {"problem": "public"}}],
+        [{"case_id": "case-1", "v": {"verdict": "SUPPORTED"},
+          "l": {"nodes": [], "edges": []}, "u": {"node_changes": []},
+          "eligible_u": False, "verifier_ref": "ref"}],
+        [{"run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+          "group_id": "G4", "diagnostic_arm": "U_ONLY", "inject_stages": ["U"]}],
+        worker_count=1,
+        require_complete_plan=True,
+    )
+    assert report["formal_run_allowed_by_protocol"] is False
+    assert "ineligible_u_diagnostic_arm" in report["errors"]
+    assert report["counts"]["ineligible_u_diagnostic_rows"] == ["run-1"]
+
+
 def test_g7_injection_source_distinguishes_oracle_assistance_from_d0() -> None:
     label = {
         "v": {"verdict": "SUPPORTED"}, "l": {"nodes": [], "edges": []},

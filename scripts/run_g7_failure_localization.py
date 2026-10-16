@@ -371,6 +371,17 @@ def protocol_preflight(
             and row.get("source_public_case_sha256") != _public_case_sha256(public[row["case_id"]])
         )
     })
+    ineligible_u_diagnostic_rows = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            isinstance(row.get("inject_stages"), list)
+            and "U" in row.get("inject_stages", [])
+            and _valid_identifier(row.get("case_id"))
+            and row.get("case_id") in labels
+            and labels[row["case_id"]].get("eligible_u") is not True
+        )
+    })
     checkpoint_arms: dict[str, list[str]] = {}
     for row in plan_rows:
         checkpoint_id = row.get("checkpoint_id")
@@ -422,6 +433,8 @@ def protocol_preflight(
         errors.append("g7_plan_public_mapping_mismatch")
     if require_complete_plan and design_label_public_hash_mismatches:
         errors.append("g7_label_public_hash_mismatch")
+    if require_complete_plan and ineligible_u_diagnostic_rows:
+        errors.append("ineligible_u_diagnostic_arm")
     if require_complete_plan and incomplete_arm_checkpoints:
         errors.append("incomplete_arm_coverage")
     if duplicate_plan_ids:
@@ -460,6 +473,7 @@ def protocol_preflight(
             "invalid_g7_plan_metadata": invalid_design_plan_rows,
             "g7_plan_public_mapping_mismatches": design_plan_mapping_mismatches,
             "g7_label_public_hash_mismatches": design_label_public_hash_mismatches,
+            "ineligible_u_diagnostic_rows": ineligible_u_diagnostic_rows,
             "incomplete_arm_checkpoints": incomplete_arm_checkpoints,
             "expected_arms_per_checkpoint": expected_arms,
             "require_complete_plan": require_complete_plan,

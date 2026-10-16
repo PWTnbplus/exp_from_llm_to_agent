@@ -87,7 +87,9 @@ def test_g7_preflight_allows_shared_checkpoint_for_diagnostic_forks(tmp_path) ->
     out = tmp_path / "preflight.json"
     public_row = _public_case({"problem": "public"})
     public.write_text(json.dumps(public_row) + "\n", encoding="utf-8")
-    labels.write_text(json.dumps(_label(public_row)) + "\n", encoding="utf-8")
+    label_row = _label(public_row)
+    label_row["eligible_u"] = True
+    labels.write_text(json.dumps(label_row) + "\n", encoding="utf-8")
     arm_specs = [
         ("D0", "G4", []), ("D1", "G3", ["V"]), ("D2", "G4", ["V", "L"]),
         ("D3", "G4", ["V", "L", "U"]), ("L_ONLY", "G3", ["L"]),

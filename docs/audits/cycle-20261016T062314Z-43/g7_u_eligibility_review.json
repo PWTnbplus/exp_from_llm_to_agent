@@ -1,0 +1,27 @@
+{
+  "audit_version": "g7-u-eligibility-review-v1",
+  "reviewer": "independent_g7_u_eligibility_contract_check_v9",
+  "status": "PASS_READ_ONLY_LOCAL",
+  "protocol_basis": "D3 and U_ONLY require an independently verified non-final intermediate U state; a final-only label cannot support U diagnostics.",
+  "plan_rows": 1288,
+  "checkpoint_count": 184,
+  "label_count": 92,
+  "u_stage_rows": 368,
+  "ineligible_u_rows": 368,
+  "ineligible_u_arms": {
+    "D3": 184,
+    "U_ONLY": 184
+  },
+  "eligible_u_labels": 0,
+  "label_edge_count_distribution": {
+    "0": 92
+  },
+  "formal_preflight_errors": [
+    "ineligible_u_diagnostic_arm"
+  ],
+  "formal_run_allowed_by_protocol": false,
+  "provider_calls_made": false,
+  "historical_artifacts_rewritten": false,
+  "source_report": "docs/audits/cycle-20261016T062314Z-43/g7_protocol_preflight.json",
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计"
+}
