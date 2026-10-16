@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T09:49:00+00:00",
+  "updated_at": "2026-10-16T09:49:36+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -114,13 +114,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "After local commits e5bc327 and 01c5f52, git push origin autopilot/scientific-law-discovery exited 1 and git ls-remote origin refs/heads/autopilot/scientific-law-discovery exited 1; both failed to connect to github.com:443 via 127.0.0.1. The remote update is not verified or claimed.",
+      "evidence": "After local commits b84f005 and 45267ed, git push origin autopilot/scientific-law-discovery exited 1 and git ls-remote origin refs/heads/autopilot/scientific-law-discovery exited 1; both failed to connect to github.com:443 via 127.0.0.1. The remote update is not verified or claimed.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T09:45:41+00:00",
+      "last_seen": "2026-10-16T09:49:36+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 81 remote delivery remains blocked by the configured proxy",
+      "blocked_reason": "Cycle 82 remote delivery remains blocked by the configured proxy",
       "verification": null,
       "history": [
         {
@@ -355,6 +355,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 81 remote delivery remains blocked by the configured proxy",
           "evidence": "After local commits e5bc327 and 01c5f52, git push origin autopilot/scientific-law-discovery exited 1 and git ls-remote origin refs/heads/autopilot/scientific-law-discovery exited 1; both failed to connect to github.com:443 via 127.0.0.1. The remote update is not verified or claimed."
+        },
+        {
+          "time": "2026-10-16T09:49:36+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 82 remote delivery remains blocked by the configured proxy",
+          "evidence": "After local commits b84f005 and 45267ed, git push origin autopilot/scientific-law-discovery exited 1 and git ls-remote origin refs/heads/autopilot/scientific-law-discovery exited 1; both failed to connect to github.com:443 via 127.0.0.1. The remote update is not verified or claimed."
         }
       ]
     },
