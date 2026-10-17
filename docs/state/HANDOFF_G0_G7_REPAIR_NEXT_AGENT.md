@@ -702,4 +702,5 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - This reproduces the `HTTP 401 Invalid token` evidence retained in the qwen G6/G7 terminal failures. The provider key/model identity/billing blocker remains external; a new paid retry is not justified until a valid authorized credential and provider-verifiable billing/model snapshot evidence are supplied.
 - Audit: `docs/audits/cycle-20261017T-provider-key-audit/audit.json`. Provider-focused regression tests pass `19/19`; the prior full host result remains `262/262`.
 - State remains truthful: `ISSUE-000000000002` is `BLOCKED`; G6/G7 are non-confirmatory and `scientific_release_allowed=false`. Preserve API keys, `runs/`, and `research_data_summary_G0_G7/`; do not stage them.
+- Delivery note: the local provider-blocker audit was committed as `4e13ec4`, but two proxy-bypassed push attempts and an independent `git ls-remote` failed because GitHub TCP/443 was unreachable. Do not claim this cycle is remotely delivered until `git ls-remote` returns the exact local SHA.
 
