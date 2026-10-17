@@ -67,8 +67,7 @@
     "An independent CTFlow matrix structural audit checks exact arm/task coverage, trace presence, redaction markers, manifest hash, and aggregate local cap."
   ],
   "delivery": {
-    "local_commits": ["ddac6d8", "d0f50fb"],
-    "latest_local_commit": "d0f50fb",
+    "local_commits": ["ddac6d8", "d0f50fb", "06e081d"],
     "push_exit_code": 1,
     "push_error": "unable to connect to github.com port 443 via 127.0.0.1",
     "ls_remote_exit_code": 1,
