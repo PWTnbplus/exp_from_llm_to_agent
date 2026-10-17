@@ -704,3 +704,17 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - State remains truthful: `ISSUE-000000000002` is `BLOCKED`; G6/G7 are non-confirmatory and `scientific_release_allowed=false`. Preserve API keys, `runs/`, and `research_data_summary_G0_G7/`; do not stage them.
 - Delivery note: the local provider-blocker audit was committed as `4e13ec4`, but two proxy-bypassed push attempts and an independent `git ls-remote` failed because GitHub TCP/443 was unreachable. Do not claim this cycle is remotely delivered until `git ls-remote` returns the exact local SHA.
 
+## Cycle 102 Kimi K2.5 single-model G6/G7 execution and audit (2026-10-17 HKT)
+
+- Followed `scientific-law-recovery` and the frozen experiment design. The user explicitly authorized paid calls with a total ceiling of USD 200. Only `kimi-k2.5` was used through `https://token.ctflow.cn/v1`; keys and raw runs remain local and untracked.
+- Kimi G6 completed with two workers and append-only failure-only resume. The canonical frozen plan covers `552/552` unique rows: `550 completed`, `2 provider_error`; `22` earlier provider failures recovered on retry. G6 trace integrity failures are `0/552`; revision audit is `0/138` valid; independent structural review passes but `scientific_release_allowed=false`.
+- Kimi G6 observed local trace cost is USD `2.034328`. This is local proxy accounting, not independently verified provider billing.
+- Kimi G7 strict preflight passed without provider calls: `92` public cases, `92` labels, `1288` plan rows, `184` checkpoints, seven arms/checkpoint, zero protocol/hash/lineage errors.
+- Kimi G7 completed with 16 workers and append-only failure-only resume. Latest canonical merge covers `1288/1288` rows and `184/184` checkpoints: states `35 completed` and `1253 checkpoint_missing`; checkpoints `5 completed` and `179 provider_error`. All failures remain in the denominator.
+- G7 Q audit retains `1288/1288` invalid/not-scored rows because no independent Q verifier exists. Corrected metrics reports `terminal_failures=1253` and `confirmatory_reuse_allowed=false`; all numbers are diagnostic-only.
+- Correctly parameterized G7 trace/Q consistency rerun with the run root reports `0` state trace-integrity failures and `0` checkpoint trace-integrity failures; completed and terminal-failure evidence are retained. The first narrower-root run was discarded as a parameterization artifact, not used as evidence.
+- Kimi G7 observed local worker-summary cost is USD `2.722796`; cumulative observed local G6+G7 cost is approximately USD `4.757124`, below the user ceiling. External billing, pricing, and immutable model snapshot/weight evidence remain unavailable.
+- Full host suite passes `262/262`. Audit: `docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json`. G0-G5 engineering gates remain as previously verified; formal G6/G7 and scientific release remain blocked.
+- No scientific truth, superiority, causal, L/U, Q-validity, or formal statistical claim is made. Do not stage `runs/`, keys, `.env`, private labels/oracles, or `research_data_summary_G0_G7/`.
+- This cycle's local audit/state commit must be pushed only with independent `git ls-remote` verification. If GitHub TCP/443 remains unreachable, report the exact local commit and failed push; never claim remote delivery.
+

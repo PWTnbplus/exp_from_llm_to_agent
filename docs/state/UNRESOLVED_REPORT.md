@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-17T08:11:08+00:00
+生成时间（UTC）：2026-10-17T13:06:38+00:00
 
 - 开放/阻塞/未验证：**8**
 - 已验证修复：**30**
@@ -11,23 +11,23 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json
+- 证据：docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json; docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json
 - 必需修复：Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard cap, obtain immutable model identity evidence, and complete independent isolation/statistical review before any formal G0-G7 claim.
-- 尝试次数：2
+- 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 96 qwen single-model pilot completed 120 registered task-runs with local runner caps and failure retention, but provider billing/pricing and immutable model identity remain unverified; 81 task-runs failed and scientific release remains closed.
+- 阻塞原因：Cycle 102 Kimi K2.5 G6/G7 execution completed local capped accounting, but provider billing/pricing and immutable model identity remain unverified; G6 retained 2 terminal provider errors and G7 retained 1253 checkpoint-missing states plus 179 checkpoint provider errors, so scientific release remains closed.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：Cycle 59: G7 corrected metrics now fail closed on identity collisions and non-bijective inputs; focused G7 tests 20 passed, host suite 176 passed, and corrected probe retained all 1288 rows with confirmatory_reuse_allowed=false. No confirmatory inference or scientific release is allowed.
+- 证据：Cycle 102: Kimi K2.5 G6 retained 552/552 canonical rows with revision-valid count 0; G7 retained all 1288 planned rows with 0/1288 valid Q rows and confirmatory_reuse_allowed=false. Corrected metrics are diagnostic-only; no confirmatory inference or scientific release is allowed. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
 - 必需修复：Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
-- 尝试次数：0
+- 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 59 repaired G7 diagnostic input identity; independent statistical and mathematical review remains unavailable.
+- 阻塞原因：Cycle 102 local Kimi G6/G7 audits pass structural accounting only; independent statistical and mathematical review remains unavailable and Q is invalid for all 1288 planned rows.
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
-- 证据：Cycle 57: duplicate public task and source-index identifiers now fail closed; focused tests 21 passed, host suite 170 passed, and verified23 remains 23 VERIFIED_INDEPENDENT_B plus TB-L1-010 permanently excluded. No external mathematical review is present.
+- 证据：Cycle 102: Kimi K2.5 G6 canonical audit retained the corrected 552-row layout and zero revision-valid rows; the run remains RESOLVED_UNVERIFIED because the external mathematical review is absent. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
 - 必需修复：Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
@@ -35,7 +35,7 @@
 
 ### ISSUE-ad61f025976a — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positive hard limits for model/tool/token/cost, missing private-ora
-- 证据：The official project_preflight.py run on configs/g6_project_preflight_verified23.json completed with 0 blockers and status READY_FOR_CONTROLLED_PILOT_NOT_RUN. The provider metadata endpoint returned HTTP 200 for glm-5 and its canonical metadata hash is persisted. The evidence is only model identity/creation metadata: the gateway supplied no immutable weight fingerprint, and no external billing receipt is present.
+- 证据：Cycle 102 Kimi K2.5 catalog/minimal preflight and local model ID/base URL evidence are persisted, but the gateway supplied no immutable weight fingerprint and no external billing receipt is present. The formal G6/G7 audit therefore remains RESOLVED_UNVERIFIED. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
 - 必需修复：Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
@@ -43,19 +43,19 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：Cycle 63 keeps the reduced denominator non-confirmatory. No dependency-edge or independent Q/math/provenance evidence is available, so no G8 causal, L/U, or scientific release claim is made.
+- 证据：Cycle 102 Kimi G7 retains the full planned denominator but has no independently valid Q rows and no dependency-edge/state evidence; no G8 causal, L/U, or scientific release claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
 - 必需修复：Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.
-- 尝试次数：2
+- 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
-- 阻塞原因：The reduced source-only denominator is structural only; independent dependency/state/Q/mathematical evidence remains externally unavailable.
+- 阻塞原因：Cycle 102 Kimi G7 has no independently valid Q rows and no audited dependency/state edges; independent dependency/state/Q/mathematical evidence remains unavailable.
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 61: future G7 trace identity/collision guards pass 53 focused tests and 185 host tests. Re-auditing the immutable corrected run found 1288/1288 state traces and 184/184 checkpoint traces without event/step identities, invalidated all 20 previously Q-valid rows by trace review, retained 3 provider_error states, and confirmed confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made.
+- 证据：Cycle 102 Kimi G7 canonical accounting retains 1288 states (35 completed, 1253 checkpoint_missing) and 184 checkpoints (5 completed, 179 provider_error); Q valid is 0/1288 and confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
 - 必需修复：Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.
-- 尝试次数：21
+- 尝试次数：22
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：Historical raw traces cannot be retroactively repaired; authorized provider access and independent Q/dependency review remain external blockers.
+- 阻塞原因：Cycle 102 Kimi G7 retains terminal provider failures and 0/1288 independently valid Q rows; independent Q/dependency/state review remains unavailable.
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present

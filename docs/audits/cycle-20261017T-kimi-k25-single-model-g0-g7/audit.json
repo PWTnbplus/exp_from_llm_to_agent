@@ -1,0 +1,97 @@
+{
+  "audit_version": "kimi-k25-single-model-g0-g7-v1",
+  "cycle": "20261017T-kimi-k25-single-model-g0-g7",
+  "status": "REAL_PROVIDER_COMPLETE_NONCONFIRMATORY",
+  "experiment_id": "single_model_g0_g7",
+  "authorization": {
+    "paid_calls_authorized_by_user": true,
+    "user_budget_usd": 200.0,
+    "external_billing_verified": false,
+    "model_snapshot_verified": false
+  },
+  "provider_execution": {
+    "model_id": "kimi-k2.5",
+    "base_url": "https://token.ctflow.cn/v1",
+    "key_file": "redacted_local_credential_path",
+    "g6_worker_count": 2,
+    "g7_worker_count": 16,
+    "g7_execution_mode": "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL",
+    "formal_scientific_release_allowed": false
+  },
+  "g6": {
+    "run_dir": "runs/ctflow_single_model/20261017T-g6-kimi-k25-v1",
+    "plan_rows": 552,
+    "public_cases": 92,
+    "private_cases": 92,
+    "canonical_responses": 552,
+    "trace_count": 552,
+    "final_status_counts": {"completed": 550, "provider_error": 2},
+    "historical_retry_successes": 22,
+    "revision_audit_rows": 138,
+    "revision_valid_count": 0,
+    "trace_integrity_failures": 0,
+    "structural_review_pass": true,
+    "scientific_release_allowed": false,
+    "plan_sha256": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+    "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "private_oracle_sha256": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+    "canonical_responses_sha256": "f907f7ad778461ca3ebae6dcd019540f1ec05d84de7fb088df03074eb974a139",
+    "observed_local_cost_usd": 2.034328
+  },
+  "g7": {
+    "run_dir": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1",
+    "public_cases": 92,
+    "labels": 92,
+    "plan_rows": 1288,
+    "checkpoints": 184,
+    "arms_per_checkpoint": 7,
+    "canonical_state_counts": {"completed": 35, "checkpoint_missing": 1253},
+    "canonical_checkpoint_counts": {"completed": 5, "provider_error": 179},
+    "q_rows": 1288,
+    "q_valid_rows": 0,
+    "terminal_failures_retained": true,
+    "trace_integrity_failures": 0,
+    "corrected_metrics_terminal_failures": 1253,
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false,
+    "preflight_formal_run_allowed_by_protocol": true,
+    "input_hashes": {
+      "public": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+      "labels": "29782338db2a76a7c854cacb8c68479cb6a47241caddadc26ba18393cc0e7490",
+      "plan": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+    },
+    "observed_local_cost_usd_from_worker_summaries": 2.722796
+  },
+  "resource_usage": {
+    "observed_local_cost_usd_g6_g7": 4.757124,
+    "external_invoice_amount": null,
+    "cost_scope": "persisted provider traces and worker summaries; external billing not independently verified"
+  },
+  "verification_commands": [
+    "E:/resources/python/python.exe scripts/audit_g6_counterfactual.py --out runs/ctflow_single_model/20261017T-g6-kimi-k25-v1 ...",
+    "E:/resources/python/python.exe scripts/review_g6_release.py --out runs/ctflow_single_model/20261017T-g6-kimi-k25-v1 ... --allow-terminal-failures",
+    "E:/resources/python/python.exe scripts/g7_protocol_preflight.py --public ... --labels ... --plan ... --worker-count 16",
+    "E:/resources/python/python.exe scripts/merge_g7_states.py --plan ... --states-dir runs/ctflow_single_model/20261017T-g7-kimi-k25-v1 ...",
+    "E:/resources/python/python.exe scripts/audit_g7_q.py --states ... --plan ... --labels ... --g6-oracle ...",
+    "E:/resources/python/python.exe scripts/audit_g7_trace_q_consistency.py --states ... --q ... --trace-root runs/ctflow_single_model/20261017T-g7-kimi-k25-v1 --checkpoints ...",
+    "E:/resources/python/python.exe scripts/audit_g7_corrected_metrics.py --plan ... --states ... --q ... --oracle ... --preflight ...",
+    "E:/resources/python/python.exe -m pytest -q"
+  ],
+  "test_result": "262 passed in 24.65s",
+  "remaining_blockers": [
+    "ISSUE-000000000002: external model snapshot and billing evidence are unavailable",
+    "ISSUE-000000000004: formal statistical validity is not independently verified",
+    "ISSUE-1f8c2b6a4d90: G7 dependency/Q/math gate remains blocked",
+    "ISSUE-3d7a9c1e5b20: terminal provider failures dominate G7 and Q is not externally verified",
+    "ISSUE-ff97c7c89112: G6 revision validity remains zero",
+    "ISSUE-ad61f025976a: model snapshot/billing evidence remains unverified"
+  ],
+  "scientific_caveats": [
+    "This is a real single-model API execution, not a confirmatory scientific result.",
+    "The G7 denominator retains terminal failures and checkpoint-missing rows; no rows were silently removed.",
+    "Q validity is NOT_SCORED without an independent Q verifier, and corrected metrics are diagnostic-only.",
+    "G6/G7 external model identity, weights, pricing, and billing remain unverified; scientific release stays closed.",
+    "No raw private oracle values, API credentials, or raw run directories are included in this audit."
+  ],
+  "no_fabricated_results": true
+}
