@@ -1,11 +1,11 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-17T03:43:02+00:00
+生成时间（UTC）：2026-10-17T03:57:02+00:00
 
-- 开放/阻塞/未验证：**9**
-- 已验证修复：**29**
+- 开放/阻塞/未验证：**8**
+- 已验证修复：**30**
 - 已验证完成里程碑：**2**
-- 未验证科学门禁：**G0, G6, G7**
+- 未验证科学门禁：**G6, G7**
 
 ## 未解决和阻塞问题
 
@@ -16,14 +16,6 @@
 - 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：Cycle 96 qwen single-model pilot completed 120 registered task-runs with local runner caps and failure retention, but provider billing/pricing and immutable model identity remain unverified; 81 task-runs failed and scientific release remains closed.
-
-### ISSUE-000000000003 — P1 — BLOCKED
-- 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：37e21eb; git push exit 1; git ls-remote exit 1
-- 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
-- 尝试次数：1
-- 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Cycle 96 local pilot/audit commits are present, but git push and independent git ls-remote again failed to connect to github.com port 443 through 127.0.0.1; remote branch remains unverified.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
@@ -84,6 +76,7 @@
 ## 已验证解决的问题
 
 - **ISSUE-000000000001**（P1）：Formal scientific scoring is incomplete——`python -m pytest -q`；Independent read-only review confirmed that the evaluator binds numeric validation, legal OOD fit, canonical-AST structural recovery, and mechanistic validity; adversarial evaluator tests cover wrong constants, illegal code, finite-region overfit, malformed output, algebraic equivalence, and local constants. The host suite passed 70 tests, including tests/test_evaluator.py::test_algebraically_equivalent_code_passes_structural_and_mechanistic_criteria and tests/test_evaluator.py::test_numeric_fit_alone_cannot_pass_with_ood_or_structural_failure.
+- **ISSUE-000000000003**（P1）：Upstream provenance and GitHub delivery are externally blocked——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py`；Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit a592f832fbb1e787a9edb21f67b46d44fbefa910 after a successful push and ls-remote verification.
 - **ISSUE-6b3a9e1d4f20**（P2）：Raw G6 traces contain noncanonical retry segments that require a derived audit view——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g6_resume_sequence.py tests/test_g7_trace_q_consistency.py tests/test_g7_protocol.py`；existing_event_seq accepts only contiguous integer sequence prefixes and fails closed on malformed JSONL, non-object rows, gaps, duplicates, and invalid sequence types. Focused tests 56/56, full host suite 198/198, and an independent temporary probe pass. Raw historical traces remain immutable and canonical derived traces remain the scoring boundary.
 - **ISSUE-7e3d4a91c2f0**（P1）：G6 A arm execution semantics do not match the G6/G7 protocol——`E:/resources/python/python.exe -m pytest -q`；Corrected G6 protocol profile executed with exactly 2 workers on the verified 23-family denominator; final audit passes 552/552 plan/response/trace rows with no failures; independent release review structural_pass=true and corrected handoff is used by G7.
 - **ISSUE-0f2cb195c681**（P1）：Original G7 model-facing prompt leaked routing metadata——`E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_label_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_failure_taxonomy.py tests/test_g7_trace_q_consistency.py`；The forward G7 contract now validates strict V/L/U label shapes, strips verifier_ref/eligibility/provenance from model-visible diagnostic payloads, and the executable preflight scans both public case prompts and constructed diagnostic payloads for routing/private metadata. Focused tests pass 59/59 and the full host suite passes 204/204. A fresh read-only preflight of the 92-case, 1288-row, 184-checkpoint protocol-corrected plan passes with zero routing/private hits and provider_calls_made=false. The immutable historical corrected trace is not retroactively reclassified: its model requests contain 4222 verifier_ref hits and remain non-confirmatory.

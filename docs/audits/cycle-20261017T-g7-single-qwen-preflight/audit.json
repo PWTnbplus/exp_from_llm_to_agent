@@ -1,0 +1,51 @@
+{
+  "cycle": "20261017T-g7-single-qwen-preflight",
+  "audit_scope": "single-model qwen G7 formal-input preflight without provider calls",
+  "status": "PROTOCOL_READY_PAID_EVIDENCE_BLOCKED",
+  "scientific_release_allowed": false,
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "model_id": "qwen3.5-plus",
+  "provider": "ctflow",
+  "provider_calls_made": false,
+  "input": {
+    "public": "results/g7_failure_localization/formal-20261014T030000Z/g7_public_cases.jsonl",
+    "labels": "results/g7_failure_localization/formal-20261014T030000Z/g7_vlu_private.jsonl",
+    "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+    "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "labels_sha256": "29782338db2a76a7c854cacb8c68479cb6a47241caddadc26ba18393cc0e7490",
+    "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+  },
+  "preflight": {
+    "command": "E:/resources/python/python.exe scripts/g7_protocol_preflight.py --public results/g7_failure_localization/formal-20261014T030000Z/g7_public_cases.jsonl --labels results/g7_failure_localization/formal-20261014T030000Z/g7_vlu_private.jsonl --plan results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl --out runs/ctflow_single_model/20261017T-g7-preflight-qwen --worker-count 1",
+    "exit_code": 0,
+    "formal_run_allowed_by_protocol": true,
+    "public_cases": 92,
+    "labels": 92,
+    "plan_rows": 1288,
+    "unique_checkpoints": 184,
+    "expected_arms_per_checkpoint": ["D0", "D1", "D2", "D3", "L_ONLY", "U_ONLY", "V_ONLY"],
+    "duplicate_run_ids": 0,
+    "duplicate_public_case_ids": 0,
+    "duplicate_label_case_ids": 0,
+    "invalid_public_metadata": 0,
+    "invalid_label_metadata": 0,
+    "invalid_plan_metadata": 0,
+    "lineage_mismatches": 0,
+    "forbidden_model_prompt_hits": 0,
+    "routing_metadata_model_prompt_hits": 0,
+    "scientific_truth_decision_made": false
+  },
+  "blocked_before_paid_call": {
+    "required_missing": [
+      "provider-verifiable billing receipt/export",
+      "immutable qwen3.5-plus model snapshot or gateway weight fingerprint"
+    ],
+    "reason": "The formal G7 runner is intentionally fail-closed on these fields. User authorization and the USD 200 ceiling permit paid calls but do not supply or justify fabricating provider billing or a weight fingerprint.",
+    "historical_g7_not_relabelled": true,
+    "qwen_single_model_pilot_not_relabelled_as_g7": true
+  },
+  "review": {
+    "findings": [],
+    "resolutions": []
+  }
+}

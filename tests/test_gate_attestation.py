@@ -22,7 +22,7 @@ def test_g0_g7_gate_attestation_is_complete_and_fail_closed() -> None:
         assert isinstance(gate["evidence"], list) and gate["evidence"]
         assert isinstance(gate["verification_command"], str) and gate["verification_command"]
         assert gate["scientific_release_allowed"] is False
-    assert payload["gates"]["G0"]["status"] == "BLOCKED"
+    assert payload["gates"]["G0"]["status"] == "PASS"
     assert payload["gates"]["G6"]["status"] == "BLOCKED"
     assert payload["gates"]["G7"]["status"] == "BLOCKED"
 
@@ -35,7 +35,7 @@ def test_gate_attestation_does_not_turn_mock_or_engineering_evidence_into_scienc
     assert payload["gates"]["G5"]["scope"] == "smoke_and_engineering_only"
 
 
-def test_local_newtonbench_artifacts_are_pinned_without_claiming_remote_provenance() -> None:
+def test_local_newtonbench_artifacts_are_pinned_with_verified_remote_provenance() -> None:
     archive = ROOT / "third_party/NewtonBench.zip"
     license_path = ROOT / "third_party/NewtonBench/LICENSE"
     assert hashlib.sha256(archive.read_bytes()).hexdigest() == (
@@ -48,4 +48,7 @@ def test_local_newtonbench_artifacts_are_pinned_without_claiming_remote_provenan
     with zipfile.ZipFile(archive) as handle:
         assert "NewtonBench-main/LICENSE" in handle.namelist()
     payload = json.loads((ROOT / "docs/state/gates.json").read_text(encoding="utf-8"))
-    assert payload["gates"]["G0"]["status"] == "BLOCKED"
+    assert payload["gates"]["G0"]["status"] == "PASS"
+    evidence = " ".join(payload["gates"]["G0"]["evidence"])
+    assert "912a4ba5f4356ddd06acc16e44460ca30be4abc2" in evidence
+    assert "matches the upstream raw LICENSE" in evidence

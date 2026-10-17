@@ -14,12 +14,11 @@
 
 ## 当前状态摘要
 
-开放/未验证：9。已验证：29。
+开放/未验证：8。已验证：30。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
 - ISSUE-000000000002 P1 BLOCKED 尝试次数=2：Real-provider pilot and retry/cost behavior are unverified；修复=Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard
-- ISSUE-000000000003 P1 BLOCKED 尝试次数=1：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
 - ISSUE-000000000004 P1 BLOCKED 尝试次数=0：Formal statistical validity is not established；修复=Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
 - ISSUE-ad61f025976a P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
