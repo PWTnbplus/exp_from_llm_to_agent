@@ -1,0 +1,137 @@
+{
+  "audit_version": "kimi-k25-format-revalidation-partial-v1",
+  "cycle": "20261018T-kimi-format-revalidation-partial",
+  "status": "REAL_PROVIDER_PARTIAL_NONCONFIRMATORY",
+  "experiment_id": "single_model_g0_g7",
+  "authorization": {
+    "paid_calls_authorized_by_user": true,
+    "user_budget_usd": 200.0,
+    "external_billing_verified": false,
+    "model_snapshot_verified": false
+  },
+  "provider_execution": {
+    "model_id": "kimi-k2.5",
+    "base_url": "https://token.ctflow.cn/v1",
+    "g6_run_dir": "runs/ctflow_single_model/20261017T-g6-kimi-k25-v1",
+    "g7_run_dir": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1",
+    "formal_scientific_release_allowed": false,
+    "note": "This cycle resumed the existing append-only Kimi run after repairing the G6/G7 response-format retry contract. It did not create a new frozen denominator."
+  },
+  "g6": {
+    "plan_rows": 552,
+    "canonical_responses": 552,
+    "final_status_counts": {"completed": 550, "provider_error": 2},
+    "historical_retry_successes": 22,
+    "trace_integrity_failures": 0,
+    "revision_valid_count": 0,
+    "audit_pass": true,
+    "independent_release_review_structural_pass": false,
+    "independent_release_review_failure": "missing_handoff",
+    "observed_local_cost_usd": 2.039289,
+    "note": "The structural audit passes coverage accounting, but no G6-to-G7 handoff exists because revision-valid evidence is zero. The independent review therefore remains non-releasable."
+  },
+  "g7": {
+    "preflight": {
+      "public_cases": 92,
+      "labels": 92,
+      "plan_rows": 1288,
+      "checkpoints": 184,
+      "arms_per_checkpoint": 7,
+      "protocol_errors": [],
+      "provider_calls_in_preflight": false
+    },
+    "canonical_merge": {
+      "state_rows": 1288,
+      "completed": 1150,
+      "checkpoint_missing": 137,
+      "provider_error": 1,
+      "terminal_failures_retained": true,
+      "checkpoint_rows": 184,
+      "checkpoint_completed": 184,
+      "checkpoint_provider_error": 0,
+      "missing_ids": []
+    },
+    "q_audit": {
+      "rows": 1288,
+      "independent_valid_rows": 0,
+      "q_trace_backed_valid_rows": 0,
+      "q_validity": "NOT_SCORED",
+      "external_q_verifier_present": false,
+      "confirmatory_reuse_allowed": false
+    },
+    "trace_q_consistency": {
+      "state_rows": 1288,
+      "trace_integrity_failures": 28,
+      "completed_trace_inconsistent": 27,
+      "failure_trace_inconsistent": 1,
+      "not_executed": 137,
+      "checkpoint_trace_integrity_failures": 0,
+      "important": "The current append-only revalidation contains duplicate RUN_START/sequence/parent-link/unmatched-request findings in 27 completed traces and one failure trace. These rows cannot be treated as trace-clean until the retry-segment lifecycle is repaired or independently explained."
+    },
+    "corrected_metrics": {
+      "terminal_failures": 138,
+      "invalid_q_rows": 1288,
+      "scientific_truth_decision_made": false,
+      "confirmatory_reuse_allowed": false,
+      "scope": "diagnostic_only"
+    },
+    "artifacts": {
+      "states": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/states_revalidated_20261018.jsonl",
+      "checkpoints": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/checkpoints_revalidated_20261018.jsonl",
+      "q": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/q_audit_revalidated_20261018.json",
+      "trace_q": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/trace_q_consistency_revalidated_20261018.json",
+      "metrics": "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/corrected_metrics_revalidated_20261018.json"
+    }
+  },
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "evidence": "The Kimi K2.5 revalidation used the user-authorized USD 200 ceiling and local capped accounting, but provider billing/pricing and immutable model identity remain unavailable. G6 local cost is 2.039289 USD and G7 remains non-confirmatory.",
+        "remediation": "Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "evidence": "The revalidated G7 Q audit has 0 independently valid rows out of 1288 because no external Q verifier is present; the corrected metrics report remains diagnostic-only and the G6 revision-valid count is 0/138.",
+        "remediation": "Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "evidence": "The current G7 run still has no independently audited dependency/state edge evidence; Q is not independently valid and the current 138 non-completed rows cannot establish L/U causal localization.",
+        "remediation": "Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "evidence": "After the repaired-format resume, canonical G7 coverage is 1150/1288 completed, 137 checkpoint_missing, and 1 provider_error. Q independent validity is 0/1288 and 28 trace-integrity failures remain in the revalidated trace audit.",
+        "remediation": "Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims."
+      },
+      {
+        "id": "ISSUE-7c2d4e9a10bf",
+        "severity": "P1",
+        "title": "G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery",
+        "evidence": "audit_g7_trace_q_consistency.py on states_revalidated_20261018.jsonl reports 28 trace_integrity_failures: 27 completed traces and 1 provider-error trace. Findings include duplicate RUN_START, duplicate/non-increasing sequence or event IDs, model-response parent mismatches, unmatched model requests, and missing RUN_END on one failure trace.",
+        "remediation": "Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not trace-clean until this audit passes."
+      }
+    ],
+    "resolutions": []
+  },
+  "tests": {
+    "focused_after_source_fix": "58 passed",
+    "full_after_source_fix": "264 passed in 18.18s",
+    "this_cycle_source_tests_rerun": true,
+    "this_cycle_full_host_suite": "264 passed in 23.84s",
+    "reason": "The full host suite was rerun after the source fix and passed. The trace lifecycle defect remains an experiment-artifact issue requiring a targeted repair and independent audit."
+  },
+  "remote_delivery": {
+    "local_head": "c1178b95d59f053730e09e46e229df9c49503fc7",
+    "push_verified": false,
+    "last_failure": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery failed: unable to connect to github.com port 443 via the configured 127.0.0.1 proxy",
+    "do_not_claim_remote_updated": true
+  },
+  "scientific_conclusion": "No formal scientific result, Agent superiority, causal L/U claim, Q-validity claim, or confirmatory statistical inference is supported. This is an authorized, locally accounted, non-confirmatory single-model pilot with incomplete and trace-inconsistent G7 execution.",
+  "no_fabricated_results": true
+}

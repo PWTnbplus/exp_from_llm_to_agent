@@ -1,26 +1,34 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-17T13:08:52+00:00
+生成时间（UTC）：2026-10-17T16:10:11+00:00
 
-- 开放/阻塞/未验证：**8**
+- 开放/阻塞/未验证：**9**
 - 已验证修复：**30**
 - 已验证完成里程碑：**2**
 - 未验证科学门禁：**G6, G7**
 
 ## 未解决和阻塞问题
 
+### ISSUE-7c2d4e9a10bf — P1 — OPEN
+- 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
+- 证据：audit_g7_trace_q_consistency.py on states_revalidated_20261018.jsonl reports 28 trace_integrity_failures: 27 completed traces and 1 provider-error trace. Findings include duplicate RUN_START, duplicate/non-increasing sequence or event IDs, model-response parent mismatches, unmatched model requests, and missing RUN_END on one failure trace.
+- 必需修复：Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not trace-clean until this audit passes.
+- 尝试次数：0
+- 来源：docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json
+- 阻塞原因：未记录
+
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json; docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json
-- 必需修复：Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard cap, obtain immutable model identity evidence, and complete independent isolation/statistical review before any formal G0-G7 claim.
+- 证据：The Kimi K2.5 revalidation used the user-authorized USD 200 ceiling and local capped accounting, but provider billing/pricing and immutable model identity remain unavailable. G6 local cost is 2.039289 USD and G7 remains non-confirmatory.
+- 必需修复：Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：Cycle 102 Kimi K2.5 G6/G7 execution completed local capped accounting, but provider billing/pricing and immutable model identity remain unverified; G6 retained 2 terminal provider errors and G7 retained 1253 checkpoint-missing states plus 179 checkpoint provider errors, so scientific release remains closed.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：Cycle 102: Kimi K2.5 G6 retained 552/552 canonical rows with revision-valid count 0; G7 retained all 1288 planned rows with 0/1288 valid Q rows and confirmatory_reuse_allowed=false. Corrected metrics are diagnostic-only; no confirmatory inference or scientific release is allowed. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
-- 必需修复：Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
+- 证据：The revalidated G7 Q audit has 0 independently valid rows out of 1288 because no external Q verifier is present; the corrected metrics report remains diagnostic-only and the G6 revision-valid count is 0/138.
+- 必需修复：Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：Cycle 102 local Kimi G6/G7 audits pass structural accounting only; independent statistical and mathematical review remains unavailable and Q is invalid for all 1288 planned rows.
@@ -43,16 +51,16 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：Cycle 102 Kimi G7 retains the full planned denominator but has no independently valid Q rows and no dependency-edge/state evidence; no G8 causal, L/U, or scientific release claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
-- 必需修复：Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.
+- 证据：The current G7 run still has no independently audited dependency/state edge evidence; Q is not independently valid and the current 138 non-completed rows cannot establish L/U causal localization.
+- 必需修复：Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：Cycle 102 Kimi G7 has no independently valid Q rows and no audited dependency/state edges; independent dependency/state/Q/mathematical evidence remains unavailable.
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：Cycle 102 Kimi G7 canonical accounting retains 1288 states (35 completed, 1253 checkpoint_missing) and 184 checkpoints (5 completed, 179 provider_error); Q valid is 0/1288 and confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
-- 必需修复：Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.
+- 证据：After the repaired-format resume, canonical G7 coverage is 1150/1288 completed, 137 checkpoint_missing, and 1 provider_error. Q independent validity is 0/1288 and 28 trace-integrity failures remain in the revalidated trace audit.
+- 必需修复：Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.
 - 尝试次数：22
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：Cycle 102 Kimi G7 retains terminal provider failures and 0/1288 independently valid Q rows; independent Q/dependency/state review remains unavailable.

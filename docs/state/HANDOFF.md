@@ -1,5 +1,7 @@
 # 下一位 Codex Agent 的交接说明
 
+> 当前 Kimi K2.5 重新验证的详细交接见 [HANDOFF_G0_G7_KIMI_REVALIDATION_20261018.md](HANDOFF_G0_G7_KIMI_REVALIDATION_20261018.md)。该文档记录了本轮 184/184 checkpoint 恢复、1150/1288 state 完成、28 个 trace lifecycle 不一致，以及下一步仅续跑 worker 2/6/8/11/13/14 的精确命令。
+
 ## 从这里开始——不要重复最初的实现过程
 
 1. 检查 `git status`、分支、远程仓库和最近提交；保留用户未提交的工作。
@@ -10,20 +12,21 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-000000000002 / P1 / Real-provider pilot and retry/cost behavior are unverified
+**下一问题（Next issue:）：** ISSUE-7c2d4e9a10bf / P1 / G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
 
 ## 当前状态摘要
 
-开放/未验证：8。已验证：30。
+开放/未验证：9。已验证：30。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-000000000002 P1 BLOCKED 尝试次数=3：Real-provider pilot and retry/cost behavior are unverified；修复=Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard
-- ISSUE-000000000004 P1 BLOCKED 尝试次数=1：Formal statistical validity is not established；修复=Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.
+- ISSUE-7c2d4e9a10bf P1 OPEN 尝试次数=0：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not tr
+- ISSUE-000000000002 P1 BLOCKED 尝试次数=3：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
+- ISSUE-000000000004 P1 BLOCKED 尝试次数=1：Formal statistical validity is not established；修复=Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
 - ISSUE-ad61f025976a P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 project_preflight returned BLOCKED_REAL_RUN with missing verified model snapshot, missing positiv；修复=Obtain an independently verifiable immutable model snapshot or gateway weight fingerprint and billing evidence; retain the current truthful preflight as a pilot-readiness attestation, not as full RUN_COMPLETE acceptance.
-- ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=3：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.
-- ISSUE-3d7a9c1e5b20 P1 BLOCKED 尝试次数=22：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and
+- ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=3：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.
+- ISSUE-3d7a9c1e5b20 P1 BLOCKED 尝试次数=22：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.
 - ISSUE-f9171bb760b1 P1 RESOLVED_UNVERIFIED 尝试次数=0：No frozen, auditable G8 real/sham/off/extra adapter is present；修复=Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
 - ISSUE-000000000005 P2 OPEN 尝试次数=0：Classical baseline is only an extension interface；修复=Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
 已验证的已完成工作（避免重复）：

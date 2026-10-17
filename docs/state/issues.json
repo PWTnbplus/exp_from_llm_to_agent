@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T13:08:52+00:00",
+  "updated_at": "2026-10-17T16:10:11+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -51,10 +51,10 @@
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
       "status": "BLOCKED",
-      "evidence": "docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json; docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json",
-      "remediation": "Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard cap, obtain immutable model identity evidence, and complete independent isolation/statistical review before any formal G0-G7 claim.",
+      "evidence": "The Kimi K2.5 revalidation used the user-authorized USD 200 ceiling and local capped accounting, but provider billing/pricing and immutable model identity remain unavailable. G6 local cost is 2.039289 USD and G7 remains non-confirmatory.",
+      "remediation": "Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-17T12:45:00+00:00",
+      "last_seen": "2026-10-17T16:10:11+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 3,
       "blocked_reason": "Cycle 102 Kimi K2.5 G6/G7 execution completed local capped accounting, but provider billing/pricing and immutable model identity remain unverified; G6 retained 2 terminal provider errors and G7 retained 1253 checkpoint-missing states plus 179 checkpoint provider errors, so scientific release remains closed.",
@@ -500,10 +500,10 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "BLOCKED",
-      "evidence": "Cycle 102: Kimi K2.5 G6 retained 552/552 canonical rows with revision-valid count 0; G7 retained all 1288 planned rows with 0/1288 valid Q rows and confirmatory_reuse_allowed=false. Corrected metrics are diagnostic-only; no confirmatory inference or scientific release is allowed. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.",
-      "remediation": "Retain the fail-closed G6/G7 input guards and obtain independent statistical and mathematical review before any confirmatory inference or scientific release.",
+      "evidence": "The revalidated G7 Q audit has 0 independently valid rows out of 1288 because no external Q verifier is present; the corrected metrics report remains diagnostic-only and the G6 revision-valid count is 0/138.",
+      "remediation": "Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-17T12:45:00+00:00",
+      "last_seen": "2026-10-17T16:10:11+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
       "blocked_reason": "Cycle 102 local Kimi G6/G7 audits pass structural accounting only; independent statistical and mathematical review remains unavailable and Q is invalid for all 1288 planned rows.",
@@ -726,10 +726,10 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "Cycle 102 Kimi G7 retains the full planned denominator but has no independently valid Q rows and no dependency-edge/state evidence; no G8 causal, L/U, or scientific release claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.",
-      "remediation": "Keep the reduced denominator structural and non-confirmatory. Obtain an independently audited complete dependency/state dataset and Q/math review before any G8 causal, L/U, or scientific release claim.",
+      "evidence": "The current G7 run still has no independently audited dependency/state edge evidence; Q is not independently valid and the current 138 non-completed rows cannot establish L/U causal localization.",
+      "remediation": "Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-17T12:45:00+00:00",
+      "last_seen": "2026-10-17T16:10:11+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
       "attempts": 3,
       "blocked_reason": "Cycle 102 Kimi G7 has no independently valid Q rows and no audited dependency/state edges; independent dependency/state/Q/mathematical evidence remains unavailable.",
@@ -789,10 +789,10 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "Cycle 102 Kimi G7 canonical accounting retains 1288 states (35 completed, 1253 checkpoint_missing) and 184 checkpoints (5 completed, 179 provider_error); Q valid is 0/1288 and confirmatory_reuse_allowed=false. No V/L/U/Q or scientific claim is made. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.",
-      "remediation": "Keep historical G7 artifacts non-confirmatory. Restore authorized provider access only with explicit paid authorization and a hard ceiling, run a separately frozen non-pooled batch using the repaired trace contract, and obtain independent Q and dependency/state review while retaining every failure in the denominator.",
+      "evidence": "After the repaired-format resume, canonical G7 coverage is 1150/1288 completed, 137 checkpoint_missing, and 1 provider_error. Q independent validity is 0/1288 and 28 trace-integrity failures remain in the revalidated trace audit.",
+      "remediation": "Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-17T12:45:00+00:00",
+      "last_seen": "2026-10-17T16:10:11+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 22,
       "blocked_reason": "Cycle 102 Kimi G7 retains terminal provider failures and 0/1288 independently valid Q rows; independent Q/dependency/state review remains unavailable.",
@@ -1913,6 +1913,27 @@
           "evidence": "Strict preflight now computes and compares canonical hashes for public, labels, and plan rows. The source-task mutation test passes; focused G7 tests pass 57/57; the full suite passes 247/247; immutable preflight reports all three expected hashes with no mismatch."
         }
       ]
+    },
+    {
+      "id": "ISSUE-7c2d4e9a10bf",
+      "severity": "P1",
+      "title": "G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery",
+      "status": "OPEN",
+      "evidence": "audit_g7_trace_q_consistency.py on states_revalidated_20261018.jsonl reports 28 trace_integrity_failures: 27 completed traces and 1 provider-error trace. Findings include duplicate RUN_START, duplicate/non-increasing sequence or event IDs, model-response parent mismatches, unmatched model requests, and missing RUN_END on one failure trace.",
+      "remediation": "Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not trace-clean until this audit passes.",
+      "first_seen": "2026-10-17T16:10:11+00:00",
+      "last_seen": "2026-10-17T16:10:11+00:00",
+      "source": "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json",
+      "attempts": 0,
+      "blocked_reason": null,
+      "verification": null,
+      "history": [
+        {
+          "time": "2026-10-17T16:10:11+00:00",
+          "event": "OPENED",
+          "source": "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json"
+        }
+      ]
     }
   ],
   "completed_work": [
@@ -2033,7 +2054,8 @@
     "docs/audits/cycle-20261017T-g7-unverified-pilot-gate/audit.json",
     "docs/audits/cycle-20261017T-g6-qwen-api/audit.json",
     "docs/audits/cycle-20261017T-provider-key-audit/audit.json",
-    "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json"
+    "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json",
+    "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json"
   ],
   "current_focus": null
 }
