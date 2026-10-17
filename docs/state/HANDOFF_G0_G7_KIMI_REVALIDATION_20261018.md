@@ -241,7 +241,7 @@ Only an extension interface exists. Do not expand scope during this repair unles
 
 ## 9. Git and hygiene
 
-The source repair is in c1178b95d59f053730e09e46e229df9c49503fc7. The handoff and audit files are now committed locally as 708f609. The current remote branch was not updated: a direct push ended with `Recv failure: Connection was reset`, and a direct `ls-remote` verification ended with `Failed to connect to github.com port 443`.
+The source repair is in c1178b95d59f053730e09e46e229df9c49503fc7. The initial handoff/audit commit is 708f609; the final delivery-status amendment is 1cf068d. The current remote branch was not updated: a direct push ended with `Recv failure: Connection was reset`, and a direct `ls-remote` verification ended with `Failed to connect to github.com port 443`.
 
 Therefore remote delivery of this handoff is not verified. After network access is restored, the next agent must:
 
