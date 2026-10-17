@@ -294,6 +294,29 @@ def existing_trace_sequence(path: Path) -> int:
     return max(sequences, default=0)
 
 
+def trace_path_for_retry(path: Path) -> tuple[Path, int]:
+    """Choose an append-safe trace path for a terminal retry.
+
+    A legacy interrupted/provider-error attempt may already contain duplicate
+    sequence values. It remains immutable evidence, but appending to it would
+    make the retry trace non-auditable. Use a deterministic sibling retry path
+    and retain the original file untouched.
+    """
+    try:
+        return path, existing_trace_sequence(path)
+    except RuntimeError:
+        for attempt in range(1, 100):
+            retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
+            retry_path = retry_dir / path.name
+            if not retry_path.exists():
+                return retry_path, 0
+            try:
+                return retry_path, existing_trace_sequence(retry_path)
+            except RuntimeError:
+                continue
+        raise RuntimeError(f"could not find an append-safe retry trace path for {path}")
+
+
 def emit(path: Path, seq: int, run_id: str, event_type: str, status: str,
          payload: dict[str, Any]) -> int:
     seq += 1
@@ -1334,7 +1357,7 @@ def main() -> int:
             continue
         trace_id = "checkpoint_" + cp_id
         event_path = out / "checkpoint_traces" / trace_id / "events.jsonl"
-        seq = existing_trace_sequence(event_path)
+        event_path, seq = trace_path_for_retry(event_path)
         started = time.monotonic()
         try:
             seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
@@ -1351,8 +1374,8 @@ def main() -> int:
             emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
             prior_cp[cp_id] = record
         except Exception as exc:
-            emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
-            emit(event_path, seq + 1, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
+            seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
+            seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
             append_jsonl(checkpoint_path, {"checkpoint_id": cp_id, "case_id": row["case_id"], "group_id": row["group_id"],
                                             "status": "provider_error", "trace_ref": str(event_path.relative_to(out))})
             continue
@@ -1369,7 +1392,7 @@ def main() -> int:
             continue
         trace_id = row["run_id"]
         event_path = out / "traces" / trace_id / "events.jsonl"
-        seq = existing_trace_sequence(event_path)
+        event_path, seq = trace_path_for_retry(event_path)
         injection: dict[str, Any] = {"applied_stages": row["inject_stages"]}
         try:
             seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
@@ -1399,8 +1422,8 @@ def main() -> int:
             prior_states[trace_id] = state
             emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
         except Exception as exc:
-            emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
-            emit(event_path, seq + 1, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
+            seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
+            seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
             state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "provider_error",
                      "trace_ref": str(event_path.relative_to(out)), "injection_audit": injection if "injection" in locals() else {"applied_stages": row["inject_stages"]}}
             append_jsonl(state_path, state)

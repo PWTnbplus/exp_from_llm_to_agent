@@ -9,7 +9,7 @@ from scripts.audit_g7_trace_q_consistency import (
     classify_recorded_failure,
     validate_lifecycle,
 )
-from scripts.run_g7_failure_localization import emit, existing_trace_sequence
+from scripts.run_g7_failure_localization import emit, existing_trace_sequence, trace_path_for_retry
 
 
 def _write_events(path: Path, events: list[dict]) -> None:
@@ -354,3 +354,20 @@ def test_g7_emit_persists_identity_and_resumes_sequence(tmp_path: Path) -> None:
     seq = emit(path, existing_trace_sequence(path), "run-1", "RUN_END", "COMPLETED", {"status": "completed"})
     assert seq == 3
     assert existing_trace_sequence(path) == 3
+
+
+def test_g7_retry_trace_path_preserves_malformed_history(tmp_path: Path) -> None:
+    path = tmp_path / "traces" / "run-1" / "events.jsonl"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps({"seq": 1}) + "\n" + json.dumps({"seq": 1}) + "\n",
+        encoding="utf-8",
+    )
+
+    retry_path, seq = trace_path_for_retry(path)
+
+    assert retry_path != path
+    assert retry_path.name == "events.jsonl"
+    assert retry_path.parent.name == "run-1.retry-1"
+    assert seq == 0
+    assert path.read_text(encoding="utf-8").count('"seq": 1') == 2
