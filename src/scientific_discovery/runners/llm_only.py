@@ -65,7 +65,7 @@ class LLMOnlyRunner:
         try:
             initial_observations = [observation_dict(v) for v in self.oracle.get_initial_observations()]
             metadata["initial_observations"] = list(initial_observations)
-            ensure_provider_call(self.budget)
+            ensure_provider_call(self.budget, self.provider)
             planning = self.provider.complete(self._planning_messages(initial_observations), tools=None)
             record_provider_call(self.provider, planning, self.budget)
             payload = response_payload(planning)
@@ -89,7 +89,7 @@ class LLMOnlyRunner:
             ]
             assert_public_text(str(initial_observations))
             assert_public_text(str([observation_dict(v) for v in observations]))
-            ensure_provider_call(self.budget)
+            ensure_provider_call(self.budget, self.provider)
             final = self.provider.complete(final_messages, tools=None)
             record_provider_call(self.provider, final, self.budget)
             law = LawCandidate.from_payload(final.content, task_id).to_dict()

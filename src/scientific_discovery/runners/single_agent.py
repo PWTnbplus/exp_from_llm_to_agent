@@ -63,7 +63,7 @@ class SingleAgentRunner:
                     )},
                 ]
                 assert_public_text(str(history))
-                ensure_provider_call(self.budget)
+                ensure_provider_call(self.budget, self.provider)
                 response = self.provider.complete(messages, tools=None if final_only else _tool_schema(schema))
                 record_provider_call(self.provider, response, self.budget)
                 payload = response_payload(response)
