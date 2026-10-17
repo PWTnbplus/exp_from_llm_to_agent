@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T13:06:38+00:00",
+  "updated_at": "2026-10-17T13:08:52+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -138,17 +138,17 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "VERIFIED",
-      "evidence": "Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit a592f832fbb1e787a9edb21f67b46d44fbefa910 after a successful push and ls-remote verification.",
+      "evidence": "Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit 0d300c48832454ae4d4f402291e0a294d847d884 after a successful push and ls-remote verification.",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-17T03:55:18+00:00",
+      "last_seen": "2026-10-17T13:08:40+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
       "blocked_reason": null,
       "verification": {
-        "time": "2026-10-17T03:55:18+00:00",
+        "time": "2026-10-17T13:08:40+00:00",
         "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py",
-        "evidence": "Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit a592f832fbb1e787a9edb21f67b46d44fbefa910 after a successful push and ls-remote verification.",
+        "evidence": "Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit 0d300c48832454ae4d4f402291e0a294d847d884 after a successful push and ls-remote verification.",
         "reason": "Independent reviewer verification"
       },
       "history": [
@@ -486,6 +486,12 @@
           "event": "VERIFIED",
           "reason": "Independent reviewer verification",
           "evidence": "Independent direct checks verified the configured NewtonBench commit exists at upstream HEAD, the upstream raw LICENSE at that commit matches the vendored license SHA-256, and origin/autopilot/scientific-law-discovery points to local commit a592f832fbb1e787a9edb21f67b46d44fbefa910 after a successful push and ls-remote verification."
+        },
+        {
+          "time": "2026-10-17T13:08:40+00:00",
+          "event": "VERIFIED",
+          "reason": "Independent push and remote-branch verification",
+          "evidence": "git push origin autopilot/scientific-law-discovery succeeded and git ls-remote verified refs/heads/autopilot/scientific-law-discovery at 0d300c48832454ae4d4f402291e0a294d847d884."
         }
       ]
     },
