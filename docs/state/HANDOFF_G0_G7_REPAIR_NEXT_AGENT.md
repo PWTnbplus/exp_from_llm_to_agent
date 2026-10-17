@@ -670,3 +670,8 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - The qwen G7 paid run was not started because the formal runner still correctly requires provider-verifiable billing evidence and an immutable model snapshot/gateway weight fingerprint. The existing qwen single-model NewtonBench pilot remains complete non-confirmatory evidence; it is not relabelled as G7. Do not fabricate either missing artifact or bypass the gate.
 - Verification: `E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py` passed `3/3`; run the full host suite before the next commit. Preserve and do not stage `research_data_summary_G0_G7/`, API keys, `.env`, or raw protected outputs.
 
+## Cycle 98 post-commit remote verification (2026-10-17 HKT)
+
+- Full host regression after the G0 update passed `257/257`; py_compile and `git diff --check` passed.
+- Commit `ebca2e12e18ef68888691f27f25e99d76f8ec54c` was pushed with proxy bypass and independently verified by `git ls-remote` as `origin/autopilot/scientific-law-discovery`. The user-owned untracked `research_data_summary_G0_G7/` directory remains untouched and unstaged.
+

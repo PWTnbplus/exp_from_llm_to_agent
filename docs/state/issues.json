@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T03:57:02+00:00",
+  "updated_at": "2026-10-17T03:58:29+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1985,7 +1985,8 @@
     "docs/audits/cycle-20261017T000000Z-95/audit.json",
     "docs/audits/cycle-20261017T-pilot-qwen/audit.json",
     "docs/audits/cycle-20261017T-g0-provenance/audit.json",
-    "docs/audits/cycle-20261017T-g7-single-qwen-preflight/audit.json"
+    "docs/audits/cycle-20261017T-g7-single-qwen-preflight/audit.json",
+    "docs/audits/cycle-20261017T-delivery/audit.json"
   ],
   "current_focus": null
 }
