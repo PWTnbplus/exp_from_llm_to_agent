@@ -62,6 +62,13 @@ FORBIDDEN_MODEL_KEYS = (
     "U_true_node_changes",
 )
 ROUTING_METADATA_KEYS = ("cf_type", "theory_family_id")
+CHECKPOINT_FORMAT_RETRY_INSTRUCTION = (
+    "The previous response failed the checkpoint JSON contract. Return only one JSON object with exactly these four "
+    "top-level fields: decision, affected_claim_ids, revised_claim, supporting_evidence. Do not include a stages "
+    "field, diagnostic labels, hidden information, prose outside the JSON object, or tool calls. decision must be "
+    "MAINTAIN, REJECT, REVISE, or UNDETERMINED; affected_claim_ids must be an array; revised_claim must be a string "
+    "or null; supporting_evidence must be a non-empty string."
+)
 FORMAT_RETRY_INSTRUCTION = (
     "The previous response failed the required JSON contract. Return only one JSON object with the required fields; "
     "do not call tools or add hidden information. For a diagnostic fork, put V, L, U, and Q as objects in the "
@@ -441,8 +448,9 @@ def system_prompt(group: str) -> str:
 {protocol}
 The case is public and contains a scientific problem, claim, intervention, and public proof graph.
 Never access files, network, hidden answers, G6 private oracle records, prior G6 responses, or answer keys.
-For a checkpoint, reason from the public case only and return JSON with decision, affected_claim_ids,
-revised_claim, supporting_evidence. For a diagnostic fork, the user message may contain staged V/L/U
+For a checkpoint, reason from the public case only and return exactly one JSON object with exactly these four
+top-level fields: decision, affected_claim_ids, revised_claim, supporting_evidence. Do not include a stages field
+in a checkpoint response. For a diagnostic fork, the user message may contain staged V/L/U
 diagnostic information. Apply only the stages explicitly supplied, then return JSON with exactly:
 decision, affected_claim_ids, revised_claim, supporting_evidence, stages. stages must contain:
 V={{"verdict":"SUPPORTED|CONTRADICTED|INDETERMINATE"}},
@@ -1039,6 +1047,7 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
     request_calls = 0
     format_retry_used = False
     format_retry_pending = False
+    retry_instruction = CHECKPOINT_FORMAT_RETRY_INSTRUCTION if checkpoint else FORMAT_RETRY_INSTRUCTION
     while normal_calls < max_calls or format_retry_pending:
         is_format_retry = format_retry_pending
         format_retry_pending = False
@@ -1079,7 +1088,7 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
                                  "name": name, "content": json.dumps(result, ensure_ascii=False)})
             if normal_calls >= max_calls and not format_retry_used:
                 format_retry_used = True
-                messages.append({"role": "user", "content": FORMAT_RETRY_INSTRUCTION})
+                messages.append({"role": "user", "content": retry_instruction})
                 seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
                            {"reason": "tool_loop_reached_workflow_call_limit"})
                 format_retry_pending = True
@@ -1095,7 +1104,7 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
             if format_retry_used:
                 raise
             format_retry_used = True
-            messages.append({"role": "user", "content": FORMAT_RETRY_INSTRUCTION})
+            messages.append({"role": "user", "content": retry_instruction})
             seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
                        {"reason": str(exc)})
             format_retry_pending = True

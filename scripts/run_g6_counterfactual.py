@@ -27,6 +27,13 @@ from src.scientific_discovery.models.provider import OpenAICompatibleProvider, P
 
 
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
+G6_FORMAT_RETRY_INSTRUCTION = (
+    "The previous response failed the required G6 JSON contract. Perform the required pass and return only one "
+    "compact JSON object with exactly these fields: decision, affected_claim_ids, revised_claim, "
+    "supporting_evidence. decision must be MAINTAIN, REJECT, REVISE, or UNDETERMINED; affected_claim_ids must be "
+    "a JSON array of strings; revised_claim must be a string or null; supporting_evidence must be a non-empty "
+    "string. Do not add prose, stages, hidden information, or tool results."
+)
 TOOLS = [
     {"type": "function", "function": {"name": "calculate_expression", "description": "Evaluate a finite symbolic expression using only supplied numeric values.", "parameters": {"type": "object", "properties": {"expression": {"type": "string"}, "values": {"type": "object"}}, "required": ["expression"], "additionalProperties": False}}},
     {"type": "function", "function": {"name": "run_experiment", "description": "Run a bounded public-expression calculation; it cannot access hidden answers, files, or the network.", "parameters": {"type": "object", "properties": {"expression": {"type": "string"}, "values": {"type": "object"}}, "required": ["expression"], "additionalProperties": False}}},
@@ -299,16 +306,25 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
         call_limit = 8 if protocol_g3 else (2 if plan_row["group_id"] == "G3" else 8)
         tools = TOOLS if (plan_row["group_id"] == "G4" or protocol_g3) else None
         final_payload: dict[str, Any] | None = None
-        for call_index in range(call_limit):
-            if plan_row["group_id"] == "G3" and call_index == 1:
+        format_retry_used = False
+        format_retry_pending = False
+        normal_calls = 0
+        request_calls = 0
+        while normal_calls < call_limit or format_retry_pending:
+            is_format_retry = format_retry_pending
+            format_retry_pending = False
+            if not is_format_retry:
+                normal_calls += 1
+            request_calls += 1
+            if plan_row["group_id"] == "G3" and normal_calls == 2 and not is_format_retry:
                 messages.append({"role": "user", "content": "Perform the fixed reflection pass now. Return only the required final JSON object."})
             limits.before_model()
-            seq = emit_event(event_path, seq, run_id, "MODEL_REQUEST", status="RUNNING", payload={"call_index": call_index + 1, "messages": messages, "tools": tools})
+            seq = emit_event(event_path, seq, run_id, "MODEL_REQUEST", status="RUNNING", payload={"call_index": request_calls, "format_retry": is_format_retry, "messages": messages, "tools": tools})
             if request_delay:
                 time.sleep(request_delay)
             response = provider.complete(messages, tools=tools)
             limits.consume(response)
-            seq = emit_event(event_path, seq, run_id, "MODEL_RESPONSE", status="COMPLETED", payload={"call_index": call_index + 1, "content": response.content, "tool_calls": response.tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata})
+            seq = emit_event(event_path, seq, run_id, "MODEL_RESPONSE", status="COMPLETED", payload={"call_index": request_calls, "format_retry": is_format_retry, "content": response.content, "tool_calls": response.tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata})
             if response.tool_calls:
                 if plan_row["group_id"] != "G4" and not protocol_g3:
                     raise RuntimeError("legacy G3 returned a tool call")
@@ -328,13 +344,24 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
                     seq = emit_event(event_path, seq, run_id, "TOOL_RESULT", status=tool_status, payload={"tool_name": name, "tool_result": result})
                     messages.append({"role": "tool", "tool_call_id": tool_call.get("id", f"tool-{limits.tool_calls}"), "name": name, "content": json.dumps(result, ensure_ascii=False)})
                 continue
-            parsed = extract_json(response.content)
-            if parsed is not None:
+            try:
+                parsed = extract_json(response.content)
+                if parsed is None:
+                    raise ValueError("provider response did not contain a JSON object")
                 final_payload = normalize_payload(parsed)
-                if protocol_g3 and call_index == 0:
+            except (TypeError, ValueError) as exc:
+                if not format_retry_used:
+                    format_retry_used = True
+                    messages.append({"role": "user", "content": G6_FORMAT_RETRY_INSTRUCTION})
+                    seq = emit_event(event_path, seq, run_id, "FORMAT_RETRY_SCHEDULED", status="COMPLETED",
+                                     payload={"reason": str(exc)})
+                    format_retry_pending = True
                     continue
-                if plan_row["group_id"] == "G3" or call_index >= 1:
-                    break
+                raise
+            if protocol_g3 and normal_calls < 2:
+                continue
+            if plan_row["group_id"] == "G3" or normal_calls >= 2:
+                break
         if final_payload is None:
             raise ValueError("no valid final JSON response")
         trace_ref = str(event_path.relative_to(out))

@@ -1062,6 +1062,9 @@ def test_g7_checkpoint_stages_are_rejected_then_bounded_retry_can_accept_valid_s
     assert payload == valid
     assert len(provider.calls) == 2
     assert sum(event["event_type"] == "FORMAT_RETRY_SCHEDULED" for event in events) == 1
+    retry_message = provider.calls[1]["messages"][-1]["content"]
+    assert "exactly these four top-level fields" in retry_message
+    assert "Do not include a stages field" in retry_message
 
 
 def test_g7_format_retry_is_bounded_and_audited(tmp_path: Path) -> None:
