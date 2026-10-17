@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-17T16:10:11+00:00
+生成时间（UTC）：2026-10-17T16:55:45+00:00
 
 - 开放/阻塞/未验证：**9**
 - 已验证修复：**30**
@@ -11,10 +11,10 @@
 
 ### ISSUE-7c2d4e9a10bf — P1 — OPEN
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：audit_g7_trace_q_consistency.py on states_revalidated_20261018.jsonl reports 28 trace_integrity_failures: 27 completed traces and 1 provider-error trace. Findings include duplicate RUN_START, duplicate/non-increasing sequence or event IDs, model-response parent mismatches, unmatched model requests, and missing RUN_END on one failure trace.
-- 必需修复：Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not trace-clean until this audit passes.
-- 尝试次数：0
-- 来源：docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json
+- 证据：The source fix makes every non-empty G7 trace immutable and starts retries in a fresh sibling path. Adversarial regression tests reproduce the old terminal/incomplete/reused-retry failures before the fix and pass after it; the full host suite passes 267/267. The read-only derived view splits every RUN_START without pooling: 1,138/1,150 completed final attempts pass, while 13 final attempts remain genuinely inconsistent. Raw historical evidence remains unchanged; therefore this issue is not closed.
+- 必需修复：Keep the append-safe retry fix. Do not claim historical trace cleanliness until the 13 remaining final-attempt failures are independently resolved or rerun under the corrected writer; retain all failures and keep G7 scientific release blocked.
+- 尝试次数：1
+- 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — BLOCKED

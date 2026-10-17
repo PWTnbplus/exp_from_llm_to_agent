@@ -1,0 +1,19 @@
+{
+  "budget_ceiling_usd": 200.0,
+  "known_local_observed_cost_usd": 4.757124,
+  "g6_local_observed_cost_usd": 2.039289,
+  "g7_local_observed_cost_usd": 2.722796,
+  "this_cycle_incremental_provider_cost_usd": 0.0,
+  "provider_calls_in_this_cycle": 0,
+  "external_billing_verified": false,
+  "external_invoice_or_receipt": null,
+  "model_id": "kimi-k2.5",
+  "base_url": "https://token.ctflow.cn/v1",
+  "immutable_model_snapshot_verified": false,
+  "billing_interpretation": "Local runner accounting only; do not treat it as provider invoice evidence. The observed local amount is below the authorized USD 200 ceiling, but billing/pricing and immutable gateway identity remain unverified.",
+  "source_artifacts": {
+    "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json": "bf9f6f68acb33fa483e8a1522181af85a43bead7db301c0d0cb91a949b6bb9e2",
+    "runs/ctflow_single_model/20261017T-g6-kimi-k25-v1/g6_audit/trace_audit.json": "ecd5481b1b473af837f73feab9d728f8a4007ef832667d79f9184815adb81678",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/runner_summary.worker-16-0.json": "ef046ef053493dcf8d9ef5e8aa2639d9a48b7b6e2b17a6ff03184b54fc889616"
+  }
+}

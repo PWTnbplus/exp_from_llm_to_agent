@@ -1,0 +1,148 @@
+{
+  "audit_version": "g0-g7-single-model-final-audit-v1",
+  "cycle": "cycle-20261018T-g7-trace-repair",
+  "experiment_id": "single_model_g0_g7",
+  "model": {
+    "configured_model_id": "kimi-k2.5",
+    "external_immutable_identity_verified": false
+  },
+  "status": "BLOCKED_NONCONFIRMATORY",
+  "scientific_release_allowed": false,
+  "gates": {
+    "G0": {
+      "status": "PASS",
+      "scope": "scientific_provenance_only",
+      "evidence": "pinned NewtonBench/licensing evidence in gates.json; official evaluator caveat retained"
+    },
+    "G1": {
+      "status": "PASS_ENGINEERING_ONLY",
+      "scope": "nonadaptive LLM-only contract",
+      "evidence": "policy/isolation tests and frozen-plan controls; no formal real-provider result"
+    },
+    "G2": {
+      "status": "PASS_ENGINEERING_ONLY",
+      "scope": "feedback-dependent Agent action",
+      "evidence": "action/tool-boundary engineering tests; no superiority inference"
+    },
+    "G3": {
+      "status": "PASS_ENGINEERING_ONLY",
+      "scope": "budget and hidden-answer isolation",
+      "evidence": "budget ledger and no-leakage controls; provider/model evidence not externally verified"
+    },
+    "G4": {
+      "status": "PASS_ENGINEERING_ONLY",
+      "scope": "objective evaluator",
+      "evidence": "adversarial evaluator tests; not upstream scientific validation"
+    },
+    "G5": {
+      "status": "PASS_SMOKE_ONLY",
+      "scope": "real simulator/mock pipeline",
+      "evidence": "smoke and protocol controls; no formal VLDR result"
+    },
+    "G6": {
+      "status": "BLOCKED",
+      "scope": "formal scientific release",
+      "evidence": "552 planned; 550 completed; 2 provider_error; trace 0; revision-valid 0/138; external math/model/billing/statistics blockers"
+    },
+    "G7": {
+      "status": "BLOCKED",
+      "scope": "formal scientific release",
+      "evidence": "1288 planned; 1150 completed; 137 checkpoint_missing; 1 provider_error; raw trace failures 28, derived final failures 13; Q 0/1288 independently valid"
+    }
+  },
+  "g7_counts": {
+    "planned_states": 1288,
+    "selected_states": 1288,
+    "completed_states": 1150,
+    "checkpoint_missing_states": 137,
+    "provider_error_states": 1,
+    "planned_checkpoints": 184,
+    "selected_checkpoints": 184,
+    "derived_trace_accepted_states": 1138,
+    "derived_trace_accepted_checkpoints": 184,
+    "raw_trace_integrity_failures": 28,
+    "derived_final_trace_integrity_failures": 13,
+    "q_rows": 1288,
+    "q_trace_backed_valid": 0,
+    "corrected_metrics": {
+      "plan_rows": 1288,
+      "state_rows": 1288,
+      "q_rows": 1288,
+      "oracle_rows_scored": 92,
+      "terminal_failures": 138,
+      "invalid_q_rows": 1288,
+      "preflight_errors": [],
+      "ineligible_u_rows": 0
+    }
+  },
+  "conclusions": [
+    "G0 is supported only for pinned simulator provenance and licensing; official evaluator status remains a caveat.",
+    "G1-G5 are engineering, policy, evaluator, or smoke evidence, not a formal LLM-versus-Agent scientific result.",
+    "G6 has no scientifically valid released law-discovery result: revision-valid is 0/138 and independent math/statistical/model/billing gates remain open.",
+    "G7 is diagnostic-only. The derived view separates append-only attempts without pooling; it does not change the frozen denominator, truth, or Q validity. Q is NOT_SCORED with 0 independently valid rows.",
+    "No causal L/U conclusion, Agent superiority claim, or confirmatory statistical inference is supported."
+  ],
+  "cost_and_provenance": {
+    "user_budget_ceiling_usd": 200.0,
+    "known_local_observed_g6_g7_usd": 4.757124,
+    "this_cycle_incremental_provider_cost_usd": 0.0,
+    "external_billing_verified": false,
+    "model_snapshot_verified": false,
+    "model_id_source": "local runner configuration and persisted summaries only"
+  },
+  "commands": [
+    {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "exit_code": 0,
+      "result": "267 passed"
+    },
+    {
+      "command": "E:/resources/python/python.exe -X utf8 -m py_compile scripts/derive_g7_trace_view.py scripts/run_g7_failure_localization.py tests/test_g7_trace_q_consistency.py",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/merge_g7_states.py ... --states-out states_merged_trace_repair_20261018.jsonl",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/derive_g7_trace_view.py ... --out-root g7_trace_view_20261018",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/audit_g7_q.py ... --out q_audit_trace_repair_20261018.jsonl",
+      "exit_code": 0,
+      "result": "1288 rows, 0 valid"
+    },
+    {
+      "command": "scripts/audit_g7_trace_q_consistency.py ... --out trace_q_consistency_trace_view_20261018.json",
+      "exit_code": 0,
+      "result": "13 final trace integrity failures; 0 Q trace-backed valid"
+    },
+    {
+      "command": "scripts/audit_g7_corrected_metrics.py ... --out corrected_metrics_trace_repair_20261018.json",
+      "exit_code": 0,
+      "result": "confirmatory_reuse_allowed=false"
+    }
+  ],
+  "artifact_sha256": {
+    "docs/state/gates.json": "73be99941634d0174fe1672697d1cf9840a32debdcbe29b7a62da6bf9d5abee6",
+    "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json": "bf9f6f68acb33fa483e8a1522181af85a43bead7db301c0d0cb91a949b6bb9e2",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/states_merged_trace_repair_20261018.jsonl": "82bbbbc16e7dd7c51b4e397329d81ccf898523d50654b1796195101bebbfdd09",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/checkpoints_merged_trace_repair_20261018.jsonl": "7d5cf5702ae8dbf8b1f85febc518dd6756ae9842c3131cb7f20945793bae47b9",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/g7_trace_view_20261018/derivation_summary.json": "39d933d1f52503039d23c5ae6e58cc12f2ce7cf376b95a3a1ad29bb9ebf4bf3f",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/trace_q_consistency_trace_view_20261018.json": "ab67936e94a1be2845df0de0fea9b0c42073de345a0953d5a054c5b732f8c05b",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/q_audit_trace_repair_20261018.jsonl": "d9668a28f9cf220ff88b1b3ad4f46478e1ba9a173698a7f3674d71eaa4f45845",
+    "runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/corrected_metrics_trace_repair_20261018.json": "97e1c716b7a9545879a5f4759dd362b830140e0ac7676d01c447cca64441164b",
+    "scripts/run_g7_failure_localization.py": "53394c7b0f9a30cc4c86058b3d930adb503c167592a83924770076ce87e5e750",
+    "scripts/derive_g7_trace_view.py": "74e70726281fd4a1b19477923bd60e7ed96357884c96c16415f8aacb86a8b855",
+    "scripts/audit_g7_trace_q_consistency.py": "192691a3c077542a995224e25f1e085888f703748b282878676f395ac3876357",
+    "tests/test_g7_trace_q_consistency.py": "92e86486ecd02504a37066c2052849eb01640d0763a4f7f8f397d356115e398c",
+    "docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_EVIDENCE_MATRIX.csv": "08bf7edd08e1f8f200aea66a371af4a520b27eab26cd9ccb3e1b702e23c181c5",
+    "docs/audits/cycle-20261018T-g7-trace-repair/REPAIR_INDEPENDENT_REVIEW.json": "fd11847df08b76e3aafc9302c178a624e5009e052e8b0a12aadff9ef1d4db35e",
+    "docs/audits/cycle-20261018T-g7-trace-repair/COST_AND_MODEL_PROVENANCE.json": "23cd3afb0e289199b247590840f0343c61abf2e6eb51b0a2aeac0177830a8e45",
+    "docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_RESULT_SUMMARY.md": "d88762b8f36d158a3b265e423104a49c1feb87275d6996327ab7a7ab9f68e21e",
+    "docs/audits/cycle-20261018T-g7-trace-repair/UNRESOLVED_BLOCKERS.md": "6901aebe5a8773b6e1f0dd7c71f6b99ab1b80cd69941761b1c19a63ffa662b2f"
+  },
+  "raw_evidence_policy": "Raw traces are retained; derived trace view is a separate non-confirmatory audit artifact; no frozen truth or raw provider record was modified.",
+  "independent_read_only_review": "docs/audits/cycle-20261018T-g7-trace-repair/REPAIR_INDEPENDENT_REVIEW.json"
+}

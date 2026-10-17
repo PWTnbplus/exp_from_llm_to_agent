@@ -9,6 +9,7 @@ from scripts.audit_g7_trace_q_consistency import (
     classify_recorded_failure,
     validate_lifecycle,
 )
+from scripts.derive_g7_trace_view import split_attempts
 from scripts.run_g7_failure_localization import emit, existing_trace_sequence, trace_path_for_retry
 
 
@@ -371,6 +372,51 @@ def test_g7_retry_trace_path_preserves_malformed_history(tmp_path: Path) -> None
     assert retry_path.parent.name == "run-1.retry-1"
     assert seq == 0
     assert path.read_text(encoding="utf-8").count('"seq": 1') == 2
+
+
+def test_g7_retry_trace_path_never_appends_to_terminal_history(tmp_path: Path) -> None:
+    path = tmp_path / "traces" / "run-1" / "events.jsonl"
+    seq = emit(path, 0, "run-1", "RUN_START", "RUNNING", {})
+    seq = emit(path, seq, "run-1", "RUN_END", "COMPLETED", {"status": "completed"})
+    original = path.read_text(encoding="utf-8")
+
+    retry_path, retry_seq = trace_path_for_retry(path)
+
+    assert retry_path.parent.name == "run-1.retry-1"
+    assert retry_seq == 0
+    assert not retry_path.exists()
+    assert path.read_text(encoding="utf-8") == original
+
+
+def test_g7_retry_trace_path_skips_existing_retry_history(tmp_path: Path) -> None:
+    path = tmp_path / "traces" / "run-1" / "events.jsonl"
+    seq = emit(path, 0, "run-1", "RUN_START", "RUNNING", {})
+    emit(path, seq, "run-1", "MODEL_REQUEST", "RUNNING", {})
+    retry_one = path.parent.parent / "run-1.retry-1" / path.name
+    emit(retry_one, 0, "run-1", "RUN_START", "RUNNING", {})
+    retry_one_contents = retry_one.read_text(encoding="utf-8")
+
+    retry_path, retry_seq = trace_path_for_retry(path)
+
+    assert retry_path.parent.name == "run-1.retry-2"
+    assert retry_seq == 0
+    assert retry_one.read_text(encoding="utf-8") == retry_one_contents
+
+
+def test_g7_derived_view_splits_every_run_start_without_pooling(tmp_path: Path) -> None:
+    events = [
+        {"run_id": "run-1", "event_type": "RUN_START"},
+        {"run_id": "run-1", "event_type": "MODEL_REQUEST"},
+        {"run_id": "run-1", "event_type": "RUN_START"},
+        {"run_id": "run-1", "event_type": "MODEL_RESPONSE"},
+        {"run_id": "run-1", "event_type": "RUN_END"},
+    ]
+
+    attempts = split_attempts(events)
+
+    assert len(attempts) == 2
+    assert [event["event_type"] for event in attempts[0]] == ["RUN_START", "MODEL_REQUEST"]
+    assert [event["event_type"] for event in attempts[1]] == ["RUN_START", "MODEL_RESPONSE", "RUN_END"]
 
 
 def test_g7_terminal_error_recovers_sequence_after_inner_loop_failure(tmp_path: Path) -> None:

@@ -308,24 +308,21 @@ def existing_trace_sequence(path: Path) -> int:
 def trace_path_for_retry(path: Path) -> tuple[Path, int]:
     """Choose an append-safe trace path for a terminal retry.
 
-    A legacy interrupted/provider-error attempt may already contain duplicate
-    sequence values. It remains immutable evidence, but appending to it would
-    make the retry trace non-auditable. Use a deterministic sibling retry path
-    and retain the original file untouched.
+    Every non-empty trace is an immutable attempt, regardless of whether its
+    last event is ``RUN_END`` or whether its sequence values are valid. A
+    retry must therefore start in a fresh deterministic sibling directory;
+    appending to an interrupted/terminal history or reusing an older retry
+    would merge lifecycle attempts and make the resulting trace ambiguous.
+    Empty files are safe to initialize in place.
     """
-    try:
-        return path, existing_trace_sequence(path)
-    except RuntimeError:
-        for attempt in range(1, 100):
-            retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
-            retry_path = retry_dir / path.name
-            if not retry_path.exists():
-                return retry_path, 0
-            try:
-                return retry_path, existing_trace_sequence(retry_path)
-            except RuntimeError:
-                continue
-        raise RuntimeError(f"could not find an append-safe retry trace path for {path}")
+    if not path.is_file() or path.stat().st_size == 0:
+        return path, 0
+    for attempt in range(1, 100):
+        retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
+        retry_path = retry_dir / path.name
+        if not retry_path.exists():
+            return retry_path, 0
+    raise RuntimeError(f"could not find an append-safe retry trace path for {path}")
 
 
 def emit(path: Path, seq: int, run_id: str, event_type: str, status: str,

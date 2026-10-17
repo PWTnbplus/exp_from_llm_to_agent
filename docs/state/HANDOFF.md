@@ -1,7 +1,5 @@
 # 下一位 Codex Agent 的交接说明
 
-> 当前 Kimi K2.5 重新验证的详细交接见 [HANDOFF_G0_G7_KIMI_REVALIDATION_20261018.md](HANDOFF_G0_G7_KIMI_REVALIDATION_20261018.md)。该文档记录了本轮 184/184 checkpoint 恢复、1150/1288 state 完成、28 个 trace lifecycle 不一致，以及下一步仅续跑 worker 2/6/8/11/13/14 的精确命令。
-
 ## 从这里开始——不要重复最初的实现过程
 
 1. 检查 `git status`、分支、远程仓库和最近提交；保留用户未提交的工作。
@@ -20,7 +18,7 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-7c2d4e9a10bf P1 OPEN 尝试次数=0：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Inspect trace_path_for_retry and retry-segment selection against the append-only history. Run an adversarial trace repair test, then rerun the independent trace/Q audit from the full run root. A completed state is not tr
+- ISSUE-7c2d4e9a10bf P1 OPEN 尝试次数=1：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Keep the append-safe retry fix. Do not claim historical trace cleanliness until the 13 remaining final-attempt failures are independently resolved or rerun under the corrected writer; retain all failures and keep G7 scie
 - ISSUE-000000000002 P1 BLOCKED 尝试次数=3：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - ISSUE-000000000004 P1 BLOCKED 尝试次数=1：Formal statistical validity is not established；修复=Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.

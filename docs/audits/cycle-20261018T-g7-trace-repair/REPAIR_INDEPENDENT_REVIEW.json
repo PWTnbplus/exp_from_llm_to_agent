@@ -1,0 +1,11 @@
+{
+  "review_version": "g7-trace-repair-independent-read-only-v1",
+  "raw_trace_hash_mismatches": [],
+  "raw_derived_path_aliases": [],
+  "accepted_derived_trace_recheck_failures": [],
+  "raw_traces_modified": true,
+  "source_fix_contract_present": true,
+  "manifest_rows": 1472,
+  "accepted_rows": 1322,
+  "review_scope": "read-only hash/path/lifecycle recheck; no provider call; no scientific truth decision"
+}

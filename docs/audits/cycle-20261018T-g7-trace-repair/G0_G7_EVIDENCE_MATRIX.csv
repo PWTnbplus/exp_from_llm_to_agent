@@ -1,0 +1,9 @@
+experiment_group,status,scope,evidence,scientific_release,artifact_paths
+G0,PASS,scientific_provenance_only,pinned NewtonBench/licensing evidence in gates.json; official evaluator caveat retained,scientific release no,docs/state/gates.json
+G1,PASS_ENGINEERING_ONLY,nonadaptive LLM-only contract,policy/isolation tests and frozen-plan controls; no formal real-provider result,scientific release no,docs/state/gates.json; tests/
+G2,PASS_ENGINEERING_ONLY,feedback-dependent Agent action,action/tool-boundary engineering tests; no superiority inference,scientific release no,docs/state/gates.json; tests/
+G3,PASS_ENGINEERING_ONLY,budget and hidden-answer isolation,budget ledger and no-leakage controls; provider/model evidence not externally verified,scientific release no,docs/state/gates.json; runs/ctflow_single_model/20261017T-g6-kimi-k25-v1
+G4,PASS_ENGINEERING_ONLY,objective evaluator,adversarial evaluator tests; not upstream scientific validation,scientific release no,docs/state/gates.json; tests/
+G5,PASS_SMOKE_ONLY,real simulator/mock pipeline,smoke and protocol controls; no formal VLDR result,scientific release no,docs/state/gates.json; docs/audits/
+G6,BLOCKED,formal scientific release,552 planned; 550 completed; 2 provider_error; trace 0; revision-valid 0/138; external math/model/billing/statistics blockers,no,runs/ctflow_single_model/20261017T-g6-kimi-k25-v1/g6_audit; docs/state/gates.json
+G7,BLOCKED,formal scientific release,"1288 planned; 1150 completed; 137 checkpoint_missing; 1 provider_error; raw trace failures 28, derived final failures 13; Q 0/1288 independently valid",no,runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit; docs/state/gates.json
