@@ -241,15 +241,13 @@ Only an extension interface exists. Do not expand scope during this repair unles
 
 ## 9. Git and hygiene
 
-Current local HEAD at handoff creation: c1178b95d59f053730e09e46e229df9c49503fc7.
+The source repair is in c1178b95d59f053730e09e46e229df9c49503fc7. The handoff and audit files are now committed locally as 708f609. The current remote branch was not updated: a direct push ended with `Recv failure: Connection was reset`, and a direct `ls-remote` verification ended with `Failed to connect to github.com port 443`.
 
-The latest direct git ls-remote attempt failed to connect to GitHub port 443 through the configured 127.0.0.1:7890 proxy. Therefore remote delivery of this handoff is not verified. The next agent must:
+Therefore remote delivery of this handoff is not verified. After network access is restored, the next agent must:
 
 ~~~powershell
 git diff --check
 git status --porcelain=v1
-git add docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json docs/state docs/reports
-git commit -m "Record Kimi G7 format revalidation handoff"
 $env:HTTP_PROXY=$null; $env:HTTPS_PROXY=$null; $env:ALL_PROXY=$null
 git -c http.proxy= -c https.proxy= push origin autopilot/scientific-law-discovery
 git -c http.proxy= -c https.proxy= ls-remote origin refs/heads/autopilot/scientific-law-discovery

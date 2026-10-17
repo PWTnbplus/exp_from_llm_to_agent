@@ -127,9 +127,10 @@
     "reason": "The full host suite was rerun after the source fix and passed. The trace lifecycle defect remains an experiment-artifact issue requiring a targeted repair and independent audit."
   },
   "remote_delivery": {
-    "local_head": "c1178b95d59f053730e09e46e229df9c49503fc7",
+    "local_head": "708f609",
+    "source_repair_commit": "c1178b95d59f053730e09e46e229df9c49503fc7",
     "push_verified": false,
-    "last_failure": "git ls-remote origin refs/heads/autopilot/scientific-law-discovery failed: unable to connect to github.com port 443 via the configured 127.0.0.1 proxy",
+    "last_failure": "git push with http.proxy= and https.proxy= ended with Recv failure: Connection was reset; the subsequent direct git ls-remote failed to connect to github.com port 443",
     "do_not_claim_remote_updated": true
   },
   "scientific_conclusion": "No formal scientific result, Agent superiority, causal L/U claim, Q-validity claim, or confirmatory statistical inference is supported. This is an authorized, locally accounted, non-confirmatory single-model pilot with incomplete and trace-inconsistent G7 execution.",
