@@ -1,0 +1,77 @@
+{
+  "cycle": "20261017T000000Z-95",
+  "audit_scope": "real_ctflow_matrix_and_g0_g7_independent_reaudit",
+  "status": "REAL_MATRIX_COMPLETED_BUT_SCIENTIFIC_RELEASE_BLOCKED",
+  "scientific_release_allowed": false,
+  "user_owned_untracked_preserved": [
+    "research_data_summary_G0_G7/"
+  ],
+  "skill_reference": ".agents/skills/scientific-law-recovery/SKILL.md",
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "verification": {
+    "full_host_suite_before_audit_script_test": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "result": "253 passed in 28.21s"
+    },
+    "matrix_runner_regression": {
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_ctflow_matrix.py tests/test_matrix_scientific_runner.py",
+      "result": "19 passed in 10.74s"
+    },
+    "ctflow_matrix": {
+      "batch": "runs/ctflow_matrix/20261016T173343Z-98f74b99",
+      "command_exit_code": 3,
+      "summary_all_paired_verified": false,
+      "models": ["qwen3.5-plus", "glm-5.2"],
+      "arms": 4,
+      "task_rows": 48,
+      "per_arm_tasks": 12,
+      "actual_local_proxy_cost_usd": 0.828254,
+      "reserved_local_proxy_cost_usd": 8.175212,
+      "configured_matrix_cap_usd": 200.0,
+      "provider_billing_verified": false,
+      "model_weight_snapshot_verified": false,
+      "result_contract_audit": "docs/audits/cycle-20261017T000000Z-95/ctflow_matrix_audit.json",
+      "arm_summary": {
+        "qwen3.5-plus/agent": {"status": "FAILED", "task_failures": 2, "validated_success_count": 3},
+        "qwen3.5-plus/llm_only": {"status": "FAILED", "task_failures": 4, "validated_success_count": 4},
+        "glm-5.2/agent": {"status": "FAILED", "task_failures": 12, "validated_success_count": 0},
+        "glm-5.2/llm_only": {"status": "FAILED", "task_failures": 10, "validated_success_count": 0}
+      },
+      "failure_policy": "All task failures and held-out validation failures are retained; no fabricated success or pooled retry is used."
+    },
+    "independent_g0_g8_audit": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g0_g8_integrity.py --root . --out docs/audits/cycle-20261017T000000Z-95/g0_g8_integrity.json",
+      "exit_code": 0,
+      "status": "COMPLETED_WITH_EXTERNAL_REVIEW_CAVEATS",
+      "report": "docs/audits/cycle-20261017T000000Z-95/g0_g8_integrity.json",
+      "scientific_truth_decision_made": false
+    },
+    "independent_g7_failure_audit": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_g7_failure_taxonomy.py --root . --out docs/audits/cycle-20261017T000000Z-95/g7_failure_taxonomy.json",
+      "exit_code": 0,
+      "status": "COMPLETED_WITH_G7_PROTOCOL_CAVEAT",
+      "report": "docs/audits/cycle-20261017T000000Z-95/g7_failure_taxonomy.json",
+      "scientific_truth_decision_made": false
+    },
+    "independent_g6_review": {
+      "command": "E:/resources/python/python.exe -X utf8 scripts/review_g6_release.py --out results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z --report docs/audits/cycle-20261017T000000Z-95/g6_release_review.json",
+      "exit_code": 0,
+      "structural_review_pass": true,
+      "scientific_release_allowed": false,
+      "report": "docs/audits/cycle-20261017T000000Z-95/g6_release_review.json"
+    }
+  },
+  "repairs": [
+    "The matrix adapter now gates both reserved and observed local cost against the per-arm cap.",
+    "The matrix host now reports an existing failed result contract instead of mislabeling RC=3 as a missing evaluator sidecar.",
+    "An independent CTFlow matrix structural audit checks exact arm/task coverage, trace presence, redaction markers, manifest hash, and aggregate local cap."
+  ],
+  "remaining_blockers": [
+    "G0 upstream NewtonBench provenance/license and GitHub remote delivery remain externally unverified.",
+    "CTFlow provider billing/pricing and immutable model-weight identity remain unverified; local proxy cost is not a billing claim.",
+    "G6/G7 statistical and independent mathematical review is not established for confirmatory inference.",
+    "Historical G7 contamination/dependency-edge/Q coverage issues remain non-confirmatory; corrected artifacts remain separately scoped.",
+    "The four-arm matrix did not satisfy paired verified release gates, so no LLM-vs-Agent superiority claim is allowed."
+  ],
+  "decision": "Record the real matrix as auditable pilot evidence, retain every failure, keep G0/G6/G7 and scientific release blocked, and do not synthesize missing results."
+}

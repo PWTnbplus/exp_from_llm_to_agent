@@ -128,6 +128,25 @@ print("simulated tool secret="+os.environ["CTFLOW_API_KEY"])
         assert '[REDACTED_API_KEY]' in log
 
 
+def test_failed_runner_result_is_reported_not_mislabeled_as_missing(tmp_path):
+    fake = tmp_path / 'failed.py'
+    fake.write_text('''import json, os, pathlib, sys
+out=pathlib.Path(sys.argv[1]); out.mkdir(parents=True,exist_ok=True)
+(out/"result.json").write_text(json.dumps(dict(status="FAILED", model_id=os.environ["LLM_MODEL"],
+ runner=os.environ["SCIENTIFIC_RUN_MODE"], protocol_valid=False, evaluator_valid=True,
+ mock=False, cost_usd=0.01, task_failures=2, budget_enforced=True)))
+raise SystemExit(3)
+''', encoding='utf-8')
+    manifest = tmp_path / 'manifest.json'; manifest.write_text('{}')
+    report = x.run_pair(model='model_failed', argv_template=[sys.executable, str(fake), '{output}'],
+                        root=ROOT, batch_dir=tmp_path, manifest=manifest, experiments=6,
+                        key='abc', base_url=m.DEFAULT_BASE, timeout=30,
+                        batch_no=0, per_job_cost=0.12)
+    assert not report['paired']
+    assert all('Runner exited 3' in item['reason'] for item in report['modes'].values())
+    assert all('task_failures=2' in item['reason'] for item in report['modes'].values())
+
+
 def test_mock_result_not_accepted_as_science(tmp_path):
     fake = tmp_path / 'mock.py'
     fake.write_text('''import json, os, pathlib, sys
@@ -142,8 +161,8 @@ p=pathlib.Path(sys.argv[1]); p.mkdir(parents=True, exist_ok=True)
                          key='abc', base_url=m.DEFAULT_BASE, timeout=30,
                          batch_no=0, per_job_cost=0.12)
     assert not report['paired']
-    assert len(report['modes']) == 1
-    assert 'mock' in next(iter(report['modes'].values()))['reason']
+    assert len(report['modes']) == 2
+    assert all('mock' in item['reason'] for item in report['modes'].values())
 
 
 def test_cli_plan_offline(tmp_path):
@@ -155,7 +174,7 @@ def test_cli_plan_offline(tmp_path):
     data = json.loads(p.stdout)
     assert len(data['models']) == 3
     assert data['pairs_per_model'] == ['llm_only', 'agent']
-    assert not data['runner_integrated']
+    assert data['runner_integrated']
 
 
 def test_verify_model_preflight_handles_supported_and_unsupported():

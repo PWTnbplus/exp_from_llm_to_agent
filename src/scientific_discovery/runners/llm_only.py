@@ -22,7 +22,7 @@ from .common import ensure_provider_call, freeze_plan, observation_dict, record_
 
 
 PLAN_SYSTEM = """You are the non-adaptive planning phase of a scientific law discovery study. Return JSON only with one key, experiments. Choose the complete list of legal experiments before any new result is observed. Do not call tools, re-plan, or include a hidden law."""
-FINAL_SYSTEM = """You are the final inference phase of a scientific law discovery study. Return JSON only as a final law object with hypothesis, equation, variables, parameters, evidence, predictions, limitations, and code. Use only the supplied observations. Do not request another experiment."""
+FINAL_SYSTEM = """You are the final inference phase of a scientific law discovery study. Return JSON only as a final law object. The exact top-level fields are hypothesis (string), equation (string), variables (JSON array of parameter-name strings), parameters (JSON object whose values are finite numbers), evidence (array of strings), predictions (array), limitations (array of strings), and code (string). The code must define exactly `def discovered_law(<the action-schema parameter names in order>):` and return the predicted numeric result; do not import modules because `math` is already available. Use only the supplied observations. Do not request another experiment and do not return explanatory prose outside JSON."""
 
 
 class LLMOnlyRunner:
@@ -81,9 +81,10 @@ class LLMOnlyRunner:
                 {"role": "system", "content": FINAL_SYSTEM},
                 {"role": "user", "content": (
                     f"Initial observations: {initial_observations}\n"
+                    f"Action schema and required parameter order: {self.oracle.get_action_schema()}\n"
                     f"Frozen plan: {plan}\n"
                     f"All batch observations: {[observation_dict(v) for v in observations]}\n"
-                    "Submit the final law JSON now."
+                    "Submit the final law JSON now. `variables` must be a JSON array, `parameters` must be a numeric JSON object, and `code` must define the exact discovered_law signature from the action schema."
                 )},
             ]
             assert_public_text(str(initial_observations))

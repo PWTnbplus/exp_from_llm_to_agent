@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import json
+import math
 import os
 import time
 from typing import Any, Callable, Iterable
@@ -39,7 +40,14 @@ class LLMProvider:
 
 
 def _estimate_tokens(text: str) -> int:
-    return max(1, len(text.split())) if text else 0
+    if not text:
+        return 0
+    # This is deliberately a conservative local reservation estimate rather
+    # than a claim about the gateway tokenizer.  The old word-count estimate
+    # could under-reserve multilingual text and tool schemas before a paid
+    # request was sent.  The provider-reported usage remains the auditable
+    # post-request value.
+    return max(1, len(text.split()), math.ceil(len(text) / 2))
 
 
 class MockLLMProvider(LLMProvider):
@@ -97,6 +105,7 @@ class OpenAICompatibleProvider(LLMProvider):
         output_cost_per_1k: float | None = None,
         max_cost_usd: float | None = None,
         max_output_tokens: int | None = None,
+        reservation_output_tokens: int | None = None,
     ):
         self.api_key = api_key or os.getenv("LLM_API_KEY", "")
         self.base_url = (base_url or os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
@@ -113,9 +122,15 @@ class OpenAICompatibleProvider(LLMProvider):
         configured_cap = os.getenv("LLM_MAX_COST_USD", "")
         self.max_cost_usd = max_cost_usd if max_cost_usd is not None else (float(configured_cap) if configured_cap else None)
         self.max_output_tokens = int(max_output_tokens if max_output_tokens is not None else os.getenv("LLM_MAX_OUTPUT_TOKENS", "2048"))
+        self.reservation_output_tokens = int(
+            reservation_output_tokens if reservation_output_tokens is not None else self.max_output_tokens
+        )
+        if self.reservation_output_tokens < self.max_output_tokens:
+            raise ValueError("reservation_output_tokens cannot be lower than max_output_tokens")
         if self.max_cost_usd is not None and self.max_cost_usd <= 0:
             raise ValueError("max_cost_usd must be positive when configured")
         self._reserved_cost_usd = 0.0
+        self._observed_cost_usd = 0.0
         self.calls: list[dict[str, Any]] = []
         self.traces: list[dict[str, Any]] = []
 
@@ -137,8 +152,10 @@ class OpenAICompatibleProvider(LLMProvider):
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"}
         last_error: Exception | None = None
         for attempt in range(self.max_retries + 1):
-            estimated_input = _estimate_tokens(json.dumps(messages, ensure_ascii=False))
-            worst_case = (estimated_input / 1000) * self.input_cost_per_1k + (self.max_output_tokens / 1000) * self.output_cost_per_1k
+            estimated_input = _estimate_tokens(json.dumps(
+                {"messages": messages, "tools": tools}, ensure_ascii=False
+            ))
+            worst_case = (estimated_input / 1000) * self.input_cost_per_1k + (self.reservation_output_tokens / 1000) * self.output_cost_per_1k
             if self.max_cost_usd is not None and self._reserved_cost_usd + worst_case > self.max_cost_usd:
                 raise RuntimeError("hard cost cap would be exceeded before provider request")
             self._reserved_cost_usd += worst_case
@@ -156,6 +173,7 @@ class OpenAICompatibleProvider(LLMProvider):
                 input_tokens = int(usage_data.get("prompt_tokens", _estimate_tokens(json.dumps(messages))))
                 output_tokens = int(usage_data.get("completion_tokens", _estimate_tokens(content)))
                 cost = (input_tokens / 1000) * self.input_cost_per_1k + (output_tokens / 1000) * self.output_cost_per_1k
+                self._observed_cost_usd += cost
                 self.calls.append({"messages": messages, "tools": tools, "latency_seconds": latency, "attempt": attempt + 1})
                 response = ProviderResponse(
                     content=content,
@@ -166,6 +184,8 @@ class OpenAICompatibleProvider(LLMProvider):
                 self.traces.append({"call_index": len(self.traces), "model": self.model_name, "request": {"messages": messages, "tools": tools}, "response": {
                     "content": content, "tool_calls": tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata,
                 }})
+                if self.max_cost_usd is not None and self._observed_cost_usd > self.max_cost_usd + 1e-12:
+                    raise RuntimeError("provider-reported usage exceeded local hard cost cap after request")
                 return response
             except HTTPError as exc:
                 # Preserve a bounded, non-secret provider diagnostic.  The

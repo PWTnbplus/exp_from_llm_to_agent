@@ -137,7 +137,7 @@ def run_pair(*, model: str, argv_template: list[str], root: Path, batch_dir: Pat
         result_file = out / 'result.json'
         quality = False
         explanation = 'No evaluator proof sidecar result.json'
-        if rc == 0 and result_file.exists():
+        if result_file.exists():
             try:
                 raw = load_json(result_file)
                 quality = (raw.get('status') == 'COMPLETED'
@@ -149,13 +149,23 @@ def run_pair(*, model: str, argv_template: list[str], root: Path, batch_dir: Pat
                            and isinstance(raw.get('cost_usd'), (float, int))
                            and 0 <= raw['cost_usd'] <= per_job_cost
                            and raw.get('budget_enforced') is True)
-                explanation = 'Verified runner result contract' if quality else 'Result contract invalid or mock'
+                if quality:
+                    explanation = 'Verified runner result contract'
+                elif rc != 0:
+                    explanation = (
+                        f"Runner exited {rc}; result status={raw.get('status')!r}, "
+                        f"task_failures={raw.get('task_failures')!r}, "
+                        f"protocol_valid={raw.get('protocol_valid')!r}"
+                    )
+                else:
+                    explanation = 'Result contract invalid or mock'
             except (ValueError, OSError, json.JSONDecodeError):
                 explanation = 'Malformed scientific evaluation result'
         pairs[mode] = {'exit_code': rc, 'verified': quality, 'reason': explanation,
                        'output_dir': str(out.relative_to(batch_dir))}
-        if not quality:
-            break  # fail closed; do not publish an incomplete pair as a result
+        # Always execute both arms so a failed arm retains its complete
+        # task-level failure evidence and the matched scope is auditable.  The
+        # pair remains unverified below unless both contracts pass.
     return {'model_id': model, 'paired': len(pairs) == 2 and all(x['verified'] for x in pairs.values()),
             'modes': pairs, 'order': list(order)}
 

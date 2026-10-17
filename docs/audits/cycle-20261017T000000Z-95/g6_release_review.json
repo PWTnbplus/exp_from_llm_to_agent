@@ -1,0 +1,31 @@
+{
+  "review": "independent_g6_release_review",
+  "artifact_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\results\\g6_counterfactual\\protocol-g3tools-v2-20261014T030000Z",
+  "protocol_layout": "corrected_g6_protocol_g3_tools_iteration",
+  "structural_review_pass": true,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "counts": {
+    "plan": 552,
+    "responses": 552,
+    "public": 92,
+    "private": 92,
+    "handoff": 552
+  },
+  "hashes": {
+    "run_plan.jsonl": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+    "public_cases.jsonl": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "private_oracle.jsonl": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+    "responses_audited.jsonl": "97022fa9ac84dad61c24c98fbc1fee2ba2b357ee853eccd9614cc348da8312fa",
+    "g6_to_g7_handoff.jsonl": "ec51c3114b84da9f818d0f6407794e42454cbe87565aa0baaf60081c61602c02"
+  },
+  "protocol_profile": [
+    "g6_protocol_g3_tools_iteration"
+  ],
+  "worker_counts": [
+    2
+  ],
+  "g6_audit_pass": true,
+  "revision_valid_count": 0,
+  "note": "Structural completeness does not override the G5 independent-math, upstream provenance, or verified-model-snapshot blockers."
+}

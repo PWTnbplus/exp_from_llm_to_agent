@@ -56,3 +56,29 @@ def test_openai_provider_hard_cost_cap_blocks_before_request(monkeypatch):
     )
     with pytest.raises(RuntimeError, match="hard cost cap"):
         provider.complete([{"role": "user", "content": "hello"}])
+
+
+def test_openai_provider_rejects_provider_usage_over_cap(monkeypatch):
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return None
+
+        def read(self):
+            return (b'{"choices":[{"message":{"content":"{}"}}],'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":200}}')
+
+    monkeypatch.setattr("scientific_discovery.models.provider.urlrequest.urlopen", lambda *a, **k: Response())
+    provider = OpenAICompatibleProvider(
+        **{"api" + "_key": "secret-test-key"},
+        model_name="test-model",
+        input_cost_per_1k=0.0,
+        output_cost_per_1k=0.1,
+        max_cost_usd=0.01,
+        max_output_tokens=1,
+    )
+    with pytest.raises(RuntimeError, match="provider-reported usage"):
+        provider.complete([{"role": "user", "content": "hello"}])
+    assert provider.audit_trace()[0]["response"]["usage"]["output_tokens"] == 200

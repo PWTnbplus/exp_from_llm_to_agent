@@ -15,7 +15,7 @@ from ..experiment.policy import PolicyController
 from .common import ensure_provider_call, observation_dict, record_provider_call, response_payload
 
 
-AGENT_SYSTEM = """You are a single autonomous scientific agent. You may either submit one JSON action for the authorized run_experiment operation or submit a final_law JSON object. You may use current observations to choose the next action, but you may never access hidden laws, source code, validation data, or the operating system. Stay within the stated budget."""
+AGENT_SYSTEM = """You are a single autonomous scientific agent. You may either submit one JSON action for the authorized run_experiment operation or submit a final_law JSON object. A final_law must contain hypothesis and equation strings, variables as a JSON array of strings, parameters as a JSON object of finite numeric values, evidence/predictions/limitations arrays, and code defining exactly `def discovered_law(<the action-schema parameter names in order>):` with no imports; `math` is available. You may use current observations to choose the next action, but you may never access hidden laws, source code, validation data, or the operating system. Stay within the stated budget."""
 
 
 def _tool_schema(schema: dict[str, Any]) -> list[dict[str, Any]]:
