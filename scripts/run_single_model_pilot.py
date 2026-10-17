@@ -46,6 +46,134 @@ from src.scientific_discovery.models.provider import OpenAICompatibleProvider  #
 RUNNERS = ("llm_only", "agent")
 
 
+def _trace_usage(provider_trace: list[dict[str, Any]]) -> dict[str, Any]:
+    actual = 0.0
+    input_tokens = 0
+    output_tokens = 0
+    for item in provider_trace:
+        response = item.get("response", {}) if isinstance(item, dict) else {}
+        usage = response.get("usage", {}) if isinstance(response, dict) else {}
+        actual += float(usage.get("cost_usd", 0.0) or 0.0)
+        input_tokens += int(usage.get("input_tokens", 0) or 0)
+        output_tokens += int(usage.get("output_tokens", 0) or 0)
+    return {
+        "provider_attempts": len(provider_trace),
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "cost_usd": actual,
+    }
+
+
+def _reconcile_task_artifacts(output: Path, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Recover task-level results after an operator stop.
+
+    A process can be stopped after a task trace/result is durable but before
+    the main thread checkpoints its row.  Reconstructing only from those
+    public task artifacts prevents a resume from issuing a duplicate paid
+    request.  A trace without a result is registered as an interrupted
+    failure, never as a success.
+    """
+
+    known = {(row.get("replicate_index"), row.get("runner"), row.get("task_id")) for row in rows}
+    recovered: list[dict[str, Any]] = []
+    for task_dir in sorted(output.glob("replicate-*/*/*")):
+        if not task_dir.is_dir():
+            continue
+        runner_dir = task_dir.parent.name
+        runner = runner_dir if runner_dir in RUNNERS else ("agent" if runner_dir == "single_agent" else None)
+        if runner is None:
+            continue
+        try:
+            replicate = int(task_dir.parent.parent.name.removeprefix("replicate-"))
+        except ValueError:
+            continue
+        result_files = [path for path in task_dir.glob("*.json") if path.name != "task_failure.json"]
+        result_payload: dict[str, Any] | None = None
+        if result_files:
+            try:
+                result_payload = json.loads(sorted(result_files, key=lambda path: path.stat().st_mtime)[-1].read_text(encoding="utf-8"))
+            except (OSError, ValueError, json.JSONDecodeError):
+                result_payload = None
+        if result_payload is not None:
+            task_id = str(result_payload.get("task_id", ""))
+            key = (replicate, runner, task_id)
+            if not task_id or key in known:
+                continue
+            metadata = result_payload.get("metadata") or {}
+            budget = metadata.get("budget") or {}
+            limits = budget.get("limits") or {}
+            task_cap = float(limits.get("max_cost_usd", 0.0) or 0.0)
+            trace = metadata.get("provider_trace") or []
+            usage = _trace_usage(trace if isinstance(trace, list) else [])
+            validation = result_payload.get("validation") or {}
+            policy = metadata.get("policy") or {}
+            violations = list(policy.get("violations", [])) if isinstance(policy, dict) else []
+            recovered.append({
+                "task_id": task_id,
+                "runner": runner,
+                "runner_name": "single_agent" if runner == "agent" else "llm_only",
+                "replicate_index": replicate,
+                "task_cap_usd": task_cap,
+                "output_dir": str(task_dir.relative_to(output)),
+                "status": result_payload.get("status", "failed"),
+                "validation_status": validation.get("status"),
+                "validated_success": bool(validation.get("validated_success", False)),
+                "protocol_valid": result_payload.get("status") == "completed" and not violations,
+                "evaluator_valid": validation.get("status") != "VALIDATOR_ERROR",
+                "policy_violations": violations,
+                "reconciled_from_task_artifact": True,
+                "reserved_cost_usd": task_cap,
+                **usage,
+            })
+            known.add(key)
+            continue
+        logs = sorted((task_dir / "logs").glob("*.jsonl")) if (task_dir / "logs").is_dir() else []
+        if not logs:
+            continue
+        try:
+            first = json.loads(logs[0].read_text(encoding="utf-8").splitlines()[0])
+            task_id = str(first.get("task_id", ""))
+            key = (replicate, runner, task_id)
+            if not task_id or key in known:
+                continue
+            limits = ((first.get("metadata") or {}).get("budget_limits") or {})
+            task_cap = float(limits.get("max_cost_usd", 0.0) or 0.0)
+        except (OSError, ValueError, IndexError, json.JSONDecodeError):
+            continue
+        recovered.append({
+            "task_id": task_id,
+            "runner": runner,
+            "runner_name": "single_agent" if runner == "agent" else "llm_only",
+            "replicate_index": replicate,
+            "task_cap_usd": task_cap,
+            "output_dir": str(task_dir.relative_to(output)),
+            "status": "failed",
+            "validation_status": "NOT_RUN",
+            "validated_success": False,
+            "protocol_valid": False,
+            "evaluator_valid": False,
+            "policy_violations": [],
+            "reconciled_from_task_artifact": True,
+            "error_type": "interrupted_without_result",
+            "error_message": "durable trace exists but the task result was not written before the pilot process stopped",
+            "provider_attempts": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cost_usd": 0.0,
+            "reserved_cost_usd": task_cap,
+        })
+        write_json(task_dir / "task_failure.json", {
+            "task_id": task_id,
+            "runner": runner,
+            "replicate_index": replicate,
+            "error_type": "interrupted_without_result",
+            "error_message": "durable trace exists but the task result was not written before the pilot process stopped",
+            "reserved_cost_usd": task_cap,
+        })
+        known.add(key)
+    return recovered
+
+
 def _provider(args: argparse.Namespace, task_cap: float, task: TaskSpec, runner: str):
     if args.provider == "mock":
         return _generic_engineering_provider(
@@ -235,6 +363,10 @@ def run_pilot(args: argparse.Namespace) -> dict[str, Any]:
         rows = prior.get("rows") or []
         if not isinstance(rows, list):
             raise ValueError("resume checkpoint rows must be a list")
+        reconciled = _reconcile_task_artifacts(output, rows)
+        if reconciled:
+            rows.extend(reconciled)
+            _write_checkpoint(output, metadata, rows)
     write_json(output / "manifest.json", {**metadata, "design": "pilot", "runner_scope": list(RUNNERS), "resumed_rows": len(rows)})
     completed_keys = {(row.get("replicate_index"), row.get("runner"), row.get("task_id")) for row in rows}
     remaining_reserved = float(args.max_cost_usd) - sum(float(row.get("reserved_cost_usd", 0.0) or 0.0) for row in rows)

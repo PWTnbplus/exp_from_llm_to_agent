@@ -48,3 +48,20 @@ def test_single_model_pilot_retains_runner_failure(tmp_path, monkeypatch):
     failures = list((_args(tmp_path).output).rglob("task_failure.json"))
     assert len(failures) == 2
     assert json.loads(failures[0].read_text(encoding="utf-8"))["error_type"] == "RuntimeError"
+
+
+def test_reconcile_recovers_durable_task_result_without_duplicate(tmp_path):
+    task_dir = tmp_path / "replicate-000" / "agent" / "000_task"
+    task_dir.mkdir(parents=True)
+    (task_dir / "single_agent_task__replicate-000.json").write_text(json.dumps({
+        "runner": "single_agent",
+        "task_id": "task-1",
+        "status": "failed",
+        "metadata": {"budget": {"limits": {"max_cost_usd": 0.5}}, "provider_trace": []},
+        "validation": {"validated_success": False},
+    }), encoding="utf-8")
+    rows = pilot._reconcile_task_artifacts(tmp_path, [])
+    assert len(rows) == 1
+    assert rows[0]["runner"] == "agent"
+    assert rows[0]["task_id"] == "task-1"
+    assert rows[0]["reconciled_from_task_artifact"] is True
