@@ -159,7 +159,11 @@ def append_jsonl(path: Path, value: dict[str, Any]) -> None:
 
 def write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
+    # Multiple workers write the shared preflight artifact concurrently. A
+    # fixed sibling temp name lets one worker replace/delete another worker's
+    # temp file on Windows. Keep the replace atomic while making each temp
+    # path process-unique.
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.{time.time_ns()}.tmp")
     tmp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.replace(tmp, path)
 
