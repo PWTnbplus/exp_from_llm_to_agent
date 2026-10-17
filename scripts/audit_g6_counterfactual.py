@@ -103,6 +103,8 @@ def main() -> int:
     parser.add_argument("--expected-public-count", type=int, default=96)
     parser.add_argument("--expected-private-count", type=int, default=96)
     parser.add_argument("--expected-cf3-count", type=int, default=144)
+    parser.add_argument("--expected-model-id", default="glm-5")
+    parser.add_argument("--expected-base-url", default="https://token.ctflow.cn/v1")
     args = parser.parse_args()
 
     plan = read_jsonl(args.plan)
@@ -218,7 +220,7 @@ def main() -> int:
             elif event_type == "MODEL_RESPONSE":
                 model_response_count += 1
                 metadata = payload.get("metadata") or {}
-                if metadata.get("model") != "glm-5":
+                if metadata.get("model") != args.expected_model_id:
                     failures.append(f"model_id:{run_id}")
                 usage = payload.get("usage") or {}
                 if not {"input_tokens", "output_tokens", "cost_usd"}.issubset(usage):
@@ -236,7 +238,7 @@ def main() -> int:
                 tool_result_count += 1
 
     for manifest in manifests:
-        if manifest.get("model_id") != "glm-5" or manifest.get("base_url") != "https://token.ctflow.cn/v1":
+        if manifest.get("model_id") != args.expected_model_id or manifest.get("base_url") != args.expected_base_url:
             failures.append("manifest_model_or_base_url")
         if manifest.get("oracle_loaded") is not False:
             failures.append("manifest_oracle_loaded")

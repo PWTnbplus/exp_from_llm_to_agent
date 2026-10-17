@@ -28,6 +28,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--expected-model-id", default="glm-5")
+    parser.add_argument("--expected-base-url", default="https://token.ctflow.cn/v1")
     args = parser.parse_args()
     root = args.out
 
@@ -90,7 +92,7 @@ def main() -> int:
         if workers != {2}:
             failures.append(f"worker_count:{sorted(workers)}")
         for manifest in manifests:
-            if manifest.get("model_id") != "glm-5" or manifest.get("base_url") != "https://token.ctflow.cn/v1":
+            if manifest.get("model_id") != args.expected_model_id or manifest.get("base_url") != args.expected_base_url:
                 failures.append("manifest_model_or_base_url")
             if manifest.get("oracle_loaded") is not False or manifest.get("allow_paid") is not True:
                 failures.append("manifest_isolation_or_paid_flag")
