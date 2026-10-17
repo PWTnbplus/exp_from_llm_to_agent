@@ -93,6 +93,23 @@ def existing_event_seq(path: Path) -> int:
     return previous
 
 
+def event_path_for_retry(path: Path) -> tuple[Path, int]:
+    """Choose an append-safe trace path for a terminal retry."""
+    try:
+        return path, existing_event_seq(path)
+    except RuntimeError:
+        for attempt in range(1, 100):
+            retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
+            retry_path = retry_dir / path.name
+            if not retry_path.exists():
+                return retry_path, 0
+            try:
+                return retry_path, existing_event_seq(retry_path)
+            except RuntimeError:
+                continue
+        raise RuntimeError(f"could not find an append-safe G6 retry trace path for {path}")
+
+
 def extract_json(text: str) -> dict[str, Any] | None:
     text = str(text or "").strip()
     fenced = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", text, flags=re.I | re.S)
@@ -274,7 +291,7 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
     messages: list[dict[str, Any]] = [{"role": "system", "content": make_system(arm, protocol_profile)}, {"role": "user", "content": case_prompt(case)}]
     # A Ctrl+C or transport failure can leave a partial trace.  Continue its
     # sequence rather than creating duplicate seq=1 records on resume.
-    seq = existing_event_seq(event_path)
+    event_path, seq = event_path_for_retry(event_path)
     started = time.monotonic()
     try:
         seq = emit_event(event_path, seq, run_id, "RUN_START", status="RUNNING", payload={"case_id": case_id, "arm_id": arm, "group_id": plan_row["group_id"], "model_id": provider.model_name, "protocol_profile": protocol_profile})
@@ -327,7 +344,7 @@ def run_one(case: dict[str, Any], plan_row: dict[str, Any], provider: OpenAIComp
     except Exception as exc:
         trace_ref = str(event_path.relative_to(out))
         seq = emit_event(event_path, seq, run_id, "ERROR", status="FAILED", payload={"error_type": type(exc).__name__, "error": str(exc)})
-        emit_event(event_path, seq, run_id, "RUN_END", status="FAILED", payload={"status": "provider_error", "elapsed_seconds": round(time.monotonic() - started, 3)})
+        seq = emit_event(event_path, seq, run_id, "RUN_END", status="FAILED", payload={"status": "provider_error", "elapsed_seconds": round(time.monotonic() - started, 3)})
         return {"run_id": run_id, "decision": "UNDETERMINED", "affected_claim_ids": [], "revised_claim": None, "supporting_evidence": f"run failed: {type(exc).__name__}", "status": "provider_error", "trace_ref": trace_ref}
 
 

@@ -1,9 +1,8 @@
 """Build a deterministic, one-record-per-run G6 response view.
 
 Worker files are append-only and may contain retries from different shard
-layouts.  A run is scientifically complete when at least one schema-valid
-completed response exists; provider_error records remain in their source
-files as audit evidence but are not selected for the canonical score input.
+layouts. A completed response is preferred; when no completed response exists,
+the latest terminal failure is retained in the canonical denominator.
 """
 from __future__ import annotations
 
@@ -44,25 +43,32 @@ def main() -> int:
     selected: list[dict[str, Any]] = []
     missing: list[str] = []
     duplicate_completed: dict[str, int] = {}
+    terminal_failures: dict[str, str] = {}
     for row in plan:
         run_id = str(row["run_id"])
         completed = [candidate for candidate in by_run.get(run_id, []) if candidate.get("status") == "completed"]
-        if not completed:
+        candidates = by_run.get(run_id, [])
+        if completed:
+            if len(completed) > 1:
+                duplicate_completed[run_id] = len(completed)
+            selected.append(completed[-1])
+            continue
+        if not candidates:
             missing.append(run_id)
             continue
-        if len(completed) > 1:
-            duplicate_completed[run_id] = len(completed)
-        selected.append(completed[-1])
+        selected.append(candidates[-1])
+        terminal_failures[run_id] = str(candidates[-1].get("status", "unknown"))
 
     write_jsonl(args.out, selected)
     manifest = {
         "experiment_id": "g6_counterfactual",
         "plan_rows": len(plan),
         "selected_completed_rows": len(selected),
+        "selected_terminal_failures": terminal_failures,
         "missing_run_ids": missing,
         "source_files": [str(path) for path in source_files],
         "duplicate_completed_run_ids": duplicate_completed,
-        "selection_rule": "plan order; latest completed record among sorted append-only source files",
+        "selection_rule": "plan order; latest completed record, else latest terminal record among sorted append-only source files",
     }
     args.out.with_name("responses_merge_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(manifest, ensure_ascii=False))

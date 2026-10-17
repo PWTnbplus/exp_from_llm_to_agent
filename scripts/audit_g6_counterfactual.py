@@ -153,6 +153,7 @@ def main() -> int:
     tool_result_count = 0
     total_tokens = 0
     total_cost = 0.0
+    terminal_failure_count = 0
     segment_statuses: Counter[str] = Counter()
     for run_id, response in response_by_run.items():
         plan_row = plan_by_run.get(run_id)
@@ -161,8 +162,10 @@ def main() -> int:
         required = {"run_id", "decision", "affected_claim_ids", "revised_claim", "supporting_evidence", "status", "trace_ref"}
         if set(response) != required:
             failures.append(f"response_fields:{run_id}")
-        if response.get("status") != "completed" or response.get("decision") not in DECISIONS:
+        if response.get("status") not in {"completed", "provider_error"} or response.get("decision") not in DECISIONS:
             failures.append(f"response_status_or_decision:{run_id}")
+        if response.get("status") == "provider_error":
+            terminal_failure_count += 1
         if not isinstance(response.get("affected_claim_ids"), list) or any(not isinstance(x, str) for x in response["affected_claim_ids"]):
             failures.append(f"response_claim_ids:{run_id}")
         if response.get("revised_claim") is not None and not isinstance(response.get("revised_claim"), str):
@@ -194,7 +197,7 @@ def main() -> int:
         if any(event.get("experiment_id") != "g6_counterfactual" or event.get("run_id") != run_id for event in events):
             failures.append(f"trace_identity:{run_id}")
         run_segments = segments(events)
-        if not run_segments or (run_segments[-1][-1].get("event_type") != "RUN_END" or (run_segments[-1][-1].get("payload") or {}).get("status") != "completed"):
+        if not run_segments or (run_segments[-1][-1].get("event_type") != "RUN_END" or (run_segments[-1][-1].get("payload") or {}).get("status") != response.get("status")):
             failures.append(f"trace_final_status:{run_id}")
         for segment in run_segments:
             if segment and segment[-1].get("event_type") == "RUN_END":
@@ -271,6 +274,7 @@ def main() -> int:
         "tool_result_count": tool_result_count,
         "total_tokens_from_responses": total_tokens,
         "total_cost_usd_from_responses": round(total_cost, 9),
+        "terminal_failure_count": terminal_failure_count,
         "segment_end_statuses": dict(segment_statuses),
         "revision_audit_count": len(revision_rows),
         "revision_valid_count": sum(row["is_valid"] for row in revision_rows),
@@ -282,7 +286,7 @@ def main() -> int:
         "protocol_profile": protocol_profile,
         "worker_counts": sorted({manifest.get("worker_count") for manifest in manifests}),
         "failures": failures,
-        "pass": not failures and trace_count == len(plan) and len(revision_rows) == args.expected_cf3_count,
+        "pass": not failures and terminal_failure_count == 0 and trace_count == len(plan) and len(revision_rows) == args.expected_cf3_count,
         "scientific_caveat": "The private oracle is grade C controlled-intervention evidence; this audit does not upgrade it to independent domain-grade A/B truth.",
     }
     args.trace_audit.parent.mkdir(parents=True, exist_ok=True)
