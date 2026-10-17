@@ -21,6 +21,7 @@ def _args(tmp_path):
         timeout_seconds=60.0,
         provider_timeout_seconds=5.0,
         resume=False,
+        max_parallel=2,
     )
 
 

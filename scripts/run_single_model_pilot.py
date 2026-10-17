@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run the frozen NewtonBench pilot for one exact model.
 
-This runner is deliberately sequential and checkpointed.  It fills the
+This runner is deliberately bounded-concurrent and checkpointed.  It fills the
 frozen pilot repeat design for both matched arms without changing the
 scientific orchestration in ``run_one``.  Every registered task-run receives
 its own directory, result artifact, trace, and row in the secret-free pilot
@@ -11,6 +11,7 @@ contract; provider or parser failures remain in the denominator.
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import math
 import os
@@ -116,13 +117,90 @@ def _write_checkpoint(output: Path, metadata: dict[str, Any], rows: list[dict[st
     write_json(output / "result.json", payload)
 
 
+def _execute_task_run(
+    args: argparse.Namespace,
+    task: TaskSpec,
+    runner: str,
+    replicate: int,
+    index: int,
+    task_cap: float,
+    output: Path,
+    upstream: Path,
+    manifest_hash: str,
+) -> dict[str, Any]:
+    task_dir = output / f"replicate-{replicate:03d}" / runner / f"{index:03d}_{safe_slug(task.task_id)}"
+    task_dir.mkdir(parents=True, exist_ok=True)
+    row = _row_base(task, runner, replicate, task_cap, task_dir.relative_to(output))
+    provider = None
+    try:
+        provider = _provider(args, task_cap, task, runner)
+        result, validation = run_one(
+            task=task,
+            repo_root=upstream,
+            provider=provider,
+            runner_name="single_agent" if runner == "agent" else "llm_only",
+            limits=BudgetLimits(
+                max_experiments=args.max_experiments,
+                max_api_calls=DEFAULT_MAX_API_CALLS,
+                max_input_tokens=DEFAULT_MAX_INPUT_TOKENS,
+                max_output_tokens=DEFAULT_MAX_OUTPUT_BUDGET,
+                max_cost_usd=task_cap,
+                max_runtime_seconds=args.timeout_seconds,
+            ),
+            output_dir=task_dir,
+            replicate_index=replicate,
+            design="pilot",
+            manifest_sha256=manifest_hash,
+        )
+        policy = result.metadata.get("policy", {}) if isinstance(result.metadata, dict) else {}
+        violations = list(policy.get("violations", [])) if isinstance(policy, dict) else []
+        trace = provider_trace_summary(provider)
+        row.update({
+            "status": result.status,
+            "validation_status": validation.get("status"),
+            "validated_success": bool(validation.get("validated_success", False)),
+            "protocol_valid": result.status == "completed" and not violations,
+            "evaluator_valid": validation.get("status") != "VALIDATOR_ERROR",
+            "policy_violations": violations,
+            **trace,
+        })
+    except Exception as exc:
+        trace = provider_trace_summary(provider) if provider is not None else {
+            "provider_attempts": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cost_usd": 0.0,
+            "reserved_cost_usd": 0.0,
+        }
+        row.update({
+            "status": "failed",
+            "validation_status": "NOT_RUN",
+            "validated_success": False,
+            "protocol_valid": False,
+            "evaluator_valid": False,
+            "error_type": type(exc).__name__,
+            "error_message": str(exc)[:1000],
+            **trace,
+        })
+        write_json(task_dir / "task_failure.json", {
+            "task_id": task.task_id,
+            "runner": runner,
+            "replicate_index": replicate,
+            "error_type": type(exc).__name__,
+            "error_message": str(exc)[:1000],
+            "provider_attempts": trace["provider_attempts"],
+            "reserved_cost_usd": trace["reserved_cost_usd"],
+        })
+    return row
+
+
 def run_pilot(args: argparse.Namespace) -> dict[str, Any]:
     if args.provider == "ctflow" and not args.allow_paid:
         raise ValueError("real provider runs require --allow-paid")
     if args.max_cost_usd <= 0:
         raise ValueError("max_cost_usd must be positive")
-    if args.repeats < 1 or args.max_experiments < 1:
-        raise ValueError("repeats and max_experiments must be positive")
+    if args.repeats < 1 or args.max_experiments < 1 or args.max_parallel < 1:
+        raise ValueError("repeats, max_experiments, and max_parallel must be positive")
     tasks, manifest_hash = load_tasks(args.manifest.resolve())
     if args.limit_tasks:
         tasks = tasks[: args.limit_tasks]
@@ -144,6 +222,7 @@ def run_pilot(args: argparse.Namespace) -> dict[str, Any]:
         "task_count": len(tasks),
         "repeats": args.repeats,
         "expected_runs": expected,
+        "max_parallel": args.max_parallel,
     }
     rows: list[dict[str, Any]] = []
     checkpoint = output / "result.json"
@@ -159,74 +238,27 @@ def run_pilot(args: argparse.Namespace) -> dict[str, Any]:
     write_json(output / "manifest.json", {**metadata, "design": "pilot", "runner_scope": list(RUNNERS), "resumed_rows": len(rows)})
     completed_keys = {(row.get("replicate_index"), row.get("runner"), row.get("task_id")) for row in rows}
     remaining_reserved = float(args.max_cost_usd) - sum(float(row.get("reserved_cost_usd", 0.0) or 0.0) for row in rows)
+    pending: list[tuple[int, int, TaskSpec, str]] = []
     for replicate in range(args.repeats):
         for index, task in enumerate(tasks):
             for runner in RUNNERS:
                 key = (replicate, runner, task.task_id)
-                if key in completed_keys:
-                    continue
-                remaining_runs = expected - len(rows)
-                task_cap = remaining_reserved / remaining_runs
-                if not math.isfinite(task_cap) or task_cap <= 0:
-                    raise RuntimeError("aggregate local reservation exhausted")
-                task_dir = output / f"replicate-{replicate:03d}" / runner / f"{index:03d}_{safe_slug(task.task_id)}"
-                task_dir.mkdir(parents=True, exist_ok=True)
-                provider = _provider(args, task_cap, task, runner)
-                row = _row_base(task, runner, replicate, task_cap, task_dir.relative_to(output))
-                try:
-                    result, validation = run_one(
-                        task=task,
-                        repo_root=upstream,
-                        provider=provider,
-                        runner_name="single_agent" if runner == "agent" else "llm_only",
-                        limits=BudgetLimits(
-                            max_experiments=args.max_experiments,
-                            max_api_calls=DEFAULT_MAX_API_CALLS,
-                            max_input_tokens=DEFAULT_MAX_INPUT_TOKENS,
-                            max_output_tokens=DEFAULT_MAX_OUTPUT_BUDGET,
-                            max_cost_usd=task_cap,
-                            max_runtime_seconds=args.timeout_seconds,
-                        ),
-                        output_dir=task_dir,
-                        replicate_index=replicate,
-                        design="pilot",
-                        manifest_sha256=manifest_hash,
-                    )
-                    policy = result.metadata.get("policy", {}) if isinstance(result.metadata, dict) else {}
-                    violations = list(policy.get("violations", [])) if isinstance(policy, dict) else []
-                    trace = provider_trace_summary(provider)
-                    row.update({
-                        "status": result.status,
-                        "validation_status": validation.get("status"),
-                        "validated_success": bool(validation.get("validated_success", False)),
-                        "protocol_valid": result.status == "completed" and not violations,
-                        "evaluator_valid": validation.get("status") != "VALIDATOR_ERROR",
-                        "policy_violations": violations,
-                        **trace,
-                    })
-                except Exception as exc:
-                    trace = provider_trace_summary(provider)
-                    row.update({
-                        "status": "failed",
-                        "validation_status": "NOT_RUN",
-                        "validated_success": False,
-                        "protocol_valid": False,
-                        "evaluator_valid": False,
-                        "error_type": type(exc).__name__,
-                        "error_message": str(exc)[:1000],
-                        **trace,
-                    })
-                    write_json(task_dir / "task_failure.json", {
-                        "task_id": task.task_id,
-                        "runner": runner,
-                        "replicate_index": replicate,
-                        "error_type": type(exc).__name__,
-                        "error_message": str(exc)[:1000],
-                        "provider_attempts": trace["provider_attempts"],
-                        "reserved_cost_usd": trace["reserved_cost_usd"],
-                    })
+                if key not in completed_keys:
+                    pending.append((replicate, index, task, runner))
+    if pending:
+        task_cap = remaining_reserved / len(pending)
+        if not math.isfinite(task_cap) or task_cap <= 0:
+            raise RuntimeError("aggregate local reservation exhausted")
+        with ThreadPoolExecutor(max_workers=min(args.max_parallel, len(pending))) as pool:
+            futures = {
+                pool.submit(_execute_task_run, args, task, runner, replicate, index, task_cap, output, upstream, manifest_hash):
+                (replicate, runner, task.task_id)
+                for replicate, index, task, runner in pending
+            }
+            for future in as_completed(futures):
+                row = future.result()
                 rows.append(row)
-                completed_keys.add(key)
+                completed_keys.add((row["replicate_index"], row["runner"], row["task_id"]))
                 remaining_reserved -= float(row.get("reserved_cost_usd", 0.0) or 0.0)
                 if remaining_reserved < -1e-9:
                     raise RuntimeError("aggregate local reservation exceeded")
@@ -251,6 +283,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--max-output-tokens", type=int, default=DEFAULT_MAX_OUTPUT_TOKENS)
     ap.add_argument("--timeout-seconds", type=float, default=3_600.0)
     ap.add_argument("--provider-timeout-seconds", type=float, default=DEFAULT_PROVIDER_TIMEOUT_SECONDS)
+    ap.add_argument("--max-parallel", type=int, default=4)
     ap.add_argument("--resume", action="store_true")
     return ap
 
