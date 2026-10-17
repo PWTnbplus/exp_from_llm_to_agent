@@ -1,0 +1,89 @@
+{
+  "audit_version": "g6-qwen-single-model-api-v1",
+  "cycle": "20261017T-g6-qwen-api",
+  "status": "REAL_PROVIDER_COMPLETE_NONCONFIRMATORY",
+  "experiment_id": "g6_counterfactual",
+  "provider_execution": {
+    "provider_calls_made": true,
+    "model_id": "qwen3.5-plus",
+    "base_url": "https://token.ctflow.cn/v1",
+    "worker_count": 2,
+    "protocol_profile": "g6_protocol_g3_tools_iteration",
+    "allow_paid": true,
+    "model_snapshot_manifest": "missing",
+    "billing_export": "missing",
+    "external_billing_verified": false
+  },
+  "inputs": {
+    "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "plan_sha256": "c60b14205f061fa2178b9d0a42074d9957a460bea2cf4e06b841acbe4b0bbde0",
+    "private_oracle_sha256": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+    "public_cases": 92,
+    "plan_rows": 552,
+    "cf3_rows": 138
+  },
+  "canonical_results": {
+    "responses": 552,
+    "response_status_counts": {
+      "completed": 231,
+      "provider_error": 321
+    },
+    "unique_run_ids": 552,
+    "trace_count": 552,
+    "model_requests": 1171,
+    "model_responses": 532,
+    "tool_calls": 371,
+    "tool_results": 371,
+    "total_tokens": 1064548,
+    "observed_local_cost_usd": 1.932244,
+    "terminal_failures_retained": true,
+    "trace_integrity_failures": 0,
+    "revision_audit_rows": 138,
+    "revision_valid_rows": 0,
+    "coverage_review": {
+      "structural_review_pass": true,
+      "scientific_release_allowed": false,
+      "terminal_failure_override_used": true,
+      "handoff_rows": 0
+    },
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false
+  },
+  "failure_evidence": {
+    "provider_error_count": 321,
+    "recovery_observation": "Failure-only retries recorded upstream HTTP 401 Invalid token; rows remain provider_error.",
+    "canonical_trace_policy": "latest completed response, otherwise latest terminal failure; raw append-only retry history retained"
+  },
+  "resource_usage": {
+    "observed_local_cost_usd": 1.932244,
+    "sum_of_worker_caps_usd": 40.0,
+    "user_authorized_total_budget_usd": 200.0,
+    "external_invoice_amount": null,
+    "usage_scope": "cumulative persisted G6 traces for the two-worker run and failure-only retries"
+  },
+  "repairs_verified": [
+    "Malformed historical G6 traces are preserved and retry traces use append-safe .retry-N paths.",
+    "Persisted sequence is recovered before ERROR and RUN_END on provider failures.",
+    "Canonical merge retains one record for every frozen plan row, including terminal failures.",
+    "Aggregate launcher manifest is excluded from the formal two-worker count."
+  ],
+  "verification_commands": [
+    "E:/resources/python/python.exe -m pytest -q tests/test_g6_resume_sequence.py",
+    "E:/resources/python/python.exe scripts/audit_g6_counterfactual.py --expected-model-id qwen3.5-plus ...",
+    "E:/resources/python/python.exe scripts/review_g6_release.py --allow-terminal-failures --expected-model-id qwen3.5-plus ..."
+  ],
+  "test_result": "focused G6 resume/audit tests 8 passed",
+  "remaining_blockers": [
+    "ISSUE-000000000002: external model snapshot and billing evidence are unavailable",
+    "ISSUE-000000000004: formal statistical validity is not independently verified",
+    "ISSUE-ff97c7c89112: G6 proof/math review remains unresolved-unverified",
+    "321 provider_error rows and 0/138 valid CF3 revisions prevent confirmatory use"
+  ],
+  "scientific_release_allowed": false,
+  "no_fabricated_results": true,
+  "notes": [
+    "This is a real single-model API execution and complete canonical accounting of the frozen 552-row G6 plan, not a confirmatory scientific result.",
+    "The qwen3.5-plus run is kept separate from historical glm-5 artifacts and is not relabeled as historical data.",
+    "No G6-to-G7 handoff was generated from incomplete responses; terminal failures are not converted into scientific labels."
+  ]
+}

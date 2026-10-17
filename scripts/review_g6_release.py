@@ -30,6 +30,15 @@ def main() -> int:
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--expected-model-id", default="glm-5")
     parser.add_argument("--expected-base-url", default="https://token.ctflow.cn/v1")
+    parser.add_argument("--plan", type=Path)
+    parser.add_argument("--public", type=Path)
+    parser.add_argument("--private", type=Path)
+    parser.add_argument("--handoff", type=Path)
+    parser.add_argument(
+        "--allow-terminal-failures",
+        action="store_true",
+        help="Review execution coverage without treating retained provider failures as malformed output; never enables scientific release.",
+    )
     args = parser.parse_args()
     root = args.out
 
@@ -38,24 +47,31 @@ def main() -> int:
     # manifests and post-run audits; retain the legacy branch below for the
     # previously published artifact layout.
     corrected_audit_path = root / "g6_audit" / "audit.json"
+    if not corrected_audit_path.is_file():
+        corrected_audit_path = root / "g6_audit" / "trace_audit.json"
     corrected_manifests = sorted(root.glob("runner_manifest*.json"))
-    if corrected_manifests and corrected_audit_path.is_file():
+    corrected_worker_manifests = sorted(root.glob("runner_manifest.worker-*.json"))
+    if corrected_worker_manifests and corrected_audit_path.is_file():
         failures: list[str] = []
-        plan = read_jsonl(root / "run_plan.jsonl")
+        plan_path = args.plan or root / "run_plan.jsonl"
+        public_path = args.public or root / "public_cases.jsonl"
+        private_path = args.private or root / "private_oracle.jsonl"
+        handoff_path = args.handoff or root / "g6_to_g7_handoff.jsonl"
+        plan = read_jsonl(plan_path)
         responses = read_jsonl(root / "responses_audited.jsonl")
-        public = read_jsonl(root / "public_cases.jsonl")
-        private = read_jsonl(root / "private_oracle.jsonl")
-        handoff = read_jsonl(root / "g6_to_g7_handoff.jsonl")
+        public = read_jsonl(public_path)
+        private = read_jsonl(private_path)
+        handoff = read_jsonl(handoff_path) if handoff_path.is_file() else []
         audit = read_json(corrected_audit_path)
-        trace_repair = read_json(root / "trace_repair_manifest.json")
+        trace_repair_path = root / "trace_repair_manifest.json"
+        trace_repair = read_json(trace_repair_path) if trace_repair_path.is_file() else {}
         merge_manifest = read_json(root / "responses_merge_manifest.json")
-        manifests = [read_json(path) for path in corrected_manifests]
+        manifests = [read_json(path) for path in corrected_worker_manifests]
 
         expected = {
             "plan": 552,
             "public": 92,
             "private": 92,
-            "handoff": 552,
         }
         counts = {
             "plan": len(plan),
@@ -77,14 +93,24 @@ def main() -> int:
             failures.append("public_case_id_uniqueness")
         if len({row.get("case_id") for row in private}) != expected["private"]:
             failures.append("private_case_id_uniqueness")
-        if any(row.get("status") != "completed" for row in responses):
+        terminal_failure_count = sum(row.get("status") == "provider_error" for row in responses)
+        nonterminal_statuses = sorted({row.get("status") for row in responses if row.get("status") != "completed"})
+        if nonterminal_statuses and not args.allow_terminal_failures:
             failures.append("non_completed_canonical_response")
-        if audit.get("pass") is not True or audit.get("plan_count") != expected["plan"] or audit.get("trace_count") != expected["plan"]:
+        if audit.get("plan_count") != expected["plan"] or audit.get("response_count") != expected["plan"] or audit.get("trace_count") != expected["plan"]:
             failures.append("g6_audit")
-        if trace_repair.get("audited_response_count") != expected["plan"] or trace_repair.get("failed_to_extract_successful_attempt"):
+        if not args.allow_terminal_failures and audit.get("pass") is not True:
+            failures.append("g6_audit_pass")
+        if trace_repair and (trace_repair.get("audited_response_count") != expected["plan"] or trace_repair.get("failed_to_extract_successful_attempt")):
             failures.append("trace_repair")
         if merge_manifest.get("selected_completed_rows") != expected["plan"] or merge_manifest.get("missing_run_ids"):
             failures.append("response_merge")
+        if not handoff_path.is_file() and not args.allow_terminal_failures:
+            failures.append("missing_handoff")
+        if handoff_path.is_file() and len(handoff) != expected["plan"] and not args.allow_terminal_failures:
+            failures.append(f"handoff_count:{len(handoff)}:{expected['plan']}")
+        if args.allow_terminal_failures and terminal_failure_count == 0:
+            failures.append("terminal_failure_override_without_terminal_failures")
         profiles = {manifest.get("protocol_profile") for manifest in manifests}
         workers = {manifest.get("worker_count") for manifest in manifests}
         if profiles != {"g6_protocol_g3_tools_iteration"}:
@@ -97,10 +123,15 @@ def main() -> int:
             if manifest.get("oracle_loaded") is not False or manifest.get("allow_paid") is not True:
                 failures.append("manifest_isolation_or_paid_flag")
 
-        actual_hashes = {
-            rel: digest(root / rel)
-            for rel in ("run_plan.jsonl", "public_cases.jsonl", "private_oracle.jsonl", "responses_audited.jsonl", "g6_to_g7_handoff.jsonl")
+        hash_paths = {
+            "run_plan.jsonl": plan_path,
+            "public_cases.jsonl": public_path,
+            "private_oracle.jsonl": private_path,
+            "responses_audited.jsonl": root / "responses_audited.jsonl",
         }
+        if handoff_path.is_file():
+            hash_paths["g6_to_g7_handoff.jsonl"] = handoff_path
+        actual_hashes = {rel: digest(path) for rel, path in hash_paths.items() if path.is_file()}
         result = {
             "review": "independent_g6_release_review",
             "artifact_root": str(root.resolve()),
@@ -113,8 +144,11 @@ def main() -> int:
             "protocol_profile": sorted(profiles),
             "worker_counts": sorted(workers),
             "g6_audit_pass": audit.get("pass"),
+            "terminal_failure_count": terminal_failure_count,
+            "terminal_failures_allowed_for_coverage_review": args.allow_terminal_failures,
+            "nonterminal_statuses": nonterminal_statuses,
             "revision_valid_count": audit.get("revision_valid_count"),
-            "note": "Structural completeness does not override the G5 independent-math, upstream provenance, or verified-model-snapshot blockers.",
+            "note": "Coverage review is non-confirmatory when terminal provider failures are retained; this does not override the G5 independent-math, upstream provenance, or verified-model-snapshot blockers.",
         }
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

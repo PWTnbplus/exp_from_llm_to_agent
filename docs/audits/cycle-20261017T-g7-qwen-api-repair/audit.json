@@ -1,0 +1,87 @@
+{
+  "audit_version": "g7-qwen-single-model-api-v1",
+  "cycle": "20261017T-g7-qwen-api-repair",
+  "status": "REAL_PROVIDER_COMPLETE_NONCONFIRMATORY",
+  "experiment_id": "g7_failure_localization",
+  "provider_execution": {
+    "provider_calls_made": true,
+    "model_id": "qwen3.5-plus",
+    "base_url": "https://token.ctflow.cn/v1",
+    "worker_count": 16,
+    "execution_mode": "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL",
+    "paid_evidence_override_used": true,
+    "model_snapshot_manifest": "missing",
+    "billing_export": "missing",
+    "external_billing_verified": false
+  },
+  "inputs": {
+    "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "labels_sha256": "29782338db2a76a7c854cacb8c68479cb6a47241caddadc26ba18393cc0e7490",
+    "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+    "public_cases": 92,
+    "plan_rows": 1288,
+    "checkpoints": 184,
+    "arms_per_checkpoint": 7
+  },
+  "canonical_results": {
+    "states": 1288,
+    "state_status_counts": {
+      "completed": 438,
+      "provider_error": 17,
+      "checkpoint_missing": 833
+    },
+    "checkpoints": 184,
+    "checkpoint_status_counts": {
+      "completed": 65,
+      "provider_error": 119
+    },
+    "q_audit_rows": 1288,
+    "q_valid_rows": 0,
+    "q_validity_policy": "NOT_SCORED_without_external_Q_verifier",
+    "terminal_failures_retained": true,
+    "trace_integrity": {
+      "state_pass": 438,
+      "state_terminal_failure_evidence": 17,
+      "state_not_executed": 833,
+      "state_integrity_failures": 0,
+      "checkpoint_pass": 65,
+      "checkpoint_terminal_failure_evidence": 119,
+      "checkpoint_integrity_failures": 0
+    },
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false
+  },
+  "resource_usage": {
+    "observed_local_cost_usd_from_worker_summaries": 6.696837,
+    "sum_of_worker_caps_usd": 60.0,
+    "user_authorized_total_budget_usd": 200.0,
+    "external_invoice_amount": null,
+    "usage_scope": "cumulative persisted G7 traces across original attempts and failure-only retries; no secret or raw oracle values persisted"
+  },
+  "repairs_verified": [
+    "Terminal provider-error traces recover the persisted sequence before writing ERROR and RUN_END.",
+    "Malformed historical traces are preserved and retries use append-safe .retry-N paths.",
+    "Parallel workers no longer race on the shared preflight artifact; only worker 0 writes it and temporary names are process-unique."
+  ],
+  "verification_commands": [
+    "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_trace_q_consistency.py tests/test_g7_q_audit.py",
+    "E:/resources/python/python.exe scripts/merge_g7_states.py --plan ... --states-dir runs/ctflow_single_model/20261017T-g7-qwen-v1 ...",
+    "E:/resources/python/python.exe scripts/audit_g7_q.py --states runs/ctflow_single_model/20261017T-g7-qwen-v1/merged_states.jsonl ...",
+    "E:/resources/python/python.exe scripts/audit_g7_trace_q_consistency.py --states ... --q ... --trace-root runs/ctflow_single_model/20261017T-g7-qwen-v1 --checkpoints ...",
+    "E:/resources/python/python.exe scripts/audit_g7_corrected_metrics.py --plan ... --states ... --q ... --oracle ... --preflight ..."
+  ],
+  "test_result": "82 passed",
+  "remaining_blockers": [
+    "ISSUE-000000000002: external model snapshot and billing evidence are unavailable",
+    "ISSUE-000000000004: formal statistical validity is not independently verified",
+    "ISSUE-1f8c2b6a4d90: G7 dependency/Q/math gate remains blocked",
+    "ISSUE-3d7a9c1e5b20: real-provider failures and low-Q coverage remain in the denominator"
+  ],
+  "scientific_release_allowed": false,
+  "no_fabricated_results": true,
+  "notes": [
+    "This is a real single-model API execution and a complete canonical accounting of the frozen 1288-row G7 plan, but it is not a confirmatory scientific result.",
+    "The provider returned terminal failures, including recorded HTTP 401 invalid-token failures during recovery; those rows are retained and not relabeled as successes.",
+    "The historical G7 artifacts are not relabeled from their original model. This audit covers only the qwen3.5-plus run in the ctflow_single_model output."
+  ]
+}

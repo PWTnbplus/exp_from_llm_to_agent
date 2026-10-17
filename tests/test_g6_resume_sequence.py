@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from scripts.run_g6_counterfactual import event_path_for_retry, existing_event_seq
+from scripts.audit_g6_counterfactual import load_manifests
 
 
 def _write(path: Path, rows: list[object]) -> None:
@@ -57,3 +58,15 @@ def test_g6_retry_trace_path_preserves_malformed_history(tmp_path: Path) -> None
     assert retry_path.parent.name == "run-1.retry-1"
     assert seq == 0
     assert path.read_text(encoding="utf-8").count('"seq": 1') == 2
+
+
+def test_g6_audit_ignores_aggregate_manifest_when_counting_workers(tmp_path: Path) -> None:
+    aggregate = {"worker_count": 1, "worker_index": 0}
+    worker = {"worker_count": 2, "worker_index": 0}
+    (tmp_path / "runner_manifest.json").write_text(json.dumps(aggregate), encoding="utf-8")
+    (tmp_path / "runner_manifest.worker-2-0.json").write_text(json.dumps(worker), encoding="utf-8")
+
+    manifests, failures = load_manifests(tmp_path)
+
+    assert failures == []
+    assert manifests == [worker]

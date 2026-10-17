@@ -80,9 +80,14 @@ def segments(events: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
 
 
 def load_manifests(out: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    # ``runner_manifest.json`` is an aggregate/resume bookkeeping record
+    # emitted by the launcher.  The formal worker denominator is represented
+    # by the two shard manifests, whose names carry the worker-count/index
+    # identity.  Counting the aggregate as a third worker would create a
+    # false audit failure.
     manifests: list[dict[str, Any]] = []
     failures: list[str] = []
-    for path in sorted(out.glob("runner_manifest*.json")):
+    for path in sorted(out.glob("runner_manifest.worker-*.json")):
         try:
             manifests.append(json.loads(path.read_text(encoding="utf-8")))
         except (OSError, ValueError, json.JSONDecodeError) as exc:
