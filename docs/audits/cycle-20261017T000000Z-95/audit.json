@@ -66,6 +66,13 @@
     "The matrix host now reports an existing failed result contract instead of mislabeling RC=3 as a missing evaluator sidecar.",
     "An independent CTFlow matrix structural audit checks exact arm/task coverage, trace presence, redaction markers, manifest hash, and aggregate local cap."
   ],
+  "delivery": {
+    "local_commit": "ddac6d8",
+    "push_exit_code": 1,
+    "push_error": "unable to connect to github.com port 443 via 127.0.0.1",
+    "ls_remote_exit_code": 1,
+    "remote_branch_verified": false
+  },
   "remaining_blockers": [
     "G0 upstream NewtonBench provenance/license and GitHub remote delivery remain externally unverified.",
     "CTFlow provider billing/pricing and immutable model-weight identity remain unverified; local proxy cost is not a billing claim.",

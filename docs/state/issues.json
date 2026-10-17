@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-16T19:35:54+00:00",
+  "updated_at": "2026-10-17T02:00:21+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -126,13 +126,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "docs/audits/cycle-20261016T163912Z-94/audit.json; git push exit 1; git ls-remote exit 1",
+      "evidence": "git push origin autopilot/scientific-law-discovery: exit 1, unable to connect to github.com port 443 via 127.0.0.1; git ls-remote origin refs/heads/autopilot/scientific-law-discovery: exit 1, same network failure",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T16:42:38+00:00",
+      "last_seen": "2026-10-17T02:00:21+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 94 push and independent git ls-remote both exited 1: configured proxy could not connect to github.com port 443. Local commit a345621 exists, but remote branch update is unverified.",
+      "blocked_reason": "Cycle 95 delivery remains externally blocked: git push and independent git ls-remote both failed to connect to github.com port 443 through 127.0.0.1; local commit ddac6d8 exists but remote branch state is unverified.",
       "verification": null,
       "history": [
         {
@@ -451,6 +451,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 94 push and independent git ls-remote both exited 1: configured proxy could not connect to github.com port 443. Local commit a345621 exists, but remote branch update is unverified.",
           "evidence": "docs/audits/cycle-20261016T163912Z-94/audit.json; git push exit 1; git ls-remote exit 1"
+        },
+        {
+          "time": "2026-10-17T02:00:21+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 95 delivery remains externally blocked: git push and independent git ls-remote both failed to connect to github.com port 443 through 127.0.0.1; local commit ddac6d8 exists but remote branch state is unverified.",
+          "evidence": "git push origin autopilot/scientific-law-discovery: exit 1, unable to connect to github.com port 443 via 127.0.0.1; git ls-remote origin refs/heads/autopilot/scientific-law-discovery: exit 1, same network failure"
         }
       ]
     },
