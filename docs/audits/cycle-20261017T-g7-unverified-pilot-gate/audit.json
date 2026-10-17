@@ -1,0 +1,33 @@
+{
+  "cycle": "20261017T-g7-unverified-pilot-gate",
+  "audit_scope": "explicit non-confirmatory G7 paid pilot override",
+  "status": "REPAIRED_UNVERIFIED_PROVIDER_RUN_PENDING",
+  "scientific_release_allowed": false,
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "issue_refs": ["ISSUE-000000000002", "ISSUE-3d7a9c1e5b20", "ISSUE-ad61f025976a"],
+  "repair": {
+    "source": "scripts/run_g7_failure_localization.py",
+    "flag": "--allow-unverified-paid-evidence",
+    "execution_mode": "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL",
+    "formal_scientific_run_allowed": false,
+    "billing_or_weight_evidence_fabricated": false,
+    "hard_budget_still_required": true
+  },
+  "verification": {
+    "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py",
+    "exit_code": 0,
+    "passed": 58,
+    "findings": [
+      "Missing/invalid external evidence still fails closed unless the new explicit pilot flag is supplied.",
+      "The override is persisted in g7_protocol_preflight.json and every runner summary remains non-confirmatory."
+    ]
+  },
+  "independent_review": {
+    "status": "PASS_FOR_EXECUTION_GUARD_ONLY",
+    "reviewer_checks": [
+      "Existing missing-evidence rejection test remains passing.",
+      "New override test checks durable mode, false formal scientific permission, and explicit override usage.",
+      "No API call or scientific result is claimed by this code audit."
+    ]
+  }
+}

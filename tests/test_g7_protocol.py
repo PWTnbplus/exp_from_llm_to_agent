@@ -927,6 +927,48 @@ def test_g7_runner_paid_evidence_gate_stops_before_key_or_provider(tmp_path: Pat
     assert report["paid_evidence"]["errors"] == ["model_snapshot_manifest_not_found", "billing_export_not_found"]
 
 
+def test_g7_unverified_paid_pilot_requires_explicit_override_and_records_nonconfirmatory_mode(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    public = tmp_path / "public.jsonl"
+    labels = tmp_path / "labels.jsonl"
+    plan = tmp_path / "plan.jsonl"
+    public.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    labels.write_text(json.dumps({"case_id": "case-1"}) + "\n", encoding="utf-8")
+    plan.write_text(json.dumps({
+        "run_id": "run-1", "checkpoint_id": "cp-1", "case_id": "case-1",
+        "group_id": "G3", "diagnostic_arm": "D0", "inject_stages": [],
+    }) + "\n", encoding="utf-8")
+    out = tmp_path / "out"
+    monkeypatch.setattr(g7_runner, "protocol_preflight", lambda *args, **kwargs: {
+        "provider_calls_made": False,
+        "formal_run_allowed_by_protocol": True,
+        "errors": [],
+        "counts": {},
+        "routing_metadata_model_prompt_hits": {},
+        "forbidden_model_prompt_hits": {},
+        "scientific_truth_decision_made": False,
+    })
+    class FakeProvider:
+        def __init__(self, **kwargs):
+            self.audit = []
+
+    monkeypatch.setattr(g7_runner, "OpenAICompatibleProvider", FakeProvider)
+    monkeypatch.setattr(g7_runner, "public_tool_loop", lambda *args, **kwargs: pytest.fail("pilot must not invent a provider response"))
+    key = tmp_path / "key"
+    key.write_text("sk-test", encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", [
+        "run_g7_failure_localization.py", "--public", str(public), "--labels", str(labels),
+        "--plan", str(plan), "--out", str(out), "--model-id", "model-x",
+        "--key-file", str(key), "--allow-paid", "--allow-unverified-paid-evidence",
+    ])
+    assert g7_runner.main() == 0
+    report = json.loads((out / "g7_protocol_preflight.json").read_text(encoding="utf-8"))
+    assert report["paid_evidence"]["execution_mode"] == "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL"
+    assert report["paid_evidence"]["formal_scientific_run_allowed"] is False
+    assert report["paid_evidence"]["override_used"] is True
+
+
 def test_g7_malformed_stage_contract_is_retained_as_failure() -> None:
     with pytest.raises(ValueError, match="missing stage Q"):
         normalize_stages({"stages": {"V": {}, "L": {}, "U": {}}})

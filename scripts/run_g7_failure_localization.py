@@ -1208,6 +1208,14 @@ def main() -> int:
     p.add_argument("--key-file", type=Path, required=True)
     p.add_argument("--base-url", default="https://token.ctflow.cn/v1")
     p.add_argument("--allow-paid", action="store_true")
+    p.add_argument(
+        "--allow-unverified-paid-evidence",
+        action="store_true",
+        help=(
+            "explicitly authorize a non-confirmatory paid pilot when external "
+            "model-weight and billing evidence is unavailable; scientific release remains closed"
+        ),
+    )
     p.add_argument("--model-snapshot-manifest", type=Path)
     p.add_argument("--billing-export", type=Path)
     p.add_argument("--worker-index", type=int, default=0)
@@ -1267,7 +1275,34 @@ def main() -> int:
     if preflight["errors"]:
         raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
     if paid_evidence["errors"]:
-        raise SystemExit("G7 paid-evidence preflight failed: " + ", ".join(paid_evidence["errors"]))
+        if not args.allow_unverified_paid_evidence:
+            raise SystemExit("G7 paid-evidence preflight failed: " + ", ".join(paid_evidence["errors"]))
+        paid_evidence["execution_mode"] = "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL"
+        paid_evidence["formal_scientific_run_allowed"] = False
+        paid_evidence["override_used"] = True
+    else:
+        paid_evidence["execution_mode"] = "PAID_INPUT_EVIDENCE_PRESENT_EXTERNAL_REVIEW_PENDING"
+        paid_evidence["formal_scientific_run_allowed"] = False
+        paid_evidence["override_used"] = False
+    # Rewrite the preflight after the explicit evidence decision so the durable
+    # report records whether this was a non-confirmatory pilot override.
+    write_json(out / "g7_protocol_preflight.json", {
+        **preflight,
+        "paid_evidence": paid_evidence,
+        "input_hashes": {
+            "public": sha256_file(args.public),
+            "labels": sha256_file(args.labels),
+            "plan": sha256_file(args.plan),
+        },
+        "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+        "budget_policy": {
+            "worker_count": args.worker_count,
+            "configured_worker_max_cost_usd": args.max_cost_usd,
+            "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+            "effective_worker_max_cost_usd": effective_max_cost_usd,
+            "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+        },
+    })
     public = {x["case_id"]: x for x in public_rows}
     labels = {x["case_id"]: x for x in label_rows}
     for row in plan:
@@ -1376,6 +1411,10 @@ def main() -> int:
                "worker_count": args.worker_count, "plan_count": len(plan), "selected_rows": len(rows_for_worker),
                "states_count": len(readl(state_path)), "checkpoints_count": len(readl(checkpoint_path)),
                "limits": limits.__dict__, "model_id": args.model_id, "base_url": args.base_url,
+               "scientific_release_allowed": False,
+               "confirmatory_inference_allowed": False,
+               "paid_evidence_execution_mode": paid_evidence["execution_mode"],
+               "paid_evidence_override_used": paid_evidence["override_used"],
                "budget_policy": {"configured_worker_max_cost_usd": args.max_cost_usd,
                                  "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
                                  "effective_worker_max_cost_usd": effective_max_cost_usd,
