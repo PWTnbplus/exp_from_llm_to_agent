@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T02:04:26+00:00",
+  "updated_at": "2026-10-17T03:42:06+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -51,13 +51,13 @@
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
       "status": "BLOCKED",
-      "evidence": "docs/audits/cycle-20261017T000000Z-95/audit.json; docs/audits/cycle-20261017T000000Z-95/ctflow_matrix_audit.json; runs/ctflow_matrix/20261016T173343Z-98f74b99/summary.json",
+      "evidence": "docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json",
       "remediation": "Keep formal paid execution closed despite the now-recorded user authorization and USD 200 ceiling. Obtain provider-verifiable pricing/usage or billing evidence, complete the tested scientific runner and runner-level hard cap, obtain immutable model identity evidence, and complete independent isolation/statistical review before any formal G0-G7 claim.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-16T19:35:54+00:00",
+      "last_seen": "2026-10-17T03:40:47+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 2,
-      "blocked_reason": "Cycle 95 real CTFlow four-arm matrix completed under explicit user authorization and USD 200 ceiling; local runner, failure retention, traces, and local hard-cap checks are verified, but provider billing/pricing and immutable model identity remain unverified and all paired scientific release gates remain false.",
+      "blocked_reason": "Cycle 96 qwen single-model pilot completed 120 registered task-runs with local runner caps and failure retention, but provider billing/pricing and immutable model identity remain unverified; 81 task-runs failed and scientific release remains closed.",
       "verification": null,
       "history": [
         {
@@ -118,6 +118,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 95 real CTFlow four-arm matrix completed under explicit user authorization and USD 200 ceiling; local runner, failure retention, traces, and local hard-cap checks are verified, but provider billing/pricing and immutable model identity remain unverified and all paired scientific release gates remain false.",
           "evidence": "docs/audits/cycle-20261017T000000Z-95/audit.json; docs/audits/cycle-20261017T000000Z-95/ctflow_matrix_audit.json; runs/ctflow_matrix/20261016T173343Z-98f74b99/summary.json"
+        },
+        {
+          "time": "2026-10-17T03:40:47+00:00",
+          "event": "BLOCKED",
+          "reason": "Cycle 96 qwen single-model pilot completed 120 registered task-runs with local runner caps and failure retention, but provider billing/pricing and immutable model identity remain unverified; 81 task-runs failed and scientific release remains closed.",
+          "evidence": "docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json; docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json"
         }
       ]
     },
@@ -1959,7 +1965,8 @@
     "docs/audits/cycle-20261016T160431Z-92/audit.json",
     "docs/audits/cycle-20261017T000000Z-93/audit.json",
     "docs/audits/cycle-20261016T163912Z-94/audit.json",
-    "docs/audits/cycle-20261017T000000Z-95/audit.json"
+    "docs/audits/cycle-20261017T000000Z-95/audit.json",
+    "docs/audits/cycle-20261017T-pilot-qwen/audit.json"
   ],
   "current_focus": null
 }

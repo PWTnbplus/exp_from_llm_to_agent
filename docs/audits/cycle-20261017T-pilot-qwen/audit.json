@@ -1,0 +1,68 @@
+{
+  "cycle": "20261017T-pilot-qwen",
+  "audit_scope": "single-model_qwen_pilot_for_frozen_newtonbench_g0_g7_matrix",
+  "status": "PILOT_COMPLETED_WITH_TASK_FAILURES_RELEASE_BLOCKED",
+  "scientific_release_allowed": false,
+  "skill_reference": ".agents/skills/scientific-law-recovery/SKILL.md",
+  "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
+  "experiment": {
+    "batch": "runs/ctflow_single_model/20261017T-pilot-qwen",
+    "model_id": "qwen3.5-plus",
+    "provider": "ctflow",
+    "runners": ["llm_only", "agent"],
+    "manifest": "task_manifest.json",
+    "manifest_sha256": "5f7da3480ad5f40c747ceaeaf09b028f6bef823fe3ea230e88665ed2a5c6c3cf",
+    "tasks": 12,
+    "repeats_per_task_per_arm": 5,
+    "expected_task_runs": 120,
+    "registered_task_runs": 120,
+    "task_failures": 81,
+    "validated_success_count": 11,
+    "actual_local_proxy_cost_usd": 1.398455,
+    "reserved_local_proxy_cost_usd": 61.67473086206894,
+    "configured_pilot_cap_usd": 140.0,
+    "provider_billing_verified": false,
+    "immutable_model_weight_verified": false,
+    "failure_policy": "All provider, parse, protocol, interruption, and held-out validation failures remain registered in the denominator; no pooled retry or fabricated result is used."
+  },
+  "qualification": {
+    "model": "qwen3.5-plus",
+    "scope": "one frozen hard task, one LLM-only and one Agent attempt",
+    "result": "both arms failed closed under provider timeout/terminal failure; Agent retained two observations",
+    "maximum_new_cap_usd": 10.0,
+    "interrupted_attempt_retained": true
+  },
+  "verification": {
+    "independent_structural_audit": "docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_audit.json",
+    "independent_structural_audit_exit_code": 0,
+    "pilot_summary": "docs/audits/cycle-20261017T-pilot-qwen/single_model_pilot_summary.json",
+    "pilot_summary_status": "descriptive_nonconfirmatory",
+    "full_host_suite": "E:/resources/python/python.exe -X utf8 -m pytest -q => 257 passed in 32.38s",
+    "focused_pilot_budget_suite": "6 passed",
+    "py_compile": "passed",
+    "git_diff_check": "passed",
+    "redaction": {
+      "bearer_marker_hits": 0,
+      "unredacted_ground_truth_markers": 0
+    },
+    "paired_summary": {
+      "pairs": 60,
+      "llm_only_validated_success": 5,
+      "agent_validated_success": 6,
+      "agent_minus_llm_only_mean": 0.016666666666666666,
+      "law_family_cluster_bootstrap_95_ci": [-0.06666666666666667, 0.10000000000000002],
+      "bootstrap_seed": 20261008,
+      "bootstrap_repeats": 10000,
+      "formal_inference_allowed": false
+    }
+  },
+  "local_commits": ["53fba30", "b7746dc", "a84267", "b7c9acc"],
+  "remaining_blockers": [
+    "G0 upstream NewtonBench provenance/license and remote delivery remain externally unverified.",
+    "Provider billing/pricing and immutable model-weight identity remain unverified.",
+    "G6 independent mathematical/statistical review and confirmatory validity remain unresolved.",
+    "G7 historical dependency-edge/Q/provider failures remain non-confirmatory; this pilot is not a G7 repair result.",
+    "The paired pilot has substantial task failures and scientific release remains blocked."
+  ],
+  "decision": "Record the qwen single-model pilot as complete, auditable, failure-retaining pilot evidence only. Keep G0/G6/G7 and scientific release blocked; do not claim model superiority or billing accuracy."
+}

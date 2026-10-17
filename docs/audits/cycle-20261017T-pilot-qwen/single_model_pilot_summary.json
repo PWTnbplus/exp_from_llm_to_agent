@@ -1,0 +1,43 @@
+{
+  "summary": "single_model_pilot_nonconfirmatory_v1",
+  "model_id": "qwen3.5-plus",
+  "design": "pilot",
+  "manifest_sha256": "5f7da3480ad5f40c747ceaeaf09b028f6bef823fe3ea230e88665ed2a5c6c3cf",
+  "registered_runs": 120,
+  "expected_runs": 120,
+  "all_pairs_present": true,
+  "arm_summary": {
+    "llm_only": {
+      "n_registered": 60,
+      "n_completed": 13,
+      "n_failed": 47,
+      "validated_success_count": 5,
+      "validated_success_rate_all_registered": 0.08333333333333333
+    },
+    "agent": {
+      "n_registered": 60,
+      "n_completed": 26,
+      "n_failed": 34,
+      "validated_success_count": 6,
+      "validated_success_rate_all_registered": 0.1
+    }
+  },
+  "primary_endpoint": "validated_success",
+  "paired_effect": "agent_minus_llm_only",
+  "paired_n": 60,
+  "paired_agent_success_count": 3,
+  "paired_llm_only_success_count": 2,
+  "paired_tied_success_count": 55,
+  "paired_mean_delta": 0.016666666666666666,
+  "law_family_cluster_bootstrap_95_ci": [
+    -0.06666666666666667,
+    0.10000000000000002
+  ],
+  "law_family_cluster_key": "NewtonBench module name",
+  "bootstrap_seed": 20261008,
+  "bootstrap_repeats": 10000,
+  "denominator_includes_all_registered_runs": true,
+  "formal_inference_allowed": false,
+  "scientific_release_allowed": false,
+  "note": "This pilot summary is descriptive only. It does not establish model superiority, provider billing, immutable model identity, G0 provenance, G6 statistical validity, or G7 completion."
+}

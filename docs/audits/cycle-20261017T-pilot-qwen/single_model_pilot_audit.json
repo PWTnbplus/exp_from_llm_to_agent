@@ -1,0 +1,24 @@
+{
+  "audit": "single_model_pilot_structural_v1",
+  "batch": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261017T-pilot-qwen",
+  "model_id": "qwen3.5-plus",
+  "structural_complete": true,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": {
+    "expected": 120,
+    "registered": 120,
+    "unique": 120,
+    "trace_directories": 120
+  },
+  "outcomes": {
+    "task_failures": 81,
+    "validated_success_count": 11,
+    "actual_local_proxy_cost_usd": 1.3984550000000007,
+    "reserved_local_proxy_cost_usd": 61.67473086206894,
+    "configured_cap_usd": 140.0,
+    "secret_marker_hits": 0,
+    "unredacted_ground_truth_markers": 0
+  },
+  "note": "This is an independent structural audit. Pilot outcomes are non-confirmatory and provider billing/model-weight identity remain unverified."
+}
