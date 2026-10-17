@@ -1,0 +1,36 @@
+{
+  "audit_version": "ctflow-provider-key-status-v1",
+  "cycle": "20261017T-provider-key-audit",
+  "status": "BLOCKED_PROVIDER_CREDENTIAL",
+  "provider": "ctflow",
+  "base_url": "https://token.ctflow.cn/v1",
+  "model_scope": [
+    "qwen3.5-plus"
+  ],
+  "provider_calls_made": false,
+  "read_only_checks": {
+    "unauthenticated_models_status": 401,
+    "authenticated_models_status": 401,
+    "authenticated_key_source": "api_key/qwen/qwen-coder-plus.txt",
+    "credential_value_logged": false,
+    "generation_endpoint_called": false,
+    "redirects_followed": false
+  },
+  "evidence": {
+    "authenticated_catalog": "Current local qwen key is rejected by the same-origin /v1/models endpoint with HTTP 401.",
+    "historical_compatibility": "The prior qwen single-model API runs remain valid historical evidence of the then-recorded provider responses; this check does not relabel or delete them.",
+    "billing_pricing": "No provider-verifiable pricing, usage, billing export, or invoice endpoint is documented in the retained CTFlow audit.",
+    "immutable_model_identity": "No gateway weight fingerprint or immutable model snapshot is available."
+  },
+  "decision": {
+    "retry_formal_experiment": false,
+    "reason": "A new paid retry with a currently rejected credential would not produce valid provider evidence and would violate fail-closed recovery policy.",
+    "required_unlock": "Provide or install a valid authorized CTFlow credential and independently verifiable billing/model-identity evidence before any new paid batch."
+  },
+  "scientific_release_allowed": false,
+  "no_fabricated_results": true,
+  "related_issues": [
+    "ISSUE-000000000002",
+    "ISSUE-ad61f025976a"
+  ]
+}

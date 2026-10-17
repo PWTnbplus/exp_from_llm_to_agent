@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T07:02:16+00:00",
+  "updated_at": "2026-10-17T08:11:08+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -1989,7 +1989,8 @@
     "docs/audits/cycle-20261017T-delivery/audit.json",
     "docs/audits/cycle-20261017T-g7-qwen-api-repair/audit.json",
     "docs/audits/cycle-20261017T-g7-unverified-pilot-gate/audit.json",
-    "docs/audits/cycle-20261017T-g6-qwen-api/audit.json"
+    "docs/audits/cycle-20261017T-g6-qwen-api/audit.json",
+    "docs/audits/cycle-20261017T-provider-key-audit/audit.json"
   ],
   "current_focus": null
 }

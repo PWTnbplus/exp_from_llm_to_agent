@@ -695,3 +695,11 @@ E:/resources/python/python.exe scripts/recovery_state.py next
 - Audit: `docs/audits/cycle-20261017T-g6-qwen-api/audit.json`. G6 remains non-confirmatory because provider failures, external billing/model snapshot, independent math/statistics, and scientific gates remain unresolved. The prior Cycle 99 “G6 still running” note is superseded by this completion entry.
 - Preserve API keys, billing/private raw results, `runs/`, and the untracked user-owned `research_data_summary_G0_G7/`; never stage them. G0/G6/G7 remain `BLOCKED` and `scientific_release_allowed=false`.
 
+## Cycle 101 CTFlow credential blocker recheck (2026-10-17 HKT)
+
+- Re-ran the mandatory V2 bootstrap and read the current ledger, unresolved report, and gates. No completed G0–G7 milestone was rebuilt.
+- A read-only same-origin catalog check against `https://token.ctflow.cn/v1/models` returned HTTP `401` both without credentials and with the local qwen credential source. No generation request or paid retry was made in this cycle.
+- This reproduces the `HTTP 401 Invalid token` evidence retained in the qwen G6/G7 terminal failures. The provider key/model identity/billing blocker remains external; a new paid retry is not justified until a valid authorized credential and provider-verifiable billing/model snapshot evidence are supplied.
+- Audit: `docs/audits/cycle-20261017T-provider-key-audit/audit.json`. Provider-focused regression tests pass `19/19`; the prior full host result remains `262/262`.
+- State remains truthful: `ISSUE-000000000002` is `BLOCKED`; G6/G7 are non-confirmatory and `scientific_release_allowed=false`. Preserve API keys, `runs/`, and `research_data_summary_G0_G7/`; do not stage them.
+
