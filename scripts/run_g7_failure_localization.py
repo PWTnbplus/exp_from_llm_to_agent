@@ -1374,6 +1374,11 @@ def main() -> int:
             emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
             prior_cp[cp_id] = record
         except Exception as exc:
+            # ``public_tool_loop`` owns its local sequence variable. If the
+            # provider raises after emitting MODEL_REQUEST, the caller's
+            # value still points to the preceding event. Recover the actual
+            # persisted tail before writing terminal failure events.
+            seq = existing_trace_sequence(event_path)
             seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
             seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
             append_jsonl(checkpoint_path, {"checkpoint_id": cp_id, "case_id": row["case_id"], "group_id": row["group_id"],
@@ -1422,6 +1427,7 @@ def main() -> int:
             prior_states[trace_id] = state
             emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
         except Exception as exc:
+            seq = existing_trace_sequence(event_path)
             seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
             seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
             state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "provider_error",

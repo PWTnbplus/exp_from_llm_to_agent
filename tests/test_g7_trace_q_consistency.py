@@ -371,3 +371,19 @@ def test_g7_retry_trace_path_preserves_malformed_history(tmp_path: Path) -> None
     assert retry_path.parent.name == "run-1.retry-1"
     assert seq == 0
     assert path.read_text(encoding="utf-8").count('"seq": 1') == 2
+
+
+def test_g7_terminal_error_recovers_sequence_after_inner_loop_failure(tmp_path: Path) -> None:
+    path = tmp_path / "trace.jsonl"
+    seq = emit(path, 0, "run-1", "RUN_START", "RUNNING", {})
+    seq = emit(path, seq, "run-1", "MODEL_REQUEST", "RUNNING", {})
+
+    # This mirrors the outer runner's exception path when the provider raises
+    # inside public_tool_loop before returning its local sequence to the caller.
+    seq = existing_trace_sequence(path)
+    seq = emit(path, seq, "run-1", "ERROR", "FAILED", {"error_type": "RuntimeError"})
+    seq = emit(path, seq, "run-1", "RUN_END", "FAILED", {"status": "provider_error"})
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+    assert [row["seq"] for row in rows] == [1, 2, 3, 4]
+    assert validate_lifecycle(rows, {"run-1"}) == []
