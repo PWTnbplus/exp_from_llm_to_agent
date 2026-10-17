@@ -1282,23 +1282,26 @@ def main() -> int:
     paid_evidence = validate_paid_evidence(args.model_id, args.model_snapshot_manifest, args.billing_export)
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
-    write_json(out / "g7_protocol_preflight.json", {
-        **preflight,
-        "paid_evidence": paid_evidence,
-        "input_hashes": {
-            "public": sha256_file(args.public),
-            "labels": sha256_file(args.labels),
-            "plan": sha256_file(args.plan),
-        },
-        "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
-        "budget_policy": {
-            "worker_count": args.worker_count,
-            "configured_worker_max_cost_usd": args.max_cost_usd,
-            "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
-            "effective_worker_max_cost_usd": effective_max_cost_usd,
-            "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
-        },
-    })
+    # The preflight is a shared immutable input report. Only worker 0 writes
+    # it; concurrent workers must not race on the same destination on Windows.
+    if args.worker_index == 0:
+        write_json(out / "g7_protocol_preflight.json", {
+            **preflight,
+            "paid_evidence": paid_evidence,
+            "input_hashes": {
+                "public": sha256_file(args.public),
+                "labels": sha256_file(args.labels),
+                "plan": sha256_file(args.plan),
+            },
+            "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+            "budget_policy": {
+                "worker_count": args.worker_count,
+                "configured_worker_max_cost_usd": args.max_cost_usd,
+                "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                "effective_worker_max_cost_usd": effective_max_cost_usd,
+                "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+            },
+        })
     if preflight["errors"]:
         raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
     if paid_evidence["errors"]:
@@ -1313,23 +1316,24 @@ def main() -> int:
         paid_evidence["override_used"] = False
     # Rewrite the preflight after the explicit evidence decision so the durable
     # report records whether this was a non-confirmatory pilot override.
-    write_json(out / "g7_protocol_preflight.json", {
-        **preflight,
-        "paid_evidence": paid_evidence,
-        "input_hashes": {
-            "public": sha256_file(args.public),
-            "labels": sha256_file(args.labels),
-            "plan": sha256_file(args.plan),
-        },
-        "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
-        "budget_policy": {
-            "worker_count": args.worker_count,
-            "configured_worker_max_cost_usd": args.max_cost_usd,
-            "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
-            "effective_worker_max_cost_usd": effective_max_cost_usd,
-            "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
-        },
-    })
+    if args.worker_index == 0:
+        write_json(out / "g7_protocol_preflight.json", {
+            **preflight,
+            "paid_evidence": paid_evidence,
+            "input_hashes": {
+                "public": sha256_file(args.public),
+                "labels": sha256_file(args.labels),
+                "plan": sha256_file(args.plan),
+            },
+            "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+            "budget_policy": {
+                "worker_count": args.worker_count,
+                "configured_worker_max_cost_usd": args.max_cost_usd,
+                "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                "effective_worker_max_cost_usd": effective_max_cost_usd,
+                "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+            },
+        })
     public = {x["case_id"]: x for x in public_rows}
     labels = {x["case_id"]: x for x in label_rows}
     for row in plan:
