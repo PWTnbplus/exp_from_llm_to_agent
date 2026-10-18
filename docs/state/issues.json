@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18T04:49:09+00:00",
+  "updated_at": "2026-10-18T04:52:00+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -174,13 +174,13 @@
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
       "status": "BLOCKED",
-      "evidence": "local commit 07f68ee; git push exit 1; git ls-remote exit 1; proxy connection failure",
+      "evidence": "git push origin autopilot/scientific-law-discovery; git ls-remote origin refs/heads/autopilot/scientific-law-discovery; local commit 4069a20",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-18T04:34:48+00:00",
+      "last_seen": "2026-10-18T04:52:00+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 2,
-      "blocked_reason": "Post-commit delivery verification for usage-audit commit 07f68ee failed again: git push and independent git ls-remote could not connect to github.com:443 through 127.0.0.1; remote branch remains unverified.",
+      "blocked_reason": "After local commit 4069a20, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local commit is present, but remote delivery is not verified.",
       "verification": null,
       "history": [
         {
@@ -541,6 +541,12 @@
           "event": "BLOCKED",
           "reason": "Post-commit delivery verification for usage-audit commit 07f68ee failed again: git push and independent git ls-remote could not connect to github.com:443 through 127.0.0.1; remote branch remains unverified.",
           "evidence": "local commit 07f68ee; git push exit 1; git ls-remote exit 1; proxy connection failure"
+        },
+        {
+          "time": "2026-10-18T04:52:00+00:00",
+          "event": "BLOCKED",
+          "reason": "After local commit 4069a20, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local commit is present, but remote delivery is not verified.",
+          "evidence": "git push origin autopilot/scientific-law-discovery; git ls-remote origin refs/heads/autopilot/scientific-law-discovery; local commit 4069a20"
         }
       ]
     },
