@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18T04:01:46+00:00",
+  "updated_at": "2026-10-18T04:25:04+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -51,13 +51,13 @@
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
       "status": "BLOCKED",
-      "evidence": "docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_BILLING_RECONCILIATION.json; docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODEL_PROVENANCE.json; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json",
+      "evidence": "docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_OPERATION_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_COMPATIBILITY_PREFLIGHT.json",
       "remediation": "Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-18T03:52:53+00:00",
+      "last_seen": "2026-10-18T04:25:04+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 3,
-      "blocked_reason": "V3 offline provider/cost gate re-audit remains externally blocked: no provider-verified pricing, invoice/usage export, or immutable model identity; no paid call made.",
+      "blocked_reason": "Authorized minimal paid compatibility preflight completed: qwen3.5-plus and glm-5.2 both passed, but no usage/invoice/pricing/model-identity evidence was returned; formal G7 dispatch remains blocked.",
       "verification": null,
       "history": [
         {
@@ -142,6 +142,18 @@
           "event": "BLOCKED",
           "reason": "V3 offline provider/cost gate re-audit remains externally blocked: no provider-verified pricing, invoice/usage export, or immutable model identity; no paid call made.",
           "evidence": "docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_BILLING_RECONCILIATION.json; docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODEL_PROVENANCE.json; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json"
+        },
+        {
+          "time": "2026-10-18T04:23:02+00:00",
+          "event": "BLOCKED",
+          "reason": "Real execution preflight was run against the frozen G7 inputs and stopped before provider dispatch: input contract passed, but provider-verified pricing, billing export, and immutable model snapshot were absent.",
+          "evidence": "docs/audits/cycle-20261018T-g6g7-v3/REAL_PROVIDER_PREFLIGHT_BLOCKED.json; provider_calls_made=false; pricing_evidence_not_found; billing_export_not_found; model_snapshot_manifest_not_found"
+        },
+        {
+          "time": "2026-10-18T04:25:04+00:00",
+          "event": "BLOCKED",
+          "reason": "Authorized minimal paid compatibility preflight completed: qwen3.5-plus and glm-5.2 both passed, but no usage/invoice/pricing/model-identity evidence was returned; formal G7 dispatch remains blocked.",
+          "evidence": "docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_OPERATION_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_COMPATIBILITY_PREFLIGHT.json"
         }
       ]
     },

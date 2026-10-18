@@ -7,7 +7,16 @@
   "LU_legacy": "LU_UNVERIFIED",
   "Q_v2": "NOT_RUN",
   "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC",
-  "provider": "BLOCKED_EXTERNAL_SOURCE",
+  "provider": "COMPATIBILITY_PREFLIGHT_PASS_BUT_BILLING_IDENTITY_UNVERIFIED",
+  "paid_compatibility_preflight": {
+    "requests": 2,
+    "results": {
+      "qwen3.5-plus": "PASS",
+      "glm-5.2": "PASS"
+    },
+    "scientific_evidence": false,
+    "cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING"
+  },
   "cost_gate": "BLOCKED_NO_PROVIDER_VERIFIED_PRICING_OR_HISTORICAL_CONSERVATIVE_CEILING",
   "evidence": {
     "source_manifest": "FROZEN_INPUT_SHA256.json",

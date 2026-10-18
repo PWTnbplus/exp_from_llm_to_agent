@@ -1,5 +1,12 @@
 {
-  "v3_cycle_new_api_spend_usd": 0.0,
+  "v3_cycle_new_api_spend_usd": null,
+  "v3_cycle_paid_compatibility_requests": 2,
+  "v3_cycle_paid_compatibility_results": {
+    "qwen3.5-plus": "PASS",
+    "glm-5.2": "PASS"
+  },
+  "v3_cycle_paid_compatibility_cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING",
+  "v3_cycle_paid_compatibility_record": "REAL_PAID_OPERATION_RECORD.json",
   "provider_invoice_or_usage_export_present": false,
   "provider_verified_pricing_present": false,
   "local_proxy_estimates_not_billing": true,
@@ -14,5 +21,5 @@
     "audited_g6_plus_raw_g7_total_usd": 14.973609
   },
   "safe_remaining_budget_claim": false,
-  "reason": "No supplier billing export or provider-verified historical ceiling is available."
+  "reason": "Two authorized compatibility requests were sent, but no supplier billing export, usage field, or provider-verified historical ceiling is available."
 }

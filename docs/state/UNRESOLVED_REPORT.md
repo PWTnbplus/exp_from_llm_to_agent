@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T04:01:46+00:00
+生成时间（UTC）：2026-10-18T04:25:04+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -27,11 +27,11 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_BILLING_RECONCILIATION.json; docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODEL_PROVENANCE.json; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_OPERATION_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_COMPATIBILITY_PREFLIGHT.json
 - 必需修复：Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：V3 offline provider/cost gate re-audit remains externally blocked: no provider-verified pricing, invoice/usage export, or immutable model identity; no paid call made.
+- 阻塞原因：Authorized minimal paid compatibility preflight completed: qwen3.5-plus and glm-5.2 both passed, but no usage/invoice/pricing/model-identity evidence was returned; formal G7 dispatch remains blocked.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established

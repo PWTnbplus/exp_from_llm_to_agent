@@ -1,0 +1,9 @@
+{
+  "base_url": "https://token.ctflow.cn/v1",
+  "models": {
+    "qwen3.5-plus": true,
+    "glm-5.2": true
+  },
+  "verified_at_utc": "2026-10-18T04:24:12.244359+00:00",
+  "protocol": "provisional_openai_chat_completions"
+}

@@ -10,6 +10,6 @@ Legacy Q remains NOT_SCORED/INELIGIBLE. Legacy L/U remains unverified with no pu
 
 Q-v2/LU-v2: strict schemas, independent verifier hooks, leakage tests and synthetic smoke passed; real formal V2 metrics are `NOT_RUN` and no synthetic result is scientific evidence.
 
-Cost: this V3 cycle added USD 0 API spend. The frozen G6 audited trace view is USD 6.057783 and raw G6 attempts are USD 6.610445; raw G7 trace directories are USD 8.915826. These are local proxy estimates, not provider billing; the raw-all trace sum is USD 15.526271 and no safe remaining budget is claimed. G7 aggregate/per-worker sub-budgets were not consumed.
+Cost: after explicit authorization, this V3 cycle sent 2 minimal compatibility requests (`qwen3.5-plus`, `glm-5.2`), both PASS; no formal scientific request or G7 retry was sent. The provider returned no usage/invoice cost, so new paid cost is `UNKNOWN_UNVERIFIED_PROVIDER_BILLING`, not zero. The frozen G6 audited trace view is USD 6.057783 and raw G6 attempts are USD 6.610445; raw G7 trace directories are USD 8.915826. These historical values are local proxy estimates, not provider billing; no safe remaining budget is claimed.
 
 Scientific release: BLOCKED. Offline engineering, source hashing, math classification, trace regression and V2 contract validation are complete to their evidence boundary; external billing/pricing/model identity and real V2/G7 missing responses remain unresolved.

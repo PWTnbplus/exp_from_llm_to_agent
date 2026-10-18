@@ -1,0 +1,25 @@
+{
+  "operation": "MINIMAL_PROVIDER_COMPATIBILITY_PREFLIGHT",
+  "authorized": true,
+  "provider": "ctflow",
+  "base_url": "https://token.ctflow.cn/v1",
+  "requests_sent": 2,
+  "responses_passed": 2,
+  "models": {
+    "qwen3.5-plus": "PASS",
+    "glm-5.2": "PASS"
+  },
+  "request_contract": {
+    "endpoint": "/chat/completions",
+    "stream": false,
+    "max_tokens": 8,
+    "prompt": "Reply OK."
+  },
+  "verified_at_utc": "2026-10-18T04:24:12.244359+00:00",
+  "formal_scientific_run": false,
+  "g7_missing_state_retry": false,
+  "provider_usage_or_invoice_returned": false,
+  "cost_usd": null,
+  "cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING",
+  "scientific_release_effect": "no_unlock"
+}
