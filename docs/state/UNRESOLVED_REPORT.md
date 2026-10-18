@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T15:10:25+00:00
+生成时间（UTC）：2026-10-18T16:00:15+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -11,8 +11,8 @@
 
 ### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：No historical rows were edited. The 150/150-state, 72/72-checkpoint recovery and 13 valid retry-target traces remain separate from the 13 retained historical lifecycle failures.
-- 必需修复：Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis.
+- 证据：The v7 state remains 150/150 states and 72/72 checkpoints with 13/13 valid new retries, while all 13 historical lifecycle errors remain preserved. No v8 cohort edits or deletes those historical rows.
+- 必需修复：Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.
 - 尝试次数：2
 - 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
 - 阻塞原因：未记录
@@ -35,16 +35,16 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：A targeted recovery of the 11 frozen Q-v2 NOT_SCORED cases made 17 additional Kimi K2.5 calls, including 3 format retries. Independent audit passed; the recovery yielded PASS 1, INCONCLUSIVE 7, and NOT_SCORED 3. The original 92-case denominator remains unchanged. A separate public-only G6 CF3 boundary review covered all 138 rows using 23 public formula witnesses: 95 model actions aligned with the public witness and 43 did not. It used no private oracle and explicitly does not claim scientific release.
-- 必需修复：Obtain an independent blinded truth set and domain-grade mathematical/statistical review. Keep targeted Q recovery separate from the frozen 92-case denominator and retain the 43 public-review failures.
+- 证据：A new isolated Q blind-truth calibration made 24 real kimi-k2.5 provider calls (24 structured responses). Its truth key was generated before execution and was never read by the runner or sent to the model; independent derivative-sign scoring gives TRUTH_MATCH=24/24. The frozen Q-v2 92-case denominator and its nonconfirmatory counts remain unchanged. The calibration is public supplementary evidence, not a replacement for domain-grade blinded review of the frozen cohort.
+- 必需修复：Retain the 24/24 public calibration as supplementary evidence and obtain an independent domain-grade blinded review for the frozen 92-case cohort before scientific release.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：V3 prospective Q-v2/LU-v2 contract and anti-leakage smoke pass, but real formal scoring remains NOT_RUN; no scientific statistical inference is released.
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
-- 证据：Cycle 102: Kimi K2.5 G6 canonical audit retained the corrected 552-row layout and zero revision-valid rows; the run remains RESOLVED_UNVERIFIED because the external mathematical review is absent. Evidence: docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json.
-- 必需修复：Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
+- 证据：The new public-only corrective cohort targeted exactly the 43 rows identified by the v7 boundary review and made 54 kimi-k2.5 provider calls, including 11 visible format retries. Independent chain-of-custody audit passes for all 43 rows; 35 candidates are structurally valid, 19 align with the public boundary witness, 16 still disagree, and 3 have candidate-quality defects. The historical 43 mismatches remain immutable and are not retroactively changed.
+- 必需修复：Keep the historical 43 failures and new correction evidence separate; obtain independent mathematical/domain review and a protocol-approved reanalysis before changing G6 scientific status.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261012T150331Z-14/audit.json
 - 阻塞原因：未记录
@@ -59,8 +59,8 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：Three additional public-only LU/U replicate cohorts completed 33 real Kimi K2.5 calls: 1, 6, and 3 independently validated non-final state transitions respectively, with 23 no-state-change records. Together with the initial 11-call cohort, the four-batch aggregate is 44 calls, 13 observed transitions, and 31 no-state-change observations. Every batch passed independent graph/trace/model/isolation audits.
-- 必需修复：Treat the 13 transitions as observed public model behavior only; obtain protocol-approved causal validation and retain all 31 no-change observations before making a U claim.
+- 证据：A new public paired control/intervention calibration made 24 primary kimi-k2.5 calls plus 6 visible format retries (30 traces total). The independent public truth key validates 5 complete causal contrasts; all remaining mismatches and NOT_SCORED records are retained. This does not retroactively relabel the historical LU/U observations or convert the formal G7 U denominator into a causal estimate.
+- 必需修复：Retain the paired calibration and obtain protocol-approved causal validation on the formal LU/U population; do not pool the calibration into the historical G7 denominator.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：V3 preserves legacy L/U as unverified and adds strict LU-v2 DAG/transition validation; real public-edge evidence remains absent, so no dependency or causal claim is made.

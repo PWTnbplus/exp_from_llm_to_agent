@@ -1,0 +1,73 @@
+{
+  "cycle": "20261018T-v8-scientific-resolution",
+  "generated_at_utc": "2026-10-18T15:59:53.6140005Z",
+  "scope": "single-model public G6 mismatch correction, Q blind-truth calibration, and LU/U paired causal calibration",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "title": "Formal statistical validity is not established",
+        "evidence": "A new isolated Q blind-truth calibration made 24 real kimi-k2.5 provider calls (24 structured responses). Its truth key was generated before execution and was never read by the runner or sent to the model; independent derivative-sign scoring gives TRUTH_MATCH=24/24. The frozen Q-v2 92-case denominator and its nonconfirmatory counts remain unchanged. The calibration is public supplementary evidence, not a replacement for domain-grade blinded review of the frozen cohort.",
+        "remediation": "Retain the 24/24 public calibration as supplementary evidence and obtain an independent domain-grade blinded review for the frozen 92-case cohort before scientific release."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "title": "LU/U formal causal validation is not established",
+        "evidence": "A new public paired control/intervention calibration made 24 primary kimi-k2.5 calls plus 6 visible format retries (30 traces total). The independent public truth key validates 5 complete causal contrasts; all remaining mismatches and NOT_SCORED records are retained. This does not retroactively relabel the historical LU/U observations or convert the formal G7 U denominator into a causal estimate.",
+        "remediation": "Retain the paired calibration and obtain protocol-approved causal validation on the formal LU/U population; do not pool the calibration into the historical G7 denominator."
+      },
+      {
+        "id": "ISSUE-ff97c7c89112",
+        "severity": "P1",
+        "title": "G6 public mathematical inconsistencies remain",
+        "evidence": "The new public-only corrective cohort targeted exactly the 43 rows identified by the v7 boundary review and made 54 kimi-k2.5 provider calls, including 11 visible format retries. Independent chain-of-custody audit passes for all 43 rows; 35 candidates are structurally valid, 19 align with the public boundary witness, 16 still disagree, and 3 have candidate-quality defects. The historical 43 mismatches remain immutable and are not retroactively changed.",
+        "remediation": "Keep the historical 43 failures and new correction evidence separate; obtain independent mathematical/domain review and a protocol-approved reanalysis before changing G6 scientific status."
+      },
+      {
+        "id": "ISSUE-7c2d4e9a10bf",
+        "severity": "P1",
+        "title": "G7 historical lifecycle failures remain part of the record",
+        "evidence": "The v7 state remains 150/150 states and 72/72 checkpoints with 13/13 valid new retries, while all 13 historical lifecycle errors remain preserved. No v8 cohort edits or deletes those historical rows.",
+        "remediation": "Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change."
+      }
+    ],
+    "resolutions": []
+  },
+  "engineering": {
+    "single_model": "kimi-k2.5",
+    "g6_public_mismatch_target": 43,
+    "g6_public_mismatch_provider_calls": 54,
+    "g6_public_mismatch_format_retries": 11,
+    "g6_public_mismatch_valid_candidates": 35,
+    "g6_public_alignment": 19,
+    "g6_public_mismatch_remaining_in_new_review": 16,
+    "q_blind_truth_provider_calls": 24,
+    "q_blind_truth_truth_match": "24/24",
+    "lu_u_causal_primary_calls": 24,
+    "lu_u_causal_total_traces": 30,
+    "lu_u_causal_validated_contrasts": 5,
+    "g7_states": 150,
+    "g7_checkpoints": 72,
+    "g7_historical_lifecycle_failures_retained": 13,
+    "private_labels_read": false,
+    "answer_keys_sent_to_model": false,
+    "pooled_with_frozen_formal_denominators": false,
+    "scientific_release_allowed": false
+  },
+  "artifacts": {
+    "g6_audit": "docs/audits/cycle-20261018T-v8-scientific-resolution/G6_PUBLIC_MISMATCH_AUDIT.json",
+    "q_audit": "docs/audits/cycle-20261018T-v8-scientific-resolution/Q_BLIND_TRUTH_AUDIT.json",
+    "lu_u_audit": "docs/audits/cycle-20261018T-v8-scientific-resolution/LU_U_CAUSAL_AUDIT.json",
+    "g6_run": "runs/ctflow_single_model/20261018T-v8-g6-public-mismatch-review",
+    "q_run": "runs/ctflow_single_model/20261018T-v8-q-blind-truth-run",
+    "lu_u_run": "runs/ctflow_single_model/20261018T-v8-lu-u-causal-run"
+  },
+  "test": {
+    "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_v4_q_lu.py tests/test_g7_protocol.py tests/test_g7_trace_q_consistency.py",
+    "exit_code": 0,
+    "evidence": "87 passed in 2.41s; py_compile passed for all v8 runners/auditors; git diff --check passed."
+  },
+  "interpretation": "Execution and public calibration advanced, but the scientific release gate remains BLOCKED. New public calibration truth is not silently substituted for the frozen formal cohorts, and historical G6/G7 failures remain immutable."
+}

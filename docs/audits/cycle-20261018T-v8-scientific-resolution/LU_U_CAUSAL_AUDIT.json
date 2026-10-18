@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "audit_version": "lu-u-causal-independent-v1",
+  "task_count": 12,
+  "record_count": 24,
+  "trace_count": 30,
+  "status_counts": {
+    "control:NOT_SCORED": 2,
+    "control:TRUTH_MATCH": 9,
+    "control:TRUTH_MISMATCH": 1,
+    "intervention:NOT_SCORED": 2,
+    "intervention:TRUTH_MATCH": 7,
+    "intervention:TRUTH_MISMATCH": 3,
+    "validated_causal_contrast": 5
+  },
+  "task_sha256": "3401391bdcc5ddb3c4b77451839475d2c17c1e975c2006be5be05a07e2d99de4",
+  "truth_key_sha256": "6ba3c4ab32244a0e172194f04d16751f0c45b7898fc2c93d21f43c681f3dc1ae",
+  "records_sha256": "e5fb11faa1a94a4b53d921b34e201822404e27cdece24280a2678bbf386ec664",
+  "traces_sha256": "cf57eeb67c440bbf0aad0febcd7349059dd00e0db79d16c6fc6403e45c58c719",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": [
+    {
+      "task_id": "LUCT-001-linear_pos_to_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-002-linear_pos2_to_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-003-linear_neg_to_pos",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-004-identity_neg_to_pos",
+      "control": "NOT_SCORED",
+      "intervention": "NOT_SCORED",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-005-zero_nondec_to_neg",
+      "control": "TRUTH_MISMATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-006-zero_noninc_to_pos",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-007-square_pos_to_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-008-square_neg_to_pos",
+      "control": "NOT_SCORED",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-009-intercept_only_pos",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-010-intercept_only_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-011-constant_nondec",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-012-constant_noninc",
+      "control": "TRUTH_MATCH",
+      "intervention": "NOT_SCORED",
+      "validated_causal_contrast": false
+    }
+  ],
+  "interpretation": "Validated paired contrasts are public causal calibration evidence only; they do not retroactively convert the historical LU/U observations into a formal G7 causal estimate."
+}

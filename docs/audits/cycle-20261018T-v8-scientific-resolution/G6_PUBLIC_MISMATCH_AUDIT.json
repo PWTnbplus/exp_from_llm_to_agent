@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "audit_version": "g6-public-mismatch-independent-v1",
+  "plan_count": 43,
+  "record_count": 43,
+  "trace_count": 54,
+  "valid_candidate_count": 35,
+  "public_alignment_counts": {
+    "PUBLIC_ALIGNMENT": 19,
+    "PUBLIC_MISMATCH_REMAINS": 16
+  },
+  "validation_error_counts": {
+    "invalid_affected_claim_ids": 1,
+    "missing_boundary_handling": 2,
+    "none": 40
+  },
+  "candidate_quality_issues": [
+    "candidate_claim_ids:g6_c3fcf5cd076139514703",
+    "candidate_boundary:g6_0cfd540d493a21c38300",
+    "candidate_boundary:g6_f24e891e3c73c7190354"
+  ],
+  "plan_sha256": "cf9ccc92b8c15e1b7e7aa208ef9b7825179b50013cec3f78678db806c933ce1d",
+  "records_sha256": "c33cd953132601b3910da239a447e741fff1a750388be9639eddab22c5c4cb69",
+  "traces_sha256": "14ca333c50c271e80c34b245bb4908186dce68e74ef719fa93d64004eb3ed32d",
+  "private_labels_read": false,
+  "private_oracle_read": false,
+  "pooled_with_frozen_g6": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "engineering_audit_pass": true,
+  "interpretation": "A public alignment after corrective review is not a blinded oracle score and cannot erase the 43 historical mismatches."
+}

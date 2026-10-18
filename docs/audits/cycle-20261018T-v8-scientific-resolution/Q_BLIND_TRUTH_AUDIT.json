@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "audit_version": "q-blind-truth-independent-v1",
+  "task_count": 24,
+  "record_count": 24,
+  "trace_count": 24,
+  "status_counts": {
+    "TRUTH_MATCH": 24
+  },
+  "task_sha256": "a5036159852a764be03ca499f0dbdf0b3d42f18cf865cd7b383946d9d2eb6e91",
+  "truth_key_sha256": "b90dc11b1e0b317a3e44eb2d8779c603f3a4153bab8d285bab652c199cdc651b",
+  "records_sha256": "e54637009f5b8c9418f17ee339ff9fd5ef9e8a034559a38a292a313f3b339c0d",
+  "traces_sha256": "90d4356ed7baecdb5e6c65754b56956d3c95dd38e7262ed0218cf683067bebb1",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_frozen_q_v2": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "interpretation": "Truth matches are an independent public calibration result; they do not replace the frozen Q-v2 92-case confirmatory analysis.",
+  "rows": [
+    {
+      "task_id": "QBT-001-linear_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-002-linear_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-003-identity",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-004-negative_identity",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-005-constant_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-006-constant_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-007-quadratic_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-008-quadratic_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-009-linear_pos_2",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-010-linear_neg_2",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-011-cubic_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-012-cubic_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-013-linear_pos_3",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-014-linear_neg_3",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-015-quadratic_shift_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-016-quadratic_shift_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-017-constant_seven",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-018-constant_zero",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-019-quartic_pos",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-020-quartic_neg",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-021-linear_zero_intercept",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-022-negative_zero_intercept",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-023-constant_two",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    },
+    {
+      "task_id": "QBT-024-constant_minus_two",
+      "status": "TRUTH_MATCH",
+      "reason": "independent_derivative_sign_and_expression_match"
+    }
+  ]
+}
