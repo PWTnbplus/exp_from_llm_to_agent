@@ -1,0 +1,148 @@
+{
+  "protocol_id": "LU_V2_PUBLIC_DERIVED",
+  "public_input": "data\\theory_benchmark_v3\\public_tasks.json",
+  "public_sha256": "c3fea70a32c2c593e7fa32284aefde9ce27beb91ce81dc8f189219d505a9ffdb",
+  "graph_count": 11,
+  "edge_count": 22,
+  "independently_verified_edges": 22,
+  "u_transition_candidates": 0,
+  "u_transition_verified": 0,
+  "skipped_task_ids": [],
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "scientific_status": "PUBLIC_DERIVATION_ONLY_NOT_A_MODEL_BEHAVIOR_RESULT",
+  "proofs": [
+    {
+      "task_id": "TC-L1-001",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-001.json",
+      "proof_sha256": "fea14a016ce9593989da3691b6f313a54758d7eb4ba0502e82a94ea48683f654",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "d3e716097f4909b168495ca57218d60fb3ef42794a293a22a7e977c96988e19e",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-002",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-002.json",
+      "proof_sha256": "901a24b60060ea1bb6596e6b055f657347153af7a2c366fb5e4dc0937825a4e8",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "70587c9f1c3bef0a94f08d61ee5918c22e1f369a6f2dca6613b095c89dfd2f32",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-003",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-003.json",
+      "proof_sha256": "a17762d342a170065436ac0f1cb40bcd9a38c0ac0c89bc9a4fa8750ea12421eb",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "d824d6193a5ba5b3904c1d3f5daef62e4b6307631675dace183b010780d76c06",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-004",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-004.json",
+      "proof_sha256": "3ba4bdf44d7cd4d69376de6bc826565a7e86c9c6b6b486ac4e0921ae7effaad9",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "e9cf233b718c4b61c8a8d0a38a27e3c86bd57b848cad9d95e0a76944a8526f77",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-005",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-005.json",
+      "proof_sha256": "10e42f0a14987364f12979718382abb384814690380499ffad52b3673fe56f95",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "9713b40fe9ef9b2c1e9dee139084d91c611a1f769eeccac279d3ac767a7f1ada",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-006",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-006.json",
+      "proof_sha256": "329c24010858be316095c06e00931942f10de0409263d01b489239bafcffdf77",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "f96288c03cccd82a5776f11b980ee965b3c7ad8f07bc7717e0bde88ab8049f84",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-007",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-007.json",
+      "proof_sha256": "20edebc6bb987071d1b1fa994a8766f1734630dbd75fb1d023e142bc2d832254",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "dc37240f4acc585d97ea9786a88a2809e7b4bb55414191bb3c094ddfc419efc6",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-009",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-009.json",
+      "proof_sha256": "bde41c2a13c80b13d870f5543f653b8b17dfb8e8909f84c8823cf88033bd86ee",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "5258854ee84aacd3ce0c4bc9792e987a32dd61c6863f0d57f904912b0ccbcc85",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-011",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-011.json",
+      "proof_sha256": "3b28d5857e24d0de756d88833fb5d78ff5846341464e379edd2a80239ca8f82f",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "39638e62b8f0aea3cf47db3dc8232ad5b6873a7d8c97c1eff064f4ba809e27c5",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-012",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-012.json",
+      "proof_sha256": "308f61f041d7e9f69d698667a0d3c9b9b8694e7e480da82fc4884a88669a7c54",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "3545771333c4a9119a01b82c25838045775b1404ef35164d11e7c94dcc0313d0",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-017",
+      "proof_ref": "LU_V2_PROOFS_EXTENDED/TC-L1-017.json",
+      "proof_sha256": "10d4232dbc1726bd50d7489cbc52f6bae3785a461d4391496a421660e60fd559",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "24e1a68cfe30a19210bdf474bd4c526a826e9b63e13ea3767e84ec184e7ea42d",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    }
+  ]
+}

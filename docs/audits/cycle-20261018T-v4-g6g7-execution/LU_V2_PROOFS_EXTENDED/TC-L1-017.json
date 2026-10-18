@@ -1,0 +1,12 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-017",
+  "public_model": "rate=k[A]^2[B]",
+  "derivation": "Verify the public mass-action rate's logarithmic sensitivities to A and B.",
+  "symbolic_checks": {
+    "A_log_sensitivity": true,
+    "B_log_sensitivity": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

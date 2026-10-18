@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T09:50:14+00:00
+生成时间（UTC）：2026-10-18T11:44:38+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -11,16 +11,16 @@
 
 ### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/G7_EXECUTOR_REGRESSION.json; docs/audits/cycle-20261018T-g6g7-v3/G7_TRACE_15_EXPLAINED_13_INVALID.jsonl; docs/audits/cycle-20261018T-g6g7-v3/18_INDEPENDENT_READ_ONLY_REVIEW_V3.json
-- 必需修复：Keep the append-safe retry fix. Do not claim historical trace cleanliness until the 13 remaining final-attempt failures are independently resolved or rerun under the corrected writer; retain all failures and keep G7 scientific release blocked.
+- 证据：New Kimi K2.5 run completed 150/150 states and 72/72 checkpoints; 13/13 retry-target latest traces pass, but historical raw lifecycle failures remain immutable and are not erased.
+- 必需修复：Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis.
 - 尝试次数：2
 - 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/QWEN_G7_PILOT_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/QWEN_G7_PILOT_INDEPENDENT_REVIEW.json; docs/audits/cycle-20261018T-g6g7-v3/CTFLOW_QWEN35_PLUS_PRICING_EVIDENCE.json
-- 必需修复：Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
+- 证据：Authenticated provider catalog returned HTTP 200 and service IDs including kimi-k2.5, but no immutable weight fingerprint or billing/usage export was returned; local trace usage remains non-confirmatory.
+- 必需修复：Obtain provider-verifiable billing/usage reconciliation and immutable route or weight identity; keep scientific release closed until independently verified.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：One-case Qwen G7 execution pilot completed under provider-public Qwen pricing after a local token-limit configuration fix; the pilot is non-confirmatory and separate from the historical denominator. Account-level billing/invoice, historic provider-charge reconciliation, and immutable model identity remain unavailable, so the scientific release gate remains closed.
@@ -35,8 +35,8 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/V2_SCHEMA_VALIDATION_AND_LEAKAGE_TESTS.json; docs/audits/cycle-20261018T-g6g7-v3/V2_FINAL_METRICS.json
-- 必需修复：Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
+- 证据：The isolated Q-v2 cohort has 92/92 successful responses with independent counts PASS 9, FAIL 3, INCONCLUSIVE 26, NOT_SCORED 54; the G6 CF3 retry public-only verifier has PASS 23, INCONCLUSIVE 62, NOT_SCORED 53; controlled exact revision validity is 0/138.
+- 必需修复：Obtain independent domain-grade mathematical and statistical review and preregister the confirmatory denominator before any scientific inference or release.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：V3 prospective Q-v2/LU-v2 contract and anti-leakage smoke pass, but real formal scoring remains NOT_RUN; no scientific statistical inference is released.
@@ -59,16 +59,16 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/LU_LEGACY_OBSERVABILITY_AUDIT.json; docs/audits/cycle-20261018T-g6g7-v3/V2_PROTOCOL_AND_PREREGISTRATION.md
-- 必需修复：Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.
+- 证据：Extended public-only LU-v2 construction produced 11 DAGs and 22/22 independently verified SymPy edges, but no observed model-state transition was available and U remains 0/0.
+- 必需修复：Obtain an independently audited dependency/state dataset with observed model transitions; do not convert public derivations into model-behavior or U evidence.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：V3 preserves legacy L/U as unverified and adds strict LU-v2 DAG/transition validation; real public-edge evidence remains absent, so no dependency or causal claim is made.
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/G7_STATE_ATTEMPT_MATRIX.csv; docs/audits/cycle-20261018T-g6g7-v3/G7_TRACE_15_EXPLAINED_13_INVALID.jsonl; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json
-- 必需修复：Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.
+- 证据：The corrected run now has 150/150 completed state records and the separate Q-v2 cohort has 92/92 provider responses, but these new non-confirmatory artifacts do not retroactively change the historical denominator or release gate.
+- 必需修复：Keep new execution evidence separate from the frozen historical denominator and obtain independent scientific review before changing the formal gate.
 - 尝试次数：22
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
 - 阻塞原因：V3 re-audit preserves the full 1288-state denominator, 137 checkpoint-missing plus 1 provider-error state, and all 28 historical trace defects; provider retry remains blocked by external evidence gates.

@@ -1,0 +1,33 @@
+{
+  "audit_version": "authenticated-provider-catalog-v1",
+  "checked_at_utc": "2026-10-18T10:32:25.765144+00:00",
+  "endpoint": "https://token.ctflow.cn/v1/models",
+  "http_status": 200,
+  "response_sha256": "4b0b4d108a8ab0bc5da6cb735d8ef8c03d67d42ef73b92a3588034583b0ecd9f",
+  "requested_model_id": "kimi-k2.5",
+  "catalog_model_matches": [
+    {
+      "id": "kimi/kimi-k2.5",
+      "object": "model",
+      "created": 1626777600,
+      "owned_by": "openai",
+      "supported_endpoint_types": [
+        "openai"
+      ]
+    },
+    {
+      "id": "kimi-k2.5",
+      "object": "model",
+      "created": 1626777600,
+      "owned_by": "openai",
+      "supported_endpoint_types": [
+        "openai"
+      ]
+    }
+  ],
+  "catalog_exact_model_id_present": true,
+  "immutable_weight_fingerprint_present": false,
+  "billing_export_present": false,
+  "scientific_release_allowed": false,
+  "interpretation": "Authenticated catalog identity is verified for this response only; it is not immutable weight or billing evidence."
+}\n

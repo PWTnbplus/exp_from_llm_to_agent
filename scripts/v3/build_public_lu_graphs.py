@@ -27,6 +27,15 @@ except ModuleNotFoundError:  # direct ``python scripts/v3/build_public_lu_graphs
 RULES = {
     "dA/dt=-kA": "exponential_decay_solution",
     "dA/dt=-kA^2": "reciprocal_decay_solution",
+    "dA/dt=-k": "zero_order_decay_solution",
+    "k(T)=A exp(-Ea/(RT))": "arrhenius_inverse_temperature_slope",
+    "DeltaG\u00b0=-RT ln K": "thermodynamic_equilibrium_relation",
+    "d ln K/dT=DeltaH\u00b0/(RT^2)": "van_t_hoff_temperature_derivative",
+    "Z=1+exp(-epsilon/(RT))": "two_state_partition_derivative",
+    "A -> B (kB), A -> C (kC)": "parallel_first_order_decay",
+    "pH=pKa+log10([A-]/[HA])": "henderson_hasselbalch_identity",
+    "v=Vmax*S/(Km+S)": "michaelis_menten_monotonicity_and_limit",
+    "rate=k[A]^2[B]": "mass_action_log_sensitivities",
 }
 
 
@@ -42,7 +51,7 @@ def read_json(path: Path) -> list[dict[str, Any]]:
 
 
 def proof_for(task: dict[str, Any]) -> dict[str, Any] | None:
-    model = str(task.get("mathematical_model", "")).split(" ", 1)[0]
+    model = str(task.get("mathematical_model", "")).strip()
     if model == "dA/dt=-kA":
         A0, k, t, A = sp.symbols("A0 k t A", real=True)
         expression = A0 * sp.exp(-k * t)
@@ -55,6 +64,62 @@ def proof_for(task: dict[str, Any]) -> dict[str, Any] | None:
         checks = {"reciprocal_derivative_k": sp.simplify(sp.diff(reciprocal, t) - k) == 0,
                   "initial_reciprocal": sp.simplify(reciprocal.subs(t, 0) - 1 / A0) == 0}
         derivation = "Differentiate 1/A: d(1/A)/dt=-(1/A^2)dA/dt=k, then integrate from 0 to t."
+    elif model == "dA/dt=-k":
+        A0, k, t = sp.symbols("A0 k t", real=True)
+        expression = A0 - k * t
+        checks = {"ode_residual_zero": sp.simplify(sp.diff(expression, t) + k) == 0,
+                  "initial_value": sp.simplify(expression.subs(t, 0) - A0) == 0}
+        derivation = "A(t)=A0-k*t; differentiate and verify the initial value."
+    elif model == "k(T)=A exp(-Ea/(RT))":
+        A, Ea, R, inverse_temperature = sp.symbols("A Ea R inverse_temperature", positive=True)
+        expression = A * sp.exp(-Ea * inverse_temperature / R)
+        checks = {"arrhenius_log_slope": sp.simplify(sp.diff(sp.log(expression), inverse_temperature) + Ea / R) == 0}
+        derivation = "Set u=1/T and verify d(log k)/du=-Ea/R symbolically."
+    elif model == "DeltaG\u00b0=-RT ln K":
+        DG = sp.symbols("DG", real=True)
+        R, T = sp.symbols("R T", positive=True)
+        expression = sp.exp(-DG / (R * T))
+        log_expression = sp.refine(sp.log(expression), sp.Q.real(DG))
+        checks = {"equilibrium_log_relation": sp.simplify(log_expression + DG / (R * T)) == 0}
+        derivation = "Solve the public thermodynamic relation as K=exp(-DeltaG/(R*T)) and verify its logarithm."
+    elif model == "d ln K/dT=DeltaH\u00b0/(RT^2)":
+        DH, K0 = sp.symbols("DH K0", real=True)
+        R, T = sp.symbols("R T", positive=True)
+        expression = K0 * sp.exp(-DH / (R * T))
+        checks = {"van_t_hoff_derivative": sp.simplify(sp.diff(sp.log(expression), T) - DH / (R * T**2)) == 0}
+        derivation = "Use K=K0*exp(-DeltaH/(R*T)) and verify the public van't Hoff derivative."
+    elif model == "Z=1+exp(-epsilon/(RT))":
+        epsilon = sp.symbols("epsilon", real=True)
+        R, T = sp.symbols("R T", positive=True)
+        expression = 1 + sp.exp(-epsilon / (R * T))
+        expected = epsilon * sp.exp(-epsilon / (R * T)) / (R * T**2)
+        checks = {"partition_temperature_derivative": sp.simplify(sp.diff(expression, T) - expected) == 0}
+        derivation = "Differentiate the public two-state partition function with respect to temperature."
+    elif model == "A -> B (kB), A -> C (kC)":
+        A0, kB, kC, t = sp.symbols("A0 kB kC t", positive=True)
+        expression = A0 * sp.exp(-(kB + kC) * t)
+        checks = {"parallel_decay_residual": sp.simplify(sp.diff(expression, t) + (kB + kC) * expression) == 0,
+                  "initial_value": sp.simplify(expression.subs(t, 0) - A0) == 0}
+        derivation = "For two independent first-order exits, verify the public total-loss solution."
+    elif model == "pH=pKa+log10([A-]/[HA])":
+        H, anion, acid, Ka = sp.symbols("H anion acid Ka", positive=True)
+        pH = -sp.log(H, 10)
+        pKa = -sp.log(Ka, 10)
+        identity = sp.expand_log(pH - (pKa + sp.log(anion / acid, 10)), force=True)
+        checks = {"henderson_hasselbalch_identity": sp.simplify(identity.subs(Ka, H * anion / acid)) == 0}
+        derivation = "Substitute Ka=H*[A-]/[HA] into the public pH and pKa definitions and simplify."
+    elif model == "v=Vmax*S/(Km+S)":
+        Vmax, S, Km = sp.symbols("Vmax S Km", positive=True)
+        expression = Vmax * S / (Km + S)
+        checks = {"positive_substrate_derivative": sp.simplify(sp.diff(expression, S) - Vmax * Km / (Km + S)**2) == 0,
+                  "saturation_limit": sp.simplify(sp.limit(expression, S, sp.oo) - Vmax) == 0}
+        derivation = "Differentiate the public Michaelis-Menten expression and verify its positive-substrate saturation limit."
+    elif model == "rate=k[A]^2[B]":
+        k, A, B = sp.symbols("k A B", positive=True)
+        expression = k * A**2 * B
+        checks = {"A_log_sensitivity": sp.simplify(A * sp.diff(sp.log(expression), A) - 2) == 0,
+                  "B_log_sensitivity": sp.simplify(B * sp.diff(sp.log(expression), B) - 1) == 0}
+        derivation = "Verify the public mass-action rate's logarithmic sensitivities to A and B."
     else:
         return None
     return {
@@ -96,7 +161,7 @@ def build_graph(task: dict[str, Any], proof_ref: str) -> dict[str, Any]:
         {
             "source_claim_id": f"{task_id}:model",
             "target_claim_id": f"{task_id}:derived",
-            "inference_rule": RULES[model],
+            "inference_rule": RULES.get(model, "independent_public_symbolic_derivation"),
             "assumptions": ["public model only", "symbolic proof_pass=true"],
             "independent_proof_ref": proof_ref,
             "graph_sha256": "",

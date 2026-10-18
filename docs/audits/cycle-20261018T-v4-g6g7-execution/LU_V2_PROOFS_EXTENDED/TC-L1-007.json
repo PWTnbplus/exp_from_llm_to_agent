@@ -1,0 +1,11 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-007",
+  "public_model": "Z=1+exp(-epsilon/(RT))",
+  "derivation": "Differentiate the public two-state partition function with respect to temperature.",
+  "symbolic_checks": {
+    "partition_temperature_derivative": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

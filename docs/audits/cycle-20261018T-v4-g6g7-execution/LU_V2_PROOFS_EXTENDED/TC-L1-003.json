@@ -1,0 +1,12 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-003",
+  "public_model": "dA/dt=-k",
+  "derivation": "A(t)=A0-k*t; differentiate and verify the initial value.",
+  "symbolic_checks": {
+    "ode_residual_zero": true,
+    "initial_value": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

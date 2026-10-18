@@ -1,0 +1,11 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-011",
+  "public_model": "pH=pKa+log10([A-]/[HA])",
+  "derivation": "Substitute Ka=H*[A-]/[HA] into the public pH and pKa definitions and simplify.",
+  "symbolic_checks": {
+    "henderson_hasselbalch_identity": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

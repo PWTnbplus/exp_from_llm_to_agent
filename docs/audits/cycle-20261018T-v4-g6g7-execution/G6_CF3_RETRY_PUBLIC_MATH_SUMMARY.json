@@ -1,0 +1,26 @@
+{
+  "experiment_id": "g6_counterfactual",
+  "scope": "CF3 retry independent public-only mathematical audit",
+  "plan_count": 138,
+  "response_count": 138,
+  "audit_count": 138,
+  "status_counts": {
+    "INCONCLUSIVE": 62,
+    "NOT_SCORED": 53,
+    "PASS": 23
+  },
+  "decision_counts": {
+    "MAINTAIN": 47,
+    "REJECT": 57,
+    "REVISE": 32,
+    "UNDETERMINED": 2
+  },
+  "failures": [],
+  "plan_sha256": "6db2816dbc00e9ff2eae6a29f3910386fd28071ec7c639b6693b8779d600ff51",
+  "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+  "responses_sha256": "fa4f8c6ae747e20fc890c4735acf953c59f4ea16f03ff344b025bcbe3ef0aca8",
+  "private_oracle_loaded": false,
+  "private_labels_used": false,
+  "scientific_release_allowed": false,
+  "verifier_source_sha256": "c0d15c2e87b89c34fdf088cb894128c1982f342353aaea8b9bf3cc5daf563f92"
+}

@@ -1,0 +1,12 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-009",
+  "public_model": "A -> B (kB), A -> C (kC)",
+  "derivation": "For two independent first-order exits, verify the public total-loss solution.",
+  "symbolic_checks": {
+    "parallel_decay_residual": true,
+    "initial_value": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

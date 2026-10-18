@@ -22,6 +22,23 @@ def test_public_lu_proof_and_graph_are_independently_validated() -> None:
     assert graph["u_transition_eligible"] is False
 
 
+def test_public_lu_extended_symbolic_rules_are_fail_closed_and_verified() -> None:
+    models = [
+        "dA/dt=-k",
+        "k(T)=A exp(-Ea/(RT))",
+        "DeltaG\u00b0=-RT ln K",
+        "d ln K/dT=DeltaH\u00b0/(RT^2)",
+        "Z=1+exp(-epsilon/(RT))",
+        "A -> B (kB), A -> C (kC)",
+        "pH=pKa+log10([A-]/[HA])",
+        "v=Vmax*S/(Km+S)",
+        "rate=k[A]^2[B]",
+    ]
+    for index, model in enumerate(models, 3):
+        proof = proof_for({"task_id": f"TC-L1-{index:03d}", "mathematical_model": model, "assumptions": []})
+        assert proof is not None and proof["proof_pass"] is True
+
+
 def test_q_v2_record_uses_independent_local_verifier() -> None:
     candidate = {
         "claim_id": "public-claim",

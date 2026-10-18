@@ -1,0 +1,11 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-005",
+  "public_model": "DeltaG°=-RT ln K",
+  "derivation": "Solve the public thermodynamic relation as K=exp(-DeltaG/(R*T)) and verify its logarithm.",
+  "symbolic_checks": {
+    "equilibrium_log_relation": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

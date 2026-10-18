@@ -1,0 +1,30 @@
+{
+  "experiment_id": "g6_counterfactual",
+  "plan_count": 138,
+  "response_count": 138,
+  "trace_count": 138,
+  "model_request_count": 390,
+  "model_response_count": 390,
+  "tool_call_count": 488,
+  "tool_result_count": 488,
+  "total_tokens_from_responses": 442760,
+  "total_cost_usd_from_responses": 0.563098,
+  "terminal_failure_count": 0,
+  "segment_end_statuses": {
+    "completed": 138
+  },
+  "revision_audit_count": 138,
+  "revision_valid_count": 0,
+  "plan_sha256": "6db2816dbc00e9ff2eae6a29f3910386fd28071ec7c639b6693b8779d600ff51",
+  "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+  "private_oracle_sha256": "e966efbadffea604d4de735a0323dbb5ffb2593e510bb8a456cb84422258d6c0",
+  "canonical_responses_sha256": "fa4f8c6ae747e20fc890c4735acf953c59f4ea16f03ff344b025bcbe3ef0aca8",
+  "manifest_count": 2,
+  "protocol_profile": "g6_protocol_g3_tools_iteration",
+  "worker_counts": [
+    2
+  ],
+  "failures": [],
+  "pass": true,
+  "scientific_caveat": "The private oracle is grade C controlled-intervention evidence; this audit does not upgrade it to independent domain-grade A/B truth."
+}

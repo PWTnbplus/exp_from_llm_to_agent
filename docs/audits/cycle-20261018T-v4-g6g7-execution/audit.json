@@ -1,0 +1,69 @@
+{
+  "cycle": "20261018T-v4-g6g7-execution",
+  "scope": "single-model Kimi K2.5 G6/G7 execution recovery",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-7c2d4e9a10bf",
+        "severity": "P1",
+        "title": "Historical G7 lifecycle failures remain retained after successful corrected retries",
+        "evidence": "New Kimi K2.5 run completed 150/150 states and 72/72 checkpoints; 13/13 retry-target latest traces pass, but historical raw lifecycle failures remain immutable and are not erased.",
+        "remediation": "Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "title": "Provider billing and immutable model identity remain unavailable",
+        "evidence": "Authenticated provider catalog returned HTTP 200 and service IDs including kimi-k2.5, but no immutable weight fingerprint or billing/usage export was returned; local trace usage remains non-confirmatory.",
+        "remediation": "Obtain provider-verifiable billing/usage reconciliation and immutable route or weight identity; keep scientific release closed until independently verified."
+      },
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "title": "Formal Q/math/statistical validity remains incomplete",
+        "evidence": "The isolated Q-v2 cohort has 92/92 successful responses with independent counts PASS 9, FAIL 3, INCONCLUSIVE 26, NOT_SCORED 54; the G6 CF3 retry public-only verifier has PASS 23, INCONCLUSIVE 62, NOT_SCORED 53; controlled exact revision validity is 0/138.",
+        "remediation": "Obtain independent domain-grade mathematical and statistical review and preregister the confirmatory denominator before any scientific inference or release."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "title": "LU dependency/state evidence is still derivation-only",
+        "evidence": "Extended public-only LU-v2 construction produced 11 DAGs and 22/22 independently verified SymPy edges, but no observed model-state transition was available and U remains 0/0.",
+        "remediation": "Obtain an independently audited dependency/state dataset with observed model transitions; do not convert public derivations into model-behavior or U evidence."
+      },
+      {
+        "id": "ISSUE-3d7a9c1e5b20",
+        "severity": "P1",
+        "title": "Historical G7 terminal/Q coverage issue remains non-confirmatory",
+        "evidence": "The corrected run now has 150/150 completed state records and the separate Q-v2 cohort has 92/92 provider responses, but these new non-confirmatory artifacts do not retroactively change the historical denominator or release gate.",
+        "remediation": "Keep new execution evidence separate from the frozen historical denominator and obtain independent scientific review before changing the formal gate."
+      }
+    ],
+    "resolutions": []
+  },
+  "test": {
+    "command": [
+      "E:/resources/python/python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_v4_q_lu.py",
+      "tests/test_g7_protocol.py",
+      "tests/test_g7_trace_q_consistency.py"
+    ],
+    "exit_code": 0
+  },
+  "engineering": {
+    "single_model": "kimi-k2.5",
+    "g6_handoff_rows": 552,
+    "g7_states_completed": 150,
+    "g7_checkpoints_completed": 72,
+    "g7_retry_target_latest_traces_valid": 13,
+    "q_v2_provider_calls": 92,
+    "lu_public_graphs": 11,
+    "lu_verified_edges": 22,
+    "g6_cf3_retry_responses": 138,
+    "g6_cf3_retry_trace_valid": 138,
+    "scientific_release_allowed": false
+  }
+}

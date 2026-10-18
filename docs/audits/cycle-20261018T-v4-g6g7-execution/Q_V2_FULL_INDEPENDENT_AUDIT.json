@@ -1,0 +1,31 @@
+{
+  "audit_version": "q-v2-full-independent-rereview-v1",
+  "records": 92,
+  "unique_case_ids": 92,
+  "traces": 92,
+  "unique_trace_calls": 92,
+  "models": [
+    "kimi-k2.5"
+  ],
+  "stored_counts": {
+    "NOT_SCORED": 54,
+    "FAIL": 3,
+    "INCONCLUSIVE": 26,
+    "PASS": 9
+  },
+  "recomputed_counts": {
+    "NOT_SCORED": 54,
+    "FAIL": 3,
+    "INCONCLUSIVE": 26,
+    "PASS": 9
+  },
+  "stored_matches_recomputed": true,
+  "proof_hashes_valid": true,
+  "provider_successful_responses": 92,
+  "provider_errors": 0,
+  "parse_errors": 54,
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "formal_scientific_run_allowed": false
+}\n

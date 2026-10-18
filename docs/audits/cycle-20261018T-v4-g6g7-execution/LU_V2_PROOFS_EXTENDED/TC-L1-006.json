@@ -1,0 +1,11 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-006",
+  "public_model": "d ln K/dT=DeltaH°/(RT^2)",
+  "derivation": "Use K=K0*exp(-DeltaH/(R*T)) and verify the public van't Hoff derivative.",
+  "symbolic_checks": {
+    "van_t_hoff_derivative": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

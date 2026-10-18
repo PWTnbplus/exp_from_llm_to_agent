@@ -1,0 +1,12 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-012",
+  "public_model": "v=Vmax*S/(Km+S)",
+  "derivation": "Differentiate the public Michaelis-Menten expression and verify its positive-substrate saturation limit.",
+  "symbolic_checks": {
+    "positive_substrate_derivative": true,
+    "saturation_limit": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

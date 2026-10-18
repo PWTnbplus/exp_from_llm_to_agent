@@ -1,0 +1,11 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-004",
+  "public_model": "k(T)=A exp(-Ea/(RT))",
+  "derivation": "Set u=1/T and verify d(log k)/du=-Ea/R symbolically.",
+  "symbolic_checks": {
+    "arrhenius_log_slope": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}
