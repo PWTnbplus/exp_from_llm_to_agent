@@ -1,12 +1,18 @@
 {
   "v3_cycle_new_api_spend_usd": null,
-  "v3_cycle_paid_compatibility_requests": 2,
+  "v3_cycle_paid_compatibility_requests": 4,
   "v3_cycle_paid_compatibility_results": {
     "qwen3.5-plus": "PASS",
     "glm-5.2": "PASS"
   },
   "v3_cycle_paid_compatibility_cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING",
   "v3_cycle_paid_compatibility_record": "REAL_PAID_OPERATION_RECORD.json",
+  "provider_response_usage_observed": true,
+  "provider_response_usage_tokens_followup": {
+    "qwen3.5-plus": 180,
+    "glm-5.2": 23
+  },
+  "provider_response_cost_fields_present": false,
   "provider_invoice_or_usage_export_present": false,
   "provider_verified_pricing_present": false,
   "local_proxy_estimates_not_billing": true,
@@ -21,5 +27,5 @@
     "audited_g6_plus_raw_g7_total_usd": 14.973609
   },
   "safe_remaining_budget_claim": false,
-  "reason": "Two authorized compatibility requests were sent, but no supplier billing export, usage field, or provider-verified historical ceiling is available."
+  "reason": "Four authorized compatibility requests were sent. Two follow-up responses exposed token usage, but no provider cost field, invoice/export, verified pricing, or provider-verified historical ceiling is available."
 }

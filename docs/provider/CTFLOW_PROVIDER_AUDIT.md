@@ -38,3 +38,11 @@
 - 尚无符合要求的真实 NewtonBench 科学 runner 和逐运行成本硬上限。
 
 因此，本次只完成了提供方目录和最小兼容性预检，没有进行科学 pilot、正式矩阵运行或科学结论推断。原有 `ISSUE-000000000002`（真实提供方 pilot 与重试/成本行为未验证）继续保持开放。
+
+## 2026-10-18 live documentation and response-usage addendum
+
+The provider documentation was fetched over HTTPS at `https://token.ctflow.cn/tokendocs` and returned HTTP 200. It documents the same-origin OpenAI-compatible base URL `https://token.ctflow.cn/v1`, `/chat/completions`, `/models`, and Bearer authentication. The documentation describes usage-log inspection but does not provide a machine-verifiable per-model price artifact or billing export for this experiment.
+
+The authenticated live model catalog returned the exact selected IDs `qwen3.5-plus` and `glm-5.2`. Four total paid compatibility requests were made in this V3 cycle; all four returned HTTP 200 and a valid response. Two follow-up responses exposed usage but no cost field: qwen3.5-plus reported 180 total tokens and glm-5.2 reported 23 total tokens. These are compatibility/usage-audit requests only, not scientific observations.
+
+Current state: `configs/model_matrix.json` contains a real runner command and local reservation controls, but `scripts/run_g7_failure_localization.py` still requires provider-verified pricing evidence before dispatch. No formal G7 retry or V2 scientific run was started. The historical matrix-gate paragraph above is retained as prior-cycle evidence; the current V3 gate state is recorded in `docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json`.

@@ -3,8 +3,8 @@
   "authorized": true,
   "provider": "ctflow",
   "base_url": "https://token.ctflow.cn/v1",
-  "requests_sent": 2,
-  "responses_passed": 2,
+  "requests_sent": 4,
+  "responses_passed": 4,
   "models": {
     "qwen3.5-plus": "PASS",
     "glm-5.2": "PASS"
@@ -16,9 +16,38 @@
     "prompt": "Reply OK."
   },
   "verified_at_utc": "2026-10-18T04:24:12.244359+00:00",
+  "followup_usage_audit": {
+    "requests_sent": 2,
+    "verified_at_utc": "2026-10-18T04:33:03.493599+00:00",
+    "responses": {
+      "qwen3.5-plus": {
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 13,
+          "total_tokens": 180,
+          "completion_tokens": 167,
+          "reasoning_tokens": 161,
+          "text_tokens": 167
+        },
+        "cost_field": null
+      },
+      "glm-5.2": {
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 15,
+          "total_tokens": 23,
+          "completion_tokens": 8,
+          "reasoning_tokens": 8,
+          "cached_tokens": 0
+        },
+        "cost_field": null
+      }
+    }
+  },
   "formal_scientific_run": false,
   "g7_missing_state_retry": false,
-  "provider_usage_or_invoice_returned": false,
+  "provider_response_usage_returned": true,
+  "provider_invoice_or_cost_returned": false,
   "cost_usd": null,
   "cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING",
   "scientific_release_effect": "no_unlock"

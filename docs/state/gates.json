@@ -9,8 +9,8 @@
     "path": "docs/audits/cycle-20261018T-g6g7-v3",
     "independent_review": "PASS",
     "real_v2_formal_runs": 0,
-    "new_paid_api_calls": 2,
-    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; not scientific evidence",
+    "new_paid_api_calls": 4,
+    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; follow-up usage observed but no cost field; not scientific evidence",
     "protected_source_hashes_unchanged": true
   },
   "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",

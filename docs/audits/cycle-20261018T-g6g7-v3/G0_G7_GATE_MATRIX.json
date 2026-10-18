@@ -9,11 +9,13 @@
   "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC",
   "provider": "COMPATIBILITY_PREFLIGHT_PASS_BUT_BILLING_IDENTITY_UNVERIFIED",
   "paid_compatibility_preflight": {
-    "requests": 2,
+    "requests": 4,
     "results": {
       "qwen3.5-plus": "PASS",
       "glm-5.2": "PASS"
     },
+    "provider_response_usage_observed": true,
+    "provider_response_cost_fields_present": false,
     "scientific_evidence": false,
     "cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING"
   },
