@@ -1,0 +1,38 @@
+{
+  "review_version": "qwen-g7-pilot-read-only-v1",
+  "pass": true,
+  "scope": "one-case non-confirmatory Qwen G7 pilot",
+  "checks": {
+    "runner_summary_json_valid": true,
+    "state_count_equals_selected_rows": true,
+    "all_states_completed": true,
+    "checkpoint_count_equals_selected_rows": true,
+    "all_checkpoints_completed": true,
+    "state_trace_has_run_start_and_run_end": true,
+    "state_trace_has_no_failed_terminal_event": true,
+    "checkpoint_trace_has_run_start_and_run_end": true,
+    "frozen_public_label_plan_hashes_match_summary": true,
+    "pricing_evidence_status_provider_verified_for_qwen": true,
+    "paid_evidence_override_explicit_and_scientific_release_false": true,
+    "cost_ledger_settled_matches_summary": true,
+    "historical_denominator_untouched": true
+  },
+  "observed": {
+    "plan_count": 1288,
+    "selected_rows": 1,
+    "states": 1,
+    "completed_states": 1,
+    "completed_checkpoints": 1,
+    "trace_events": 7,
+    "checkpoint_trace_events": 8,
+    "model_calls": 4,
+    "tool_calls": 1,
+    "total_tokens": 7314,
+    "local_ledger_settled_usd": 0.0145112,
+    "scientific_release_allowed": false,
+    "confirmatory_inference_allowed": false,
+    "provider_account_billing_verified": false
+  },
+  "source": "QWEN_G7_PILOT_RECORD.json",
+  "scientific_truth_decision_made": false
+}

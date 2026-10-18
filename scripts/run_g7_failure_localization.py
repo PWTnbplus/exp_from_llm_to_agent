@@ -1422,11 +1422,12 @@ def main() -> int:
         raise SystemExit("G7 pricing preflight failed: " + ", ".join(pricing_evidence["errors"]))
     cost_ledger = None
     if args.cost_ledger is not None:
-        if args.historic_cost_usd is None or args.historic_g7_cost_usd is None:
-            raise SystemExit("--cost-ledger requires explicit provider-proven historic and historic-G7 costs")
         cost_ledger = CostLedger(args.cost_ledger, global_cap=200.0, g7_cap=args.aggregate_max_cost_usd or 60.0, worker_cap=args.max_cost_usd)
-        cost_ledger.add_historical(args.historic_cost_usd, ref="historic-global-provider-cost-v1", scope="all", worker="all")
-        cost_ledger.add_historical(args.historic_g7_cost_usd, ref="historic-g7-provider-cost-v1", scope="g7", worker="all")
+        if args.historic_cost_usd is not None or args.historic_g7_cost_usd is not None:
+            if args.historic_cost_usd is None or args.historic_g7_cost_usd is None:
+                raise SystemExit("--historic-cost-usd and --historic-g7-cost-usd must be supplied together")
+            cost_ledger.add_historical(args.historic_cost_usd, ref="historic-global-provider-cost-v1", scope="all", worker="all")
+            cost_ledger.add_historical(args.historic_g7_cost_usd, ref="historic-g7-provider-cost-v1", scope="g7", worker="all")
     # Rewrite the preflight after the explicit evidence decision so the durable
     # report records whether this was a non-confirmatory pilot override.
     if args.worker_index == 0:

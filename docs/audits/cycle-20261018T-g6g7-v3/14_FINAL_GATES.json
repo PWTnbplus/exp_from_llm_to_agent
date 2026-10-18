@@ -64,7 +64,18 @@
       "duplicate_state_ids": 0,
       "preserves_frozen_denominator": true,
       "trace_valid_completed_canonical": 1123,
-      "trace_valid_completed_trace_qualified": 1138
+      "trace_valid_completed_trace_qualified": 1138,
+      "non_confirmatory_qwen_pilot": {
+        "selected_rows": 1,
+        "state": "completed",
+        "provider_requests": 9,
+        "model_calls_completed_retry": 4,
+        "tool_calls_completed_retry": 1,
+        "total_tokens_completed_retry": 7314,
+        "local_estimate_total_across_attempts_usd": 0.031124,
+        "pooled_into_historical_denominator": false,
+        "record": "QWEN_G7_PILOT_RECORD.json"
+      }
     },
     "trace": {
       "old_trace_failures": 28,
@@ -103,7 +114,7 @@
       "responses_with_local_usage": 6885,
       "billing_verified": false,
       "model_identity_verified": false,
-      "status": "PROVIDER_BILLING_UNVERIFIED;MODEL_IDENTITY_UNVERIFIED"
+      "status": "QWEN_PUBLIC_PRICE_ONLY;PROVIDER_BILLING_UNVERIFIED;MODEL_IDENTITY_UNVERIFIED"
     }
   }
 }

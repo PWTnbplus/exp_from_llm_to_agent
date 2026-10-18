@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T04:34:48+00:00
+生成时间（UTC）：2026-10-18T04:49:09+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -19,11 +19,11 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_OPERATION_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/REAL_PAID_COMPATIBILITY_PREFLIGHT.json; docs/provider/CTFLOW_PROVIDER_AUDIT.md
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/QWEN_G7_PILOT_RECORD.json; docs/audits/cycle-20261018T-g6g7-v3/QWEN_G7_PILOT_INDEPENDENT_REVIEW.json; docs/audits/cycle-20261018T-g6g7-v3/CTFLOW_QWEN35_PLUS_PRICING_EVIDENCE.json
 - 必需修复：Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Four authorized compatibility requests now completed: all responses passed; two follow-up responses exposed token usage, but no provider cost field, invoice/export, verified pricing, or immutable model identity was returned. Formal G7 dispatch remains blocked.
+- 阻塞原因：One-case Qwen G7 execution pilot completed under provider-public Qwen pricing after a local token-limit configuration fix; the pilot is non-confirmatory and separate from the historical denominator. Account-level billing/invoice, historic provider-charge reconciliation, and immutable model identity remain unavailable, so the scientific release gate remains closed.
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked

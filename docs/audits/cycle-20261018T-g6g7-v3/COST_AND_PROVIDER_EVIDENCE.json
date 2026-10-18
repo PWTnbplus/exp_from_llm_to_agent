@@ -14,7 +14,14 @@
   },
   "provider_response_cost_fields_present": false,
   "provider_invoice_or_usage_export_present": false,
-  "provider_verified_pricing_present": false,
+  "provider_verified_pricing_present": true,
+  "provider_verified_pricing_scope": ["qwen3.5-plus"],
+  "provider_verified_pricing_record": "CTFLOW_QWEN35_PLUS_PRICING_EVIDENCE.json",
+  "qwen_g7_pilot_local_estimate_usd": 0.0145112,
+  "qwen_g7_pilot_initial_failed_attempt_local_estimate_usd": 0.0166128,
+  "qwen_g7_pilot_total_local_estimate_usd": 0.031124,
+  "qwen_g7_pilot_actual_account_charge_usd": null,
+  "qwen_g7_pilot_record": "QWEN_G7_PILOT_RECORD.json",
   "local_proxy_estimates_not_billing": true,
   "historical_local_trace_estimates": {
     "g6_raw_all_attempts_usd": 6.610445,
@@ -27,5 +34,5 @@
     "audited_g6_plus_raw_g7_total_usd": 14.973609
   },
   "safe_remaining_budget_claim": false,
-  "reason": "Four authorized compatibility requests were sent. Two follow-up responses exposed token usage, but no provider cost field, invoice/export, verified pricing, or provider-verified historical ceiling is available."
+  "reason": "Four authorized compatibility requests were sent and a separate one-case Qwen G7 execution pilot completed after a local token-limit configuration fix. Qwen public pricing is now provider-verifiable, but the compatibility calls have no cost field/invoice, the pilot has no account-level billing receipt, GLM/Kimi USD pricing is not verified, historic provider billing is not reconciled, and immutable model identity remains unavailable."
 }

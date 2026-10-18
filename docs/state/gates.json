@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-10-18T03:53:00+00:00",
+  "generated_at_utc": "2026-10-18T04:49:09+00:00",
   "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
   "scientific_release_allowed": false,
   "mock_is_not_science_evidence": true,
@@ -9,8 +9,9 @@
     "path": "docs/audits/cycle-20261018T-g6g7-v3",
     "independent_review": "PASS",
     "real_v2_formal_runs": 0,
-    "new_paid_api_calls": 4,
-    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; follow-up usage observed but no cost field; not scientific evidence",
+    "new_paid_api_calls": 13,
+    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; four compatibility requests plus nine Qwen pilot requests; Qwen public price verified, account billing and model identity unresolved; not scientific evidence",
+    "qwen_g7_pilot": "COMPLETED_NON_CONFIRMATORY; 1 frozen case; 4 model calls; 1 tool call; 7314 tokens; local ledger estimate USD 0.0145112; historical denominator unchanged",
     "protected_source_hashes_unchanged": true
   },
   "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
@@ -113,7 +114,7 @@
       "scope": "formal_scientific_release",
       "evidence": [
         "Kimi K2.5 strict preflight passed without provider calls: 1288/1288 plan rows, 184/184 checkpoints, seven arms per checkpoint, exact corrected input hashes, and zero protocol/lineage/privacy errors.",
-        "The V3 state/attempt matrix preserves the full 1288/1288 frozen denominator, 184/184 checkpoints, and state accounting of 1150 completed, 137 checkpoint_missing, and 1 provider_error. It independently recomputes provider request and genuine response counts from immutable selected traces. Canonical trace-valid selection is 1123/1288; the separate trace-qualified sensitivity view is 1138/1288 completed attempts. The 138 missing states require real provider responses and were not paid for or fabricated.",
+        "The V3 state/attempt matrix preserves the full 1288/1288 frozen denominator, 184/184 checkpoints, and state accounting of 1150 completed, 137 checkpoint_missing, and 1 provider_error. It independently recomputes provider request and genuine response counts from immutable selected traces. Canonical trace-valid selection is 1123/1288; the separate trace-qualified sensitivity view is 1138/1288 completed attempts. The 138 missing states require real provider responses and were not paid for or fabricated. A separate one-case Qwen pilot completed under explicit non-confirmatory override and is not pooled into this denominator.",
         "The independent Q audit reports 0 verified PASS, 0 FAIL, 0 INCONCLUSIVE, 1150 NOT_SCORED, and 138 INELIGIBLE; private labels and private oracle were not read. No confirmatory reuse or scientific accuracy claim is made.",
         "The historical 28 trace defects reconcile exactly to 15 attempt-boundary artifacts plus 13 genuine final-attempt inconsistencies; raw history is preserved and the append-safe writer fix is covered by adversarial tests. L/U evidence remains unverified: 0 declared graph edges and 0 scored U rows. Evidence: docs/audits/cycle-20261018T-g6g7-v3/G7_STATE_ATTEMPT_MATRIX.csv, G7_TRACE_15_EXPLAINED_13_INVALID.jsonl, G7_EXECUTOR_REGRESSION.json, and 18_INDEPENDENT_READ_ONLY_REVIEW_V3.json."
       ],

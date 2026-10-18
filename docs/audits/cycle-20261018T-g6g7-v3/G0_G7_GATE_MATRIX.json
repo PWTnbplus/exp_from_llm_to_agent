@@ -7,7 +7,7 @@
   "LU_legacy": "LU_UNVERIFIED",
   "Q_v2": "NOT_RUN",
   "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC",
-  "provider": "COMPATIBILITY_PREFLIGHT_PASS_BUT_BILLING_IDENTITY_UNVERIFIED",
+  "provider": "QWEN_PRICE_VERIFIED_PILOT_BUT_BILLING_IDENTITY_UNVERIFIED",
   "paid_compatibility_preflight": {
     "requests": 4,
     "results": {
@@ -19,7 +19,19 @@
     "scientific_evidence": false,
     "cost_status": "UNKNOWN_UNVERIFIED_PROVIDER_BILLING"
   },
-  "cost_gate": "BLOCKED_NO_PROVIDER_VERIFIED_PRICING_OR_HISTORICAL_CONSERVATIVE_CEILING",
+  "qwen_g7_pilot": {
+    "record": "QWEN_G7_PILOT_RECORD.json",
+    "selected_rows": 1,
+    "state": "COMPLETED_NON_CONFIRMATORY",
+    "model_calls": 4,
+    "tool_calls": 1,
+    "total_tokens": 7314,
+    "local_pricing_estimate_usd": 0.0145112,
+    "account_billing_verified": false,
+    "pooled_into_historical_denominator": false,
+    "scientific_evidence": false
+  },
+  "cost_gate": "BLOCKED_PROVIDER_BILLING_IDENTITY_AND_HISTORICAL_CEILING; QWEN_PUBLIC_PRICE_ONLY",
   "evidence": {
     "source_manifest": "FROZEN_INPUT_SHA256.json",
     "executor_regression": "G7_EXECUTOR_REGRESSION.json",

@@ -1,0 +1,23 @@
+{
+  "verification_status": "PROVIDER_VERIFIED",
+  "provider": "ctflow",
+  "model_id": "qwen3.5-plus",
+  "base_url": "https://token.ctflow.cn/v1",
+  "currency": "USD",
+  "input_cost_per_1k": 0.0008,
+  "output_cost_per_1k": 0.0048,
+  "source_url": "https://token.ctflow.cn/api/pricing",
+  "source_sha256": "69034004ecca9ca4f4389add63829662c8a0965951777a371cb5a802f00386b7",
+  "effective_from_utc": "2026-10-18T04:38:34+00:00",
+  "pricing_version": "a42d372ccf0b5dd13ecf71203521f9d2",
+  "group": "模型官方原价",
+  "context_tier": "len <= 128000",
+  "provider_billing_expression": "p * 0.8 + c * 4.8",
+  "rate_unit": "USD per 1M tokens in provider expression; converted to USD per 1K for the runner",
+  "derivation": {
+    "input": "0.8 / 1000",
+    "output": "4.8 / 1000",
+    "group_ratio": 1
+  },
+  "scientific_truth_decision_made": false
+}

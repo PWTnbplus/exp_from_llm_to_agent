@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-18T04:00:53.665070+00:00",
+  "created_at_utc": "2026-10-18T04:52:00+00:00",
   "pass": true,
   "runs": [
     {
@@ -32,7 +32,7 @@
         "-q"
       ],
       "exit_code": 0,
-      "stdout_tail": "........................................................................ [ 25%]\n........................................................................ [ 51%]\n........................................................................ [ 77%]\n...............................................................          [100%]\n279 passed in 18.67s\n",
+      "stdout_tail": "........................................................................ [ 25%]\n........................................................................ [ 51%]\n........................................................................ [ 77%]\n...............................................................          [100%]\n279 passed in 33.09s\n",
       "stderr_tail": "",
       "status": "PASS"
     },
@@ -61,8 +61,17 @@
       "status": "PASS"
     }
   ],
+  "latest_post_pilot_verification": {
+    "targeted_tests": "tests/test_g7_protocol.py tests/test_cost_ledger.py tests/test_v3_observability.py",
+    "targeted_result": "63 passed in 3.20s",
+    "full_result": "279 passed in 33.09s",
+    "independent_review": "scripts/audit_repair/review_v3_audit.py --docs docs/audits/cycle-20261018T-g6g7-v3: pass=true; protected_source_hashes_unchanged=true",
+    "pilot_review": "QWEN_G7_PILOT_INDEPENDENT_REVIEW.json: pass=true",
+    "json_validation": "6 changed JSON state/audit documents parsed successfully",
+    "git_diff_check": "pass"
+  },
   "code_sha256": {
-    "scripts/run_g7_failure_localization.py": "1127df2b0a5d8be47a90d0d4824202736316ebcfee3abab1e2e05a4cd7dbf8c1",
+    "scripts/run_g7_failure_localization.py": "82e976ead7aa50efdd8085d54112b5de58f33df1c92625270a73c427073311cc",
     "src/scientific_discovery/models/provider.py": "238ccb12ed221508849ef99073bb53d733bb75cbb076e6ad68c6f58a7aae3932",
     "scripts/audit_repair/cost_ledger.py": "10e4d09a276bba8ff7c8fcb0de24696dca167c6179fd838586aba9aeb7fab3a8",
     "scripts/audit_repair/math_verifier.py": "c0d15c2e87b89c34fdf088cb894128c1982f342353aaea8b9bf3cc5daf563f92",

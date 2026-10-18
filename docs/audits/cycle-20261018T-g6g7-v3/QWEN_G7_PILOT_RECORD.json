@@ -1,0 +1,72 @@
+{
+  "operation": "G7_NON_CONFIRMATORY_PROVIDER_PILOT",
+  "authorized": true,
+  "provider": "ctflow",
+  "model_id": "qwen3.5-plus",
+  "base_url": "https://token.ctflow.cn/v1",
+  "execution_mode": "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL",
+  "scientific_release_allowed": false,
+  "confirmatory_inference_allowed": false,
+  "frozen_inputs": {
+    "public": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_public_cases.jsonl",
+    "labels": "results/g7_failure_localization/formal-20261014T030000Z-16workers/g7_vlu_private.jsonl",
+    "plan": "results/g7_failure_localization/formal-20261015T060000Z-protocol-corrected-16workers/g7_full_retry_plan.jsonl",
+    "plan_count": 1288,
+    "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+    "labels_sha256": "29782338db2a76a7c854cacb8c68479cb6a47241caddadc26ba18393cc0e7490",
+    "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5"
+  },
+  "runs": {
+    "initial_hard_budget_failure": {
+      "path": "runs/ctflow_single_model/20261018T-qwen35plus-g7-v3-pilot",
+      "selected_rows": 1,
+      "state_status": "provider_error",
+      "provider_requests": 5,
+      "model_calls": 5,
+      "tool_calls": 2,
+      "total_tokens": 8896,
+      "local_pricing_estimate_usd": 0.0166128,
+      "failure": "Local max_total_tokens=8192 rejected the response after provider completion; raw trace and failed state retained."
+    },
+    "retry_after_runner_limit_configuration_fix": {
+      "path": "runs/ctflow_single_model/20261018T-qwen35plus-g7-v3-pilot-retry",
+      "selected_rows": 1,
+      "state_status": "completed",
+      "checkpoint_status": "completed",
+      "decision": "MAINTAIN",
+      "stages": {
+        "V": "SUPPORTED",
+        "L_nodes": [],
+        "L_edges": [],
+        "U_node_changes": [],
+        "Q": "SUPPORTED"
+      },
+      "provider_requests": 4,
+      "model_calls": 4,
+      "tool_calls": 1,
+      "total_tokens": 7314,
+      "local_pricing_estimate_usd": 0.0145112,
+      "cost_ledger_settled_usd": 0.0145112,
+      "cost_ledger": "runs/ctflow_single_model/20261018T-qwen35plus-g7-v3-pilot-retry/cost.sqlite",
+      "raw_artifact_sha256": {
+        "runner_summary.worker-1-0.json": "aaa666b43f472fd66ef7e88638b448fe12555615ea6949e145fde387a14d8499",
+        "states.worker-1-0.jsonl": "7cbaf1d4a6efb6449ffb7b72d33558c75ecd1c45c8dba7234881f4c5c7b50ae7",
+        "checkpoints.worker-1-0.jsonl": "3cf274d4c0d8762324ef4267b7d438a4d3afa5232900e964cb146ac923eacb4a",
+        "traces/g7full_e5a11d97205e71b63b13/events.jsonl": "c1324d4638e003252e015e49319320a84dd088e5db1bac647aa66563268a2a3e",
+        "checkpoint_traces/checkpoint_g7fullcp_f4f289d9a9700b478e4b/events.jsonl": "5eaac3eb651e5768f24a7d495599221f60485e11687fe27e9bc77a865bab56ac"
+      }
+    }
+  },
+  "provider_billing": {
+    "total_provider_requests_across_attempts": 9,
+    "total_local_pricing_estimate_usd_across_attempts": 0.031124,
+    "pricing_evidence": "CTFLOW_QWEN35_PLUS_PRICING_EVIDENCE.json",
+    "pricing_status": "PROVIDER_VERIFIED_FOR_QWEN35_PLUS_ONLY",
+    "provider_cost_field_present": false,
+    "invoice_or_usage_export_present": false,
+    "actual_account_charge_usd": null,
+    "local_estimate_is_invoice": false,
+    "note": "The runner estimate is derived from the provider public pricing expression and usage returned by the API. It is not an account-level billing receipt."
+  },
+  "audit_boundary": "This is an execution and compatibility pilot on one frozen case. It is not pooled into the historical 1288-state denominator and does not establish Q accuracy, L/U validity, model superiority, or any scientific law claim."
+}
