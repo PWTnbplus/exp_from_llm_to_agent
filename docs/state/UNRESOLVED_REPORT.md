@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T04:25:04+00:00
+生成时间（UTC）：2026-10-18T04:26:46+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -8,14 +8,6 @@
 - 未验证科学门禁：**G6, G7**
 
 ## 未解决和阻塞问题
-
-### ISSUE-000000000003 — P1 — IN_PROGRESS
-- 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：local commit 5b35d1d; git push origin autopilot/scientific-law-discovery exit 128; git ls-remote origin refs/heads/autopilot/scientific-law-discovery exit 128
-- 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
-- 尝试次数：2
-- 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：未记录
 
 ### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
@@ -32,6 +24,14 @@
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：Authorized minimal paid compatibility preflight completed: qwen3.5-plus and glm-5.2 both passed, but no usage/invoice/pricing/model-identity evidence was returned; formal G7 dispatch remains blocked.
+
+### ISSUE-000000000003 — P1 — BLOCKED
+- 描述：Upstream provenance and GitHub delivery are externally blocked
+- 证据：local commit d5910b0; git push exit 1; git ls-remote exit 1; proxy connection failure
+- 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
+- 尝试次数：2
+- 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
+- 阻塞原因：Post-commit delivery verification failed again: git push and independent git ls-remote could not connect to github.com:443 through 127.0.0.1; local commit d5910b0 exists and remote branch remains unverified.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established

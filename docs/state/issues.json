@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18T04:25:04+00:00",
+  "updated_at": "2026-10-18T04:26:46+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -161,14 +161,14 @@
       "id": "ISSUE-000000000003",
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
-      "status": "IN_PROGRESS",
-      "evidence": "local commit 5b35d1d; git push origin autopilot/scientific-law-discovery exit 128; git ls-remote origin refs/heads/autopilot/scientific-law-discovery exit 128",
+      "status": "BLOCKED",
+      "evidence": "local commit d5910b0; git push exit 1; git ls-remote exit 1; proxy connection failure",
       "remediation": "Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-18T04:01:45+00:00",
+      "last_seen": "2026-10-18T04:26:46+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 2,
-      "blocked_reason": null,
+      "blocked_reason": "Post-commit delivery verification failed again: git push and independent git ls-remote could not connect to github.com:443 through 127.0.0.1; local commit d5910b0 exists and remote branch remains unverified.",
       "verification": null,
       "history": [
         {
@@ -517,6 +517,12 @@
           "event": "IN_PROGRESS",
           "reason": "V3 delivery recheck failed: current git push and ls-remote could not connect to github.com through 127.0.0.1:443; local commit exists but remote state is unverified.",
           "evidence": "local commit 5b35d1d; git push origin autopilot/scientific-law-discovery exit 128; git ls-remote origin refs/heads/autopilot/scientific-law-discovery exit 128"
+        },
+        {
+          "time": "2026-10-18T04:26:46+00:00",
+          "event": "BLOCKED",
+          "reason": "Post-commit delivery verification failed again: git push and independent git ls-remote could not connect to github.com:443 through 127.0.0.1; local commit d5910b0 exists and remote branch remains unverified.",
+          "evidence": "local commit d5910b0; git push exit 1; git ls-remote exit 1; proxy connection failure"
         }
       ]
     },
