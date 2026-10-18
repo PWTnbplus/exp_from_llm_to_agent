@@ -35,6 +35,11 @@ FORBIDDEN_INPUT_TERMS = (
     "g7_vlu_private", "private_oracle", "expected_decision", "correct_revised_claim",
     "hidden_true", "answer_key", "v_true", "l_true", "u_true",
 )
+Q_FORMAT_RETRY_INSTRUCTION = (
+    "Your previous answer was not valid JSON or was truncated. Return only one compact JSON object now. "
+    "Use exactly the nine required fields. Keep claim_id short, assumptions and quantifiers to at most two "
+    "short strings, and use a one-variable typed_ast with no explanation or markdown."
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -112,7 +117,9 @@ def q_messages(payload: dict[str, Any]) -> list[dict[str, str]]:
                 "origin must be MODEL_GENERATED. For this cohort claim_type MUST be exactly "
                 "monotonicity, relation MUST be one of increasing, decreasing, nonincreasing, "
                 "or nondecreasing, and typed_ast MUST be a recursive object using only op/value/name/args "
-                "with ops number, variable, add, sub, mul, div, pow, or neg. "
+                "with ops number, variable, add, sub, mul, div, pow, or neg. Keep the response compact: "
+                "claim_id must be short; assumptions and quantifiers must each contain no more than two short strings; "
+                "do not include derivations, explanations, markdown, or extra fields. "
                 "For example, use {\"op\":\"mul\",\"args\":[{\"op\":\"number\",\"value\":-1},{\"op\":\"variable\",\"name\":\"x\"}]} "
                 "rather than a formula string. assumptions and quantifiers MUST be arrays of strings; "
                 "domain MUST be an object such as {\"variable\":\"x\",\"lower\":0,\"upper\":\"infinity\"}; "
@@ -154,6 +161,8 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
         "formal_scientific_run_allowed": False,
         "provider_calls_made": 0,
         "execution_status": "PREFLIGHT_ONLY",
+        "format_retries": args.format_retries,
+        "max_output_tokens": args.max_output_tokens,
     }
     (args.out / "cohort_plan.json").write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if args.preflight_only:
@@ -204,24 +213,38 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
     for item in prompts:
         provider_error = None
         response = None
-        try:
-            response = provider.complete(q_messages(item["prompt"]))
-        except RuntimeError as exc:
-            provider_error = str(exc)
-        trace = provider.audit_trace()[-1] if provider.audit_trace() else {
-            "call_index": len(provider.audit_trace()),
-            "model": args.model_id,
-            "error": {"type": "NO_PROVIDER_TRACE", "message": provider_error or "unknown"},
-        }
-        with traces_path.open("a", encoding="utf-8", newline="\n") as trace_handle:
-            trace_handle.write(json.dumps(trace, ensure_ascii=False, separators=(",", ":")) + "\n")
-        parse_error = None
+        parse_errors: list[str] = []
         candidate = None
-        if response is not None:
+        messages = q_messages(item["prompt"])
+        trace_start = len(provider.audit_trace())
+        for format_attempt in range(args.format_retries + 1):
+            try:
+                response = provider.complete(messages)
+            except RuntimeError as exc:
+                provider_error = str(exc)
+                break
             try:
                 candidate = extract_json_object(response.content)
+                break
             except (ValueError, json.JSONDecodeError) as exc:
-                parse_error = str(exc)
+                parse_errors.append(f"attempt_{format_attempt + 1}:{exc}")
+                if format_attempt < args.format_retries:
+                    messages = [
+                        *messages,
+                        {"role": "assistant", "content": response.content},
+                        {"role": "user", "content": Q_FORMAT_RETRY_INSTRUCTION},
+                    ]
+        traces = provider.audit_trace()[trace_start:]
+        if not traces:
+            traces = [{
+                "call_index": len(provider.audit_trace()),
+                "model": args.model_id,
+                "error": {"type": "NO_PROVIDER_TRACE", "message": provider_error or "unknown"},
+            }]
+        with traces_path.open("a", encoding="utf-8", newline="\n") as trace_handle:
+            for format_attempt, trace in enumerate(traces, 1):
+                trace = {**trace, "cohort_case_id": item["case_id"], "format_attempt": format_attempt}
+                trace_handle.write(json.dumps(trace, ensure_ascii=False, separators=(",", ":")) + "\n")
         proof_path = proofs / f"{item['case_id']}.json"
         record = {
             "protocol_id": "G7_Q_V2_PUBLIC_COHORT",
@@ -235,11 +258,13 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
                 "verifier_output_ref": str(proof_path.relative_to(args.out)).replace("\\", "/"),
             },
             "provider_usage": response.usage.__dict__ if response is not None else {},
+            "provider_attempts": len(traces),
+            "format_retry_used": len(traces) > 1,
         }
         if provider_error is not None:
             record["provider_error"] = provider_error
-        if parse_error is not None:
-            record["parse_error"] = parse_error
+        if parse_errors:
+            record["parse_errors"] = parse_errors
         proof = verify_q_record(record)
         proof_path.write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         record["q_evidence"]["verifier_output_sha256"] = sha256_file(proof_path)
@@ -257,7 +282,9 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
             if plan["pricing_override_used"]
             else "PAID_NONCONFIRMATORY_COHORT"
         ),
-        "provider_calls_made": len(records),
+        "provider_calls_made": len(provider.audit_trace()),
+        "provider_attempts_total": len(provider.audit_trace()),
+        "format_retry_count": sum(record.get("format_retry_used") is True for record in records),
         "provider_successful_responses": sum(record["provider_usage"] != {} for record in records),
         "independent_q_counts": {
             status: sum(record["independent_q"].get("status") == status for record in records)
@@ -289,8 +316,11 @@ def main() -> int:
     parser.add_argument("--input-cost-per-1k", type=float, default=0.001)
     parser.add_argument("--output-cost-per-1k", type=float, default=0.003)
     parser.add_argument("--max-output-tokens", type=int, default=256)
+    parser.add_argument("--format-retries", type=int, default=1, help="fixed public-only retry count for malformed/truncated JSON")
     parser.add_argument("--timeout", type=float, default=60.0)
     args = parser.parse_args()
+    if args.format_retries < 0 or args.format_retries > 2:
+        raise SystemExit("format retries must be between 0 and 2")
     try:
         result = run_cohort(args)
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:

@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T11:44:38+00:00
+生成时间（UTC）：2026-10-18T14:07:28+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -11,7 +11,7 @@
 
 ### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：New Kimi K2.5 run completed 150/150 states and 72/72 checkpoints; 13/13 retry-target latest traces pass, but historical raw lifecycle failures remain immutable and are not erased.
+- 证据：The new Kimi K2.5 recovery remains 150/150 states and 72/72 checkpoints with 13/13 retry-target latest traces valid. The 13 historical lifecycle failures remain retained and are not retroactively cleared or merged into a clean historical denominator.
 - 必需修复：Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis.
 - 尝试次数：2
 - 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
@@ -19,7 +19,7 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：Authenticated provider catalog returned HTTP 200 and service IDs including kimi-k2.5, but no immutable weight fingerprint or billing/usage export was returned; local trace usage remains non-confirmatory.
+- 证据：Authenticated read-only probes returned /models HTTP 200 with 241 records but no fingerprint-like fields; /usage, /billing, and /account/usage each returned HTTP 404. The probe sent no generation request. Local ledgers and provider traces remain useful execution evidence but do not verify provider billing or immutable weight/route identity.
 - 必需修复：Obtain provider-verifiable billing/usage reconciliation and immutable route or weight identity; keep scientific release closed until independently verified.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
@@ -27,16 +27,16 @@
 
 ### ISSUE-000000000003 — P1 — BLOCKED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：git push origin autopilot/scientific-law-discovery; git ls-remote origin refs/heads/autopilot/scientific-law-discovery; local commit 37e6e02
-- 必需修复：Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
+- 证据：The local branch contains the completed work, but push verification still fails through the configured proxy at 127.0.0.1:443. No remote push success is claimed.
+- 必需修复：Restore an authorized network path or publish the local commit through an independently verified upstream channel; do not claim remote delivery until git ls-remote confirms it.
 - 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：After local commit 37e6e02, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local repair commits are present, but remote delivery is not verified.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：The isolated Q-v2 cohort has 92/92 successful responses with independent counts PASS 9, FAIL 3, INCONCLUSIVE 26, NOT_SCORED 54; the G6 CF3 retry public-only verifier has PASS 23, INCONCLUSIVE 62, NOT_SCORED 53; controlled exact revision validity is 0/138.
-- 必需修复：Obtain independent domain-grade mathematical and statistical review and preregister the confirmatory denominator before any scientific inference or release.
+- 证据：A new isolated Q-v2 public cohort completed 92/92 cases with 103 recorded Kimi K2.5 calls, including 11 fixed format retries. Independent record/trace/proof audit passed. Recomputed verdicts are PASS 18, FAIL 8, INCONCLUSIVE 55, NOT_SCORED 11. The prespecified primary PASS fraction is 18/92 = 0.1957 (Clopper-Pearson 95% CI 0.1203-0.2915); the scoreable-subset fraction is 18/26 = 0.6923 (95% CI 0.4821-0.8567). No independent blinded truth labels exist, so this is a non-confirmatory verifier audit and the scientific gate remains blocked.
+- 必需修复：Obtain an independent blinded truth set and domain-grade mathematical/statistical review before treating Q-v2 or G6 CF3 results as confirmatory evidence.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：V3 prospective Q-v2/LU-v2 contract and anti-leakage smoke pass, but real formal scoring remains NOT_RUN; no scientific statistical inference is released.
@@ -59,8 +59,8 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：Extended public-only LU-v2 construction produced 11 DAGs and 22/22 independently verified SymPy edges, but no observed model-state transition was available and U remains 0/0.
-- 必需修复：Obtain an independently audited dependency/state dataset with observed model transitions; do not convert public derivations into model-behavior or U evidence.
+- 证据：A separate public-only LU-v2 Kimi K2.5 cohort made 11/11 real calls. Three responses produced independently validated non-final state transitions; eight produced no observed state change. The independent audit passed with no private labels, answer key, or frozen-G7 pooling, but this does not establish a causal U result.
+- 必需修复：Increase independently audited public state-transition coverage and obtain protocol-approved causal analysis; retain the eight no-change cases as observed failures/non-events.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：V3 preserves legacy L/U as unverified and adds strict LU-v2 DAG/transition validation; real public-edge evidence remains absent, so no dependency or causal claim is made.

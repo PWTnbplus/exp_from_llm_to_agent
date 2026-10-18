@@ -1,0 +1,90 @@
+{
+  "cycle": "20261018T-v5-scientific-gates",
+  "scope": "single-model Kimi K2.5 continuation of G6/G7 scientific-gate work",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "title": "Formal statistical validity is not established",
+        "evidence": "A new isolated Q-v2 public cohort completed 92/92 cases with 103 recorded Kimi K2.5 calls, including 11 fixed format retries. Independent record/trace/proof audit passed. Recomputed verdicts are PASS 18, FAIL 8, INCONCLUSIVE 55, NOT_SCORED 11. The prespecified primary PASS fraction is 18/92 = 0.1957 (Clopper-Pearson 95% CI 0.1203-0.2915); the scoreable-subset fraction is 18/26 = 0.6923 (95% CI 0.4821-0.8567). No independent blinded truth labels exist, so this is a non-confirmatory verifier audit and the scientific gate remains blocked.",
+        "remediation": "Obtain an independent blinded truth set and domain-grade mathematical/statistical review before treating Q-v2 or G6 CF3 results as confirmatory evidence."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
+        "evidence": "A separate public-only LU-v2 Kimi K2.5 cohort made 11/11 real calls. Three responses produced independently validated non-final state transitions; eight produced no observed state change. The independent audit passed with no private labels, answer key, or frozen-G7 pooling, but this does not establish a causal U result.",
+        "remediation": "Increase independently audited public state-transition coverage and obtain protocol-approved causal analysis; retain the eight no-change cases as observed failures/non-events."
+      },
+      {
+        "id": "ISSUE-7c2d4e9a10bf",
+        "severity": "P1",
+        "title": "G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery",
+        "evidence": "The new Kimi K2.5 recovery remains 150/150 states and 72/72 checkpoints with 13/13 retry-target latest traces valid. The 13 historical lifecycle failures remain retained and are not retroactively cleared or merged into a clean historical denominator.",
+        "remediation": "Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis."
+      },
+      {
+        "id": "ISSUE-000000000002",
+        "severity": "P1",
+        "title": "Real-provider pilot and retry/cost behavior are unverified",
+        "evidence": "Authenticated read-only probes returned /models HTTP 200 with 241 records but no fingerprint-like fields; /usage, /billing, and /account/usage each returned HTTP 404. The probe sent no generation request. Local ledgers and provider traces remain useful execution evidence but do not verify provider billing or immutable weight/route identity.",
+        "remediation": "Obtain provider-verifiable billing/usage reconciliation and immutable route or weight identity; keep scientific release closed until independently verified."
+      },
+      {
+        "id": "ISSUE-000000000003",
+        "severity": "P1",
+        "title": "Upstream provenance and GitHub delivery are externally blocked",
+        "evidence": "The local branch contains the completed work, but push verification still fails through the configured proxy at 127.0.0.1:443. No remote push success is claimed.",
+        "remediation": "Restore an authorized network path or publish the local commit through an independently verified upstream channel; do not claim remote delivery until git ls-remote confirms it."
+      }
+    ],
+    "resolutions": []
+  },
+  "test": {
+    "command": [
+      "E:/resources/python/python.exe",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_v4_q_lu.py",
+      "tests/test_g7_protocol.py",
+      "tests/test_g7_trace_q_consistency.py"
+    ],
+    "exit_code": 0,
+    "evidence": "87 passed; Q-v2 and LU-v2 independent audit scripts also completed with exit code 0 after the proof-reference path repair."
+  },
+  "engineering": {
+    "single_model": "kimi-k2.5",
+    "g7_states_completed": 150,
+    "g7_checkpoints_completed": 72,
+    "g7_historical_lifecycle_failures_retained": 13,
+    "g7_retry_target_latest_traces_valid": 13,
+    "q_v2_public_cases": 92,
+    "q_v2_provider_calls": 103,
+    "q_v2_format_retry_cases": 11,
+    "q_v2_independent_audit_pass": true,
+    "q_v2_counts": {
+      "PASS": 18,
+      "FAIL": 8,
+      "INCONCLUSIVE": 55,
+      "NOT_SCORED": 11
+    },
+    "q_v2_confirmatory_scientific_status": "BLOCKED",
+    "lu_public_graphs": 11,
+    "lu_observed_model_state_transitions": 3,
+    "lu_no_observed_state_change": 8,
+    "lu_independent_audit_pass": true,
+    "g6_cf3_exact_controlled_oracle_valid": "0/138",
+    "g6_cf3_public_math_review": {
+      "PASS": 23,
+      "INCONCLUSIVE": 62,
+      "NOT_SCORED": 53
+    },
+    "provider_billing_or_usage_export_verified": false,
+    "provider_immutable_weight_or_route_fingerprint_verified": false,
+    "scientific_release_allowed": false
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "protocol_id": "G7_Q_V2_PUBLIC_COHORT_CONFIRMATORY_STATISTICAL_AUDIT",
+  "records_sha256": "bc0c5a45fc6a64bafb7f68fbec997017f32893e1242e6d5b5f276dc5e643897f",
+  "record_count": 92,
+  "case_id_count": 92,
+  "recomputed_status_counts": {
+    "PASS": 18,
+    "FAIL": 8,
+    "INCONCLUSIVE": 55,
+    "NOT_SCORED": 11
+  },
+  "provider_attempt_count_from_records": 103,
+  "format_retry_case_count": 11,
+  "parsed_candidate_case_count": 82,
+  "cases_with_parse_errors": 11,
+  "analysis_plan": {
+    "primary_estimand": "PASS / all selected public cases",
+    "secondary_estimand": "PASS / (PASS + FAIL), excluding unsupported or invalid cases",
+    "missingness": "INCONCLUSIVE and NOT_SCORED remain in the primary denominator and are not imputed",
+    "interval": "two-sided 95% Wilson score interval plus Clopper-Pearson exact interval when SciPy is available",
+    "unit": "one public case, one final independent verifier verdict",
+    "truth_requirement": "an external blinded truth set is required for confirmatory scientific accuracy",
+    "multiple_testing": "no claim-specific hypothesis testing; this is a prespecified audit of two descriptive estimands"
+  },
+  "analysis_plan_sha256": "83667b31770e438ba01a09ef23b754ac0256163220fca538387c39db48bf255f",
+  "metrics": [
+    {
+      "name": "primary_pass_fraction_all_selected",
+      "successes": 18,
+      "total": 92,
+      "proportion": 0.1956521739130435,
+      "wilson_95_ci": [
+        0.12749843174966963,
+        0.2882032834676653
+      ],
+      "clopper_pearson_exact_95_ci": [
+        0.12027601750684569,
+        0.2914737212057662
+      ],
+      "method": "Wilson score interval, z=1.959963984540054; exact Clopper-Pearson interval when available"
+    },
+    {
+      "name": "secondary_pass_fraction_scoreable",
+      "successes": 18,
+      "total": 26,
+      "proportion": 0.6923076923076923,
+      "wilson_95_ci": [
+        0.5001174167780164,
+        0.8349868440453624
+      ],
+      "clopper_pearson_exact_95_ci": [
+        0.4821035635542585,
+        0.8567400020722964
+      ],
+      "method": "Wilson score interval, z=1.959963984540054; exact Clopper-Pearson interval when available"
+    }
+  ],
+  "confirmatory_scientific_status": "BLOCKED",
+  "confirmatory_scientific_reason": "The cohort has no independent blinded truth labels; local Q-v2 proofs establish only the whitelisted symbolic property of a submitted candidate. Unsupported and invalid cases are retained as missing/non-scoreable and no truth accuracy claim is made."
+}
