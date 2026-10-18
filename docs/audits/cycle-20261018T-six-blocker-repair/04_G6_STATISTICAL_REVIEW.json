@@ -1,0 +1,28 @@
+{
+  "status": "DESCRIPTIVE_ONLY",
+  "outcome": "decision_matches_frozen_oracle_label",
+  "oracle_used_as_verifier": false,
+  "planned_denominator": 552,
+  "by_group": {
+    "G3": {
+      "n": 276,
+      "mean": 0.7608695652173914
+    },
+    "G4": {
+      "n": 276,
+      "mean": 0.6884057971014492
+    }
+  },
+  "family_cluster_count": 23,
+  "paired_family_effect_g4_minus_g3": -0.07246376811594203,
+  "family_bootstrap_95ci": [
+    -0.14492753623188406,
+    -0.007246376811594208
+  ],
+  "confirmatory_reuse_allowed": false,
+  "limitations": [
+    "provider billing/model identity unverified",
+    "independent Q/L/U not established",
+    "historical/debugged run"
+  ]
+}

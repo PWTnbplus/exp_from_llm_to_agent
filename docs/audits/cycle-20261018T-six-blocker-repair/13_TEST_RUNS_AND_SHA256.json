@@ -1,0 +1,65 @@
+{
+  "created_at_utc": "2026-10-18T03:11:51.699735+00:00",
+  "pass": true,
+  "runs": [
+    {
+      "command": [
+        "E:\\resources\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_six_blocker_repair.py",
+        "tests/test_cost_ledger.py",
+        "tests/test_g7_trace_q_consistency.py"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "................................                                         [100%]\n32 passed in 2.56s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "E:\\resources\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "........................................................................ [ 26%]\n........................................................................ [ 52%]\n........................................................................ [ 79%]\n.........................................................                [100%]\n273 passed in 29.77s\n",
+      "stderr_tail": "",
+      "status": "PASS"
+    },
+    {
+      "command": [
+        "E:\\resources\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "py_compile",
+        "scripts/run_g7_failure_localization.py",
+        "scripts/audit_repair/cost_ledger.py",
+        "scripts/audit_repair/math_verifier.py",
+        "scripts/audit_repair/verify_q.py",
+        "scripts/audit_repair/six_blocker_audit.py",
+        "scripts/audit_repair/review_six_blockers.py"
+      ],
+      "exit_code": 0,
+      "stdout_tail": "",
+      "stderr_tail": "",
+      "status": "PASS"
+    }
+  ],
+  "code_sha256": {
+    "scripts/run_g7_failure_localization.py": "62119a846721e21bed3584f789e4613737b232ec58d16c98265aa3cd8b90eccd",
+    "src/scientific_discovery/models/provider.py": "6a4742f7de4db081f4043b0a0778773c75d6d962d28a32f4c9fc250802f57489",
+    "scripts/audit_repair/cost_ledger.py": "4f2d5ba5d3404b03098b4c4bcc65d5bc0aad7e8f33614a0c1e3af7b79f06c818",
+    "scripts/audit_repair/math_verifier.py": "c0d15c2e87b89c34fdf088cb894128c1982f342353aaea8b9bf3cc5daf563f92",
+    "scripts/audit_repair/verify_q.py": "dc620d10504447231f08a02178225c33755001b97d7daba4a5f90d6cd8f53e45",
+    "scripts/audit_repair/six_blocker_audit.py": "2781096e56657868d3574fe5d62a39bf9e99e8d6dd235509a30f88d871b8add9",
+    "scripts/audit_repair/review_six_blockers.py": "cdc3eeeed989f84b8f9b34d8eae66342912e940a46d093db3902f131f2b347d2"
+  }
+}

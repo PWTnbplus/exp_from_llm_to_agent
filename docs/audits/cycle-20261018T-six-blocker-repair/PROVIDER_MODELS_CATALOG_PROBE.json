@@ -1,0 +1,12 @@
+{
+  "gateway": "https://token.ctflow.cn/v1",
+  "endpoint": "/models",
+  "http_status": 200,
+  "catalog_count": 241,
+  "requested_model_exactly_listed": true,
+  "namespace_variant_listed": true,
+  "matching_ids": ["kimi-k2.5", "kimi/kimi-k2.5"],
+  "what_this_proves": "The gateway catalog exposed these service-side model IDs at probe time.",
+  "what_this_does_not_prove": ["immutable backend weights or snapshot", "request-to-invoice billing reconciliation", "historical pricing applicability"],
+  "scientific_release_effect": "no_unlock"
+}

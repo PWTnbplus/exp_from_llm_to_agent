@@ -106,6 +106,11 @@ class OpenAICompatibleProvider(LLMProvider):
         max_cost_usd: float | None = None,
         max_output_tokens: int | None = None,
         reservation_output_tokens: int | None = None,
+        cost_ledger: Any | None = None,
+        ledger_scope: str = "all",
+        ledger_worker: str = "all",
+        ledger_ref_prefix: str = "provider",
+        require_cost_ledger: bool = False,
     ):
         self.api_key = api_key or os.getenv("LLM_API_KEY", "")
         self.base_url = (base_url or os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
@@ -131,6 +136,11 @@ class OpenAICompatibleProvider(LLMProvider):
             raise ValueError("max_cost_usd must be positive when configured")
         self._reserved_cost_usd = 0.0
         self._observed_cost_usd = 0.0
+        self.cost_ledger = cost_ledger
+        self.ledger_scope = ledger_scope
+        self.ledger_worker = ledger_worker
+        self.ledger_ref_prefix = ledger_ref_prefix
+        self.require_cost_ledger = require_cost_ledger
         self.calls: list[dict[str, Any]] = []
         self.traces: list[dict[str, Any]] = []
 
@@ -145,6 +155,8 @@ class OpenAICompatibleProvider(LLMProvider):
                 "LLM_COST_PER_1K_INPUT_TOKENS and LLM_COST_PER_1K_OUTPUT_TOKENS "
                 "before enabling a real API run"
             )
+        if self.require_cost_ledger and self.cost_ledger is None:
+            raise RuntimeError("global atomic cost ledger is required before a paid provider request")
         payload: dict[str, Any] = {"model": self.model_name, "messages": messages, "max_tokens": self.max_output_tokens}
         if tools is not None:
             payload["tools"] = tools
@@ -159,6 +171,14 @@ class OpenAICompatibleProvider(LLMProvider):
             if self.max_cost_usd is not None and self._reserved_cost_usd + worst_case > self.max_cost_usd:
                 raise RuntimeError("hard cost cap would be exceeded before provider request")
             self._reserved_cost_usd += worst_case
+            reservation = None
+            if self.cost_ledger is not None:
+                reservation = self.cost_ledger.reserve(
+                    worst_case,
+                    scope=self.ledger_scope,
+                    worker=self.ledger_worker,
+                    ref=f"{self.ledger_ref_prefix}:{len(self.calls)}:{attempt + 1}:{time.time_ns()}",
+                )
             started = time.monotonic()
             try:
                 req = urlrequest.Request(f"{self.base_url}/chat/completions", data=body, headers=headers, method="POST")
@@ -181,6 +201,9 @@ class OpenAICompatibleProvider(LLMProvider):
                     usage=Usage(input_tokens, output_tokens, cost),
                     metadata={"provider": "openai-compatible", "model": self.model_name, "raw_id": data.get("id"), "attempt": attempt + 1, "latency_seconds": latency},
                 )
+                if reservation is not None:
+                    self.cost_ledger.settle(reservation.reservation_id, cost)
+                    reservation = None
                 self.traces.append({"call_index": len(self.traces), "model": self.model_name, "request": {"messages": messages, "tools": tools}, "response": {
                     "content": content, "tool_calls": tool_calls, "usage": response.usage.__dict__, "metadata": response.metadata,
                 }})
@@ -188,6 +211,9 @@ class OpenAICompatibleProvider(LLMProvider):
                     raise RuntimeError("provider-reported usage exceeded local hard cost cap after request")
                 return response
             except HTTPError as exc:
+                if reservation is not None:
+                    self.cost_ledger.settle(reservation.reservation_id, 0.0)
+                    reservation = None
                 # Preserve a bounded, non-secret provider diagnostic.  The
                 # status alone is not enough to distinguish unsupported tool
                 # calling from a malformed request, which is essential when
@@ -211,6 +237,9 @@ class OpenAICompatibleProvider(LLMProvider):
                 if attempt >= self.max_retries:
                     break
             except (URLError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
+                if reservation is not None:
+                    self.cost_ledger.settle(reservation.reservation_id, 0.0)
+                    reservation = None
                 last_error = exc
                 self.traces.append({
                     "call_index": len(self.traces),

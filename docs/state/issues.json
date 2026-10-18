@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-17T16:38:44+00:00",
+  "updated_at": "2026-10-18T03:12:29+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -51,13 +51,13 @@
       "severity": "P1",
       "title": "Real-provider pilot and retry/cost behavior are unverified",
       "status": "BLOCKED",
-      "evidence": "The Kimi K2.5 revalidation used the user-authorized USD 200 ceiling and local capped accounting, but provider billing/pricing and immutable model identity remain unavailable. G6 local cost is 2.039289 USD and G7 remains non-confirmatory.",
+      "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/11_PROVIDER_RECONCILIATION.csv; docs/audits/cycle-20261018T-six-blocker-repair/PROVIDER_MODELS_CATALOG_PROBE.json",
       "remediation": "Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-17T16:10:11+00:00",
+      "last_seen": "2026-10-18T03:12:26+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 3,
-      "blocked_reason": "Cycle 102 Kimi K2.5 G6/G7 execution completed local capped accounting, but provider billing/pricing and immutable model identity remain unverified; G6 retained 2 terminal provider errors and G7 retained 1253 checkpoint-missing states plus 179 checkpoint provider errors, so scientific release remains closed.",
+      "blocked_reason": "Provider catalog exposes service IDs but no invoice/usage reconciliation or immutable route/weight proof; retain PROVIDER_BILLING_UNVERIFIED and MODEL_IDENTITY_UNVERIFIED.",
       "verification": null,
       "history": [
         {
@@ -130,6 +130,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 102 Kimi K2.5 G6/G7 execution is locally accounted and failure-retaining, but provider billing/pricing and immutable model identity remain unverified; formal scientific release remains closed.",
           "evidence": "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json"
+        },
+        {
+          "time": "2026-10-18T03:12:26+00:00",
+          "event": "BLOCKED",
+          "reason": "Provider catalog exposes service IDs but no invoice/usage reconciliation or immutable route/weight proof; retain PROVIDER_BILLING_UNVERIFIED and MODEL_IDENTITY_UNVERIFIED.",
+          "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/11_PROVIDER_RECONCILIATION.csv; docs/audits/cycle-20261018T-six-blocker-repair/PROVIDER_MODELS_CATALOG_PROBE.json"
         }
       ]
     },
@@ -500,13 +506,13 @@
       "severity": "P1",
       "title": "Formal statistical validity is not established",
       "status": "BLOCKED",
-      "evidence": "The revalidated G7 Q audit has 0 independently valid rows out of 1288 because no external Q verifier is present; the corrected metrics report remains diagnostic-only and the G6 revision-valid count is 0/138.",
+      "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/03_G6_INDEPENDENT_MATH_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/09_G7_Q_INDEPENDENT_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/04_G6_STATISTICAL_REVIEW.json",
       "remediation": "Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-17T16:10:11+00:00",
+      "last_seen": "2026-10-18T03:12:27+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 1,
-      "blocked_reason": "Cycle 102 local Kimi G6/G7 audits pass structural accounting only; independent statistical and mathematical review remains unavailable and Q is invalid for all 1288 planned rows.",
+      "blocked_reason": "Independent math/Q audit and family-cluster statistic are implemented and tested, but production Q is 1150 NOT_SCORED plus 138 INELIGIBLE and G6 math remains partly inconclusive; keep scientific gate blocked.",
       "verification": null,
       "history": [
         {
@@ -555,6 +561,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 102 structural audit confirms that local execution accounting is not independent statistical validity; Q remains invalid for every planned G7 row and confirmatory reuse is prohibited.",
           "evidence": "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json"
+        },
+        {
+          "time": "2026-10-18T03:12:27+00:00",
+          "event": "BLOCKED",
+          "reason": "Independent math/Q audit and family-cluster statistic are implemented and tested, but production Q is 1150 NOT_SCORED plus 138 INELIGIBLE and G6 math remains partly inconclusive; keep scientific gate blocked.",
+          "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/03_G6_INDEPENDENT_MATH_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/09_G7_Q_INDEPENDENT_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/04_G6_STATISTICAL_REVIEW.json"
         }
       ]
     },
@@ -726,13 +738,13 @@
       "severity": "P1",
       "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
       "status": "BLOCKED",
-      "evidence": "The current G7 run still has no independently audited dependency/state edge evidence; Q is not independently valid and the current 138 non-completed rows cannot establish L/U causal localization.",
+      "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/10_G7_LU_EVIDENCE_MATRIX.jsonl; runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/cycle-20261018T-six-blocker-repair/VL_U_SOURCE_PROVENANCE.json",
       "remediation": "Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.",
       "first_seen": "2026-10-13T17:46:23+00:00",
-      "last_seen": "2026-10-17T16:10:11+00:00",
+      "last_seen": "2026-10-18T03:12:28+00:00",
       "source": "docs/audits/cycle-20261014T030000Z-19/audit.json",
       "attempts": 3,
-      "blocked_reason": "Cycle 102 Kimi G7 has no independently valid Q rows and no audited dependency/state edges; independent dependency/state/Q/mathematical evidence remains unavailable.",
+      "blocked_reason": "Independent G5/G7 source audit finds 0 declared dependency edges and no independently observed eligible U transition; no edge was synthesized.",
       "verification": null,
       "history": [
         {
@@ -781,6 +793,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 102 Kimi G7 retains no independently valid Q rows and no audited dependency/state edges; no causal or L/U claim is allowed.",
           "evidence": "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json"
+        },
+        {
+          "time": "2026-10-18T03:12:28+00:00",
+          "event": "BLOCKED",
+          "reason": "Independent G5/G7 source audit finds 0 declared dependency edges and no independently observed eligible U transition; no edge was synthesized.",
+          "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/10_G7_LU_EVIDENCE_MATRIX.jsonl; runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/cycle-20261018T-six-blocker-repair/VL_U_SOURCE_PROVENANCE.json"
         }
       ]
     },
@@ -789,13 +807,13 @@
       "severity": "P1",
       "title": "G7 provider execution has terminal failures and low independently valid Q coverage",
       "status": "BLOCKED",
-      "evidence": "After the repaired-format resume, canonical G7 coverage is 1150/1288 completed, 137 checkpoint_missing, and 1 provider_error. Q independent validity is 0/1288 and 28 trace-integrity failures remain in the revalidated trace audit.",
+      "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/06_G7_STATE_RESUME_MATRIX.csv; docs/audits/cycle-20261018T-six-blocker-repair/15_UNRESOLVED_EXTERNAL_ACTIONS.md",
       "remediation": "Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.",
       "first_seen": "2026-10-14T16:31:46+00:00",
-      "last_seen": "2026-10-17T16:10:11+00:00",
+      "last_seen": "2026-10-18T03:12:29+00:00",
       "source": "docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json",
       "attempts": 22,
-      "blocked_reason": "Cycle 102 Kimi G7 retains terminal provider failures and 0/1288 independently valid Q rows; independent Q/dependency/state review remains unavailable.",
+      "blocked_reason": "Frozen G7 accounting retains 137 checkpoint_missing and 1 provider_error states; no safe paid resume was authorized because historic billing is not externally reconcilable.",
       "verification": null,
       "history": [
         {
@@ -976,6 +994,12 @@
           "event": "BLOCKED",
           "reason": "Cycle 102 Kimi G7 retains terminal provider failures and zero independently valid Q rows; no V/L/U/Q or scientific claim is allowed.",
           "evidence": "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json"
+        },
+        {
+          "time": "2026-10-18T03:12:29+00:00",
+          "event": "BLOCKED",
+          "reason": "Frozen G7 accounting retains 137 checkpoint_missing and 1 provider_error states; no safe paid resume was authorized because historic billing is not externally reconcilable.",
+          "evidence": "docs/audits/cycle-20261018T-six-blocker-repair/06_G7_STATE_RESUME_MATRIX.csv; docs/audits/cycle-20261018T-six-blocker-repair/15_UNRESOLVED_EXTERNAL_ACTIONS.md"
         }
       ]
     },

@@ -29,6 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from src.scientific_discovery.models.provider import OpenAICompatibleProvider, ProviderResponse
 from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_json
+from scripts.audit_repair.cost_ledger import CostLedger
 
 
 DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
@@ -158,10 +159,27 @@ def readl(path: Path) -> list[dict[str, Any]]:
 
 def append_jsonl(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(value, ensure_ascii=False, separators=(",", ":")) + "\n")
-        handle.flush()
-        os.fsync(handle.fileno())
+    lock_path = path.with_name(path.name + ".writer-lock")
+    lock_fd: int | None = None
+    for _ in range(600):
+        try:
+            lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.005)
+    if lock_fd is None:
+        raise RuntimeError(f"trace writer lock timeout: {path}")
+    try:
+        os.close(lock_fd)
+        with path.open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(value, ensure_ascii=False, separators=(",", ":")) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+    finally:
+        try:
+            lock_path.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -326,17 +344,18 @@ def trace_path_for_retry(path: Path) -> tuple[Path, int]:
 
 
 def emit(path: Path, seq: int, run_id: str, event_type: str, status: str,
-         payload: dict[str, Any]) -> int:
+         payload: dict[str, Any], *, parent_step_id: str | None = None) -> int:
     seq += 1
+    if parent_step_id is None and event_type in {"MODEL_RESPONSE", "TOOL_RESULT", "TOOL_ERROR"}:
+        # Compatibility for direct callers/tests. Production call sites pass
+        # the exact request/call parent explicitly below.
+        parent_step_id = f"{run_id}:step-{seq - 1:06d}"
     event = {
         "seq": seq,
         "event_id": f"{run_id}:event-{seq:06d}",
         "step_id": f"{run_id}:step-{seq:06d}",
-        "parent_step_id": (
-            f"{run_id}:step-{seq - 1:06d}"
-            if event_type in {"MODEL_RESPONSE", "TOOL_RESULT", "TOOL_ERROR"}
-            else None
-        ),
+        "attempt_id": path.parent.name,
+        "parent_step_id": parent_step_id,
         "ts_utc": utc_now(),
         "run_id": run_id,
         "event_type": event_type,
@@ -1044,6 +1063,8 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
     request_calls = 0
     format_retry_used = False
     format_retry_pending = False
+    pending_model_request_step: str | None = None
+    pending_tool_call_step: str | None = None
     retry_instruction = CHECKPOINT_FORMAT_RETRY_INSTRUCTION if checkpoint else FORMAT_RETRY_INSTRUCTION
     while normal_calls < max_calls or format_retry_pending:
         is_format_retry = format_retry_pending
@@ -1057,13 +1078,15 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
         seq = emit(event_path, seq, trace_id, "MODEL_REQUEST", "RUNNING",
                    {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
                     "messages": messages, "tools": tools})
+        pending_model_request_step = f"{trace_id}:step-{seq:06d}"
         response = provider.complete(messages, tools=tools)
         limits.consume(response)
         seq = emit(event_path, seq, trace_id, "MODEL_RESPONSE", "COMPLETED",
                    {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
                     "content": response.content,
                     "tool_calls": response.tool_calls, "usage": response.usage.__dict__,
-                    "metadata": response.metadata})
+                    "metadata": response.metadata}, parent_step_id=pending_model_request_step)
+        pending_model_request_step = None
         if response.tool_calls:
             messages.append({"role": "assistant", "content": response.content, "tool_calls": response.tool_calls})
             for tool_call in response.tool_calls:
@@ -1073,6 +1096,7 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
                 limits.before_tool()
                 seq = emit(event_path, seq, trace_id, "TOOL_CALL", "RUNNING",
                            {"tool_name": name, "tool_arguments": args})
+                pending_tool_call_step = f"{trace_id}:step-{seq:06d}"
                 try:
                     result = execute_tool(name, args)
                     tool_status = "COMPLETED"
@@ -1080,7 +1104,8 @@ def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str
                     result = {"error_type": type(exc).__name__, "error": str(exc)}
                     tool_status = "FAILED"
                 seq = emit(event_path, seq, trace_id, "TOOL_RESULT", tool_status,
-                           {"tool_name": name, "tool_result": result})
+                           {"tool_name": name, "tool_result": result}, parent_step_id=pending_tool_call_step)
+                pending_tool_call_step = None
                 messages.append({"role": "tool", "tool_call_id": tool_call.get("id", f"tool-{limits.tool_calls}"),
                                  "name": name, "content": json.dumps(result, ensure_ascii=False)})
             if normal_calls >= max_calls and not format_retry_used:
@@ -1263,6 +1288,12 @@ def main() -> int:
     p.add_argument("--max-total-tokens", type=int, default=4608000)
     p.add_argument("--max-cost-usd", type=float, default=200.0)
     p.add_argument("--aggregate-max-cost-usd", type=float)
+    p.add_argument("--cost-ledger", type=Path,
+                   help="required atomic ledger for every paid worker request")
+    p.add_argument("--historic-cost-usd", type=float,
+                   help="explicit provider-proven historical cost entered once in the ledger")
+    p.add_argument("--historic-g7-cost-usd", type=float,
+                   help="explicit provider-proven historical G7 cost entered once in the ledger")
     args = p.parse_args()
     if not args.allow_paid:
         raise SystemExit("real G7 requires explicit --allow-paid")
@@ -1320,6 +1351,13 @@ def main() -> int:
         paid_evidence["execution_mode"] = "PAID_INPUT_EVIDENCE_PRESENT_EXTERNAL_REVIEW_PENDING"
         paid_evidence["formal_scientific_run_allowed"] = False
         paid_evidence["override_used"] = False
+    cost_ledger = None
+    if args.cost_ledger is not None:
+        if args.historic_cost_usd is None or args.historic_g7_cost_usd is None:
+            raise SystemExit("--cost-ledger requires explicit provider-proven historic and historic-G7 costs")
+        cost_ledger = CostLedger(args.cost_ledger, global_cap=200.0, g7_cap=args.aggregate_max_cost_usd or 60.0, worker_cap=args.max_cost_usd)
+        cost_ledger.add_historical(args.historic_cost_usd, ref="historic-global-provider-cost-v1", scope="all", worker="all")
+        cost_ledger.add_historical(args.historic_g7_cost_usd, ref="historic-g7-provider-cost-v1", scope="g7", worker="all")
     # Rewrite the preflight after the explicit evidence decision so the durable
     # report records whether this was a non-confirmatory pilot override.
     if args.worker_index == 0:
@@ -1363,7 +1401,11 @@ def main() -> int:
     provider = OpenAICompatibleProvider(api_key=args.key_file.read_text(encoding="utf-8").strip(), base_url=args.base_url,
                                         model_name=args.model_id, timeout=args.provider_timeout, max_retries=args.provider_retries,
                                         input_cost_per_1k=args.input_cost_per_1k, output_cost_per_1k=args.output_cost_per_1k,
-                                        max_cost_usd=effective_max_cost_usd, max_output_tokens=1024)
+                                        max_cost_usd=effective_max_cost_usd, max_output_tokens=1024,
+                                        cost_ledger=cost_ledger, ledger_scope="g7",
+                                        ledger_worker=str(args.worker_index),
+                                        ledger_ref_prefix=f"g7:{args.worker_index}",
+                                        require_cost_ledger=True)
     # Checkpoints are assigned as units, so all diagnostic forks from one
     # checkpoint remain on exactly one worker and have one immutable initial answer.
     for cp_id, row in selected_cps.items():

@@ -84,8 +84,9 @@
       "status": "BLOCKED",
       "scope": "formal_scientific_release",
       "evidence": [
-        "Kimi K2.5 canonical G6 coverage is 552/552 with 550 completed rows, 2 terminal provider errors retained, zero trace-integrity failures, and revision-valid count 0.",
-        "The independent G6 structural review passes only for coverage accounting; scientific release remains false pending independent mathematical/statistical review, immutable model evidence, billing evidence, and provenance."
+        "The current G6 audit preserves the 552-row normalized response denominator (552/552 structurally accounted; original attempt view 550 completed and 2 provider errors retained) and the 138-row revision denominator (69 G3 plus 69 G4). Independent row-level classification is BAD_DECISION 109 and VERIFIER_INCONCLUSIVE 29; secondary revised-claim-null count is 61.",
+        "The independent math verifier classifies the 138 revision rows as PASS 18, INCONCLUSIVE 59, and NOT_SCORED 61; this is a fail-closed audit result, not a private-oracle accuracy claim. Statistical output is descriptive only, and the handoff is metadata-only rather than a scientific release.",
+        "Evidence: docs/audits/cycle-20261018T-six-blocker-repair/02_G6_REVISION_ROOT_CAUSES.csv, 03_G6_INDEPENDENT_MATH_AUDIT.jsonl, 04_G6_STATISTICAL_REVIEW.json, 05_G6_HANDOFF_PROVENANCE.json, and 14_FINAL_GATES.json. Scientific release remains false pending valid independent proof, immutable model evidence, billing evidence, and provenance."
       ],
       "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_statistics.py tests/test_g7_corrected_metrics.py (engineering checks only)",
       "blocking_issues": [
@@ -103,9 +104,9 @@
       "scope": "formal_scientific_release",
       "evidence": [
         "Kimi K2.5 strict preflight passed without provider calls: 1288/1288 plan rows, 184/184 checkpoints, seven arms per checkpoint, exact corrected input hashes, and zero protocol/lineage/privacy errors.",
-        "Latest revalidated canonical G7 accounting selects all 1288 states (1150 completed, 137 checkpoint_missing, 1 provider_error) and all 184 checkpoints (184 completed); no failed row was removed.",
-        "The independent Q audit reports 0/1288 valid rows because no external Q verifier is present; corrected metrics are diagnostic-only and confirmatory reuse is false.",
-        "The raw revalidated trace/Q audit reports 28 state trace-integrity failures (27 completed traces and 1 failure trace), zero checkpoint trace-integrity failures, and 137 not-executed states. The new non-mutating derived view splits every RUN_START: 1,138/1,150 final completed attempts pass and 13 final attempts remain inconsistent; this remains a release blocker. Evidence: docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json and REPAIR_INDEPENDENT_REVIEW.json."
+        "The current G7 state matrix preserves the full 1288/1288 frozen denominator, 184/184 checkpoints, and state accounting of 1150 completed, 137 checkpoint_missing, and 1 provider_error. Canonical trace-valid selection is 1123/1288; the separate trace-qualified sensitivity view is 1138/1288 completed attempts. The 138 missing states require real provider responses and were not paid for or fabricated.",
+        "The independent Q audit reports 0 verified PASS, 0 FAIL, 0 INCONCLUSIVE, 1150 NOT_SCORED, and 138 INELIGIBLE; private labels and private oracle were not read. No confirmatory reuse or scientific accuracy claim is made.",
+        "The historical 28 trace defects reconcile exactly to 15 attempt-boundary artifacts plus 13 genuine final-attempt inconsistencies; raw history is preserved and the append-safe writer fix is covered by adversarial tests. L/U evidence remains unverified: 0 declared graph edges and 0 scored U rows. Evidence: docs/audits/cycle-20261018T-six-blocker-repair/06_G7_STATE_RESUME_MATRIX.csv through 10_G7_LU_EVIDENCE_MATRIX.jsonl, 14_FINAL_GATES.json, and 17_INDEPENDENT_READ_ONLY_REVIEW.json."
       ],
       "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_q_audit.py tests/test_g7_corrected_metrics.py",
       "blocking_issues": [

@@ -1,0 +1,109 @@
+{
+  "scientific_release_allowed": false,
+  "G6_accounting": "PASS",
+  "G6_math": "PARTIAL_NOT_SCORED",
+  "G6_stats": "DESCRIPTIVE_ONLY",
+  "G7_coverage": "PARTIAL_EXECUTION",
+  "G7_trace": "TRACE_BLOCKED",
+  "Q": "Q_NOT_SCORED",
+  "L/U": "LU_UNVERIFIED",
+  "provider": "PROVIDER_UNVERIFIED",
+  "release": "BLOCKED",
+  "evidence": {
+    "g6": {
+      "planned_rows": 552,
+      "completed_response_rows": 552,
+      "provider_error_rows": 0,
+      "revision_denominator": 138,
+      "revision_root_cause_counts": {
+        "BAD_DECISION": 109,
+        "VERIFIER_INCONCLUSIVE": 29
+      },
+      "revision_secondary_reason_counts": {
+        "BAD_DECISION": 109,
+        "REVISED_CLAIM_NULL": 61
+      },
+      "independent_math_status_counts": {
+        "INCONCLUSIVE": 59,
+        "NOT_SCORED": 61,
+        "PASS": 18
+      },
+      "g3_revision_units": 69,
+      "g4_revision_units": 69,
+      "confirmatory_reuse_allowed": false,
+      "oracle_used_to_generate_candidate_claim": false,
+      "original_attempt_view": {
+        "planned": 552,
+        "completed": 550,
+        "provider_error": 2,
+        "source": "runs/ctflow_single_model/20261017T-g6-kimi-k25-v1/g6_audit/release_review.json"
+      }
+    },
+    "g7": {
+      "planned_ids": 1288,
+      "observed_state_ids": 1288,
+      "unique_state_ids": 1288,
+      "checkpoint_ids": 184,
+      "completed_checkpoint_ids": 184,
+      "state_status_counts": {
+        "completed": 1150,
+        "provider_error": 1,
+        "checkpoint_missing": 137
+      },
+      "actual_provider_completed": 1150,
+      "trace_valid_completed": 1123,
+      "needs_real_provider_call": 138,
+      "worker_missing_counts": {
+        "13": 46,
+        "8": 46,
+        "14": 22,
+        "11": 8,
+        "2": 4,
+        "6": 12
+      },
+      "duplicate_state_ids": 0,
+      "preserves_frozen_denominator": true,
+      "trace_valid_completed_canonical": 1123,
+      "trace_valid_completed_trace_qualified": 1138
+    },
+    "trace": {
+      "old_trace_failures": 28,
+      "boundary_artifacts": 15,
+      "genuine_final_inconsistencies": 13,
+      "new_attempts_created": 0
+    },
+    "q": {
+      "planned_denominator": 1288,
+      "Q_eligible": 0,
+      "Q_verified_pass": 0,
+      "Q_verified_fail": 0,
+      "Q_inconclusive": 0,
+      "Q_not_scored": 1150,
+      "Q_ineligible": 138,
+      "status_counts": {
+        "NOT_SCORED": 1150,
+        "INELIGIBLE": 138
+      },
+      "private_labels_read": false,
+      "private_oracle_read": false
+    },
+    "lu": {
+      "graph_cases": 92,
+      "declared_edges": 0,
+      "L_scored": 0,
+      "L_not_scored": 92,
+      "U_rows": 1288,
+      "U_ineligible": 756,
+      "U_scored": 0,
+      "g7_causal_mechanism_established": false,
+      "source_labels_read": false
+    },
+    "provider": {
+      "rows": 6932,
+      "responses_with_local_usage": 6885,
+      "billing_verified": false,
+      "model_identity_verified": false,
+      "status": "PROVIDER_BILLING_UNVERIFIED;MODEL_IDENTITY_UNVERIFIED"
+    }
+  }
+}
