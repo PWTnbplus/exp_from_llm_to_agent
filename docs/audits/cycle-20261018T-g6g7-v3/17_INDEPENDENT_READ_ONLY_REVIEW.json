@@ -1,0 +1,16 @@
+{
+  "review_version": "six-blocker-independent-read-only-v1",
+  "pass": true,
+  "failures": [],
+  "counts": {
+    "g6_revision": 138,
+    "g7_states": 1288,
+    "trace_old": 28,
+    "trace_boundary": 15,
+    "trace_genuine": 13,
+    "trace_incidents": 13,
+    "q": 1288
+  },
+  "protected_source_hashes_unchanged": true,
+  "scientific_truth_decision_made": false
+}

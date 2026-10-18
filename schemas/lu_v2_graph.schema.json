@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["graph_id", "nodes", "edges"],
+  "properties": {
+    "graph_id": {"type": "string", "minLength": 1},
+    "nodes": {"type": "array", "items": {"type": "object", "required": ["claim_id", "kind"], "additionalProperties": false}},
+    "edges": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["source_claim_id", "target_claim_id", "inference_rule", "assumptions", "independent_proof_ref", "graph_sha256"]}}
+  }
+}

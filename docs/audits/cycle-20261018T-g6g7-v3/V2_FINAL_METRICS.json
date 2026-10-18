@@ -1,0 +1,6 @@
+{
+  "status": "NOT_RUN",
+  "real_formal_runs": 0,
+  "reason": "provider pricing/billing/identity gates unavailable",
+  "synthetic_smoke": "SMOKE_PASS"
+}

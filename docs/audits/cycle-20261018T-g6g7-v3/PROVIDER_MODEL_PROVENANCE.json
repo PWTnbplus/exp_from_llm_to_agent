@@ -1,0 +1,12 @@
+{
+  "status": "MODEL_IDENTITY_UNVERIFIED",
+  "gateway": "https://token.ctflow.cn/v1",
+  "catalog_count": 241,
+  "matching_service_ids": [
+    "kimi-k2.5",
+    "kimi/kimi-k2.5"
+  ],
+  "immutable_weight_or_snapshot": false,
+  "route_attestation": false,
+  "evidence_ref": "docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODELS_CATALOG_PROBE.json"
+}

@@ -212,7 +212,11 @@ class OpenAICompatibleProvider(LLMProvider):
                 return response
             except HTTPError as exc:
                 if reservation is not None:
-                    self.cost_ledger.settle(reservation.reservation_id, 0.0)
+                    # The request left the process.  Without a provider
+                    # receipt an HTTP error is not evidence of zero billing;
+                    # consume the full conservative reservation instead of
+                    # releasing budget that may already have been charged.
+                    self.cost_ledger.settle(reservation.reservation_id, reservation.amount)
                     reservation = None
                 # Preserve a bounded, non-secret provider diagnostic.  The
                 # status alone is not enough to distinguish unsupported tool
@@ -238,7 +242,11 @@ class OpenAICompatibleProvider(LLMProvider):
                     break
             except (URLError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
                 if reservation is not None:
-                    self.cost_ledger.settle(reservation.reservation_id, 0.0)
+                    # A timeout/transport/parse failure after dispatch has
+                    # charge-uncertain semantics.  Keep the worst-case
+                    # reservation settled until an external usage export
+                    # proves a smaller amount.
+                    self.cost_ledger.settle(reservation.reservation_id, reservation.amount)
                     reservation = None
                 last_error = exc
                 self.traces.append({

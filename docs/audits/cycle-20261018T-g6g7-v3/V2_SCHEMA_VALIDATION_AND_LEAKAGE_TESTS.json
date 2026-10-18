@@ -1,0 +1,49 @@
+{
+  "protocol_id": "G7_Q_V2_AND_LU_V2",
+  "status": "SMOKE_PASS",
+  "scientific_status": "SYNTHETIC_MOCK_NOT_SCIENTIFIC",
+  "q": {
+    "status": "PASS",
+    "reason_code": "SYMBOLIC_CONSTANT_DERIVATIVE_SIGN",
+    "verifier": {
+      "verifier_id": "q-v2-sympy-linear-monotonicity-v1",
+      "verifier_code_sha256": "de21aa161cbf955c9b4e286e9d0761d4ee9c08d9bf421bd23006bb0e91bf7231",
+      "candidate_claim_hash": "1765038d7359ec9cb5a6d0f565af1fed8063b6cd5e8ddedca3c27d510c4609bb",
+      "verdict": "PASS",
+      "proof_grade": "A",
+      "reason_code": "SYMBOLIC_CONSTANT_DERIVATIVE_SIGN",
+      "independent_of_tested_model": true,
+      "proof": "d/dx=-1.00000000000000"
+    }
+  },
+  "lu_graph": {
+    "graph_sha256": "c25eb2d7dddc52b0e157550c081ed9698d2a26d20d92fcf5108622375e1ffab0",
+    "node_count": 3,
+    "edge_count": 2,
+    "acyclic": true
+  },
+  "lu_transition": {
+    "eligible": true,
+    "claim_id": "M1",
+    "to_status": "supported",
+    "trace_ref": "synthetic://trace/1"
+  },
+  "anti_cheat": {
+    "final_decision_invariant": true,
+    "altered_symbol_rejected": true,
+    "unobserved_tool_rejected": true,
+    "private_field_rejected": true
+  },
+  "real_v2_formal_runs": 0,
+  "schema_files": {
+    "q": {
+      "path": "schemas/q_v2_candidate.schema.json",
+      "sha256": "a0a60852f11da0f64b131ddb74a2287938683b22cba4ce67cf8f63d5e3e386b6"
+    },
+    "lu": {
+      "path": "schemas/lu_v2_graph.schema.json",
+      "sha256": "2dc18a5120e6b3d52e21a55841c50d891f98512f6c983d41a9976c429f3f48e8"
+    }
+  },
+  "real_provider_calls": 0
+}

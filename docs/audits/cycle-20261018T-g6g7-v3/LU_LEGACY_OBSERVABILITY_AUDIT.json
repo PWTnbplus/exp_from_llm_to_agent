@@ -1,0 +1,16 @@
+{
+  "graph_cases": 92,
+  "declared_edges": 0,
+  "L_scored": 0,
+  "L_not_scored": 92,
+  "U_rows": 1288,
+  "U_ineligible": 756,
+  "U_scored": 0,
+  "g7_causal_mechanism_established": false,
+  "source_labels_read": false,
+  "public_graph_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+  "verifier_source_sha256": "dc620d10504447231f08a02178225c33755001b97d7daba4a5f90d6cd8f53e45",
+  "protocol": "LEGACY_LU",
+  "public_edge_truth_observed": false,
+  "nonfinal_transition_truth_observed": false
+}

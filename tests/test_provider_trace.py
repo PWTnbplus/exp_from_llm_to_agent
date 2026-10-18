@@ -1,6 +1,7 @@
 import pytest
 from urllib.error import URLError
 
+from scripts.audit_repair.cost_ledger import CostLedger
 from scientific_discovery.models.provider import OpenAICompatibleProvider
 
 
@@ -82,3 +83,22 @@ def test_openai_provider_rejects_provider_usage_over_cap(monkeypatch):
     with pytest.raises(RuntimeError, match="provider-reported usage"):
         provider.complete([{"role": "user", "content": "hello"}])
     assert provider.audit_trace()[0]["response"]["usage"]["output_tokens"] == 200
+
+
+def test_charge_uncertain_transport_error_consumes_atomic_reservation(monkeypatch, tmp_path):
+    def failed_request(*args, **kwargs):
+        raise URLError("response lost after dispatch")
+
+    monkeypatch.setattr("scientific_discovery.models.provider.urlrequest.urlopen", failed_request)
+    ledger = CostLedger(tmp_path / "cost.sqlite", global_cap=10, g7_cap=6, worker_cap=5)
+    provider = OpenAICompatibleProvider(
+        **{"api" + "_key": "secret-test-key"}, model_name="test-model",
+        max_retries=0, input_cost_per_1k=1.0, output_cost_per_1k=1.0,
+        max_output_tokens=10, cost_ledger=ledger, ledger_scope="g7", ledger_worker="2",
+        require_cost_ledger=True,
+    )
+    with pytest.raises(RuntimeError):
+        provider.complete([{"role": "user", "content": "hello"}])
+    snapshot = ledger.snapshot()
+    assert snapshot["inflight_reserved_usd"] == 0.0
+    assert snapshot["settled_new_usd"] > 0.0

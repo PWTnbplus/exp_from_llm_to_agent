@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claim_id", "claim_type", "typed_ast", "assumptions", "quantifiers", "domain", "relation", "time_interval", "origin"],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "claim_type": {"enum": ["monotonicity", "implication", "equality", "stability", "other_whitelisted"]},
+    "typed_ast": {"type": "object"},
+    "assumptions": {"type": "array"},
+    "quantifiers": {"type": "array"},
+    "domain": {"type": "object"},
+    "relation": {"type": "string"},
+    "time_interval": {},
+    "origin": {"const": "MODEL_GENERATED"}
+  }
+}

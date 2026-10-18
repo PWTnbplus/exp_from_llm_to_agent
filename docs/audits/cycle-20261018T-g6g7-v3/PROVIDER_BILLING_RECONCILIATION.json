@@ -1,0 +1,16 @@
+{
+  "local_rows": 6932,
+  "rows_with_local_usage": 6885,
+  "supplier_invoice_or_usage_export": null,
+  "billing_status": "NO_EXTERNAL_BILLING_EXPORT",
+  "pricing_status": "NO_PROVIDER_VERIFIED_PRICE_RECORD",
+  "billing_verified": false,
+  "model_identity_verified": false,
+  "catalog_probe_ref": "docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODELS_CATALOG_PROBE.json",
+  "catalog_probe_proves_only": "The gateway catalog exposed these service-side model IDs at probe time.",
+  "catalog_probe_does_not_prove": [
+    "immutable backend weights or snapshot",
+    "request-to-invoice billing reconciliation",
+    "historical pricing applicability"
+  ]
+}

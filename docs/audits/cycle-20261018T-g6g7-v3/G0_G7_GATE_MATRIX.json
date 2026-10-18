@@ -1,0 +1,22 @@
+{
+  "scientific_release_allowed": false,
+  "G6": "PARTIAL_NOT_SCORED",
+  "G7_legacy": "PARTIAL_EXECUTION",
+  "G7_trace": "TRACE_BLOCKED",
+  "Q_legacy": "Q_NOT_SCORED",
+  "LU_legacy": "LU_UNVERIFIED",
+  "Q_v2": "NOT_RUN",
+  "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC",
+  "provider": "BLOCKED_EXTERNAL_SOURCE",
+  "cost_gate": "BLOCKED_NO_PROVIDER_VERIFIED_PRICING_OR_HISTORICAL_CONSERVATIVE_CEILING",
+  "evidence": {
+    "source_manifest": "FROZEN_INPUT_SHA256.json",
+    "executor_regression": "G7_EXECUTOR_REGRESSION.json",
+    "independent_review_pending": false
+  },
+  "independent_review": {
+    "path": "18_INDEPENDENT_READ_ONLY_REVIEW_V3.json",
+    "pass": true,
+    "scientific_truth_decision_made": false
+  }
+}

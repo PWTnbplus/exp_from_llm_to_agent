@@ -57,13 +57,24 @@ class CostLedger:
 
     def _totals(self, db: sqlite3.Connection, scope: str, worker: str) -> tuple[float, float, float, float]:
         historical = db.execute(
-            "SELECT COALESCE(SUM(amount),0) FROM entries WHERE kind='historical'"
+            # ``scope=all`` is the global historical total.  A scoped entry
+            # such as G7 is a sub-budget annotation and must not be added a
+            # second time to the global ceiling.
+            "SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='all' AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')"
         ).fetchone()[0]
         settled = db.execute(
             "SELECT COALESCE(SUM(settled),0) FROM reservations WHERE status='settled'"
         ).fetchone()[0]
         inflight = db.execute(
             "SELECT COALESCE(SUM(reserved),0) FROM reservations WHERE status='reserved'"
+        ).fetchone()[0]
+        scoped_historical = db.execute(
+            "SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope=? AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')",
+            (scope,),
+        ).fetchone()[0]
+        worker_historical = db.execute(
+            "SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope=? AND worker=? AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')",
+            (scope, worker),
         ).fetchone()[0]
         scoped_settled = db.execute(
             "SELECT COALESCE(SUM(settled),0) FROM reservations WHERE scope=? AND status='settled'", (scope,)
@@ -80,17 +91,20 @@ class CostLedger:
             (scope, worker),
         ).fetchone()[0]
         return (float(historical + settled), float(inflight),
-                float(scoped_settled + scoped_inflight),
-                float(worker_settled + worker_inflight))
+                float(scoped_historical + scoped_settled + scoped_inflight),
+                float(worker_historical + worker_settled + worker_inflight))
 
-    def add_historical(self, amount: float, *, ref: str, scope: str = "all", worker: str = "all") -> None:
+    def add_historical(self, amount: float, *, ref: str, scope: str = "all", worker: str = "all",
+                       evidence_class: str = "confirmed") -> None:
         if amount < 0:
             raise ValueError("historical amount must be non-negative")
+        if evidence_class not in {"confirmed", "unbilled_ceiling"}:
+            raise ValueError("evidence_class must be confirmed or unbilled_ceiling")
         with self._connect() as db:
             db.execute("BEGIN IMMEDIATE")
             db.execute(
                 "INSERT OR IGNORE INTO entries(scope,worker,kind,amount,ref) VALUES(?,?,?,?,?)",
-                (scope, worker, "historical", float(amount), ref),
+                (scope, worker, f"historical_{evidence_class}", float(amount), ref),
             )
             db.execute("COMMIT")
 
@@ -100,6 +114,13 @@ class CostLedger:
         reservation_id = ref or str(uuid.uuid4())
         with self._connect() as db:
             db.execute("BEGIN IMMEDIATE")
+            if scope == "g7":
+                unknown_worker_history = db.execute(
+                    "SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='g7' AND worker='all' AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')"
+                ).fetchone()[0]
+                if float(unknown_worker_history) > 0:
+                    db.execute("ROLLBACK")
+                    raise RuntimeError("G7 historical worker allocation is unavailable; per-worker cap is fail-closed")
             total, inflight, scoped, worker_total = self._totals(db, scope, worker)
             if total + inflight + amount > self.global_cap + 1e-12:
                 db.execute("ROLLBACK")
@@ -142,7 +163,10 @@ class CostLedger:
 
     def snapshot(self) -> dict[str, object]:
         with self._connect() as db:
-            historical = float(db.execute("SELECT COALESCE(SUM(amount),0) FROM entries WHERE kind='historical'").fetchone()[0])
+            historical = float(db.execute("SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='all' AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')").fetchone()[0])
+            confirmed = float(db.execute("SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='all' AND kind IN ('historical','historical_confirmed')").fetchone()[0])
+            unbilled = float(db.execute("SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='all' AND kind='historical_unbilled_ceiling'").fetchone()[0])
+            g7_history = float(db.execute("SELECT COALESCE(SUM(amount),0) FROM entries WHERE scope='g7' AND kind IN ('historical','historical_confirmed','historical_unbilled_ceiling')").fetchone()[0])
             settled = float(db.execute("SELECT COALESCE(SUM(settled),0) FROM reservations WHERE status='settled'").fetchone()[0])
             inflight = float(db.execute("SELECT COALESCE(SUM(reserved),0) FROM reservations WHERE status='reserved'").fetchone()[0])
             return {
@@ -150,6 +174,9 @@ class CostLedger:
                 "g7_cap_usd": self.g7_cap,
                 "worker_cap_usd": self.worker_cap,
                 "historical_entered_usd": historical,
+                "historical_confirmed_usd": confirmed,
+                "historical_unbilled_conservative_ceiling_usd": unbilled,
+                "historical_g7_subcap_usd": g7_history,
                 "settled_new_usd": settled,
                 "inflight_reserved_usd": inflight,
                 "safe_remaining_if_all_reservations_settle_usd": self.global_cap - historical - settled - inflight,

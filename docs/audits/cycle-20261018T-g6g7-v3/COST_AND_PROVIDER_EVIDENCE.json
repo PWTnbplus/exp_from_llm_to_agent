@@ -1,0 +1,18 @@
+{
+  "v3_cycle_new_api_spend_usd": 0.0,
+  "provider_invoice_or_usage_export_present": false,
+  "provider_verified_pricing_present": false,
+  "local_proxy_estimates_not_billing": true,
+  "historical_local_trace_estimates": {
+    "g6_raw_all_attempts_usd": 6.610445,
+    "g6_raw_model_responses": 2010,
+    "g6_audited_trace_view_usd": 6.057783,
+    "g6_audited_model_responses": 1826,
+    "g7_raw_all_trace_dirs_usd": 8.915826,
+    "g7_raw_model_responses": 4875,
+    "raw_all_trace_dirs_total_usd": 15.526271,
+    "audited_g6_plus_raw_g7_total_usd": 14.973609
+  },
+  "safe_remaining_budget_claim": false,
+  "reason": "No supplier billing export or provider-verified historical ceiling is available."
+}

@@ -1,0 +1,5 @@
+gate,status,scope,scientific_release_allowed
+G0,PASS,pinned simulator/licensing only,False
+G1-G5,PASS,engineering/smoke only,False
+G6,BLOCKED,formal scientific,False
+G7,BLOCKED,formal scientific,False

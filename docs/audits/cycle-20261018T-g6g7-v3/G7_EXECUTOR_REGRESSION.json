@@ -1,0 +1,20 @@
+{
+  "command": [
+    "E:\\resources\\python\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_g7_trace_q_consistency.py",
+    "tests/test_six_blocker_repair.py",
+    "tests/test_v3_observability.py"
+  ],
+  "exit_code": 0,
+  "status": "PASS",
+  "stdout_tail": ".................................                                        [100%]\n33 passed in 1.38s\n",
+  "stderr_tail": "",
+  "historical_13_preserved": true,
+  "new_paid_attempts": 0,
+  "writer_source_sha256": "1127df2b0a5d8be47a90d0d4824202736316ebcfee3abab1e2e05a4cd7dbf8c1"
+}

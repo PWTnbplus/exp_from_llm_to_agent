@@ -1,0 +1,11 @@
+{
+  "protocol": "LEGACY_Q",
+  "planned": 1288,
+  "status_counts": {
+    "NOT_SCORED": 1150,
+    "INELIGIBLE": 138
+  },
+  "private_labels_read": false,
+  "private_oracle_read": false,
+  "verifier_source": "scripts/audit_repair/verify_q.py"
+}

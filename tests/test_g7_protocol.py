@@ -957,10 +957,23 @@ def test_g7_unverified_paid_pilot_requires_explicit_override_and_records_nonconf
     monkeypatch.setattr(g7_runner, "public_tool_loop", lambda *args, **kwargs: pytest.fail("pilot must not invent a provider response"))
     key = tmp_path / "key"
     key.write_text("sk-test", encoding="utf-8")
+    pricing = tmp_path / "pricing.json"
+    pricing.write_text(json.dumps({
+        "verification_status": "PROVIDER_VERIFIED",
+        "model_id": "model-x",
+        "base_url": "https://token.ctflow.cn/v1",
+        "currency": "USD",
+        "input_cost_per_1k": 0.001,
+        "output_cost_per_1k": 0.003,
+        "source_url": "https://provider.example/pricing-export",
+        "source_sha256": "a" * 64,
+        "effective_from_utc": "2026-10-18T00:00:00+00:00",
+    }), encoding="utf-8")
     monkeypatch.setattr(sys, "argv", [
         "run_g7_failure_localization.py", "--public", str(public), "--labels", str(labels),
         "--plan", str(plan), "--out", str(out), "--model-id", "model-x",
         "--key-file", str(key), "--allow-paid", "--allow-unverified-paid-evidence",
+        "--pricing-evidence", str(pricing),
     ])
     assert g7_runner.main() == 0
     report = json.loads((out / "g7_protocol_preflight.json").read_text(encoding="utf-8"))

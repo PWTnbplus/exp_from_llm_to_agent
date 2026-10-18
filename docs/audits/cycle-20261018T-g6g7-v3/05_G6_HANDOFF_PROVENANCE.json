@@ -1,0 +1,21 @@
+{
+  "source_path": "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z/g6_to_g7_handoff.jsonl",
+  "source_sha256": "ec51c3114b84da9f818d0f6407794e42454cbe87565aa0baaf60081c61602c02",
+  "rows": 552,
+  "unique_run_ids": 552,
+  "actual_source_rows": true,
+  "scientifically_release_usable": false,
+  "reason": "metadata handoff exists, but independent math/stat/provider gates remain blocked",
+  "fields_preserved": [
+    "run_id",
+    "case_id",
+    "theory_family_id",
+    "arm_id",
+    "cf_type",
+    "decision",
+    "expected_decision",
+    "trace_ref",
+    "failure_type",
+    "is_mock"
+  ]
+}

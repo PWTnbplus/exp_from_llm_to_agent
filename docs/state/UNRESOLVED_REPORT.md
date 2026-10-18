@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T03:12:29+00:00
+生成时间（UTC）：2026-10-18T03:52:55+00:00
 
 - 开放/阻塞/未验证：**9**
 - 已验证修复：**30**
@@ -19,19 +19,19 @@
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
-- 证据：docs/audits/cycle-20261018T-six-blocker-repair/11_PROVIDER_RECONCILIATION.csv; docs/audits/cycle-20261018T-six-blocker-repair/PROVIDER_MODELS_CATALOG_PROBE.json
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_BILLING_RECONCILIATION.json; docs/audits/cycle-20261018T-g6g7-v3/PROVIDER_MODEL_PROVENANCE.json; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json
 - 必需修复：Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - 尝试次数：3
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Provider catalog exposes service IDs but no invoice/usage reconciliation or immutable route/weight proof; retain PROVIDER_BILLING_UNVERIFIED and MODEL_IDENTITY_UNVERIFIED.
+- 阻塞原因：V3 offline provider/cost gate re-audit remains externally blocked: no provider-verified pricing, invoice/usage export, or immutable model identity; no paid call made.
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：docs/audits/cycle-20261018T-six-blocker-repair/03_G6_INDEPENDENT_MATH_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/09_G7_Q_INDEPENDENT_AUDIT.jsonl; docs/audits/cycle-20261018T-six-blocker-repair/04_G6_STATISTICAL_REVIEW.json
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/V2_SCHEMA_VALIDATION_AND_LEAKAGE_TESTS.json; docs/audits/cycle-20261018T-g6g7-v3/V2_FINAL_METRICS.json
 - 必需修复：Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：Independent math/Q audit and family-cluster statistic are implemented and tested, but production Q is 1150 NOT_SCORED plus 138 INELIGIBLE and G6 math remains partly inconclusive; keep scientific gate blocked.
+- 阻塞原因：V3 prospective Q-v2/LU-v2 contract and anti-leakage smoke pass, but real formal scoring remains NOT_RUN; no scientific statistical inference is released.
 
 ### ISSUE-ff97c7c89112 — P1 — RESOLVED_UNVERIFIED
 - 描述：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.json, and manifest.json siblings, but the audit explicitly rep
@@ -51,19 +51,19 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：docs/audits/cycle-20261018T-six-blocker-repair/10_G7_LU_EVIDENCE_MATRIX.jsonl; runs/ctflow_single_model/20261017T-g7-kimi-k25-v1/g7_audit/cycle-20261018T-six-blocker-repair/VL_U_SOURCE_PROVENANCE.json
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/LU_LEGACY_OBSERVABILITY_AUDIT.json; docs/audits/cycle-20261018T-g6g7-v3/V2_PROTOCOL_AND_PREREGISTRATION.md
 - 必需修复：Do not synthesize dependency edges or U eligibility. Obtain an independently audited complete dependency/state dataset and mathematical review.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
-- 阻塞原因：Independent G5/G7 source audit finds 0 declared dependency edges and no independently observed eligible U transition; no edge was synthesized.
+- 阻塞原因：V3 preserves legacy L/U as unverified and adds strict LU-v2 DAG/transition validation; real public-edge evidence remains absent, so no dependency or causal claim is made.
 
 ### ISSUE-3d7a9c1e5b20 — P1 — BLOCKED
 - 描述：G7 provider execution has terminal failures and low independently valid Q coverage
-- 证据：docs/audits/cycle-20261018T-six-blocker-repair/06_G7_STATE_RESUME_MATRIX.csv; docs/audits/cycle-20261018T-six-blocker-repair/15_UNRESOLVED_EXTERNAL_ACTIONS.md
+- 证据：docs/audits/cycle-20261018T-g6g7-v3/G7_STATE_ATTEMPT_MATRIX.csv; docs/audits/cycle-20261018T-g6g7-v3/G7_TRACE_15_EXPLAINED_13_INVALID.jsonl; docs/audits/cycle-20261018T-g6g7-v3/G0_G7_GATE_MATRIX.json
 - 必需修复：Resume only workers 2, 6, 8, 11, 13, and 14, merge canonical states, repair or explain retry-segment trace lifecycle errors, and retain all failures. Do not make scientific claims.
 - 尝试次数：22
 - 来源：docs/audits/cycle-20261015T081700Z-27/g7_failure_taxonomy.json
-- 阻塞原因：Frozen G7 accounting retains 137 checkpoint_missing and 1 provider_error states; no safe paid resume was authorized because historic billing is not externally reconcilable.
+- 阻塞原因：V3 re-audit preserves the full 1288-state denominator, 137 checkpoint-missing plus 1 provider-error state, and all 28 historical trace defects; provider retry remains blocked by external evidence gates.
 
 ### ISSUE-f9171bb760b1 — P1 — RESOLVED_UNVERIFIED
 - 描述：No frozen, auditable G8 real/sham/off/extra adapter is present

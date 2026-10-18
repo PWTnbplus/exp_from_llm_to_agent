@@ -307,6 +307,66 @@ def validate_paid_evidence(model_id: str, snapshot_manifest: Path | None,
     }
 
 
+def validate_pricing_evidence(model_id: str, base_url: str, pricing_file: Path | None,
+                              input_rate: float, output_rate: float) -> dict[str, Any]:
+    """Require an external, hash-linked price record before paid dispatch.
+
+    Local proxy rates are not a spending authorization.  The V3 protocol
+    therefore requires a separate machine-readable pricing artifact whose
+    verification status, model/base URL, USD rates, and effective interval
+    agree with the runner arguments.  The artifact is only a gate; its raw
+    contents are never sent to the model.
+    """
+    errors: list[str] = []
+    value: dict[str, Any] | None = None
+    file_hash = None
+    if pricing_file is None:
+        errors.append("pricing_evidence_required")
+    elif not pricing_file.is_file():
+        errors.append("pricing_evidence_not_found")
+    else:
+        file_hash = sha256_file(pricing_file)
+        try:
+            parsed = json.loads(pricing_file.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            parsed = None
+            errors.append("pricing_evidence_invalid_json")
+        if isinstance(parsed, dict):
+            value = parsed
+        elif parsed is not None:
+            errors.append("pricing_evidence_must_be_object")
+    if value is not None:
+        if value.get("verification_status") != "PROVIDER_VERIFIED":
+            errors.append("pricing_evidence_not_provider_verified")
+        if value.get("model_id") != model_id:
+            errors.append("pricing_model_id_mismatch")
+        if value.get("base_url", "").rstrip("/") != base_url.rstrip("/"):
+            errors.append("pricing_base_url_mismatch")
+        if str(value.get("currency", "")).upper() != "USD":
+            errors.append("pricing_currency_must_be_usd")
+        for field, observed in (("input_cost_per_1k", input_rate), ("output_cost_per_1k", output_rate)):
+            expected = value.get(field)
+            if not isinstance(expected, (int, float)) or isinstance(expected, bool) or not math.isfinite(float(expected)) or float(expected) <= 0:
+                errors.append(f"pricing_{field}_invalid")
+            elif abs(float(expected) - float(observed)) > 1e-12:
+                errors.append(f"pricing_{field}_argument_mismatch")
+        if not isinstance(value.get("source_url"), str) or not value["source_url"].strip():
+            errors.append("pricing_source_url_missing")
+        if not _valid_sha256(value.get("source_sha256")):
+            errors.append("pricing_source_sha256_invalid")
+        if not isinstance(value.get("effective_from_utc"), str) or not value["effective_from_utc"].strip():
+            errors.append("pricing_effective_from_missing")
+    return {
+        "required": True,
+        "file_sha256": file_hash,
+        "evidence_status": "PROVIDER_VERIFIED" if not errors else "MISSING_OR_INVALID",
+        "errors": errors,
+        "model_id": model_id,
+        "base_url": base_url,
+        "scientific_truth_decision_made": False,
+    }
+
+
 def existing_trace_sequence(path: Path) -> int:
     """Return the last persisted sequence for an append-only retry trace."""
     if not path.is_file():
@@ -1276,6 +1336,8 @@ def main() -> int:
     )
     p.add_argument("--model-snapshot-manifest", type=Path)
     p.add_argument("--billing-export", type=Path)
+    p.add_argument("--pricing-evidence", type=Path,
+                   help="required provider-verified price artifact; local proxy rates alone are rejected")
     p.add_argument("--worker-index", type=int, default=0)
     p.add_argument("--worker-count", type=int, default=1)
     p.add_argument("--limit", type=int, default=0)
@@ -1317,6 +1379,10 @@ def main() -> int:
         require_formal_input_contract=True,
     )
     paid_evidence = validate_paid_evidence(args.model_id, args.model_snapshot_manifest, args.billing_export)
+    pricing_evidence = validate_pricing_evidence(
+        args.model_id, args.base_url, args.pricing_evidence,
+        args.input_cost_per_1k, args.output_cost_per_1k,
+    )
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     # The preflight is a shared immutable input report. Only worker 0 writes
@@ -1325,6 +1391,7 @@ def main() -> int:
         write_json(out / "g7_protocol_preflight.json", {
             **preflight,
             "paid_evidence": paid_evidence,
+            "pricing_evidence": pricing_evidence,
             "input_hashes": {
                 "public": sha256_file(args.public),
                 "labels": sha256_file(args.labels),
@@ -1351,6 +1418,8 @@ def main() -> int:
         paid_evidence["execution_mode"] = "PAID_INPUT_EVIDENCE_PRESENT_EXTERNAL_REVIEW_PENDING"
         paid_evidence["formal_scientific_run_allowed"] = False
         paid_evidence["override_used"] = False
+    if pricing_evidence["errors"]:
+        raise SystemExit("G7 pricing preflight failed: " + ", ".join(pricing_evidence["errors"]))
     cost_ledger = None
     if args.cost_ledger is not None:
         if args.historic_cost_usd is None or args.historic_g7_cost_usd is None:
@@ -1364,6 +1433,7 @@ def main() -> int:
         write_json(out / "g7_protocol_preflight.json", {
             **preflight,
             "paid_evidence": paid_evidence,
+            "pricing_evidence": pricing_evidence,
             "input_hashes": {
                 "public": sha256_file(args.public),
                 "labels": sha256_file(args.labels),
