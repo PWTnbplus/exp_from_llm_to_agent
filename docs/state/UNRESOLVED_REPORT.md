@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-18T14:14:32+00:00
+生成时间（UTC）：2026-10-18T15:10:25+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -11,7 +11,7 @@
 
 ### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
 - 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：The new Kimi K2.5 recovery remains 150/150 states and 72/72 checkpoints with 13/13 retry-target latest traces valid. The 13 historical lifecycle failures remain retained and are not retroactively cleared or merged into a clean historical denominator.
+- 证据：No historical rows were edited. The 150/150-state, 72/72-checkpoint recovery and 13 valid retry-target traces remain separate from the 13 retained historical lifecycle failures.
 - 必需修复：Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis.
 - 尝试次数：2
 - 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
@@ -35,8 +35,8 @@
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established
-- 证据：A new isolated Q-v2 public cohort completed 92/92 cases with 103 recorded Kimi K2.5 calls, including 11 fixed format retries. Independent record/trace/proof audit passed. Recomputed verdicts are PASS 18, FAIL 8, INCONCLUSIVE 55, NOT_SCORED 11. The prespecified primary PASS fraction is 18/92 = 0.1957 (Clopper-Pearson 95% CI 0.1203-0.2915); the scoreable-subset fraction is 18/26 = 0.6923 (95% CI 0.4821-0.8567). No independent blinded truth labels exist, so this is a non-confirmatory verifier audit and the scientific gate remains blocked.
-- 必需修复：Obtain an independent blinded truth set and domain-grade mathematical/statistical review before treating Q-v2 or G6 CF3 results as confirmatory evidence.
+- 证据：A targeted recovery of the 11 frozen Q-v2 NOT_SCORED cases made 17 additional Kimi K2.5 calls, including 3 format retries. Independent audit passed; the recovery yielded PASS 1, INCONCLUSIVE 7, and NOT_SCORED 3. The original 92-case denominator remains unchanged. A separate public-only G6 CF3 boundary review covered all 138 rows using 23 public formula witnesses: 95 model actions aligned with the public witness and 43 did not. It used no private oracle and explicitly does not claim scientific release.
+- 必需修复：Obtain an independent blinded truth set and domain-grade mathematical/statistical review. Keep targeted Q recovery separate from the frozen 92-case denominator and retain the 43 public-review failures.
 - 尝试次数：1
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：V3 prospective Q-v2/LU-v2 contract and anti-leakage smoke pass, but real formal scoring remains NOT_RUN; no scientific statistical inference is released.
@@ -59,8 +59,8 @@
 
 ### ISSUE-1f8c2b6a4d90 — P1 — BLOCKED
 - 描述：All eligible G6 public proof graphs have no dependency edges for G7 localization
-- 证据：A separate public-only LU-v2 Kimi K2.5 cohort made 11/11 real calls. Three responses produced independently validated non-final state transitions; eight produced no observed state change. The independent audit passed with no private labels, answer key, or frozen-G7 pooling, but this does not establish a causal U result.
-- 必需修复：Increase independently audited public state-transition coverage and obtain protocol-approved causal analysis; retain the eight no-change cases as observed failures/non-events.
+- 证据：Three additional public-only LU/U replicate cohorts completed 33 real Kimi K2.5 calls: 1, 6, and 3 independently validated non-final state transitions respectively, with 23 no-state-change records. Together with the initial 11-call cohort, the four-batch aggregate is 44 calls, 13 observed transitions, and 31 no-state-change observations. Every batch passed independent graph/trace/model/isolation audits.
+- 必需修复：Treat the 13 transitions as observed public model behavior only; obtain protocol-approved causal validation and retain all 31 no-change observations before making a U claim.
 - 尝试次数：3
 - 来源：docs/audits/cycle-20261014T030000Z-19/audit.json
 - 阻塞原因：V3 preserves legacy L/U as unverified and adds strict LU-v2 DAG/transition validation; real public-edge evidence remains absent, so no dependency or causal claim is made.

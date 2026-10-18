@@ -1,0 +1,72 @@
+{
+  "cycle": "20261018T-v7-scientific-review",
+  "scope": "single-model public mathematical review, targeted Q recovery, and repeated LU/U observations",
+  "review": {
+    "findings": [
+      {
+        "id": "ISSUE-000000000004",
+        "severity": "P1",
+        "title": "Formal statistical validity is not established",
+        "evidence": "A targeted recovery of the 11 frozen Q-v2 NOT_SCORED cases made 17 additional Kimi K2.5 calls, including 3 format retries. Independent audit passed; the recovery yielded PASS 1, INCONCLUSIVE 7, and NOT_SCORED 3. The original 92-case denominator remains unchanged. A separate public-only G6 CF3 boundary review covered all 138 rows using 23 public formula witnesses: 95 model actions aligned with the public witness and 43 did not. It used no private oracle and explicitly does not claim scientific release.",
+        "remediation": "Obtain an independent blinded truth set and domain-grade mathematical/statistical review. Keep targeted Q recovery separate from the frozen 92-case denominator and retain the 43 public-review failures."
+      },
+      {
+        "id": "ISSUE-1f8c2b6a4d90",
+        "severity": "P1",
+        "title": "All eligible G6 public proof graphs have no dependency edges for G7 localization",
+        "evidence": "Three additional public-only LU/U replicate cohorts completed 33 real Kimi K2.5 calls: 1, 6, and 3 independently validated non-final state transitions respectively, with 23 no-state-change records. Together with the initial 11-call cohort, the four-batch aggregate is 44 calls, 13 observed transitions, and 31 no-state-change observations. Every batch passed independent graph/trace/model/isolation audits.",
+        "remediation": "Treat the 13 transitions as observed public model behavior only; obtain protocol-approved causal validation and retain all 31 no-change observations before making a U claim."
+      },
+      {
+        "id": "ISSUE-7c2d4e9a10bf",
+        "severity": "P1",
+        "title": "G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery",
+        "evidence": "No historical rows were edited. The 150/150-state, 72/72-checkpoint recovery and 13 valid retry-target traces remain separate from the 13 retained historical lifecycle failures.",
+        "remediation": "Keep historical failures and corrected retry traces separately audited; do not relabel the historical denominator as clean without a protocol-approved reanalysis."
+      }
+    ],
+    "resolutions": []
+  },
+  "test": {
+    "command": [
+      "E:/resources/python/python.exe",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_v4_q_lu.py",
+      "tests/test_g7_protocol.py",
+      "tests/test_g7_trace_q_consistency.py"
+    ],
+    "exit_code": 0,
+    "evidence": "Targeted tests passed after the new public review and Q recovery runner changes."
+  },
+  "engineering": {
+    "single_model": "kimi-k2.5",
+    "q_v2_original_frozen_cases": 92,
+    "q_v2_targeted_recovery_cases": 11,
+    "q_v2_targeted_recovery_provider_calls": 17,
+    "q_v2_targeted_recovery_counts": {
+      "PASS": 1,
+      "FAIL": 0,
+      "INCONCLUSIVE": 7,
+      "NOT_SCORED": 3
+    },
+    "g6_cf3_public_boundary_review_rows": 138,
+    "g6_cf3_public_boundary_review_pass": 95,
+    "g6_cf3_public_boundary_review_fail": 43,
+    "g6_cf3_exact_controlled_oracle_valid": "0/138",
+    "g7_states_completed": 150,
+    "g7_checkpoints_completed": 72,
+    "g7_historical_lifecycle_failures_retained": 13,
+    "lu_u_replicate_batches": 4,
+    "lu_u_replicate_provider_calls": 44,
+    "lu_u_observed_transitions": 13,
+    "lu_u_no_observed_state_change": 31,
+    "private_labels_read": false,
+    "answer_key_read": false,
+    "pooling_with_frozen_g7": false,
+    "scientific_release_allowed": false
+  }
+}

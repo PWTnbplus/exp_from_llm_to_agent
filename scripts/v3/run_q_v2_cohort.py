@@ -135,7 +135,14 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
     rows = read_jsonl(args.public)
     if not rows:
         raise ValueError("public cohort is empty")
-    selected = rows[: args.limit] if args.limit else rows
+    if args.case_id:
+        wanted = set(args.case_id)
+        selected = [row for row in rows if row.get("case_id") in wanted]
+        missing = wanted - {row.get("case_id") for row in selected}
+        if missing:
+            raise ValueError(f"requested case IDs are absent from public cohort: {sorted(missing)}")
+    else:
+        selected = rows[: args.limit] if args.limit else rows
     selected = [row for row in selected if isinstance(row.get("case_id"), str)]
     if not selected:
         raise ValueError("no public cases selected")
@@ -312,6 +319,7 @@ def main() -> int:
     )
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--limit", type=int, default=4)
+    parser.add_argument("--case-id", action="append", help="run an explicit public case ID; repeat for a targeted recovery")
     parser.add_argument("--max-cost-usd", type=float, default=0.05)
     parser.add_argument("--input-cost-per-1k", type=float, default=0.001)
     parser.add_argument("--output-cost-per-1k", type=float, default=0.003)

@@ -1,0 +1,34 @@
+{
+  "audit_version": "q-v2-independent-rereview-with-format-retry-v1",
+  "records": 11,
+  "unique_case_ids": 11,
+  "traces": 17,
+  "unique_trace_cases": 11,
+  "format_retry_records": 3,
+  "provider_attempts_total": 17,
+  "models": [
+    "kimi-k2.5"
+  ],
+  "stored_counts": {
+    "INCONCLUSIVE": 7,
+    "NOT_SCORED": 3,
+    "PASS": 1
+  },
+  "recomputed_counts": {
+    "INCONCLUSIVE": 7,
+    "NOT_SCORED": 3,
+    "PASS": 1
+  },
+  "stored_matches_recomputed": true,
+  "proof_hashes_valid": true,
+  "provider_successful_records": 11,
+  "parse_error_records": 3,
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "scientific_release_allowed": false,
+  "records_sha256": "6560d87e292a679acbc73dadad11f22b1b0f770607c7f92c044fe34f74ec73b9",
+  "traces_sha256": "d3cb161b1dcfeb09ab756a5f5da9e41169283dc42e791ef8de15e1229b8a6fea",
+  "failures": [],
+  "engineering_audit_pass": true
+}

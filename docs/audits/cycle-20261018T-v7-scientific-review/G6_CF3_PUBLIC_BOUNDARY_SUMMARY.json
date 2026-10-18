@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "audit_version": "g6-cf3-public-boundary-review-v2",
+  "plan_count": 138,
+  "response_count": 138,
+  "review_count": 138,
+  "public_family_count": 23,
+  "status_counts": {
+    "FAIL": 43,
+    "PASS": 95
+  },
+  "public_outcome_counts": {
+    "degenerate_formula": 12,
+    "invalidates": 90,
+    "preserves_specific": 36
+  },
+  "failures": [],
+  "plan_sha256": "6db2816dbc00e9ff2eae6a29f3910386fd28071ec7c639b6693b8779d600ff51",
+  "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+  "responses_sha256": "fa4f8c6ae747e20fc890c4735acf953c59f4ea16f03ff344b025bcbe3ef0aca8",
+  "private_oracle_loaded": false,
+  "private_labels_used": false,
+  "scientific_release_allowed": false,
+  "interpretation": "Public boundary witnesses provide independent coverage and do not replace a blinded domain reviewer or the frozen oracle denominator."
+}

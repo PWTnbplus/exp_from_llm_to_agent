@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "protocol_id": "LU_V2_PUBLIC_U_REPLICATE_AGGREGATE",
+  "audit_count": 4,
+  "graphs_per_audit": [
+    11
+  ],
+  "provider_calls": 44,
+  "observed_transition_count": 13,
+  "no_observed_state_change_count": 31,
+  "model_ids": [
+    "kimi-k2.5"
+  ],
+  "graphs_sha256": [
+    "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9"
+  ],
+  "audit_sha256": {
+    "docs\\audits\\cycle-20261018T-v4-g6g7-execution\\LU_U_V2_INDEPENDENT_AUDIT.json": "a7ed191db1138310bfe8904deb18a2156a7943141e82f63be3f3598df8bfce5a",
+    "docs\\audits\\cycle-20261018T-v7-scientific-review\\LU_U_V2_REP1_AUDIT.json": "14ed2dde0f5cc9edf6d3cf967bda1325a97f289cbebc45074973c42220a80821",
+    "docs\\audits\\cycle-20261018T-v7-scientific-review\\LU_U_V2_REP2_AUDIT.json": "7ac6f57435f3102cbd3062ec11fa18a79af0abb1f4851383f73b650a29c40802",
+    "docs\\audits\\cycle-20261018T-v7-scientific-review\\LU_U_V2_REP3_AUDIT.json": "31bf7b39586b1f83436e662e1387427feba345b24db6a45a442457ec5b790757"
+  },
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "scientific_release_allowed": false,
+  "interpretation": "These are repeated public-only observed model transitions. The aggregate is not a causal U estimate, does not alter the frozen G7 denominator, and retains every no-change observation."
+}

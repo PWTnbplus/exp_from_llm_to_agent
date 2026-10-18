@@ -1,0 +1,23 @@
+{
+  "audit_version": "lu-v2-public-u-independent-v1",
+  "graph_count": 11,
+  "record_count": 11,
+  "trace_count": 11,
+  "observed_transition_count": 1,
+  "validation_error_counts": {
+    "no observed state change": 10,
+    "none": 1
+  },
+  "model_ids": [
+    "kimi-k2.5"
+  ],
+  "graphs_sha256": "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9",
+  "records_sha256": "adebb30eee602adee20e1b691dcf9755e20de9dcf1c76f5ef7097cf2eb2b7922",
+  "traces_sha256": "be3b2438bbf1b8f91edc7e0a63214ed8ead9270176fe70cc99d95c176158cb56",
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "engineering_audit_pass": true
+}
