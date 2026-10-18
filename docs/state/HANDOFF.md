@@ -10,15 +10,16 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-7c2d4e9a10bf / P1 / G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
+**下一问题（Next issue:）：** ISSUE-000000000003 / P1 / Upstream provenance and GitHub delivery are externally blocked
 
 ## 当前状态摘要
 
-开放/未验证：9。已验证：30。
+开放/未验证：10。已验证：29。
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-7c2d4e9a10bf P1 OPEN 尝试次数=1：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Keep the append-safe retry fix. Do not claim historical trace cleanliness until the 13 remaining final-attempt failures are independently resolved or rerun under the corrected writer; retain all failures and keep G7 scie
+- ISSUE-000000000003 P1 IN_PROGRESS 尝试次数=2：Upstream provenance and GitHub delivery are externally blocked；修复=Restore network/Git credentials, independently verify the configured NewtonBench commit and license against the upstream remote, then re-run G0 and verify the feature-branch remote state.
+- ISSUE-7c2d4e9a10bf P1 IN_PROGRESS 尝试次数=2：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Keep the append-safe retry fix. Do not claim historical trace cleanliness until the 13 remaining final-attempt failures are independently resolved or rerun under the corrected writer; retain all failures and keep G7 scie
 - ISSUE-000000000002 P1 BLOCKED 尝试次数=3：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain provider-verifiable billing/usage and immutable model or gateway-weight evidence; keep scientific release closed until independent isolation, mathematical, and statistical review passes.
 - ISSUE-000000000004 P1 BLOCKED 尝试次数=1：Formal statistical validity is not established；修复=Obtain an independently reviewed Q/math/statistical verification path and preregister the confirmatory denominator before any inference or release.
 - ISSUE-ff97c7c89112 P1 RESOLVED_UNVERIFIED 尝试次数=0：G6 audit-g5 found 1309 proof_graph.json files and all 1309 had events.jsonl, steps.jsonl, summary.js；修复=Retain the fail-closed input guards and obtain an independent external mathematical review of the verifier; release only the 23-family corrected subset and never synthesize or restore TB-L1-010.
