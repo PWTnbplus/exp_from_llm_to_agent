@@ -109,7 +109,15 @@ def q_messages(payload: dict[str, Any]) -> list[dict[str, str]]:
                 "You are in a public-only Q-v2 verification cohort. Return only JSON. "
                 "The candidate must have exactly the fields claim_id, claim_type, typed_ast, "
                 "assumptions, quantifiers, domain, relation, time_interval, origin. "
-                "origin must be MODEL_GENERATED. Use a one-variable typed expression when possible."
+                "origin must be MODEL_GENERATED. For this cohort claim_type MUST be exactly "
+                "monotonicity, relation MUST be one of increasing, decreasing, nonincreasing, "
+                "or nondecreasing, and typed_ast MUST be a recursive object using only op/value/name/args "
+                "with ops number, variable, add, sub, mul, div, pow, or neg. "
+                "For example, use {\"op\":\"mul\",\"args\":[{\"op\":\"number\",\"value\":-1},{\"op\":\"variable\",\"name\":\"x\"}]} "
+                "rather than a formula string. assumptions and quantifiers MUST be arrays of strings; "
+                "domain MUST be an object such as {\"variable\":\"x\",\"lower\":0,\"upper\":\"infinity\"}; "
+                "time_interval MUST be an object such as {\"start\":0,\"end\":\"infinity\",\"unit\":\"time\"}. "
+                "Use one real variable and numeric constants in typed_ast, and state assumptions explicitly."
             ),
         },
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False, sort_keys=True)},
@@ -141,6 +149,9 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
         "pooling_with_frozen_g7": False,
         "local_verifier": "scripts/v3/q_v2.py::verify_q_record",
         "paid_cap_usd": args.max_cost_usd,
+        "pricing_evidence_provided": bool(args.pricing_evidence and args.pricing_evidence.is_file()),
+        "pricing_override_used": False,
+        "formal_scientific_run_allowed": False,
         "provider_calls_made": 0,
         "execution_status": "PREFLIGHT_ONLY",
     }
@@ -150,7 +161,11 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
     if not args.allow_paid:
         raise RuntimeError("paid Q-v2 execution requires --allow-paid; no provider request was made")
     if not args.pricing_evidence or not args.pricing_evidence.is_file():
-        raise RuntimeError("paid Q-v2 execution requires provider pricing evidence; no provider request was made")
+        if not args.allow_user_authorized_unverified_pricing:
+            raise RuntimeError("paid Q-v2 execution requires provider pricing evidence; no provider request was made")
+        plan["pricing_override_used"] = True
+        plan["execution_status"] = "USER_AUTHORIZED_UNVERIFIED_PRICING_NONCONFIRMATORY"
+    (args.out / "cohort_plan.json").write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if not args.cost_ledger:
         raise RuntimeError("paid Q-v2 execution requires an atomic cost ledger; no provider request was made")
     if OpenAICompatibleProvider is None:
@@ -182,9 +197,31 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
     records: list[dict[str, Any]] = []
     proofs = args.out / "proofs"
     proofs.mkdir(exist_ok=True)
+    records_path = args.out / "q_records.jsonl"
+    traces_path = args.out / "provider_traces.jsonl"
+    records_path.write_text("", encoding="utf-8")
+    traces_path.write_text("", encoding="utf-8")
     for item in prompts:
-        response = provider.complete(q_messages(item["prompt"]))
-        candidate = extract_json_object(response.content)
+        provider_error = None
+        response = None
+        try:
+            response = provider.complete(q_messages(item["prompt"]))
+        except RuntimeError as exc:
+            provider_error = str(exc)
+        trace = provider.audit_trace()[-1] if provider.audit_trace() else {
+            "call_index": len(provider.audit_trace()),
+            "model": args.model_id,
+            "error": {"type": "NO_PROVIDER_TRACE", "message": provider_error or "unknown"},
+        }
+        with traces_path.open("a", encoding="utf-8", newline="\n") as trace_handle:
+            trace_handle.write(json.dumps(trace, ensure_ascii=False, separators=(",", ":")) + "\n")
+        parse_error = None
+        candidate = None
+        if response is not None:
+            try:
+                candidate = extract_json_object(response.content)
+            except (ValueError, json.JSONDecodeError) as exc:
+                parse_error = str(exc)
         proof_path = proofs / f"{item['case_id']}.json"
         record = {
             "protocol_id": "G7_Q_V2_PUBLIC_COHORT",
@@ -197,20 +234,31 @@ def run_cohort(args: argparse.Namespace) -> dict[str, Any]:
                 "verifier_input_hash": sha256_json(candidate),
                 "verifier_output_ref": str(proof_path.relative_to(args.out)).replace("\\", "/"),
             },
-            "provider_usage": response.usage.__dict__,
+            "provider_usage": response.usage.__dict__ if response is not None else {},
         }
+        if provider_error is not None:
+            record["provider_error"] = provider_error
+        if parse_error is not None:
+            record["parse_error"] = parse_error
         proof = verify_q_record(record)
         proof_path.write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         record["q_evidence"]["verifier_output_sha256"] = sha256_file(proof_path)
         records.append({**record, "independent_q": proof})
-    with (args.out / "q_records.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
+        with records_path.open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(records[-1], ensure_ascii=False, separators=(",", ":")) + "\n")
+    with records_path.open("w", encoding="utf-8", newline="\n") as handle:
         for record in records:
             handle.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
     result = {
         **plan,
         "status": "EXECUTED",
-        "execution_status": "PAID_NONCONFIRMATORY_COHORT",
+        "execution_status": (
+            "USER_AUTHORIZED_UNVERIFIED_PRICING_NONCONFIRMATORY"
+            if plan["pricing_override_used"]
+            else "PAID_NONCONFIRMATORY_COHORT"
+        ),
         "provider_calls_made": len(records),
+        "provider_successful_responses": sum(record["provider_usage"] != {} for record in records),
         "independent_q_counts": {
             status: sum(record["independent_q"].get("status") == status for record in records)
             for status in ("PASS", "FAIL", "INCONCLUSIVE", "NOT_SCORED")
@@ -230,6 +278,11 @@ def main() -> int:
     parser.add_argument("--pricing-evidence", type=Path)
     parser.add_argument("--cost-ledger", type=Path)
     parser.add_argument("--allow-paid", action="store_true")
+    parser.add_argument(
+        "--allow-user-authorized-unverified-pricing",
+        action="store_true",
+        help="explicit user authorization for a non-confirmatory run when provider pricing evidence is unavailable",
+    )
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--limit", type=int, default=4)
     parser.add_argument("--max-cost-usd", type=float, default=0.05)

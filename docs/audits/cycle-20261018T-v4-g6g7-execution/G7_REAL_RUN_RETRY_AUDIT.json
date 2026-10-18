@@ -1,0 +1,126 @@
+{
+  "audit_version": "g7-real-run-retry-audit-v1",
+  "scope": "new_real_kimi_k25_run_only",
+  "target_trace_retry_rows": 13,
+  "completed_states": 13,
+  "bad_latest_traces": [],
+  "rows": [
+    {
+      "run_id": "g7full_a8fd3ca2bb41a0beb704",
+      "category": "TERMINAL_STATE_AND_TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_a8fd3ca2bb41a0beb704\\events.jsonl",
+      "events": 17,
+      "trace_sha256": "977a24f002557fb65e902a268fb817c18a130cdb8e6a35ef20fa344e61a65370",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_a350012ea6e8c969771e",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_a350012ea6e8c969771e\\events.jsonl",
+      "events": 9,
+      "trace_sha256": "938bf294352c272cf0f01fb6346c004ca7f17340fb3a7757eaa3cfc72d99440c",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_b0724db2b117027b21fd",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_b0724db2b117027b21fd\\events.jsonl",
+      "events": 15,
+      "trace_sha256": "32b4cac8801e76b0ea38483f585c11cc094e2c21ca5c6eb4d6332d7c581bcd8c",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_70ac64fa4b2645c052c5",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_70ac64fa4b2645c052c5\\events.jsonl",
+      "events": 16,
+      "trace_sha256": "89bd718ba107828a0cd98c96f84298545b7f362ccecd470a433b291df92f97b6",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_be2a6381ea347493973f",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_be2a6381ea347493973f\\events.jsonl",
+      "events": 14,
+      "trace_sha256": "4ca10d54451217add78acd0e83051e1faf53db1940ad1071f3869b844f2d7b91",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_0804fd76ad1b416ccdae",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_0804fd76ad1b416ccdae\\events.jsonl",
+      "events": 20,
+      "trace_sha256": "99683d979db12608a5ee8d978fcbea8c4bf872dfa87e922b3b04858b1f305c6f",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_0c29ad2a6719822aeb95",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_0c29ad2a6719822aeb95\\events.jsonl",
+      "events": 9,
+      "trace_sha256": "1adafe0a238a14cd6357cea262d3b5510d666cad0a6b8ddd7e857b93b9ae8116",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_1ff317e8ecc9c328e0b1",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_1ff317e8ecc9c328e0b1\\events.jsonl",
+      "events": 14,
+      "trace_sha256": "ab0eb53cd4804747d36aaa23936fd458fed2c11d7ab1c3f943f9b6596e705cbf",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_ddcacd5ac022c6e93db9",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_ddcacd5ac022c6e93db9\\events.jsonl",
+      "events": 11,
+      "trace_sha256": "ffdaae52580b9158a71ef723352800e768686fbd97fe688789e29578aab4fc85",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_d8593bdf6ce8afc2533a",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_d8593bdf6ce8afc2533a\\events.jsonl",
+      "events": 15,
+      "trace_sha256": "f8e1e57f2050b6e92c220b54069151abf4bef9ac2f90ff0f5cdd4163475f42dc",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_ece42a559e674269298b",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_ece42a559e674269298b\\events.jsonl",
+      "events": 9,
+      "trace_sha256": "cb84941958c145f7e40af8f7f00876644ebfbf1927345516da84751a56262fce",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_18c9ba81206b943914e4",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_18c9ba81206b943914e4\\events.jsonl",
+      "events": 14,
+      "trace_sha256": "b036ffda7cbf4926210cec201893071ab94916a1909c1b50b01d7597ed679c53",
+      "latest_trace_completed": true
+    },
+    {
+      "run_id": "g7full_bcad4fc15eecd3e717c9",
+      "category": "TRACE_RETRY",
+      "status": "completed",
+      "trace_ref": "traces\\g7full_bcad4fc15eecd3e717c9\\events.jsonl",
+      "events": 9,
+      "trace_sha256": "09b335d28259c5d07fbb6673f9235cc961928601b04ae225d8340bf17b1112cf",
+      "latest_trace_completed": true
+    }
+  ]
+}\n

@@ -205,12 +205,17 @@ def state_claim(root: Path, run_id: str):
                     return
                 try:
                     os.kill(owner_pid, 0)
-                except ProcessLookupError:
-                    claim_path.unlink(missing_ok=True)
-                    continue
                 except PermissionError:
+                    # The process exists but this worker cannot inspect it.
                     yield False
                     return
+                except (ProcessLookupError, OSError, SystemError):
+                    # Windows can surface an invalid/stale PID as WinError
+                    # 87 or SystemError rather than ProcessLookupError after
+                    # the owning process is interrupted.  Treat that claim as
+                    # reclaimable; historical traces and states are untouched.
+                    claim_path.unlink(missing_ok=True)
+                    continue
                 yield False
                 return
             except (OSError, UnicodeError, json.JSONDecodeError):
@@ -1380,6 +1385,14 @@ def main() -> int:
             "model-weight and billing evidence is unavailable; scientific release remains closed"
         ),
     )
+    p.add_argument(
+        "--allow-user-authorized-unverified-pricing",
+        action="store_true",
+        help=(
+            "explicit user authorization to dispatch a non-confirmatory pilot "
+            "with local proxy rates when provider pricing evidence is unavailable"
+        ),
+    )
     p.add_argument("--model-snapshot-manifest", type=Path)
     p.add_argument("--billing-export", type=Path)
     p.add_argument("--pricing-evidence", type=Path,
@@ -1469,7 +1482,14 @@ def main() -> int:
         paid_evidence["formal_scientific_run_allowed"] = False
         paid_evidence["override_used"] = False
     if pricing_evidence["errors"]:
-        raise SystemExit("G7 pricing preflight failed: " + ", ".join(pricing_evidence["errors"]))
+        if not args.allow_user_authorized_unverified_pricing:
+            raise SystemExit("G7 pricing preflight failed: " + ", ".join(pricing_evidence["errors"]))
+        pricing_evidence["execution_mode"] = "USER_AUTHORIZED_UNVERIFIED_PRICING_NONCONFIRMATORY"
+        pricing_evidence["override_used"] = True
+        pricing_evidence["formal_scientific_run_allowed"] = False
+    else:
+        pricing_evidence["execution_mode"] = "PROVIDER_VERIFIED_PRICING"
+        pricing_evidence["override_used"] = False
     cost_ledger = None
     if args.cost_ledger is not None:
         cost_ledger = CostLedger(args.cost_ledger, global_cap=200.0, g7_cap=args.aggregate_max_cost_usd or 60.0, worker_cap=args.max_cost_usd)

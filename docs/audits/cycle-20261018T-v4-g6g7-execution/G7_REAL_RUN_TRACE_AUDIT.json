@@ -1,0 +1,66 @@
+{
+  "audit_version": "g7-trace-q-consistency-v4",
+  "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
+  "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; require_unique_event_step_ids_and_parent_pairing; retain_prior_history_count",
+  "inputs": {
+    "states": "32122f1fa9c02190218b32067c82d873251a872526b9527ef02977d0839f00a9",
+    "q": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "checkpoints": "3f4a1b378b45119240f6c51517032ed3d511d7991ad55c12e22fbdc4f9e519da"
+  },
+  "states": {
+    "rows": 150,
+    "unique_run_ids": 150,
+    "duplicate_run_ids": [],
+    "status_counts": {
+      "completed": 150
+    },
+    "trace_status_counts": {
+      "pass": 150
+    },
+    "recorded_failure_category_counts": {
+      "none": 150
+    },
+    "trace_integrity_failures": 0,
+    "review_samples": []
+  },
+  "checkpoints": {
+    "provided": true,
+    "rows": 72,
+    "unique_ids": 72,
+    "duplicate_ids": [],
+    "status_counts": {
+      "completed": 72
+    },
+    "trace_status_counts": {
+      "pass": 72
+    },
+    "recorded_failure_category_counts": {
+      "none": 72
+    },
+    "trace_integrity_failures": 0,
+    "review_samples": []
+  },
+  "q": {
+    "rows": 0,
+    "unique_run_ids": 0,
+    "original_independent_valid": 0,
+    "trace_backed_valid": 0,
+    "valid_rows_invalidated_by_trace_review": 0,
+    "rows_missing_state_review": 0,
+    "states_missing_q_row": 150,
+    "q_rows_without_state": 0,
+    "duplicate_run_ids": [],
+    "malformed_validity_rows": 0,
+    "review_status_counts": {}
+  },
+  "conclusion": {
+    "terminal_failures_retained": false,
+    "q_invalidity_retained": false,
+    "retries_pooled": false,
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false,
+    "interpretation_boundary": "Failure categories are derived from persisted trace text; they do not establish an external provider root cause or scientific validity."
+  },
+  "trace_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261018T-v4-g7-kimi-resume",
+  "audit_script_sha256": "192691a3c077542a995224e25f1e085888f703748b282878676f395ac3876357"
+}
