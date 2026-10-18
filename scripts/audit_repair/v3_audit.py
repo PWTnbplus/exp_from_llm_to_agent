@@ -235,11 +235,14 @@ def build_v3(args: Namespace) -> dict[str, Any]:
         if legacy_catalog.is_file():
             shutil.copyfile(legacy_catalog, provider_catalog)
     catalog = read_json(provider_catalog) if provider_catalog.is_file() else {}
+    pricing_path = docs / "CTFLOW_QWEN35_PLUS_PRICING_EVIDENCE.json"
+    pricing = read_json(pricing_path) if pricing_path.is_file() else {}
+    pricing_verified = pricing.get("verification_status") == "PROVIDER_VERIFIED"
     provider_csv = list(csv.DictReader((docs / "11_PROVIDER_RECONCILIATION.csv").open(encoding="utf-8")))
     provider_reconciliation = {
         "local_rows": len(provider_csv), "rows_with_local_usage": sum(r.get("local_estimate") not in {"", None} for r in provider_csv),
         "supplier_invoice_or_usage_export": None, "billing_status": "NO_EXTERNAL_BILLING_EXPORT",
-        "pricing_status": "NO_PROVIDER_VERIFIED_PRICE_RECORD", "billing_verified": False,
+        "pricing_status": "PROVIDER_VERIFIED_QWEN35_PLUS_ONLY" if pricing_verified else "NO_PROVIDER_VERIFIED_PRICE_RECORD", "billing_verified": False,
         "model_identity_verified": False, "catalog_probe_ref": rel(provider_catalog),
         "catalog_probe_proves_only": catalog.get("what_this_proves"),
         "catalog_probe_does_not_prove": catalog.get("what_this_does_not_prove"),
@@ -260,10 +263,17 @@ def build_v3(args: Namespace) -> dict[str, Any]:
         [ROOT / "results/g6_counterfactual/protocol-g3tools-v2-20261014T030000Z/traces_audited"],
     )
     g7_raw_cost, g7_raw_responses = trace_cost(G7_ROOT, [G7_ROOT / "traces", G7_ROOT / "checkpoint_traces"])
+    pilot_path = docs / "QWEN_G7_PILOT_RECORD.json"
+    pilot = read_json(pilot_path) if pilot_path.is_file() else {}
+    pilot_billing = pilot.get("provider_billing", {}) if isinstance(pilot, dict) else {}
     write_json(docs / "COST_AND_PROVIDER_EVIDENCE.json", {
-        "v3_cycle_new_api_spend_usd": 0.0,
+        "v3_cycle_new_api_spend_usd": None,
+        "cycle_paid_activity_recorded": pilot_path.is_file(),
+        "qwen_g7_pilot_total_local_estimate_usd": pilot_billing.get("total_local_pricing_estimate_usd_across_attempts"),
         "provider_invoice_or_usage_export_present": False,
-        "provider_verified_pricing_present": False,
+        "provider_verified_pricing_present": pricing_verified,
+        "provider_verified_pricing_scope": [pricing.get("model_id")] if pricing_verified else [],
+        "provider_verified_pricing_record": rel(pricing_path) if pricing_verified else None,
         "local_proxy_estimates_not_billing": True,
         "historical_local_trace_estimates": {
             "g6_raw_all_attempts_usd": round(g6_raw_cost, 9),
@@ -276,7 +286,7 @@ def build_v3(args: Namespace) -> dict[str, Any]:
             "audited_g6_plus_raw_g7_total_usd": round(g6_audited_cost + g7_raw_cost, 9),
         },
         "safe_remaining_budget_claim": False,
-        "reason": "No supplier billing export or provider-verified historical ceiling is available.",
+        "reason": "Cycle-level paid activity is kept in its separate record; account billing and provider-verified historical ceiling remain unavailable.",
     })
 
     smoke_path = private / "V2_SCHEMA_VALIDATION_AND_LEAKAGE_SMOKE.json"
@@ -297,7 +307,7 @@ Q-v2 requires a model-generated typed AST, explicit assumptions/quantifiers/doma
 
 LU-v2 requires a public acyclic DAG with independently referenced proof artifacts and a real observed non-final claim transition in the same fork. Final-node changes, evaluator-derived edges, private labels, and synthetic arrows are ineligible.
 
-The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCIENTIFIC`). A real DEV/PILOT/FINAL run requires verified provider pricing, atomic budget clearance, a separately frozen task cohort, and a real trace. No paid call was made in this cycle.
+The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCIENTIFIC`). A real DEV/PILOT/FINAL run requires verified provider pricing, atomic budget clearance, a separately frozen task cohort, and a real trace. Any cycle-level compatibility or non-confirmatory pilot calls are recorded separately and are never counted as V2 formal runs.
 """
     (docs / "V2_PROTOCOL_AND_PREREGISTRATION.md").write_text(prereg, encoding="utf-8")
     write_json(docs / "V2_FINAL_METRICS.json", {"status": "NOT_RUN", "real_formal_runs": 0, "reason": "provider pricing/billing/identity gates unavailable", "synthetic_smoke": smoke["status"]})
@@ -305,8 +315,8 @@ The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCI
     gates = {
         "scientific_release_allowed": False, "G6": "PARTIAL_NOT_SCORED", "G7_legacy": "PARTIAL_EXECUTION",
         "G7_trace": "TRACE_BLOCKED", "Q_legacy": "Q_NOT_SCORED", "LU_legacy": "LU_UNVERIFIED",
-        "Q_v2": "NOT_RUN", "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC", "provider": "BLOCKED_EXTERNAL_SOURCE",
-        "cost_gate": "BLOCKED_NO_PROVIDER_VERIFIED_PRICING_OR_HISTORICAL_CONSERVATIVE_CEILING",
+        "Q_v2": "NOT_RUN", "LU_v2": "SMOKE_ONLY_NOT_SCIENTIFIC", "provider": "QWEN_PUBLIC_PRICE_ONLY_BILLING_IDENTITY_UNVERIFIED" if pricing_verified else "BLOCKED_EXTERNAL_SOURCE",
+        "cost_gate": "BLOCKED_PROVIDER_BILLING_IDENTITY_AND_HISTORICAL_CEILING; QWEN_PUBLIC_PRICE_ONLY" if pricing_verified else "BLOCKED_NO_PROVIDER_VERIFIED_PRICING_OR_HISTORICAL_CONSERVATIVE_CEILING",
         "evidence": {"source_manifest": "FROZEN_INPUT_SHA256.json", "executor_regression": "G7_EXECUTOR_REGRESSION.json", "independent_review_pending": True},
     }
     write_json(docs / "G0_G7_GATE_MATRIX.json", gates)
@@ -314,7 +324,7 @@ The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCI
 
 - `PROVIDER_BILLING_UNVERIFIED`: no supplier invoice or usage export is present.
 - `MODEL_IDENTITY_UNVERIFIED`: `/models` service IDs do not establish immutable weights or a time-bound route attestation.
-- `PRICING_UNVERIFIED`: no provider-verified USD price record with effective interval was available; the runner now rejects local proxy rates alone.
+- `PRICING_PARTIAL`: provider-verified USD pricing is available only where the captured provider artifact exists; the runner rejects local proxy rates alone.
 - `HISTORIC_CONSERVATIVE_CEILING_UNVERIFIED`: local trace sums are not a safe provider-charge ceiling; G7 missing states remain unpaid.
 - `G6_REVISIONS_PARTIAL`: 138 rows are independently classified, but only a subset has a narrow mathematical proof and statistics remain descriptive.
 - `G7_COVERAGE`: 137 checkpoint-missing plus 1 provider-error state lack a real provider response.
@@ -325,17 +335,17 @@ The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCI
     (docs / "UNRESOLVED_EXTERNAL_ACTIONS.md").write_text(unresolved, encoding="utf-8")
     final = f"""# V3 executive report
 
-模型/路由：CTFlow catalog probe exposed service IDs only; immutable model identity remains UNVERIFIED. 账单/价格：UNVERIFIED; no provider-verified pricing artifact or invoice was available.
+模型/路由：CTFlow catalog probe exposed service IDs only; immutable model identity remains UNVERIFIED. 账单/价格：account billing remains UNVERIFIED; provider-public pricing is reported only for captured model-specific evidence.
 
 G6 legacy: 552 normalized rows; revision denominator 138; root causes and independent verifier counts are in `G6_138_MATH_CLASSIFICATION.csv` and `G6_INDEPENDENT_VERIFIER_RESULT.jsonl`. G6 remains partial/not scored for scientific release.
 
-G7 legacy: 1288 unique states, 184 checkpoints, 1150 provider-completed, 137 checkpoint-missing, 1 provider-error; canonical trace-valid and sensitivity views remain separate. Historical trace defects remain 15 boundary + 13 genuine final inconsistencies. No new paid attempt was made.
+G7 legacy: 1288 unique states, 184 checkpoints, 1150 provider-completed, 137 checkpoint-missing, 1 provider-error; canonical trace-valid and sensitivity views remain separate. Historical trace defects remain 15 boundary + 13 genuine final inconsistencies. Cycle-level paid activity, if any, is separate from the legacy denominator and is not a formal scientific attempt.
 
 Legacy Q remains NOT_SCORED/INELIGIBLE. Legacy L/U remains unverified with no public dependency edges and no eligible observed non-final transition.
 
 Q-v2/LU-v2: strict schemas, independent verifier hooks, leakage tests and synthetic smoke passed; real formal V2 metrics are `NOT_RUN` and no synthetic result is scientific evidence.
 
-Cost: this V3 cycle added USD 0 API spend. The frozen G6 audited trace view is USD 6.057783 and raw G6 attempts are USD 6.610445; raw G7 trace directories are USD 8.915826. These are local proxy estimates, not provider billing; the raw-all trace sum is USD 15.526271 and no safe remaining budget is claimed. G7 aggregate/per-worker sub-budgets were not consumed.
+Cost: cycle-level API activity and its evidence class are recorded separately in `COST_AND_PROVIDER_EVIDENCE.json` and any paid-operation record; account billing is not inferred from local estimates. The frozen G6 audited trace view is USD 6.057783 and raw G6 attempts are USD 6.610445; raw G7 trace directories are USD 8.915826. These are local proxy estimates, not provider billing; the raw-all trace sum is USD 15.526271 and no safe remaining budget is claimed. G7 aggregate/per-worker sub-budgets were not consumed by a V2 formal run.
 
 Scientific release: BLOCKED. Offline engineering, source hashing, math classification, trace regression and V2 contract validation are complete to their evidence boundary; external billing/pricing/model identity and real V2/G7 missing responses remain unresolved.
 """

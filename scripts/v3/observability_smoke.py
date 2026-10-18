@@ -12,8 +12,12 @@ import json
 from pathlib import Path
 from typing import Any
 
-from scripts.v3.lu_v2 import graph_sha256, validate_nonfinal_transition, validate_public_dag
-from scripts.v3.q_v2 import verify_candidate, verify_q_record
+try:
+    from scripts.v3.lu_v2 import graph_sha256, validate_nonfinal_transition, validate_public_dag
+    from scripts.v3.q_v2 import verify_candidate, verify_q_record
+except ModuleNotFoundError:  # Direct ``python scripts/v3/observability_smoke.py`` entry point.
+    from lu_v2 import graph_sha256, validate_nonfinal_transition, validate_public_dag
+    from q_v2 import verify_candidate, verify_q_record
 
 
 def fixture() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:

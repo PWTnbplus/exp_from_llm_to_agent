@@ -8,4 +8,4 @@ Q-v2 requires a model-generated typed AST, explicit assumptions/quantifiers/doma
 
 LU-v2 requires a public acyclic DAG with independently referenced proof artifacts and a real observed non-final claim transition in the same fork. Final-node changes, evaluator-derived edges, private labels, and synthetic arrows are ineligible.
 
-The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCIENTIFIC`). A real DEV/PILOT/FINAL run requires verified provider pricing, atomic budget clearance, a separately frozen task cohort, and a real trace. No paid call was made in this cycle.
+The present artifact is a synthetic contract smoke only (`SYNTHETIC_MOCK_NOT_SCIENTIFIC`). A real DEV/PILOT/FINAL run requires verified provider pricing, atomic budget clearance, a separately frozen task cohort, and a real trace. No paid Q-v2/LU-v2 formal call was made in this cycle; the separate Qwen G7 execution pilot is recorded independently and is not V2 evidence.

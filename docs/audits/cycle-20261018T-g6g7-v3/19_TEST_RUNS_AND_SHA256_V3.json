@@ -67,6 +67,8 @@
     "full_result": "279 passed in 33.09s",
     "independent_review": "scripts/audit_repair/review_v3_audit.py --docs docs/audits/cycle-20261018T-g6g7-v3: pass=true; protected_source_hashes_unchanged=true",
     "pilot_review": "QWEN_G7_PILOT_INDEPENDENT_REVIEW.json: pass=true",
+    "direct_smoke_entrypoint": "python scripts/v3/observability_smoke.py --out ...: exit_code=0; SMOKE_PASS; real_v2_formal_runs=0; scientific_status=SYNTHETIC_MOCK_NOT_SCIENTIFIC",
+    "offline_repairs": "observability_smoke direct-entry import fallback; v3_audit generator no longer hardcodes cycle-level API spend as zero or no paid activity",
     "json_validation": "6 changed JSON state/audit documents parsed successfully",
     "git_diff_check": "pass"
   },
@@ -78,10 +80,10 @@
     "scripts/audit_repair/verify_q.py": "dc620d10504447231f08a02178225c33755001b97d7daba4a5f90d6cd8f53e45",
     "scripts/audit_repair/six_blocker_audit.py": "2781096e56657868d3574fe5d62a39bf9e99e8d6dd235509a30f88d871b8add9",
     "scripts/audit_repair/review_six_blockers.py": "cdc3eeeed989f84b8f9b34d8eae66342912e940a46d093db3902f131f2b347d2",
-    "scripts/audit_repair/v3_audit.py": "53a4b1f451efcadd8054a7374754f80190ed5b0e56e6c514e2d084fcd57eb8fb",
+    "scripts/audit_repair/v3_audit.py": "9e8be57722ab326361637bf94fcdf50dff0f4dd5b14438a9fa33558aa37473de",
     "scripts/audit_repair/review_v3_audit.py": "9b2a3b07c53a854726303785d359ef9e261b2d7e009b37c3754f0752673fa19a",
     "scripts/v3/q_v2.py": "de21aa161cbf955c9b4e286e9d0761d4ee9c08d9bf421bd23006bb0e91bf7231",
     "scripts/v3/lu_v2.py": "21d4d1b979ed6ede7fade6a43360a53695b58c564ef0f5b1b2342f011241e898",
-    "scripts/v3/observability_smoke.py": "4b3e1dd333f5665b5af174b7f05f98f2cfa179e72c69332202fd442bc528cfee"
+    "scripts/v3/observability_smoke.py": "4e95e0a7cdac1d332e0646490f5af20efd347cdcc31d15f0ea440210a9a8e121"
   }
 }
