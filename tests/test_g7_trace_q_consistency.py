@@ -10,7 +10,7 @@ from scripts.audit_g7_trace_q_consistency import (
     validate_lifecycle,
 )
 from scripts.derive_g7_trace_view import split_attempts
-from scripts.run_g7_failure_localization import emit, existing_trace_sequence, trace_path_for_retry
+from scripts.run_g7_failure_localization import emit, existing_trace_sequence, state_claim, trace_path_for_retry
 
 
 def _write_events(path: Path, events: list[dict]) -> None:
@@ -433,3 +433,12 @@ def test_g7_terminal_error_recovers_sequence_after_inner_loop_failure(tmp_path: 
 
     assert [row["seq"] for row in rows] == [1, 2, 3, 4]
     assert validate_lifecycle(rows, {"run-1"}) == []
+
+
+def test_g7_state_claim_is_atomic_and_released(tmp_path: Path) -> None:
+    with state_claim(tmp_path, "run-1") as first:
+        assert first is True
+        with state_claim(tmp_path, "run-1") as second:
+            assert second is False
+    with state_claim(tmp_path, "run-1") as reclaimed:
+        assert reclaimed is True

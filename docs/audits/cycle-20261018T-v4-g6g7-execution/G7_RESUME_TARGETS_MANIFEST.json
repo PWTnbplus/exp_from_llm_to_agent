@@ -1,0 +1,14 @@
+{
+  "kind": "g7_append_only_resume_targets",
+  "plan_sha256": "be6c5550dfc453110b3f526f9ed6cf865bb0c1df5c3891b87dc0a23d6cf4c2e5",
+  "states_sha256": "82bbbbc16e7dd7c51b4e397329d81ccf898523d50654b1796195101bebbfdd09",
+  "trace_incidents_sha256": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018",
+  "plan_rows": 1288,
+  "target_rows": 150,
+  "terminal_state_targets": 138,
+  "trace_retry_targets": 13,
+  "overlap_targets": 1,
+  "unique_target_ids": 150,
+  "pooling_prohibited": true,
+  "historical_failures_retained": true
+}

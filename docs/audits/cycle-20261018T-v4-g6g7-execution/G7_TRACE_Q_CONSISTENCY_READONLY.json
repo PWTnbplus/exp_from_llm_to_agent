@@ -1,0 +1,793 @@
+{
+  "audit_version": "g7-trace-q-consistency-v4",
+  "audit_scope": "read_only_trace_lifecycle_q_cross_check; no_provider_call; no_scientific_truth_decision",
+  "trace_policy": "audit_latest_append_only_RUN_START_to_RUN_END_segment; require_unique_event_step_ids_and_parent_pairing; retain_prior_history_count",
+  "inputs": {
+    "states": "82bbbbc16e7dd7c51b4e397329d81ccf898523d50654b1796195101bebbfdd09",
+    "q": "d9668a28f9cf220ff88b1b3ad4f46478e1ba9a173698a7f3674d71eaa4f45845",
+    "checkpoints": "7d5cf5702ae8dbf8b1f85febc518dd6756ae9842c3131cb7f20945793bae47b9"
+  },
+  "states": {
+    "rows": 1288,
+    "unique_run_ids": 1288,
+    "duplicate_run_ids": [],
+    "status_counts": {
+      "completed": 1150,
+      "provider_error": 1,
+      "checkpoint_missing": 137
+    },
+    "trace_status_counts": {
+      "pass": 1123,
+      "trace_inconsistent": 27,
+      "failure_trace_inconsistent": 1,
+      "not_executed": 137
+    },
+    "recorded_failure_category_counts": {
+      "none": 1288
+    },
+    "trace_integrity_failures": 28,
+    "review_samples": [
+      {
+        "run_id": "g7full_de426358073cb27f89d4",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_de426358073cb27f89d4\\events.jsonl",
+        "event_count": 21,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_de426358073cb27f89d4"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 3,
+          "TOOL_RESULT": 3,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:17",
+          "model_response_parent_mismatch:20",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:17",
+          "model_response_parent_mismatch:20",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_209143e45ed6541a54fa",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_209143e45ed6541a54fa\\events.jsonl",
+        "event_count": 21,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_209143e45ed6541a54fa"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 3,
+          "TOOL_RESULT": 3,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:20",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:20",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_5185c32cd89cddc22643",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_5185c32cd89cddc22643\\events.jsonl",
+        "event_count": 12,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_5185c32cd89cddc22643"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 3,
+          "MODEL_RESPONSE": 2,
+          "TOOL_CALL": 1,
+          "TOOL_RESULT": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:11",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:11",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_ede7a777c92c10f5961e",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_ede7a777c92c10f5961e\\events.jsonl",
+        "event_count": 19,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_ede7a777c92c10f5961e"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 6,
+          "MODEL_RESPONSE": 5,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "TOOL_CALL": 1,
+          "TOOL_RESULT": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:12",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:18",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:12",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:18",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_6e84c3ae584db2067492",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_6e84c3ae584db2067492\\events.jsonl",
+        "event_count": 20,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_6e84c3ae584db2067492"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 3,
+          "TOOL_RESULT": 3,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:19",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:19",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_b5567bd4f3dcbc77d418",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_b5567bd4f3dcbc77d418\\events.jsonl",
+        "event_count": 18,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_b5567bd4f3dcbc77d418"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 2,
+          "TOOL_RESULT": 2,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:9",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:17",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:9",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:17",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_a8fd3ca2bb41a0beb704",
+        "record_status": "provider_error",
+        "trace_ref": "traces\\g7full_a8fd3ca2bb41a0beb704\\events.jsonl",
+        "event_count": 13,
+        "history_segment_count": 2,
+        "event_run_ids": [
+          "g7full_a8fd3ca2bb41a0beb704"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 1,
+          "INJECTION_APPLIED": 1,
+          "MODEL_REQUEST": 2,
+          "MODEL_RESPONSE": 1,
+          "TOOL_CALL": 4,
+          "TOOL_RESULT": 4
+        },
+        "lifecycle_reasons": [
+          "last_event_not_run_end",
+          "run_end_count:0"
+        ],
+        "trace_status": "failure_trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "last_event_not_run_end",
+          "run_end_count:0",
+          "missing_provider_error_run_end",
+          "missing_failure_evidence"
+        ]
+      },
+      {
+        "run_id": "g7full_19d2a7a7007b0f9dd482",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_19d2a7a7007b0f9dd482\\events.jsonl",
+        "event_count": 17,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_19d2a7a7007b0f9dd482"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 1,
+          "TOOL_RESULT": 1,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_a44660512ef608feea11",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_a44660512ef608feea11\\events.jsonl",
+        "event_count": 14,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_a44660512ef608feea11"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 4,
+          "MODEL_RESPONSE": 3,
+          "TOOL_CALL": 1,
+          "TOOL_RESULT": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:13",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:13",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_c3c5302393cf273bd1ba",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_c3c5302393cf273bd1ba\\events.jsonl",
+        "event_count": 30,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_c3c5302393cf273bd1ba"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 4,
+          "MODEL_RESPONSE": 3,
+          "TOOL_CALL": 9,
+          "TOOL_RESULT": 9,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:21",
+          "model_response_parent_mismatch:29",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:21",
+          "model_response_parent_mismatch:29",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_07e6412a59dd644fc708",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_07e6412a59dd644fc708\\events.jsonl",
+        "event_count": 17,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_07e6412a59dd644fc708"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 1,
+          "TOOL_RESULT": 1,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:14",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_a350012ea6e8c969771e",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_a350012ea6e8c969771e\\events.jsonl",
+        "event_count": 14,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_a350012ea6e8c969771e"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 3,
+          "MODEL_RESPONSE": 2,
+          "TOOL_CALL": 2,
+          "TOOL_RESULT": 2,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "duplicate_sequence",
+          "sequence_not_strictly_increasing",
+          "duplicate_event_id",
+          "duplicate_step_id",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "duplicate_sequence",
+          "sequence_not_strictly_increasing",
+          "duplicate_event_id",
+          "duplicate_step_id",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_ba2237cafca7315f1b57",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_ba2237cafca7315f1b57\\events.jsonl",
+        "event_count": 23,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_ba2237cafca7315f1b57"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 4,
+          "TOOL_RESULT": 4,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:19",
+          "model_response_parent_mismatch:22",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:19",
+          "model_response_parent_mismatch:22",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_64855b73c8828515d9ff",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_64855b73c8828515d9ff\\events.jsonl",
+        "event_count": 17,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_64855b73c8828515d9ff"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 4,
+          "MODEL_RESPONSE": 3,
+          "TOOL_CALL": 2,
+          "TOOL_RESULT": 2,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:13",
+          "model_response_parent_mismatch:16",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_b0724db2b117027b21fd",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_b0724db2b117027b21fd\\events.jsonl",
+        "event_count": 30,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_b0724db2b117027b21fd"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 8,
+          "TOOL_RESULT": 8,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "last_event_not_run_end",
+          "run_start_count:2",
+          "run_end_not_last",
+          "duplicate_sequence",
+          "sequence_not_strictly_increasing",
+          "duplicate_event_id",
+          "duplicate_step_id",
+          "model_response_parent_mismatch:17",
+          "model_response_parent_mismatch:23"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "last_event_not_run_end",
+          "run_start_count:2",
+          "run_end_not_last",
+          "duplicate_sequence",
+          "sequence_not_strictly_increasing",
+          "duplicate_event_id",
+          "duplicate_step_id",
+          "model_response_parent_mismatch:17",
+          "model_response_parent_mismatch:23"
+        ]
+      },
+      {
+        "run_id": "g7full_a4a2aa78a23f92676703",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      },
+      {
+        "run_id": "g7full_7b045348b92f278b8870",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_7b045348b92f278b8870\\events.jsonl",
+        "event_count": 27,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_7b045348b92f278b8870"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 5,
+          "MODEL_RESPONSE": 4,
+          "TOOL_CALL": 6,
+          "TOOL_RESULT": 6,
+          "FORMAT_RETRY_SCHEDULED": 1,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:18",
+          "model_response_parent_mismatch:26",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:18",
+          "model_response_parent_mismatch:26",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_70ac64fa4b2645c052c5",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_70ac64fa4b2645c052c5\\events.jsonl",
+        "event_count": 5,
+        "history_segment_count": 2,
+        "event_run_ids": [
+          "g7full_70ac64fa4b2645c052c5"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 1,
+          "INJECTION_APPLIED": 1,
+          "MODEL_REQUEST": 2,
+          "MODEL_RESPONSE": 1
+        },
+        "lifecycle_reasons": [
+          "last_event_not_run_end",
+          "run_end_count:0"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "last_event_not_run_end",
+          "run_end_count:0",
+          "missing_completed_run_end"
+        ]
+      },
+      {
+        "run_id": "g7full_0574ace6670ac8be81ac",
+        "record_status": "completed",
+        "trace_ref": "traces\\g7full_0574ace6670ac8be81ac\\events.jsonl",
+        "event_count": 24,
+        "history_segment_count": 1,
+        "event_run_ids": [
+          "g7full_0574ace6670ac8be81ac"
+        ],
+        "error_count": 0,
+        "error_text": [],
+        "failure_category": "none",
+        "parse_errors": [],
+        "event_type_counts": {
+          "RUN_START": 2,
+          "INJECTION_APPLIED": 2,
+          "MODEL_REQUEST": 6,
+          "MODEL_RESPONSE": 5,
+          "TOOL_CALL": 4,
+          "TOOL_RESULT": 4,
+          "RUN_END": 1
+        },
+        "lifecycle_reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:19",
+          "model_response_parent_mismatch:23",
+          "unmatched_model_request"
+        ],
+        "trace_status": "trace_inconsistent",
+        "trace_ok": false,
+        "reasons": [
+          "run_start_count:2",
+          "model_response_parent_mismatch:7",
+          "model_response_parent_mismatch:11",
+          "model_response_parent_mismatch:15",
+          "model_response_parent_mismatch:19",
+          "model_response_parent_mismatch:23",
+          "unmatched_model_request"
+        ]
+      },
+      {
+        "run_id": "g7full_72ae478d8ad8c6f9a362",
+        "record_status": "checkpoint_missing",
+        "trace_status": "not_executed",
+        "trace_ok": true,
+        "failure_category": "none",
+        "reasons": []
+      }
+    ]
+  },
+  "checkpoints": {
+    "provided": true,
+    "rows": 184,
+    "unique_ids": 184,
+    "duplicate_ids": [],
+    "status_counts": {
+      "completed": 184
+    },
+    "trace_status_counts": {
+      "pass": 184
+    },
+    "recorded_failure_category_counts": {
+      "none": 184
+    },
+    "trace_integrity_failures": 0,
+    "review_samples": []
+  },
+  "q": {
+    "rows": 1288,
+    "unique_run_ids": 1288,
+    "original_independent_valid": 0,
+    "trace_backed_valid": 0,
+    "valid_rows_invalidated_by_trace_review": 0,
+    "rows_missing_state_review": 0,
+    "states_missing_q_row": 0,
+    "q_rows_without_state": 0,
+    "duplicate_run_ids": [],
+    "malformed_validity_rows": 0,
+    "review_status_counts": {
+      "q_invalid_preserved": 1288
+    }
+  },
+  "conclusion": {
+    "terminal_failures_retained": true,
+    "q_invalidity_retained": true,
+    "retries_pooled": false,
+    "confirmatory_reuse_allowed": false,
+    "scientific_truth_decision_made": false,
+    "interpretation_boundary": "Failure categories are derived from persisted trace text; they do not establish an external provider root cause or scientific validity."
+  },
+  "trace_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261017T-g7-kimi-k25-v1",
+  "audit_script_sha256": "192691a3c077542a995224e25f1e085888f703748b282878676f395ac3876357"
+}

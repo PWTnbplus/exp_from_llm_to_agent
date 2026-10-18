@@ -1,0 +1,12 @@
+{
+  "proof_type": "sympy_independent_public_derivation",
+  "task_id": "TC-L1-001",
+  "public_model": "dA/dt=-kA",
+  "derivation": "A(t)=A0*exp(-k*t); substitute into dA/dt+kA=0 and verify A(0)=A0.",
+  "symbolic_checks": {
+    "ode_residual_zero": true,
+    "initial_value": true
+  },
+  "proof_pass": true,
+  "answer_key_read": false
+}

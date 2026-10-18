@@ -1,0 +1,21 @@
+{
+  "protocol_id": "G7_Q_V2_PUBLIC_COHORT",
+  "model_id": "kimi-k2.5",
+  "base_url": "https://token.ctflow.cn/v1",
+  "public_input": "results\\g7_failure_localization\\formal-20261014T030000Z\\g7_public_cases.jsonl",
+  "public_sha256": "1bffc3769523e437cc7e4ea5cff22f4eb2d42cd3500299f914cb03ec36b6063f",
+  "selected_cases": [
+    "G6F-TC-L1-001-CF1",
+    "G6F-TC-L1-001-CF2",
+    "G6F-TC-L1-001-CF3",
+    "G6F-TC-L1-001-CF4"
+  ],
+  "selected_case_count": 4,
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "local_verifier": "scripts/v3/q_v2.py::verify_q_record",
+  "paid_cap_usd": 0.05,
+  "provider_calls_made": 0,
+  "execution_status": "PREFLIGHT_ONLY"
+}

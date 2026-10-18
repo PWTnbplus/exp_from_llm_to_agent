@@ -1,0 +1,40 @@
+{
+  "protocol_id": "LU_V2_PUBLIC_DERIVED",
+  "public_input": "data\\theory_benchmark_v3\\public_tasks.json",
+  "public_sha256": "c3fea70a32c2c593e7fa32284aefde9ce27beb91ce81dc8f189219d505a9ffdb",
+  "graph_count": 2,
+  "edge_count": 4,
+  "independently_verified_edges": 4,
+  "u_transition_candidates": 0,
+  "u_transition_verified": 0,
+  "skipped_task_ids": [],
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "scientific_status": "PUBLIC_DERIVATION_ONLY_NOT_A_MODEL_BEHAVIOR_RESULT",
+  "proofs": [
+    {
+      "task_id": "TC-L1-001",
+      "proof_ref": "LU_V2_PROOFS/TC-L1-001.json",
+      "proof_sha256": "fea14a016ce9593989da3691b6f313a54758d7eb4ba0502e82a94ea48683f654",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "90790b15315a8b37e955f51d6969ed11c96381414d0cff3eb8872205c89c9065",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    },
+    {
+      "task_id": "TC-L1-002",
+      "proof_ref": "LU_V2_PROOFS/TC-L1-002.json",
+      "proof_sha256": "901a24b60060ea1bb6596e6b055f657347153af7a2c366fb5e4dc0937825a4e8",
+      "proof_pass": true,
+      "graph_validation": {
+        "graph_sha256": "3e6c3ae773ee4c52255c6b0d1aed0ac11801e0ea89f19a54079f9726dfb680d0",
+        "node_count": 3,
+        "edge_count": 2,
+        "acyclic": true
+      }
+    }
+  ]
+}

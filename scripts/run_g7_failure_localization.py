@@ -13,6 +13,7 @@ objects are recorded as invalid provider attempts, not silently repaired.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import hashlib
 import json
 import math
@@ -180,6 +181,51 @@ def append_jsonl(path: Path, value: dict[str, Any]) -> None:
             lock_path.unlink()
         except FileNotFoundError:
             pass
+
+
+@contextmanager
+def state_claim(root: Path, run_id: str):
+    """Atomically claim one state across cooperating worker processes."""
+    claim_path = root / "claims" / f"{run_id}.claim"
+    claim_path.parent.mkdir(parents=True, exist_ok=True)
+    fd: int | None = None
+    for _ in range(2):
+        try:
+            fd = os.open(claim_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(fd, json.dumps({"pid": os.getpid(), "run_id": run_id}).encode("utf-8"))
+            os.close(fd)
+            fd = None
+            break
+        except FileExistsError:
+            try:
+                owner = json.loads(claim_path.read_text(encoding="utf-8"))
+                owner_pid = owner.get("pid")
+                if not isinstance(owner_pid, int) or owner_pid <= 0:
+                    yield False
+                    return
+                try:
+                    os.kill(owner_pid, 0)
+                except ProcessLookupError:
+                    claim_path.unlink(missing_ok=True)
+                    continue
+                except PermissionError:
+                    yield False
+                    return
+                yield False
+                return
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                yield False
+                return
+        finally:
+            if fd is not None:
+                os.close(fd)
+    if fd is not None:
+        yield False
+        return
+    try:
+        yield True
+    finally:
+        claim_path.unlink(missing_ok=True)
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -1340,6 +1386,10 @@ def main() -> int:
                    help="required provider-verified price artifact; local proxy rates alone are rejected")
     p.add_argument("--worker-index", type=int, default=0)
     p.add_argument("--worker-count", type=int, default=1)
+    p.add_argument(
+        "--run-ids-file", type=Path,
+        help="optional newline-delimited run_id/JSONL target list; reruns only these states",
+    )
     p.add_argument("--limit", type=int, default=0)
     p.add_argument("--provider-retries", type=int, default=0)
     p.add_argument("--provider-timeout", type=float, default=60)
@@ -1456,7 +1506,32 @@ def main() -> int:
             raise SystemExit(f"plan row lacks public case or G7 label: {row.get('run_id')}")
     state_path = out / f"states.worker-{args.worker_count}-{args.worker_index}.jsonl"
     checkpoint_path = out / f"checkpoints.worker-{args.worker_count}-{args.worker_index}.jsonl"
+    requested_run_ids: set[str] | None = None
+    if args.run_ids_file is not None:
+        if not args.run_ids_file.is_file():
+            raise SystemExit(f"run-ids file not found: {args.run_ids_file}")
+        requested_run_ids = set()
+        for line in args.run_ids_file.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            value: Any = line.strip()
+            if line.lstrip().startswith("{"):
+                parsed = json.loads(line)
+                value = parsed.get("run_id") if isinstance(parsed, dict) else None
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit("run-ids file contains a row without run_id")
+            requested_run_ids.add(value.strip())
+        plan_ids = {str(row["run_id"]) for row in plan}
+        unknown = sorted(requested_run_ids - plan_ids)
+        if unknown:
+            raise SystemExit("run-ids file contains unknown frozen state IDs: " + ", ".join(unknown[:10]))
+        if not requested_run_ids:
+            raise SystemExit("run-ids file is empty")
     selected = plan if args.limit <= 0 else plan[:args.limit]
+    if requested_run_ids is not None:
+        selected = [row for row in selected if row["run_id"] in requested_run_ids]
+        if not selected:
+            raise SystemExit("run-ids file selected no rows after --limit")
     checkpoints: dict[str, dict[str, Any]] = {}
     for row in selected:
         checkpoints.setdefault(row["checkpoint_id"], row)
@@ -1497,8 +1572,8 @@ def main() -> int:
                       "initial_decision": payload["decision"], "checkpoint_payload": payload,
                       "trace_ref": str(event_path.relative_to(out)), "status": "completed",
                       "elapsed_seconds": round(time.monotonic() - started, 3), "public_only": True}
-            append_jsonl(checkpoint_path, record)
             emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
+            append_jsonl(checkpoint_path, record)
             prior_cp[cp_id] = record
         except Exception as exc:
             # ``public_tool_loop`` owns its local sequence variable. If the
@@ -1513,7 +1588,9 @@ def main() -> int:
             continue
     rows_for_worker = [row for row in selected if row["checkpoint_id"] in selected_cps]
     for index, row in enumerate(rows_for_worker, 1):
-        if row["run_id"] in prior_states and prior_states[row["run_id"]].get("status") == "completed":
+        explicitly_requested = requested_run_ids is not None and row["run_id"] in requested_run_ids
+        if (not explicitly_requested and row["run_id"] in prior_states
+                and prior_states[row["run_id"]].get("status") == "completed"):
             continue
         cp = prior_cp.get(row["checkpoint_id"])
         if not cp or cp.get("status") != "completed":
@@ -1526,41 +1603,48 @@ def main() -> int:
         event_path = out / "traces" / trace_id / "events.jsonl"
         event_path, seq = trace_path_for_retry(event_path)
         injection: dict[str, Any] = {"applied_stages": row["inject_stages"]}
-        try:
-            seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
-                       {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "case_id": row["case_id"],
-                        "diagnostic_arm": row["diagnostic_arm"], "group_id": row["group_id"], "public_only": True})
-            case = public[row["case_id"]]
-            label = labels[row["case_id"]]
-            injection = injection_for(row, label)
-            seq = emit(event_path, seq, trace_id, "INJECTION_APPLIED", "COMPLETED", injection)
-            messages = [{"role": "system", "content": system_prompt(row["group_id"])},
-                        {"role": "user", "content": case_prompt(case)},
-                        {"role": "assistant", "content": json.dumps(cp["checkpoint_payload"], ensure_ascii=False)},
-                        {"role": "user", "content": json.dumps({"diagnostic_arm": row["diagnostic_arm"],
-                           "inject_stages": row["inject_stages"],
-                           "diagnostic_information": model_visible_diagnostic_information(injection),
-                           "instruction": "Re-evaluate the case with only these supplied diagnostic stages. Return the required JSON."}, ensure_ascii=False)}]
-            payload, seq = public_tool_loop(provider, messages, row["group_id"], limits, event_path, trace_id, seq, False)
-            stages = normalize_stages(payload)
-            state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "completed",
-                     "initial_decision": cp["initial_decision"], "final_decision": payload["decision"],
-                     "stages": stages, "trace_ref": str(event_path.relative_to(out)),
-                     "checkpoint_trace_ref": cp["trace_ref"], "injection_audit": injection,
-                     "usage": {"model_calls": limits.model_calls, "tool_calls": limits.tool_calls,
-                               "total_tokens": limits.total_tokens, "cost_usd": limits.cost_usd},
-                     "public_only_checkpoint": True}
-            append_jsonl(state_path, state)
-            prior_states[trace_id] = state
-            emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
-        except Exception as exc:
-            seq = existing_trace_sequence(event_path)
-            seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
-            seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
-            state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "provider_error",
-                     "trace_ref": str(event_path.relative_to(out)), "injection_audit": injection if "injection" in locals() else {"applied_stages": row["inject_stages"]}}
-            append_jsonl(state_path, state)
-            prior_states[trace_id] = state
+        with state_claim(out, trace_id) as claimed:
+            if not claimed:
+                state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "claim_skipped",
+                         "trace_ref": str(event_path.relative_to(out)), "claim_skipped": True}
+            else:
+                try:
+                    seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
+                               {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "case_id": row["case_id"],
+                                "diagnostic_arm": row["diagnostic_arm"], "group_id": row["group_id"], "public_only": True})
+                    case = public[row["case_id"]]
+                    label = labels[row["case_id"]]
+                    injection = injection_for(row, label)
+                    seq = emit(event_path, seq, trace_id, "INJECTION_APPLIED", "COMPLETED", injection)
+                    messages = [{"role": "system", "content": system_prompt(row["group_id"])},
+                                {"role": "user", "content": case_prompt(case)},
+                                {"role": "assistant", "content": json.dumps(cp["checkpoint_payload"], ensure_ascii=False)},
+                                {"role": "user", "content": json.dumps({"diagnostic_arm": row["diagnostic_arm"],
+                                   "inject_stages": row["inject_stages"],
+                                   "diagnostic_information": model_visible_diagnostic_information(injection),
+                                   "instruction": "Re-evaluate the case with only these supplied diagnostic stages. Return the required JSON."}, ensure_ascii=False)}]
+                    payload, seq = public_tool_loop(provider, messages, row["group_id"], limits, event_path, trace_id, seq, False)
+                    stages = normalize_stages(payload)
+                    state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "completed",
+                             "initial_decision": cp["initial_decision"], "final_decision": payload["decision"],
+                             "stages": stages, "trace_ref": str(event_path.relative_to(out)),
+                             "checkpoint_trace_ref": cp["trace_ref"], "injection_audit": injection,
+                             "usage": {"model_calls": limits.model_calls, "tool_calls": limits.tool_calls,
+                                       "total_tokens": limits.total_tokens, "cost_usd": limits.cost_usd},
+                             "public_only_checkpoint": True}
+                    # The trace is the source of truth for lifecycle validity;
+                    # persist the completed state only after RUN_END is durable.
+                    emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
+                    append_jsonl(state_path, state)
+                    prior_states[trace_id] = state
+                except Exception as exc:
+                    seq = existing_trace_sequence(event_path)
+                    seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
+                    seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
+                    state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "provider_error",
+                             "trace_ref": str(event_path.relative_to(out)), "injection_audit": injection}
+                    append_jsonl(state_path, state)
+                    prior_states[trace_id] = state
         if index % 10 == 0 or state.get("status") != "completed":
             print(f"G7 progress {index}/{len(rows_for_worker)}: {state.get('status')} calls={limits.model_calls} tools={limits.tool_calls} tokens={limits.total_tokens}", flush=True)
     summary = {"experiment_id": "g7_failure_localization", "worker_index": args.worker_index,
