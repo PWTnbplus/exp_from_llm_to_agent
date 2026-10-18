@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18T14:07:28+00:00",
+  "updated_at": "2026-10-18T14:14:32+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -2165,7 +2165,8 @@
     "docs/audits/cycle-20261017T-kimi-k25-single-model-g0-g7/audit.json",
     "docs/audits/cycle-20261018T-kimi-format-revalidation-partial/audit.json",
     "docs/audits/cycle-20261018T-v4-g6g7-execution/audit.json",
-    "docs/audits/cycle-20261018T-v5-scientific-gates/audit.json"
+    "docs/audits/cycle-20261018T-v5-scientific-gates/audit.json",
+    "docs/audits/cycle-20261018T-v6-github-upload/audit.json"
   ],
   "current_focus": null
 }
