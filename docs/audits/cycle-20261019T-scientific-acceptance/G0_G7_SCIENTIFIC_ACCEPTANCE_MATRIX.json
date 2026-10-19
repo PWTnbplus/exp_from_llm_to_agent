@@ -1,6 +1,6 @@
 {
   "acceptance_version": "g0-g7-scientific-acceptance-v1",
-  "created_at_utc": "2026-10-19T02:38:02.202487+00:00",
+  "created_at_utc": "2026-10-19T02:43:48.256122+00:00",
   "read_only": true,
   "provider_calls_in_acceptance": 0,
   "gate_rows": [
@@ -97,7 +97,7 @@
   "provider_and_provenance": {
     "official_billing_verified": false,
     "immutable_route_or_weight_verified": false,
-    "remote_sha_verified": false
+    "remote_sha_verified": true
   },
   "unresolved_scientific_blocker_ids": [
     "ISSUE-000000000002",

@@ -1,10 +1,11 @@
 {
   "command": "git -c http.proxy= -c https.proxy= ls-remote origin refs/heads/autopilot/scientific-law-discovery",
-  "local_sha": "4e2519e264bdd49bc18ca88b8c20cd2fc91e64d2",
-  "remote_exit_code": 128,
-  "remote_stdout": "",
-  "remote_stderr": "fatal: unable to access 'https://github.com/PWTnbplus/exp_from_llm_to_agent.git/': Failed to connect to github.com port 443 after 21178 ms: Could not connect to server\n",
-  "remote_sha_verified": false,
-  "upstream_provenance_status": "PENDING_SEPARATE_NEWTONBENCH_PROOF",
-  "interpretation": "No remote delivery is claimed unless the exact remote SHA is observed and matches local HEAD."
+  "local_sha": "8becc9005d51bc88430d0849f1f2b9ab1e1b26ee",
+  "remote_sha": "8becc9005d51bc88430d0849f1f2b9ab1e1b26ee",
+  "remote_exit_code": 0,
+  "remote_stdout": "8becc9005d51bc88430d0849f1f2b9ab1e1b26ee\trefs/heads/autopilot/scientific-law-discovery\n",
+  "remote_stderr": "",
+  "remote_sha_verified": true,
+  "upstream_provenance_status": "VERIFIED_PINNED_NEWTONBENCH_AND_REMOTE_SHA",
+  "interpretation": "Remote delivery is verified only when the exact remote SHA is observed and matches local HEAD."
 }
