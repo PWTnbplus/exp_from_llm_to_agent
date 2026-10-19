@@ -1,0 +1,7 @@
+{
+  "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_v7_machine_pipeline.py tests/test_v4_q_lu.py tests/test_g7_protocol.py tests/test_g7_trace_q_consistency.py",
+  "command_exit_code": 0,
+  "executed_outside_scheduler": true,
+  "pytest_plugin_autoload_disabled": true,
+  "result": "92 passed in 4.49s"
+}

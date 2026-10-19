@@ -1,0 +1,19 @@
+{
+  "calibration_24_not_pooled": true,
+  "counts": {
+    "FAIL": 8,
+    "INCONCLUSIVE": 55,
+    "NOT_SCORED": 11,
+    "PASS": 18
+  },
+  "historical_baseline": {
+    "FAIL": 8,
+    "INCONCLUSIVE": 55,
+    "NOT_SCORED": 11,
+    "PASS": 18
+  },
+  "human_domain_review": "NOT_AVAILABLE",
+  "machine_truth_coverage": 0,
+  "n": 92,
+  "scientific_release_allowed": false
+}

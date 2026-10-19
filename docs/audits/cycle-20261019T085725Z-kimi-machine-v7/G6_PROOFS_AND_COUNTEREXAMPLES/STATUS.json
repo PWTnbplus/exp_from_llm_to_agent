@@ -1,0 +1,6 @@
+{
+  "generated_certificate_count": 0,
+  "no_historical_row_relabelled": true,
+  "reason": "all 276 historical rows lacked a public structured claim suitable for controlled proof",
+  "status": "NO_CERTIFICATES_GENERATED"
+}

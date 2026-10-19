@@ -1,0 +1,11 @@
+{
+  "audit_sha256": "a01e84736e2e2854f9cb281516ffe8863eda1bfcf2b912b1e1e29572dfc50002",
+  "event_rows": 143,
+  "failures": [],
+  "g6_rows": 276,
+  "g7_defect_rows": 13,
+  "independent_reviewer": "v7-independent-machine-audit-v1",
+  "q92_rows": 92,
+  "required_files_checked": 14,
+  "scientific_release_allowed": false
+}

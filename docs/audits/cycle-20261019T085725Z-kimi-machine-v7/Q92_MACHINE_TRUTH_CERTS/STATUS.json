@@ -1,0 +1,6 @@
+{
+  "generated_certificate_count": 0,
+  "reason": "public obligation text and truth key were not reconstructible from the frozen pack",
+  "status": "NO_CERTIFICATES_GENERATED",
+  "truth_key_read": false
+}

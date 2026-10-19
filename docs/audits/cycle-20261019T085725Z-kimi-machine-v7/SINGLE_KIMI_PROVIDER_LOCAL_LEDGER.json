@@ -1,0 +1,12 @@
+{
+  "external_publication_certification": false,
+  "immutable_route_or_weight": "UNKNOWN",
+  "language_model_count": 1,
+  "local_cost_estimate_usd": 0.006012,
+  "model_id": "kimi-k2.5",
+  "models_observed": [
+    "kimi-k2.5"
+  ],
+  "official_billing": "UNAVAILABLE",
+  "trace_rows_reused": 12
+}

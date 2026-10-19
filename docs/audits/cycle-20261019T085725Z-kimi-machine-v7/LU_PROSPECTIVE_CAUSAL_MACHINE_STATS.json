@@ -1,0 +1,12 @@
+{
+  "analysis_unit": "independent_theory_family",
+  "ci95": null,
+  "effect_real_minus_sham": null,
+  "families": 6,
+  "historical_lu_u_not_pooled": true,
+  "planned_itt": 6,
+  "source_transition_count": 6,
+  "trace_validity_separate": true,
+  "valid_u_real": 0,
+  "valid_u_sham": 0
+}

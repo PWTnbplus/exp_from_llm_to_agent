@@ -1,0 +1,32 @@
+{
+  "branch": "autopilot/scientific-law-discovery",
+  "created_at_utc": "2026-10-19T09:05:28.920955+00:00",
+  "historical_counts": {
+    "g6_audit": 276,
+    "g6_formal_denominator": 552,
+    "g6_proven_equivalent": 23,
+    "g7_frozen": 1288,
+    "g7_historical_defects": 13,
+    "g7_recovery": 150,
+    "lu_formal_u": 0,
+    "q92": 92
+  },
+  "historical_inputs_read_only": true,
+  "input_sha256": {
+    "docs/audits/cycle-20261018T-g6g7-v3/G7_TRACE_15_EXPLAINED_13_INVALID.jsonl": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018",
+    "docs/audits/cycle-20261019T-v5-execution/G6_MATH_REVIEW.jsonl": "cd8132dc385911e6e744372a8deb10d5bce3f15248172a4662a92ed7e3cf8d03",
+    "docs/audits/cycle-20261019T-v5-execution/G7_APPEND_ONLY_RECOVERY_VIEW.jsonl": "7e7cd8c95da7db6169220b7e78f0c97b4f48e2f1af0a28fbd322b1371aa33fa6",
+    "docs/audits/cycle-20261019T-v5-execution/G7_FROZEN_ORIGINAL_FULL_LEDGER.jsonl": "17dc42496a522e4e427b2e27672425a0076a706df384f6ec692b289b0787c092",
+    "docs/audits/cycle-20261019T-v5-execution/Q92_FROZEN_DOMAIN_REVIEW.jsonl": "e7eb7162dd2075d50a77a38d1df84107c20a60bbaea39ac30c16d2614d73f214",
+    "runs/ctflow_single_model/20261019T-v9-targeted-recovery/lu-u-cohort-r4/public_tasks.jsonl": "61c5da3ff773b60f1415edd0b6adaee2001ad1dcbd7a638a4eee73f43bc8c65a",
+    "runs/ctflow_single_model/20261019T-v9-targeted-recovery/lu-u-run-r4/provider_traces.jsonl": "0f50ca3d625a3c5232089e1b49654f0c67b60151d29a31101697d47de535a1a0",
+    "runs/ctflow_single_model/20261019T-v9-targeted-recovery/lu-u-run-r4/records.jsonl": "e012091932a4ae35fc9659f96bcc267dc3d0f3d6560dfe00201f9323ec2ddc84"
+  },
+  "language_model_count": 1,
+  "mode": "MACHINE_VERIFIED_INTERNAL",
+  "model_id": "kimi-k2.5",
+  "provider_immutable_fingerprint": "UNKNOWN",
+  "provider_official_billing": "UNAVAILABLE",
+  "route": "https://token.ctflow.cn/v1",
+  "source_sha": "c00091c5064590ef7ae2cb0aa66b440ea6ba7a12"
+}

@@ -1,0 +1,38 @@
+{
+  "analysis_type": "AUTOMATED_RETROSPECTIVE_REANALYSIS",
+  "formal_denominators": {
+    "frozen": 1288,
+    "recovery": 150
+  },
+  "frozen_initial_attempt": {
+    "n": 1288,
+    "status_counts": {
+      "checkpoint_missing": 137,
+      "completed": 1150,
+      "provider_error": 1
+    }
+  },
+  "historical_genuine_lifecycle_failures": 13,
+  "new_append_recovery_view": {
+    "n": 150,
+    "not_independent_n": true,
+    "status_counts": {
+      "completed": 150
+    }
+  },
+  "pooled": false,
+  "prospective_new_run": {
+    "n": 0,
+    "status": "NO_NEW_G7_CALLS_REQUIRED_REUSED_TRACE_BACKED_DATA"
+  },
+  "protocol_eligible_retry_view": {
+    "n": 0,
+    "status": "RETROSPECTIVE_NOT_CONFIRMATORY"
+  },
+  "scientific_release_allowed": false,
+  "source_hashes": {
+    "frozen": "17dc42496a522e4e427b2e27672425a0076a706df384f6ec692b289b0787c092",
+    "incidents": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018",
+    "recovery": "7e7cd8c95da7db6169220b7e78f0c97b4f48e2f1af0a28fbd322b1371aa33fa6"
+  }
+}
