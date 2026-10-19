@@ -18,7 +18,7 @@ def main() -> int:
     plan = json.loads((args.cohort / "cohort_plan.json").read_text(encoding="utf-8")); tasks = {x["task_id"]: x for x in read_jsonl(args.cohort / "public_tasks.jsonl")}; truth = {x["task_id"]: x for x in read_jsonl(args.cohort / "causal_truth_key.jsonl")}; records = read_jsonl(args.run / "records.jsonl"); traces = read_jsonl(args.run / "provider_traces.jsonl")
     failures: list[str] = []; statuses: Counter[str] = Counter(); rows = []
     if sha256(args.cohort / "causal_truth_key.jsonl") != plan["truth_key_sha256"]: failures.append("truth_key_hash_mismatch")
-    if set(tasks) != set(truth) or len(tasks) != 12: failures.append("task_truth_bijection_or_count")
+    if set(tasks) != set(truth) or len(tasks) != int(plan.get("task_count", -1)): failures.append("task_truth_bijection_or_count")
     by_task: dict[str, dict[str, dict[str, Any]]] = {}
     for record in records: by_task.setdefault(str(record.get("task_id")), {})[str(record.get("arm"))] = record
     if set(by_task) != set(tasks) or any(set(arms) != {"control", "intervention"} for arms in by_task.values()): failures.append("paired_record_bijection")

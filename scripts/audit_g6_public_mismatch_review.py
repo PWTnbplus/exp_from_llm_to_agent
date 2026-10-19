@@ -77,8 +77,8 @@ def main() -> int:
     traces = read_jsonl(args.traces)
     failures: list[str] = []
     quality_issues: list[str] = []
-    if plan_count != 43 or len(plan_ids) != 43:
-        failures.append("plan_not_exactly_43_unique_prior_runs")
+    if plan_count <= 0 or len(plan_ids) != plan_count:
+        failures.append("plan_not_positive_unique_prior_runs")
     if len(records) != plan_count or len({row.get("prior_run_id") for row in records}) != len(records):
         failures.append("record_plan_bijection")
     if not traces:
@@ -88,6 +88,7 @@ def main() -> int:
         failures.append("prior_run_id_set_mismatch")
     alignment_counts: Counter[str] = Counter()
     validation_counts: Counter[str] = Counter()
+    audit_rows: list[dict[str, Any]] = []
     valid = 0
     for row in records:
         prior_id = row.get("prior_run_id")
@@ -101,6 +102,16 @@ def main() -> int:
         candidate = row.get("candidate")
         error = row.get("validation_error")
         validation_counts[str(error or "none")] += 1
+        audit_row: dict[str, Any] = {
+            "prior_run_id": prior_id,
+            "review_id": row.get("review_id"),
+            "case_id": row.get("case_id"),
+            "family": family,
+            "validation_error": error,
+            "public_alignment": None,
+            "public_outcome": None,
+            "public_witness_token_hits": None,
+        }
         if candidate is not None:
             if forbidden(candidate):
                 failures.append(f"forbidden_candidate:{prior_id}")
@@ -119,6 +130,11 @@ def main() -> int:
                 row["public_alignment"] = status
                 row["public_outcome"] = outcome
                 row["public_witness_token_hits"] = hits
+                audit_row.update(
+                    public_alignment=status,
+                    public_outcome=outcome,
+                    public_witness_token_hits=hits,
+                )
         trace_rows = [trace for trace in traces if trace.get("review_id") == row.get("review_id")]
         if not trace_rows:
             failures.append(f"missing_trace:{prior_id}")
@@ -127,6 +143,7 @@ def main() -> int:
                 failures.append(f"trace_model:{prior_id}")
             if forbidden(trace.get("request")):
                 failures.append(f"forbidden_request:{prior_id}")
+        audit_rows.append(audit_row)
     summary = {
         "schema_version": 1,
         "audit_version": "g6-public-mismatch-independent-v1",
@@ -137,6 +154,7 @@ def main() -> int:
         "public_alignment_counts": dict(sorted(alignment_counts.items())),
         "validation_error_counts": dict(sorted(validation_counts.items())),
         "candidate_quality_issues": quality_issues,
+        "rows": audit_rows,
         "plan_sha256": sha256(args.plan),
         "records_sha256": sha256(args.records),
         "traces_sha256": sha256(args.traces),

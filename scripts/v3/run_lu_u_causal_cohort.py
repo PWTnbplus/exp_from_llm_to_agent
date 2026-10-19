@@ -28,16 +28,28 @@ def extract_json(content: str) -> dict[str, Any]:
     return value
 
 
-def messages(task: dict[str, Any], arm: str) -> list[dict[str, str]]:
+def messages(task: dict[str, Any], arm: str, semantic_recovery: bool = False) -> list[dict[str, str]]:
     claim = task["control_claim"] if arm == "control" else task["intervention_claim"]
     payload = {
         "task_id": task["task_id"], "claim_id": task["claim_id"], "arm": arm,
         "public_domain": task["domain"], "public_claim": claim,
         "public_intervention": "No parameter change; evaluate the control claim." if arm == "control" else task["public_intervention"],
-        "instruction": "Return exactly one JSON object with claim_id, state_before, state_after, to_status, evidence. state_before must be supported; state_after and to_status must be supported, refuted, or unresolved.",
+        "instruction": (
+            "Return exactly one JSON object with claim_id, state_before, state_after, to_status, evidence. "
+            "state_before must literally be supported for every arm. Set state_after and to_status to supported "
+            "if and only if the displayed public_claim is mathematically true on x>=0; otherwise use refuted "
+            "or unresolved. Evaluate the claim text exactly and ignore the task_id name. Standard weak monotonicity "
+            "applies: nondecreasing means derivative >= 0, nonincreasing means derivative <= 0, so constant "
+            "functions satisfy both. An intercept does not change a linear function's monotonicity."
+            " For strict monotonicity, use pairwise comparison on the stated domain; an isolated endpoint "
+            "derivative of zero does not by itself disprove strictness (for example, -x^2 is strictly "
+            "decreasing on x>=0, while x^2 is not decreasing). Keep evidence to one short sentence "
+            "(under 120 characters) so the JSON is not truncated."
+        ),
+        "semantic_recovery_instruction": "Recompute the derivative sign of the displayed polynomial on x>=0 and compare it directly with the stated public_claim." if semantic_recovery else None,
     }
     return [
-        {"role": "system", "content": "You are in a public paired control/intervention state cohort. Return only compact JSON with exactly the five requested fields. Use no external labels or metadata."},
+        {"role": "system", "content": "You are in a public paired control/intervention state cohort. Return only compact JSON with exactly the five requested fields. Use no external labels or metadata. Do not reinterpret nondecreasing/nonincreasing as strict decreasing."},
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False, sort_keys=True)},
     ]
 
@@ -49,6 +61,7 @@ def main() -> int:
     parser.add_argument("--key-file", type=Path, default=Path("api_key/kimi/kimi-k2.5.txt")); parser.add_argument("--cost-ledger", type=Path, required=True)
     parser.add_argument("--allow-paid", action="store_true"); parser.add_argument("--allow-user-authorized-unverified-pricing", action="store_true")
     parser.add_argument("--preflight-only", action="store_true"); parser.add_argument("--format-retries", type=int, default=1)
+    parser.add_argument("--semantic-recovery", action="store_true")
     parser.add_argument("--max-cost-usd", type=float, default=8.0); parser.add_argument("--max-output-tokens", type=int, default=192); parser.add_argument("--timeout", type=float, default=60.0)
     args = parser.parse_args()
     plan = json.loads((args.cohort / "cohort_plan.json").read_text(encoding="utf-8")); tasks = read_jsonl(args.cohort / "public_tasks.jsonl")
@@ -68,7 +81,7 @@ def main() -> int:
     records = []
     for task in tasks:
         for arm in ("control", "intervention"):
-            response = None; candidate = None; errors: list[str] = []; start = len(provider.audit_trace()); request_messages = messages(task, arm)
+            response = None; candidate = None; errors: list[str] = []; start = len(provider.audit_trace()); request_messages = messages(task, arm, semantic_recovery=args.semantic_recovery)
             for attempt in range(args.format_retries + 1):
                 try:
                     response = provider.complete(request_messages); candidate = extract_json(response.content); break

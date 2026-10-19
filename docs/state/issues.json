@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-18T16:00:15+00:00",
+  "updated_at": "2026-10-19T01:02:43+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -2168,7 +2168,8 @@
     "docs/audits/cycle-20261018T-v5-scientific-gates/audit.json",
     "docs/audits/cycle-20261018T-v6-github-upload/audit.json",
     "docs/audits/cycle-20261018T-v7-scientific-review/audit.json",
-    "docs/audits/cycle-20261018T-v8-scientific-resolution/audit.json"
+    "docs/audits/cycle-20261018T-v8-scientific-resolution/audit.json",
+    "docs/audits/cycle-20261019T-v9-targeted-recovery/audit.json"
   ],
   "current_focus": null
 }

@@ -59,7 +59,7 @@ def extract_json(content: str) -> dict[str, Any]:
     return value
 
 
-def public_payload(plan: dict[str, Any], public: dict[str, Any], prior: dict[str, Any], audit: dict[str, Any]) -> dict[str, Any]:
+def public_payload(plan: dict[str, Any], public: dict[str, Any], prior: dict[str, Any], audit: dict[str, Any], semantic_recovery: bool = False) -> dict[str, Any]:
     visible = public.get("model_visible") or {}
     family = str(plan["case_id"]).rsplit("-CF3", 1)[0]
     spec = SPECS[family]
@@ -89,6 +89,14 @@ def public_payload(plan: dict[str, Any], public: dict[str, Any], prior: dict[str
             "routing or metadata. Explain the mathematical boundary consequence briefly in supporting_evidence."
         ),
         "previous_public_review_status": audit.get("status"),
+        "semantic_recovery_instruction": (
+            "This is a targeted recovery. Re-derive the displayed boundary witness before answering; "
+            "distinguish the boundary case from the interior case and keep boundary_handling a non-empty string. "
+            "Use the public expected_scope as the rubric: preserves_specific requires MAINTAIN; "
+            "invalidates or degenerate_formula requires REVISE or REJECT. Do not replace the supplied "
+            "witness with a different parameter regime or reinterpret the original numerical instance."
+            if semantic_recovery else None
+        ),
     }
 
 
@@ -119,6 +127,7 @@ def main() -> int:
     parser.add_argument("--public", type=Path, required=True)
     parser.add_argument("--responses", type=Path, required=True)
     parser.add_argument("--mismatch-audit", type=Path, required=True)
+    parser.add_argument("--target-run-ids", type=Path, help="optional JSON array or newline-delimited prior run IDs")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--model-id", default=MODEL_ID)
     parser.add_argument("--base-url", default=BASE_URL)
@@ -127,6 +136,7 @@ def main() -> int:
     parser.add_argument("--allow-paid", action="store_true")
     parser.add_argument("--allow-user-authorized-unverified-pricing", action="store_true")
     parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--semantic-recovery", action="store_true")
     parser.add_argument("--format-retries", type=int, default=1)
     parser.add_argument("--max-cost-usd", type=float, default=10.0)
     parser.add_argument("--max-output-tokens", type=int, default=320)
@@ -141,19 +151,37 @@ def main() -> int:
     mismatch_rows = [row for row in read_jsonl(args.mismatch_audit) if row.get("status") == "FAIL"]
     if len(mismatch_rows) != 43:
         raise ValueError(f"expected exactly 43 public mismatches, found {len(mismatch_rows)}")
+    target_ids: set[str] | None = None
+    if args.target_run_ids:
+        raw = args.target_run_ids.read_text(encoding="utf-8").strip()
+        parsed = json.loads(raw) if raw.startswith("[") else [line.strip() for line in raw.splitlines() if line.strip()]
+        if not isinstance(parsed, list) or not parsed or any(not isinstance(x, str) for x in parsed):
+            raise ValueError("target-run-ids must contain a non-empty list of strings")
+        target_ids = set(parsed)
+        if len(target_ids) != len(parsed):
+            raise ValueError("target-run-ids contains duplicates")
+        mismatch_ids = {row.get("run_id") for row in mismatch_rows}
+        if not target_ids.issubset(mismatch_ids):
+            raise ValueError("target-run-ids must be a subset of the 43 public mismatches")
     selected = []
     for audit in mismatch_rows:
         run_id = audit.get("run_id")
         if run_id not in plan_rows or run_id not in prior_rows or audit.get("case_id") not in public_rows:
             raise ValueError(f"mismatch row cannot be joined: {run_id}")
-        selected.append((plan_rows[run_id], public_rows[audit["case_id"]], prior_rows[run_id], audit))
+        if target_ids is None or run_id in target_ids:
+            selected.append((plan_rows[run_id], public_rows[audit["case_id"]], prior_rows[run_id], audit))
+    if target_ids is not None and {row[0]["run_id"] for row in selected} != target_ids:
+        raise ValueError("target-run-ids did not resolve to the requested rows")
+    if not selected:
+        raise ValueError("no rows selected for public correction review")
     args.out.mkdir(parents=True, exist_ok=True)
     plan = {
-        "protocol_id": "G6_CF3_PUBLIC_MISMATCH_CORRECTION_V1",
+        "protocol_id": "G6_CF3_PUBLIC_MISMATCH_CORRECTION_V2" if target_ids is not None else "G6_CF3_PUBLIC_MISMATCH_CORRECTION_V1",
         "model_id": args.model_id,
         "base_url": args.base_url,
         "selected_count": len(selected),
         "selected_prior_run_ids": [row[0]["run_id"] for row in selected],
+        "selected_targeted_subset": target_ids is not None,
         "plan_sha256": sha256_file(args.plan),
         "public_sha256": sha256_file(args.public),
         "prior_responses_sha256": sha256_file(args.responses),
@@ -203,7 +231,7 @@ def main() -> int:
     traces_path.write_text("", encoding="utf-8")
     records: list[dict[str, Any]] = []
     for plan_row, public_row, prior, audit in selected:
-        payload = public_payload(plan_row, public_row, prior, audit)
+        payload = public_payload(plan_row, public_row, prior, audit, semantic_recovery=args.semantic_recovery)
         response = None
         candidate = None
         errors: list[str] = []

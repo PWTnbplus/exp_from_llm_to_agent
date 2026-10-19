@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "audit_version": "g6-public-mismatch-independent-v1",
+  "plan_count": 8,
+  "record_count": 8,
+  "trace_count": 9,
+  "valid_candidate_count": 7,
+  "public_alignment_counts": {
+    "PUBLIC_MISMATCH_REMAINS": 7
+  },
+  "validation_error_counts": {
+    "none": 8
+  },
+  "candidate_quality_issues": [],
+  "rows": [
+    {
+      "prior_run_id": "g6_d71a15c627b87462d6d6",
+      "review_id": "public-g6-cf3:g6_d71a15c627b87462d6d6",
+      "case_id": "G6F-TB-L1-004-CF3",
+      "family": "G6F-TB-L1-004",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_e2471ccad493b5775539",
+      "review_id": "public-g6-cf3:g6_e2471ccad493b5775539",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_5ea947fbe17bc01c4d02",
+      "review_id": "public-g6-cf3:g6_5ea947fbe17bc01c4d02",
+      "case_id": "G6F-TC-L1-001-CF3",
+      "family": "G6F-TC-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_69419794c40a1f76f119",
+      "review_id": "public-g6-cf3:g6_69419794c40a1f76f119",
+      "case_id": "G6F-TC-L1-005-CF3",
+      "family": "G6F-TC-L1-005",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_ba45f81f994b89db0cd1",
+      "review_id": "public-g6-cf3:g6_ba45f81f994b89db0cd1",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_d26e21e8c8547fcfe778",
+      "review_id": "public-g6-cf3:g6_d26e21e8c8547fcfe778",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_ab06d9b5db03fdf0537f",
+      "review_id": "public-g6-cf3:g6_ab06d9b5db03fdf0537f",
+      "case_id": "G6F-TC-L1-009-CF3",
+      "family": "G6F-TC-L1-009",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "degenerate_formula",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_f24e891e3c73c7190354",
+      "review_id": "public-g6-cf3:g6_f24e891e3c73c7190354",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 1
+    }
+  ],
+  "plan_sha256": "b7ddd4a55e859f2d722025604a572413ed009cf20c1073dc2730ab39a7576aad",
+  "records_sha256": "c2954f416d273e10b2c8249e046ad29d6a71e197c7b39e604762d8a3c773356b",
+  "traces_sha256": "c8c8784aa523479b01e8b0a6ae9efc7e5b5589fe2e8885ac5dcb262b8bd32a7c",
+  "private_labels_read": false,
+  "private_oracle_read": false,
+  "pooled_with_frozen_g6": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "engineering_audit_pass": true,
+  "interpretation": "A public alignment after corrective review is not a blinded oracle score and cannot erase the 43 historical mismatches."
+}

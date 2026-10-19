@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "audit_version": "lu-u-causal-independent-v1",
+  "task_count": 6,
+  "record_count": 12,
+  "trace_count": 16,
+  "status_counts": {
+    "control:NOT_SCORED": 1,
+    "control:TRUTH_MATCH": 3,
+    "control:TRUTH_MISMATCH": 2,
+    "intervention:NOT_SCORED": 1,
+    "intervention:TRUTH_MATCH": 1,
+    "intervention:TRUTH_MISMATCH": 4
+  },
+  "task_sha256": "343fd471b6cc1aeacd8be534d358473514ea6f08eb26ad44575de6f7836a5a63",
+  "truth_key_sha256": "37d3f8b77f2ddb17aa188577be7728e10d0c5916408ac11387015a7f90107a89",
+  "records_sha256": "f632a8028bb022aa15a3fd66f49ddba4e1044f4b41f80d4128e91bdc23fe79af",
+  "traces_sha256": "baf7203d513c0c36d770be914012d0dd053c5c1fffb4600d7db5d3d259161427",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": [
+    {
+      "task_id": "LUCT-004-identity_neg_to_pos",
+      "control": "TRUTH_MISMATCH",
+      "intervention": "NOT_SCORED",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-005-zero_nondec_to_neg",
+      "control": "TRUTH_MISMATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-008-square_neg_to_pos",
+      "control": "NOT_SCORED",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-010-intercept_only_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-011-constant_nondec",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-012-constant_noninc",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    }
+  ],
+  "interpretation": "Validated paired contrasts are public causal calibration evidence only; they do not retroactively convert the historical LU/U observations into a formal G7 causal estimate."
+}

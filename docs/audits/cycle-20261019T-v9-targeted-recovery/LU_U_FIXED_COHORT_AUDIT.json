@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "audit_version": "lu-u-causal-independent-v1",
+  "task_count": 6,
+  "record_count": 12,
+  "trace_count": 12,
+  "status_counts": {
+    "control:TRUTH_MATCH": 5,
+    "control:TRUTH_MISMATCH": 1,
+    "intervention:TRUTH_MATCH": 6,
+    "validated_causal_contrast": 2
+  },
+  "task_sha256": "61c5da3ff773b60f1415edd0b6adaee2001ad1dcbd7a638a4eee73f43bc8c65a",
+  "truth_key_sha256": "37d3f8b77f2ddb17aa188577be7728e10d0c5916408ac11387015a7f90107a89",
+  "records_sha256": "e012091932a4ae35fc9659f96bcc267dc3d0f3d6560dfe00201f9323ec2ddc84",
+  "traces_sha256": "0f50ca3d625a3c5232089e1b49654f0c67b60151d29a31101697d47de535a1a0",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": [
+    {
+      "task_id": "LUCT-004-identity_neg_to_pos",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-005-zero_nondec_to_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-008-square_neg_to_pos",
+      "control": "TRUTH_MISMATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-010-intercept_only_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-011-constant_nondec",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-012-constant_noninc",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    }
+  ],
+  "interpretation": "Validated paired contrasts are public causal calibration evidence only; they do not retroactively convert the historical LU/U observations into a formal G7 causal estimate."
+}

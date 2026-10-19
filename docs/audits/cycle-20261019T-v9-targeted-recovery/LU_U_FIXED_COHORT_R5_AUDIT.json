@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "audit_version": "lu-u-causal-independent-v1",
+  "task_count": 1,
+  "record_count": 2,
+  "trace_count": 2,
+  "status_counts": {
+    "control:TRUTH_MISMATCH": 1,
+    "intervention:TRUTH_MATCH": 1
+  },
+  "task_sha256": "494a77f0605697493e70220fb79ad6b4c9aed24fe627782dae9b039882e0eff2",
+  "truth_key_sha256": "090da3344c4812d6796f4e0f84775537a812507ea94b0fe6cf481907f3b765c7",
+  "records_sha256": "14afaec1eeed2cc93592fd5f8b91d6d846e5bcc6250d0fea9298d8a8a0bb9cdc",
+  "traces_sha256": "8912a8ad1bbfb3b5b9344a0466a195da41746767d541e2e9ff3c2bce1afe3bbf",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": [
+    {
+      "task_id": "LUCT-008-square_neg_to_pos",
+      "control": "TRUTH_MISMATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    }
+  ],
+  "interpretation": "Validated paired contrasts are public causal calibration evidence only; they do not retroactively convert the historical LU/U observations into a formal G7 causal estimate."
+}

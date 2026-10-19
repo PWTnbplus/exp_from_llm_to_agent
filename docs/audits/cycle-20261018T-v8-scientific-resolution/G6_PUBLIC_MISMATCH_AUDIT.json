@@ -19,6 +19,438 @@
     "candidate_boundary:g6_0cfd540d493a21c38300",
     "candidate_boundary:g6_f24e891e3c73c7190354"
   ],
+  "rows": [
+    {
+      "prior_run_id": "g6_77529029ea5df04219bb",
+      "review_id": "public-g6-cf3:g6_77529029ea5df04219bb",
+      "case_id": "G6F-TB-L1-012-CF3",
+      "family": "G6F-TB-L1-012",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_3140a51f9cf8489c29f9",
+      "review_id": "public-g6-cf3:g6_3140a51f9cf8489c29f9",
+      "case_id": "G6F-TB-L1-005-CF3",
+      "family": "G6F-TB-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_b66e9995142dc559ee7f",
+      "review_id": "public-g6-cf3:g6_b66e9995142dc559ee7f",
+      "case_id": "G6F-TB-L1-012-CF3",
+      "family": "G6F-TB-L1-012",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_64623b346eafa8976c91",
+      "review_id": "public-g6-cf3:g6_64623b346eafa8976c91",
+      "case_id": "G6F-TC-L1-005-CF3",
+      "family": "G6F-TC-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_b0c571f294a3cf482b9b",
+      "review_id": "public-g6-cf3:g6_b0c571f294a3cf482b9b",
+      "case_id": "G6F-TC-L1-004-CF3",
+      "family": "G6F-TC-L1-004",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_b81f7d3ccb98d49d1060",
+      "review_id": "public-g6-cf3:g6_b81f7d3ccb98d49d1060",
+      "case_id": "G6F-TC-L1-006-CF3",
+      "family": "G6F-TC-L1-006",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_042f451adfb584d04264",
+      "review_id": "public-g6-cf3:g6_042f451adfb584d04264",
+      "case_id": "G6F-TC-L1-009-CF3",
+      "family": "G6F-TC-L1-009",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "degenerate_formula",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_e27edd46c380a2401f74",
+      "review_id": "public-g6-cf3:g6_e27edd46c380a2401f74",
+      "case_id": "G6F-TB-L1-012-CF3",
+      "family": "G6F-TB-L1-012",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_0d351c7daf780180b1f4",
+      "review_id": "public-g6-cf3:g6_0d351c7daf780180b1f4",
+      "case_id": "G6F-TC-L1-011-CF3",
+      "family": "G6F-TC-L1-011",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_d71a15c627b87462d6d6",
+      "review_id": "public-g6-cf3:g6_d71a15c627b87462d6d6",
+      "case_id": "G6F-TB-L1-004-CF3",
+      "family": "G6F-TB-L1-004",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_81cb69c456f588d7d5c7",
+      "review_id": "public-g6-cf3:g6_81cb69c456f588d7d5c7",
+      "case_id": "G6F-TB-L1-006-CF3",
+      "family": "G6F-TB-L1-006",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_ed6720f7ba5a9080903f",
+      "review_id": "public-g6-cf3:g6_ed6720f7ba5a9080903f",
+      "case_id": "G6F-TB-L1-002-CF3",
+      "family": "G6F-TB-L1-002",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_e2471ccad493b5775539",
+      "review_id": "public-g6-cf3:g6_e2471ccad493b5775539",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_343cc5fdbf449c8ab184",
+      "review_id": "public-g6-cf3:g6_343cc5fdbf449c8ab184",
+      "case_id": "G6F-TC-L1-004-CF3",
+      "family": "G6F-TC-L1-004",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_cdce4a19a7d9537e9911",
+      "review_id": "public-g6-cf3:g6_cdce4a19a7d9537e9911",
+      "case_id": "G6F-TC-L1-011-CF3",
+      "family": "G6F-TC-L1-011",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_e9554a0fa3d153e15eaa",
+      "review_id": "public-g6-cf3:g6_e9554a0fa3d153e15eaa",
+      "case_id": "G6F-TC-L1-002-CF3",
+      "family": "G6F-TC-L1-002",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_c1f473d282c98317a163",
+      "review_id": "public-g6-cf3:g6_c1f473d282c98317a163",
+      "case_id": "G6F-TC-L1-011-CF3",
+      "family": "G6F-TC-L1-011",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_c5449e766ddfe3f18369",
+      "review_id": "public-g6-cf3:g6_c5449e766ddfe3f18369",
+      "case_id": "G6F-TC-L1-001-CF3",
+      "family": "G6F-TC-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_89176df7e0339bd90319",
+      "review_id": "public-g6-cf3:g6_89176df7e0339bd90319",
+      "case_id": "G6F-TB-L1-012-CF3",
+      "family": "G6F-TB-L1-012",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_5ea947fbe17bc01c4d02",
+      "review_id": "public-g6-cf3:g6_5ea947fbe17bc01c4d02",
+      "case_id": "G6F-TC-L1-001-CF3",
+      "family": "G6F-TC-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_b48ba9f5c2be9bc80542",
+      "review_id": "public-g6-cf3:g6_b48ba9f5c2be9bc80542",
+      "case_id": "G6F-TB-L1-001-CF3",
+      "family": "G6F-TB-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_9f2f5459e7c4c458e85a",
+      "review_id": "public-g6-cf3:g6_9f2f5459e7c4c458e85a",
+      "case_id": "G6F-TC-L1-004-CF3",
+      "family": "G6F-TC-L1-004",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_04b44e4352a857b130c0",
+      "review_id": "public-g6-cf3:g6_04b44e4352a857b130c0",
+      "case_id": "G6F-TB-L1-011-CF3",
+      "family": "G6F-TB-L1-011",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_999bb52a2de5352bcd32",
+      "review_id": "public-g6-cf3:g6_999bb52a2de5352bcd32",
+      "case_id": "G6F-TB-L1-012-CF3",
+      "family": "G6F-TB-L1-012",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_356cac1287ff53b78923",
+      "review_id": "public-g6-cf3:g6_356cac1287ff53b78923",
+      "case_id": "G6F-TB-L1-002-CF3",
+      "family": "G6F-TB-L1-002",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_8dc1e86bc919511d8618",
+      "review_id": "public-g6-cf3:g6_8dc1e86bc919511d8618",
+      "case_id": "G6F-TB-L1-005-CF3",
+      "family": "G6F-TB-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_c3fcf5cd076139514703",
+      "review_id": "public-g6-cf3:g6_c3fcf5cd076139514703",
+      "case_id": "G6F-TC-L1-004-CF3",
+      "family": "G6F-TC-L1-004",
+      "validation_error": "invalid_affected_claim_ids",
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_515538e379ee7a5793f4",
+      "review_id": "public-g6-cf3:g6_515538e379ee7a5793f4",
+      "case_id": "G6F-TC-L1-006-CF3",
+      "family": "G6F-TC-L1-006",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_0c670a774780b64108d5",
+      "review_id": "public-g6-cf3:g6_0c670a774780b64108d5",
+      "case_id": "G6F-TC-L1-005-CF3",
+      "family": "G6F-TC-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_69419794c40a1f76f119",
+      "review_id": "public-g6-cf3:g6_69419794c40a1f76f119",
+      "case_id": "G6F-TC-L1-005-CF3",
+      "family": "G6F-TC-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_ba45f81f994b89db0cd1",
+      "review_id": "public-g6-cf3:g6_ba45f81f994b89db0cd1",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_56347e5f991961966e87",
+      "review_id": "public-g6-cf3:g6_56347e5f991961966e87",
+      "case_id": "G6F-TB-L1-003-CF3",
+      "family": "G6F-TB-L1-003",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_36bc5f60ca5cf756d063",
+      "review_id": "public-g6-cf3:g6_36bc5f60ca5cf756d063",
+      "case_id": "G6F-TB-L1-001-CF3",
+      "family": "G6F-TB-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_90b3c54d233a29991dbd",
+      "review_id": "public-g6-cf3:g6_90b3c54d233a29991dbd",
+      "case_id": "G6F-TC-L1-003-CF3",
+      "family": "G6F-TC-L1-003",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_866a6be4ad91559ba688",
+      "review_id": "public-g6-cf3:g6_866a6be4ad91559ba688",
+      "case_id": "G6F-TB-L1-005-CF3",
+      "family": "G6F-TB-L1-005",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_0cfd540d493a21c38300",
+      "review_id": "public-g6-cf3:g6_0cfd540d493a21c38300",
+      "case_id": "G6F-TB-L1-003-CF3",
+      "family": "G6F-TB-L1-003",
+      "validation_error": "missing_boundary_handling",
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_fa50f62003d3518cbab7",
+      "review_id": "public-g6-cf3:g6_fa50f62003d3518cbab7",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_3737a15e3efab5d3a59d",
+      "review_id": "public-g6-cf3:g6_3737a15e3efab5d3a59d",
+      "case_id": "G6F-TC-L1-007-CF3",
+      "family": "G6F-TC-L1-007",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 2
+    },
+    {
+      "prior_run_id": "g6_950d8d2b297217825008",
+      "review_id": "public-g6-cf3:g6_950d8d2b297217825008",
+      "case_id": "G6F-TB-L1-001-CF3",
+      "family": "G6F-TB-L1-001",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_ALIGNMENT",
+      "public_outcome": "invalidates",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_db060a079ed868ad099b",
+      "review_id": "public-g6-cf3:g6_db060a079ed868ad099b",
+      "case_id": "G6F-TC-L1-009-CF3",
+      "family": "G6F-TC-L1-009",
+      "validation_error": null,
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    },
+    {
+      "prior_run_id": "g6_d26e21e8c8547fcfe778",
+      "review_id": "public-g6-cf3:g6_d26e21e8c8547fcfe778",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "preserves_specific",
+      "public_witness_token_hits": 1
+    },
+    {
+      "prior_run_id": "g6_ab06d9b5db03fdf0537f",
+      "review_id": "public-g6-cf3:g6_ab06d9b5db03fdf0537f",
+      "case_id": "G6F-TC-L1-009-CF3",
+      "family": "G6F-TC-L1-009",
+      "validation_error": null,
+      "public_alignment": "PUBLIC_MISMATCH_REMAINS",
+      "public_outcome": "degenerate_formula",
+      "public_witness_token_hits": 3
+    },
+    {
+      "prior_run_id": "g6_f24e891e3c73c7190354",
+      "review_id": "public-g6-cf3:g6_f24e891e3c73c7190354",
+      "case_id": "G6F-TB-L1-008-CF3",
+      "family": "G6F-TB-L1-008",
+      "validation_error": "missing_boundary_handling",
+      "public_alignment": null,
+      "public_outcome": null,
+      "public_witness_token_hits": null
+    }
+  ],
   "plan_sha256": "cf9ccc92b8c15e1b7e7aa208ef9b7825179b50013cec3f78678db806c933ce1d",
   "records_sha256": "c33cd953132601b3910da239a447e741fff1a750388be9639eddab22c5c4cb69",
   "traces_sha256": "14ca333c50c271e80c34b245bb4908186dce68e74ef719fa93d64004eb3ed32d",

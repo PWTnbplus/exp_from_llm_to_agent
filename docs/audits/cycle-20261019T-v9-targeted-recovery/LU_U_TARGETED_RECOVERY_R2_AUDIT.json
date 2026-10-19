@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "audit_version": "lu-u-causal-independent-v1",
+  "task_count": 6,
+  "record_count": 12,
+  "trace_count": 14,
+  "status_counts": {
+    "control:NOT_SCORED": 2,
+    "control:TRUTH_MATCH": 4,
+    "intervention:TRUTH_MATCH": 4,
+    "intervention:TRUTH_MISMATCH": 2,
+    "validated_causal_contrast": 1
+  },
+  "task_sha256": "343fd471b6cc1aeacd8be534d358473514ea6f08eb26ad44575de6f7836a5a63",
+  "truth_key_sha256": "37d3f8b77f2ddb17aa188577be7728e10d0c5916408ac11387015a7f90107a89",
+  "records_sha256": "6e7127c170b343348c09c6b754a234d4f37e852a44e53aeaf956d20dc548ccf3",
+  "traces_sha256": "d64267c1e14fc45c4857531d065c90b8241e895e5cd4972b0af7ab3d57e0551c",
+  "private_labels_read": false,
+  "truth_key_sent_to_model": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [],
+  "rows": [
+    {
+      "task_id": "LUCT-004-identity_neg_to_pos",
+      "control": "NOT_SCORED",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-005-zero_nondec_to_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": true
+    },
+    {
+      "task_id": "LUCT-008-square_neg_to_pos",
+      "control": "NOT_SCORED",
+      "intervention": "TRUTH_MISMATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-010-intercept_only_neg",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-011-constant_nondec",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    },
+    {
+      "task_id": "LUCT-012-constant_noninc",
+      "control": "TRUTH_MATCH",
+      "intervention": "TRUTH_MATCH",
+      "validated_causal_contrast": false
+    }
+  ],
+  "interpretation": "Validated paired contrasts are public causal calibration evidence only; they do not retroactively convert the historical LU/U observations into a formal G7 causal estimate."
+}

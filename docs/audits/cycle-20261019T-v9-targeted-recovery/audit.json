@@ -1,0 +1,56 @@
+{
+  "cycle": "20261019T-v9-targeted-recovery",
+  "scope": "append-only single-model recovery of unresolved G6 public reviews, frozen Q-92 independent review, and repaired LU/U public causal calibration",
+  "model_id": "kimi-k2.5",
+  "engineering": {
+    "g6_historical_mismatches_retained": 43,
+    "g6_recovery_r1_selected": 19,
+    "g6_recovery_r1_provider_attempts": 21,
+    "g6_recovery_r1_public_alignment": 5,
+    "g6_recovery_r1_public_mismatch_remains": 13,
+    "g6_recovery_r2_selected": 13,
+    "g6_recovery_r2_provider_attempts": 16,
+    "g6_recovery_r2_public_alignment": 3,
+    "g6_recovery_r2_public_mismatch_remains": 8,
+    "g6_recovery_r3_selected": 8,
+    "g6_recovery_r3_provider_attempts": 9,
+    "g6_recovery_r3_public_alignment": 0,
+    "g6_recovery_r3_public_mismatch_remains": 7,
+    "g6_recovery_runs_are_overlapping_append_only": true,
+    "q_frozen_case_count": 92,
+    "q_frozen_independent_counts": {"PASS": 18, "FAIL": 8, "INCONCLUSIVE": 55, "NOT_SCORED": 11},
+    "lu_fixed_cohort_r4_primary_calls": 12,
+    "lu_fixed_cohort_r4_valid_records": 12,
+    "lu_fixed_cohort_r4_validated_causal_contrasts": 2,
+    "lu_fixed_cohort_r5_primary_calls": 2,
+    "g7_states": 150,
+    "g7_checkpoints": 72,
+    "g7_historical_lifecycle_failures_retained": 13
+  },
+  "repairs": [
+    "G6 audit now emits row-level append-only selection metadata and supports targeted subsets without changing the historical denominator.",
+    "LU/U builder now keeps the same explicit monotonicity proposition in the intervention arm instead of sending only a bare formula.",
+    "LU/U runner now fixes state_before, weak monotonicity semantics, strict endpoint handling, and compact evidence to prevent JSON truncation.",
+    "Frozen Q-92 received a separate AST/SymPy read-only reviewer that does not import the production verifier or read a truth key."
+  ],
+  "artifacts": {
+    "g6_r1": "docs/audits/cycle-20261019T-v9-targeted-recovery/G6_TARGETED_RECOVERY_AUDIT.json",
+    "g6_r2": "docs/audits/cycle-20261019T-v9-targeted-recovery/G6_TARGETED_RECOVERY_R2_AUDIT.json",
+    "g6_r3": "docs/audits/cycle-20261019T-v9-targeted-recovery/G6_TARGETED_RECOVERY_R3_AUDIT.json",
+    "q_frozen_review": "docs/audits/cycle-20261019T-v9-targeted-recovery/Q_FROZEN_PUBLIC_REVIEW.json",
+    "lu_r4": "docs/audits/cycle-20261019T-v9-targeted-recovery/LU_U_FIXED_COHORT_AUDIT.json",
+    "lu_r5": "docs/audits/cycle-20261019T-v9-targeted-recovery/LU_U_FIXED_COHORT_R5_AUDIT.json"
+  },
+  "scientific": {
+    "private_labels_read": false,
+    "truth_keys_sent_to_model": false,
+    "historical_denominators_modified": false,
+    "g6_private_oracle_scientific_score_obtained": false,
+    "q_domain_grade_blinded_review_complete": false,
+    "lu_formal_g7_causal_estimate_obtained": false,
+    "scientific_release_allowed": false,
+    "interpretation": "Engineering execution advanced and the LU/U builder defect was repaired, but public calibration evidence does not replace blinded domain truth or formal protocol reanalysis. Scientific gates remain BLOCKED."
+  },
+  "failures": [],
+  "audit_status": "ENGINEERING_ADVANCED_SCIENTIFIC_RELEASE_BLOCKED"
+}
