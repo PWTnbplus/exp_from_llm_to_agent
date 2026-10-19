@@ -44,6 +44,12 @@
       "result": "exit 1; graph_count=11, record_count=12, trace_count=16, observed_transition_count=0; record/graph and trace/record bijections fail; scientific_release_allowed=false",
       "exit_code": 1,
       "interpretation": "The persisted raw LU/U cohort is not the public graph denominator and cannot be promoted to a causal result."
+    },
+    {
+      "scope": "single-model Kimi exact-ID live compatibility preflight",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/ctflow_models.py verify --allow-paid --selected-file configs/selected_models_kimi_runtime.json --preflight-file docs/audits/cycle-20261019T-scientific-acceptance/KIMI_PREFLIGHT_RECHECK_20261019.json",
+      "result": "exit 0; kimi-k2.5=PASS; provisional chat compatibility only; no billing or immutable-weight evidence returned",
+      "exit_code": 0
     }
   ],
   "interpretation": "The software and protocol checks passed. The scientific release decision remains blocked by explicit evidence requirements, not by a test failure."

@@ -1,0 +1,8 @@
+{
+  "base_url": "https://token.ctflow.cn/v1",
+  "models": {
+    "kimi-k2.5": true
+  },
+  "verified_at_utc": "2026-10-19T06:30:42.155005+00:00",
+  "protocol": "provisional_openai_chat_completions"
+}
