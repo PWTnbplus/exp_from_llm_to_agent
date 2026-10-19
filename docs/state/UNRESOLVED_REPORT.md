@@ -1,10 +1,10 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-19T06:26:21+00:00
+生成时间（UTC）：2026-10-19T15:08:37+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
-- 已验证完成里程碑：**2**
+- 已验证完成里程碑：**3**
 - 未验证科学门禁：**G6, G7**
 
 ## 未解决和阻塞问题
@@ -125,6 +125,7 @@
 
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests. | 验证：`python -m pytest -q` | 提交：`未固定`
 - Corrected G6 protocol and audited G7 failure-localization execution：G6 corrected 23-family run and G7 16-worker run have canonical merge, independent audits, hashes, and explicit terminal-failure accounting; host suite and package tests pass. Scientific release remains blocked by recorded external/math/provenance/statistical/provider gates. | 验证：`E:/resources/python/python.exe -m pytest -q` | 提交：`未固定`
+- V8 single-model internal execution and audit integration：Append-only V8 state inventory records 107 real kimi-k2.5 provider calls (G6 63, Q 8, LU/U 16, G7 20), contiguous call numbers, no private request markers, unchanged historical denominators, and scientific G6/G7 gates explicitly retained as BLOCKED. No historical result or truth key was modified. | 验证：`E:/resources/python/python.exe -m pytest -q tests/test_v8_state_reconciliation.py tests/test_v8_scientific_pipeline.py tests/test_recovery_state.py` | 提交：`21777298f59fa38ece528e4665d7b9f368ba2933`
 
 ## 科学性注意事项
 

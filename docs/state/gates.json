@@ -4,6 +4,23 @@
   "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
   "scientific_release_allowed": false,
   "mock_is_not_science_evidence": true,
+  "v8_internal_execution": {
+    "run_id": "20261019T094634Z-kimi-v8-real-evidence",
+    "audit_path": "docs/audits/cycle-20261019T094634Z-kimi-v8-real-evidence/V8_STATE_RECONCILIATION.json",
+    "model_id": "kimi-k2.5",
+    "real_provider_calls": 107,
+    "protocol_counts": {
+      "G6_V8": 63,
+      "Q_V8": 8,
+      "LU_U_V8": 16,
+      "G7_V8": 20
+    },
+    "mock": false,
+    "local_usage_cost_usd": 0.120029,
+    "historical_denominators_unchanged": true,
+    "scientific_gate_uplift": false,
+    "note": "Internal execution and audit inventory only. G6/G7 scientific gates remain blocked; no historical result, truth key, or denominator is changed."
+  },
   "v3_audit": {
     "cycle": "cycle-20261018T-g6g7-v3",
     "path": "docs/audits/cycle-20261018T-g6g7-v3",

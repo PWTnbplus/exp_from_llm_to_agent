@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-19T06:26:21+00:00",
+  "updated_at": "2026-10-19T15:08:37+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -2070,6 +2070,13 @@
       "verification_command": "E:/resources/python/python.exe -m pytest -q",
       "commit": "",
       "verified_at": "2026-10-14T16:32:19+00:00"
+    },
+    {
+      "name": "V8 single-model internal execution and audit integration",
+      "evidence": "Append-only V8 state inventory records 107 real kimi-k2.5 provider calls (G6 63, Q 8, LU/U 16, G7 20), contiguous call numbers, no private request markers, unchanged historical denominators, and scientific G6/G7 gates explicitly retained as BLOCKED. No historical result or truth key was modified.",
+      "verification_command": "E:/resources/python/python.exe -m pytest -q tests/test_v8_state_reconciliation.py tests/test_v8_scientific_pipeline.py tests/test_recovery_state.py",
+      "commit": "21777298f59fa38ece528e4665d7b9f368ba2933",
+      "verified_at": "2026-10-19T15:08:37+00:00"
     }
   ],
   "ingested_audits": [

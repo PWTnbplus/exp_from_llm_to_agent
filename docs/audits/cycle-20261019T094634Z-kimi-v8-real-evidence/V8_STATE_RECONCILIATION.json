@@ -1,0 +1,35 @@
+{
+  "protocol": "V8_INTERNAL_STATE_RECONCILIATION",
+  "run_id": "20261019T094634Z-kimi-v8-real-evidence",
+  "model_id": "kimi-k2.5",
+  "mock": false,
+  "real_provider_calls": 107,
+  "call_numbers_contiguous": true,
+  "protocol_counts": {
+    "G6_V8": 63,
+    "Q_V8": 8,
+    "LU_U_V8": 16,
+    "G7_V8": 20
+  },
+  "local_usage_cost_usd": 0.120029,
+  "private_truth_request_marker_hits": 0,
+  "historical_denominators": {
+    "g6_formal_rows": 552,
+    "g6_machine_rows": 276,
+    "g7_frozen": 1288,
+    "g7_recovery": 150,
+    "g7_historical_defects": 13,
+    "q92": 92,
+    "lu_u_pairs": 6
+  },
+  "state_preservation": {
+    "historical_data_modified": false,
+    "truth_keys_sent_to_model": false,
+    "g7_private_y_injected": false,
+    "legacy_non_kimi_artifacts_pooled": false,
+    "scientific_release_allowed": false,
+    "g6_gate_status": "BLOCKED",
+    "g7_gate_status": "BLOCKED"
+  },
+  "scope": "Non-scientific state inventory and regression evidence only; this record does not assert a scientific release or alter any historical result."
+}

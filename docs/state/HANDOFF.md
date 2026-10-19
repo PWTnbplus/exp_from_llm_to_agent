@@ -31,6 +31,7 @@
 已验证的已完成工作（避免重复）：
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.
 - Corrected G6 protocol and audited G7 failure-localization execution：G6 corrected 23-family run and G7 16-worker run have canonical merge, independent audits, hashes, and explicit terminal-failure accounting; host suite and package tests pass. Scien
+- V8 single-model internal execution and audit integration：Append-only V8 state inventory records 107 real kimi-k2.5 provider calls (G6 63, Q 8, LU/U 16, G7 20), contiguous call numbers, no private request markers, unchanged historical den
 
 ## 权威参考
 
