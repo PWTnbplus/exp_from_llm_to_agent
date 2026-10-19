@@ -1,0 +1,55 @@
+{
+  "cycle": "20261019T-scientific-acceptance",
+  "authorization": "user-authorized paid CTFlow matrix; existing configured ceiling USD 200",
+  "original_batch": {
+    "command": "scripts/model_matrix.py run --allow-paid --max-parallel-models 2 --timeout-seconds 1800",
+    "batch": "runs/ctflow_matrix/20261019T063739Z-08811ad8",
+    "exit_code": 1,
+    "summary": "all_paired_verified=false",
+    "audit": "CTFLOW_MATRIX_AUDIT_20261019.json",
+    "observed": {
+      "qwen3.5-plus/llm_only": {"task_count": 12, "task_failures": 3, "validated_success_count": 5},
+      "qwen3.5-plus/agent": {"host_timeout": true, "evaluator_sidecar": false},
+      "glm-5.2/llm_only": {"task_count": 12, "task_failures": 12, "validated_success_count": 0},
+      "glm-5.2/agent": {"task_count": 12, "task_failures": 12, "validated_success_count": 0}
+    },
+    "local_proxy_cost_usd": 0.468393,
+    "reserved_local_proxy_cost_usd": 3.978208
+  },
+  "targeted_recovery": {
+    "agent": {
+      "command": "scripts/run_matrix_scientific.py --mode agent --model qwen3.5-plus --manifest configs/qwen_recovery_manifest_20261019.json --allow-paid --timeout-seconds 7200",
+      "batch": "runs/ctflow_matrix_recovery/20261019T-qwen-agent-failed-only",
+      "exit_code": 1,
+      "task_count": 6,
+      "task_failures": 2,
+      "validated_success_count": 1,
+      "local_proxy_cost_usd": 0.136549,
+      "reserved_local_proxy_cost_usd": 1.872779,
+      "audit": "CTFLOW_QWEN_AGENT_RECOVERY_AUDIT_20261019.json"
+    },
+    "llm_only": {
+      "command": "scripts/run_matrix_scientific.py --mode llm_only --model qwen3.5-plus --manifest configs/qwen_llm_recovery_manifest_20261019.json --allow-paid --timeout-seconds 7200",
+      "batch": "runs/ctflow_matrix_recovery/20261019T-qwen-llm-failed-only",
+      "exit_code": 0,
+      "task_count": 3,
+      "task_failures": 0,
+      "validated_success_count": 1,
+      "local_proxy_cost_usd": 0.056009,
+      "reserved_local_proxy_cost_usd": 0.301053,
+      "audit": "CTFLOW_QWEN_LLM_RECOVERY_AUDIT_20261019.json"
+    }
+  },
+  "tests": {
+    "command": "python -m pytest -q tests/test_ctflow_matrix.py tests/test_matrix_scientific_runner.py",
+    "exit_code": 0,
+    "result": "19 passed in 8.44s"
+  },
+  "scientific_interpretation": {
+    "matched_pair_verified": false,
+    "scientific_release_allowed": false,
+    "frozen_formal_denominators_modified": false,
+    "provider_billing_or_immutable_identity_verified": false,
+    "note": "Recovery results are append-only evidence and do not replace or alter the frozen G0-G7/Q92/LU-U ledgers."
+  }
+}

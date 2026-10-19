@@ -1,0 +1,53 @@
+{
+  "audit": "ctflow_matrix_structural_v1",
+  "batch": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_matrix\\20261019T063739Z-08811ad8",
+  "batch_id": "20261019T063739Z-08811ad8",
+  "structural_complete": false,
+  "scientific_release_allowed": false,
+  "paired_verified": false,
+  "failures": [
+    "arm_set:[('glm-5.2', 'agent'), ('glm-5.2', 'llm_only'), ('qwen3.5-plus', 'llm_only')]"
+  ],
+  "arms": {
+    "glm-5.2/agent": {
+      "status": "FAILED",
+      "task_count": 12,
+      "task_failures": 12,
+      "validated_success_count": 0,
+      "protocol_valid": false,
+      "evaluator_valid": true,
+      "cost_usd": 0.17071699999999998,
+      "reserved_cost_usd": 2.2749260000000002
+    },
+    "glm-5.2/llm_only": {
+      "status": "FAILED",
+      "task_count": 12,
+      "task_failures": 12,
+      "validated_success_count": 0,
+      "protocol_valid": false,
+      "evaluator_valid": true,
+      "cost_usd": 0.07835800000000001,
+      "reserved_cost_usd": 0.599586
+    },
+    "qwen3.5-plus/llm_only": {
+      "status": "FAILED",
+      "task_count": 12,
+      "task_failures": 3,
+      "validated_success_count": 5,
+      "protocol_valid": false,
+      "evaluator_valid": true,
+      "cost_usd": 0.219318,
+      "reserved_cost_usd": 1.103696
+    }
+  },
+  "aggregate": {
+    "arm_count": 3,
+    "task_rows": 36,
+    "actual_local_proxy_cost_usd": 0.468393,
+    "reserved_local_proxy_cost_usd": 3.9782080000000004,
+    "configured_matrix_cap_usd": 200.0,
+    "secret_marker_hits": 0,
+    "unredacted_ground_truth_markers": 0
+  },
+  "note": "Failures and held-out validation outcomes remain evidence; this report does not claim model superiority or provider billing accuracy."
+}

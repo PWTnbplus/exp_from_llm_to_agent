@@ -1,0 +1,23 @@
+{
+  "audit": "ctflow_recovery_structural_v1",
+  "batch": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_matrix_recovery\\20261019T-qwen-llm-failed-only",
+  "manifest": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\configs\\qwen_llm_recovery_manifest_20261019.json",
+  "model_id": "qwen3.5-plus",
+  "runner": "llm_only",
+  "structural_complete": true,
+  "scientific_release_allowed": false,
+  "matched_pair_verified": false,
+  "failures": [],
+  "status": "COMPLETED",
+  "task_count": 3,
+  "task_failures": 0,
+  "validated_success_count": 1,
+  "protocol_valid": true,
+  "evaluator_valid": true,
+  "trace_count": 3,
+  "actual_local_proxy_cost_usd": 0.056008999999999996,
+  "reserved_local_proxy_cost_usd": 0.301053,
+  "secret_marker_hits": 0,
+  "unredacted_ground_truth_markers": 0,
+  "note": "Targeted recovery evidence is append-only and is not merged into the frozen formal denominator."
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "task_id": "newtonbench:m1_coulomb_force:medium:v1:vanilla_equation",
+    "source": "NewtonBench",
+    "module": "m1_coulomb_force",
+    "domain": "coulomb_force",
+    "law_complexity": "medium",
+    "system_complexity": "vanilla_equation",
+    "law_variant": "v1",
+    "split": "test",
+    "seed": 42,
+    "supported": true,
+    "notes": "Targeted recovery of prior failed arm; original failure retained in batch 20261019T063739Z-08811ad8."
+  },
+  {
+    "task_id": "newtonbench:m7_malus_law:medium:v0:vanilla_equation",
+    "source": "NewtonBench",
+    "module": "m7_malus_law",
+    "domain": "malus_law",
+    "law_complexity": "medium",
+    "system_complexity": "vanilla_equation",
+    "law_variant": "v0",
+    "split": "test",
+    "seed": 42,
+    "supported": true,
+    "notes": "Targeted recovery of prior failed arm; original failure retained in batch 20261019T063739Z-08811ad8."
+  },
+  {
+    "task_id": "newtonbench:m6_underdamped_harmonic:hard:v0:vanilla_equation",
+    "source": "NewtonBench",
+    "module": "m6_underdamped_harmonic",
+    "domain": "underdamped_harmonic_motion",
+    "law_complexity": "hard",
+    "system_complexity": "vanilla_equation",
+    "law_variant": "v0",
+    "split": "test",
+    "seed": 42,
+    "supported": true,
+    "notes": "Targeted recovery of prior failed arm; original failure retained in batch 20261019T063739Z-08811ad8."
+  }
+]
