@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "protocol_id": "PROVIDER_EVIDENCE_READ_ONLY_ENDPOINT_PROBE",
+  "base_url": "https://token.ctflow.cn/v1",
+  "authenticated": true,
+  "generation_request_sent": false,
+  "endpoints": [
+    {
+      "path": "/models",
+      "http_status": 200,
+      "transport_error": null,
+      "response": {
+        "body_sha256": "4b0b4d108a8ab0bc5da6cb735d8ef8c03d67d42ef73b92a3588034583b0ecd9f",
+        "body_bytes": 30879,
+        "json": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "data",
+          "object",
+          "success"
+        ],
+        "record_count": 241,
+        "record_keys": [
+          "created",
+          "id",
+          "object",
+          "owned_by",
+          "supported_endpoint_types"
+        ],
+        "fingerprint_like_keys": []
+      }
+    },
+    {
+      "path": "/usage",
+      "http_status": 404,
+      "transport_error": null,
+      "response": {
+        "body_sha256": "c89b308c7e53076d71dd97cbccc40c561851236f02f81da17524abe3d030b1a7",
+        "body_bytes": 103,
+        "json": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "error"
+        ],
+        "record_count": null,
+        "record_keys": [],
+        "fingerprint_like_keys": []
+      }
+    },
+    {
+      "path": "/billing",
+      "http_status": 404,
+      "transport_error": null,
+      "response": {
+        "body_sha256": "171dd463f916468ab469919d7a44340b44308104ba5d6d9e13550e79354a3d9d",
+        "body_bytes": 105,
+        "json": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "error"
+        ],
+        "record_count": null,
+        "record_keys": [],
+        "fingerprint_like_keys": []
+      }
+    },
+    {
+      "path": "/account/usage",
+      "http_status": 404,
+      "transport_error": null,
+      "response": {
+        "body_sha256": "3692c9508a99b84c3a3e87db2c70d96894cfb0a5d159ee2e7eba56e99b7be3be",
+        "body_bytes": 111,
+        "json": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "error"
+        ],
+        "record_count": null,
+        "record_keys": [],
+        "fingerprint_like_keys": []
+      }
+    }
+  ],
+  "interpretation": {
+    "billing_or_usage_export_verified": false,
+    "immutable_weight_or_route_fingerprint_verified": false,
+    "scope": "only the listed authenticated read-only endpoints; not a vendor-wide absence claim"
+  }
+}

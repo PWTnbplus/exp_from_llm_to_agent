@@ -1,0 +1,35 @@
+{
+  "audit_version": "lu-v2-public-u-independent-v1",
+  "graph_count": 11,
+  "record_count": 12,
+  "trace_count": 16,
+  "observed_transition_count": 0,
+  "validation_error_counts": {},
+  "model_ids": [
+    "kimi-k2.5"
+  ],
+  "graphs_sha256": "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9",
+  "records_sha256": "f632a8028bb022aa15a3fd66f49ddba4e1044f4b41f80d4128e91bdc23fe79af",
+  "traces_sha256": "baf7203d513c0c36d770be914012d0dd053c5c1fffb4600d7db5d3d259161427",
+  "private_labels_read": false,
+  "answer_key_read": false,
+  "pooling_with_frozen_g7": false,
+  "scientific_release_allowed": false,
+  "failures": [
+    "record_graph_denominator_or_uniqueness",
+    "trace_record_bijection",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None",
+    "unknown_graph:None"
+  ],
+  "engineering_audit_pass": false
+}

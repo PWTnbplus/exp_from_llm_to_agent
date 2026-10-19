@@ -25,6 +25,25 @@
       "command": "E:/resources/python/python.exe -X utf8 scripts/v5/scientific_acceptance.py --pack docs/audits/cycle-20261019T-v5-execution --output docs/audits/cycle-20261019T-scientific-acceptance/G0_G7_SCIENTIFIC_ACCEPTANCE_MATRIX.json",
       "result": "engineering_or_protocol_pass_count=6; formal_scientific_gate_pass_count=0; scientific_release_allowed=false (fresh rerun 2026-10-19)",
       "exit_code": 0
+    },
+    {
+      "scope": "authenticated provider evidence surfaces (read-only)",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_provider_evidence.py --base-url https://token.ctflow.cn/v1 --key-file api_key/kimi/kimi-k2.5.txt --out docs/audits/cycle-20261019T-scientific-acceptance/PROVIDER_READ_ONLY_RECHECK_20261019.json",
+      "result": "exit 0; generation_request_sent=false; /models=200 (241 records, no fingerprint fields); /usage,/billing,/account/usage=404; billing_or_usage_export_verified=false; immutable_weight_or_route_fingerprint_verified=false",
+      "exit_code": 0
+    },
+    {
+      "scope": "Q92 independent public symbolic recheck",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_q_v2_frozen_public_reviewer.py --records runs/ctflow_single_model/20261018T-v5-qv2-kimi-format-retry/q_records.jsonl --expected-model-id kimi-k2.5 --out docs/audits/cycle-20261019T-scientific-acceptance/Q92_PUBLIC_RECHECK_20261019.json",
+      "result": "exit 0; 92 rows; PASS=18, FAIL=8, INCONCLUSIVE=55, NOT_SCORED=11; private_labels_read=false; truth_key_read=false; domain_grade_review_complete=false",
+      "exit_code": 0
+    },
+    {
+      "scope": "LU/U raw-to-public graph compatibility probe",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/audit_lu_u_v2.py --graphs docs/audits/cycle-20261018T-v4-g6g7-execution/LU_V2_PUBLIC_GRAPHS_EXTENDED.jsonl --records runs/ctflow_single_model/20261019T-v9-targeted-recovery/lu-u-run/records.jsonl --traces runs/ctflow_single_model/20261019T-v9-targeted-recovery/lu-u-run/provider_traces.jsonl --expected-model-id kimi-k2.5 --out docs/audits/cycle-20261019T-scientific-acceptance/LU_U_PUBLIC_RECHECK_20261019.json",
+      "result": "exit 1; graph_count=11, record_count=12, trace_count=16, observed_transition_count=0; record/graph and trace/record bijections fail; scientific_release_allowed=false",
+      "exit_code": 1,
+      "interpretation": "The persisted raw LU/U cohort is not the public graph denominator and cannot be promoted to a causal result."
     }
   ],
   "interpretation": "The software and protocol checks passed. The scientific release decision remains blocked by explicit evidence requirements, not by a test failure."
