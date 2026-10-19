@@ -1,0 +1,13 @@
+{
+  "historical_data_modified": false,
+  "historical_denominator": 276,
+  "model_decision_match": 96,
+  "model_response_present": 276,
+  "output_sha256": "e97310a3745b0909cfc8d58918ff2ff79afd332ef43a3a0bf68b9e0f6de28487",
+  "private_truth_read": false,
+  "protocol": "G6_HISTORICAL_276_RECOVER_AND_ADJUDICATE_V9",
+  "public_problem_valid": 276,
+  "revised_claim_valid": 84,
+  "rows": 276,
+  "source_sha256": "ebc559ed29442e3fb0929e160bd985bbf3a4f99f8247630c0ee3993163e5b66c"
+}

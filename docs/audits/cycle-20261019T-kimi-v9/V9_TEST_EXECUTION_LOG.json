@@ -1,0 +1,25 @@
+{
+  "generated_at_utc": "2026-10-19T16:49:20.994617+00:00",
+  "tests": [
+    {
+      "name": "v9_focused",
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_v9_claim_ir.py tests/test_v9_math_verifier.py tests/test_v9_namespace_and_privacy.py tests/test_v9_g7_diagnosis.py tests/test_v9_q_lu_stats.py tests/test_v9_agent_comparison.py tests/test_v9_completion_artifacts.py",
+      "assertions": "9 passed in 2.34s",
+      "process_status": "PASS",
+      "returncode": 0
+    },
+    {
+      "name": "v7_v8_regression",
+      "command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_v7_machine_pipeline.py tests/test_v4_q_lu.py tests/test_g7_protocol.py tests/test_g7_trace_q_consistency.py tests/test_v8_state_reconciliation.py tests/test_v8_scientific_pipeline.py tests/test_recovery_state.py",
+      "assertions": "111 passed in 4.21s",
+      "process_status": "ASSERTIONS_PASS_BUT_EXECUTION_WRAPPER_NONZERO",
+      "returncode_observed": 1,
+      "note": "The pytest output contained no failed/error assertions, but the surrounding execution wrapper returned non-zero before emitting its final status line. This is not claimed as a clean process pass."
+    }
+  ],
+  "full_suite": {
+    "status": "NOT_COMPLETED_ENVIRONMENT_INTERRUPTED",
+    "note": "A prior pytest -q run reached 227 passed before the execution environment interrupted it; no assertion failure was recorded.",
+    "not_claimed_as_pass": true
+  }
+}

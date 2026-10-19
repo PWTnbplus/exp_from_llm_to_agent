@@ -1,0 +1,407 @@
+{
+  "entry": {
+    "g6_new_machine_verifiable": {
+      "by_arm": {
+        "G6_A_G3_GIVEN": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5,
+            0.875
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.6875,
+          "n": 16,
+          "score_key": "action_correct"
+        },
+        "G6_B_G4_GIVEN": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.75,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.875,
+          "n": 16,
+          "score_key": "action_correct"
+        }
+      },
+      "by_cf": {
+        "CF1": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF2": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.75,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF3": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.75
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.375,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF4": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 8,
+          "score_key": "action_correct"
+        }
+      },
+      "strict_action": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.65625,
+          0.9375
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.78125,
+        "n": 32,
+        "score_key": "action_correct"
+      }
+    },
+    "g7_primary_and_repair": {
+      "primary": {
+        "by_stage": {
+          "D0": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              0.75
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.25,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D1_V": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.5,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D2_VL": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D3_VLU": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          }
+        },
+        "final_accuracy_all_planned_semantic": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_semantic_correct"
+        },
+        "final_accuracy_all_planned_strict": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_correct"
+        },
+        "stage_adherence": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5625,
+            0.75
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.6875,
+          "n": 16,
+          "score_key": "stage_adherent"
+        }
+      },
+      "repair": {
+        "by_stage": {
+          "D0": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.5,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D1_V": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.25,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.75,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D2_VL": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D3_VLU": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          }
+        },
+        "final_accuracy_all_planned_semantic": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.25,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.75,
+          "n": 4,
+          "score_key": "final_semantic_correct"
+        },
+        "final_accuracy_all_planned_strict": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_correct"
+        },
+        "stage_adherence": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.75,
+            0.9375
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.8125,
+          "n": 16,
+          "score_key": "stage_adherent"
+        }
+      }
+    },
+    "historical_denominators_unchanged": {
+      "g6_formal": 552,
+      "g6_machine_rows": 276,
+      "g7_frozen": 1288,
+      "g7_historical_defects": 13,
+      "g7_recovery": 150,
+      "lu_legacy_pairs": 6,
+      "q92": 92
+    },
+    "local_usage_cost_usd": 0.07614800000000005,
+    "lu_u_new_control_real_sham": {
+      "by_arm": {
+        "CONTROL": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        },
+        "REAL": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        },
+        "SHAM": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        }
+      },
+      "review_summary": {
+        "arm_counts": {
+          "CONTROL": 4,
+          "REAL": 4,
+          "SHAM": 4
+        },
+        "checkpoint_count": 4,
+        "fork_rows": 12,
+        "protocol": "LU_V9_PROSPECTIVE_SHARED_CHECKPOINT_CONTROL_REAL_SHAM",
+        "semantic_correct": {
+          "CONTROL": 0,
+          "REAL": 4,
+          "SHAM": 0
+        },
+        "shared_checkpoint_hashes_present": true,
+        "truth_key_sent_to_model": false
+      },
+      "semantic_update": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.3333333333333333,
+        "n": 12,
+        "score_key": "semantic_nonfinal_update_correct"
+      }
+    },
+    "model_id": "kimi-k2.5",
+    "note": "V9 internal evidence is appended. Existing historical G6/G7 gates and denominators are not rewritten; provider external attestation remains separate.",
+    "protocol_counts": {
+      "AGENT_COMPARISON_V9": 16,
+      "G6_V9": 32,
+      "G7_V9_PRIMARY": 16,
+      "G7_V9_REPAIR": 16,
+      "LU_U_V9": 16,
+      "Q_V9": 8
+    },
+    "q_new_truth_first": {
+      "action_schema": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 8,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_schema_valid"
+      },
+      "mathematical_state": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 8,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "state_correct"
+      },
+      "review_summary": {
+        "private_truth_read_after_model_calls": true,
+        "protocol": "Q_KIMI_V9_TRUTH_FIRST_INDEPENDENT_REVIEW",
+        "rows": 8,
+        "schema_valid": 8,
+        "state_correct": 8,
+        "sympy_status_counts": {
+          "PROVEN_FALSE": 3,
+          "PROVEN_TRUE": 5,
+          "UNKNOWN": 0
+        },
+        "truth_key_sent_to_model": false
+      }
+    },
+    "real_provider_calls": 104,
+    "run_id": "20261019T-kimi-v9-prospective",
+    "scientific_hypothesis_supported": "NO_OVERALL_SUPPORT_CLAIM",
+    "scientific_release_allowed": false,
+    "status": "INTERNAL_RUN_COMPLETE_SCIENTIFIC_GATES_RETAINED_BLOCKED"
+  },
+  "historical_gates_preserved": true,
+  "state_path": "docs\\state\\gates.json"
+}

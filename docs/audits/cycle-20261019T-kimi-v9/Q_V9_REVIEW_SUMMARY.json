@@ -1,0 +1,13 @@
+{
+  "private_truth_read_after_model_calls": true,
+  "protocol": "Q_KIMI_V9_TRUTH_FIRST_INDEPENDENT_REVIEW",
+  "rows": 8,
+  "schema_valid": 8,
+  "state_correct": 8,
+  "sympy_status_counts": {
+    "PROVEN_FALSE": 3,
+    "PROVEN_TRUE": 5,
+    "UNKNOWN": 0
+  },
+  "truth_key_sent_to_model": false
+}

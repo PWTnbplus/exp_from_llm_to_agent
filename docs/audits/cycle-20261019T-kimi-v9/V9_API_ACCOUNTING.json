@@ -1,0 +1,28 @@
+{
+  "cost_ledger": {
+    "g7_cap_usd": 60.0,
+    "global_cap_usd": 200.0,
+    "historical_confirmed_usd": 0.0,
+    "historical_entered_usd": 0.0,
+    "historical_g7_subcap_usd": 0.0,
+    "historical_unbilled_conservative_ceiling_usd": 0.0,
+    "inflight_reserved_usd": 0.0,
+    "safe_remaining_if_all_reservations_settle_usd": 199.923852,
+    "settled_new_usd": 0.07614800000000001,
+    "worker_cap_usd": 20.0
+  },
+  "local_usage_cost_usd": 0.07614800000000005,
+  "mock": false,
+  "model_id": "kimi-k2.5",
+  "only_model": true,
+  "protocol_counts": {
+    "AGENT_COMPARISON_V9": 16,
+    "G6_V9": 32,
+    "G7_V9_PRIMARY": 16,
+    "G7_V9_REPAIR": 16,
+    "LU_U_V9": 16,
+    "Q_V9": 8
+  },
+  "provider_errors": [],
+  "real_provider_calls": 104
+}

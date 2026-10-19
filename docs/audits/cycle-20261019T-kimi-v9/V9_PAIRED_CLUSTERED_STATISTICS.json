@@ -1,0 +1,387 @@
+{
+  "AGENT_COMPARISON_V9": {
+    "action_valid": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.625,
+        1.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.8125,
+      "n": 16,
+      "score_key": "action_valid"
+    },
+    "adaptive_feedback_records": 8,
+    "by_workflow": {
+      "AGENT": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_valid"
+      },
+      "LLM_ONLY": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.25,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.625,
+        "n": 8,
+        "score_key": "action_valid"
+      }
+    }
+  },
+  "G6_V9": {
+    "by_arm": {
+      "G6_A_G3_GIVEN": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.5,
+          0.875
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.6875,
+        "n": 16,
+        "score_key": "action_correct"
+      },
+      "G6_B_G4_GIVEN": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.75,
+          1.0
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.875,
+        "n": 16,
+        "score_key": "action_correct"
+      }
+    },
+    "by_cf": {
+      "CF1": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_correct"
+      },
+      "CF2": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.5,
+          1.0
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.75,
+        "n": 8,
+        "score_key": "action_correct"
+      },
+      "CF3": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          0.75
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.375,
+        "n": 8,
+        "score_key": "action_correct"
+      },
+      "CF4": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_correct"
+      }
+    },
+    "strict_action": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.65625,
+        0.9375
+      ],
+      "cluster_key": "family_id",
+      "clusters": 4,
+      "estimate": 0.78125,
+      "n": 32,
+      "score_key": "action_correct"
+    }
+  },
+  "G7_V9": {
+    "by_stage": {
+      "D0": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          0.75
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.25,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D1_V": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.5,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D2_VL": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D3_VLU": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 4,
+        "score_key": "stage_adherent"
+      }
+    },
+    "final_accuracy_all_planned_semantic": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "final_semantic_correct"
+    },
+    "final_accuracy_all_planned_strict": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "final_correct"
+    },
+    "stage_adherence": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.5625,
+        0.75
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.6875,
+      "n": 16,
+      "score_key": "stage_adherent"
+    }
+  },
+  "G7_V9_REPAIR_PUBLIC_EQUATION": {
+    "by_stage": {
+      "D0": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.5,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D1_V": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.25,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.75,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D2_VL": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 4,
+        "score_key": "stage_adherent"
+      },
+      "D3_VLU": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 4,
+        "score_key": "stage_adherent"
+      }
+    },
+    "final_accuracy_all_planned_semantic": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.25,
+        1.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.75,
+      "n": 4,
+      "score_key": "final_semantic_correct"
+    },
+    "final_accuracy_all_planned_strict": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "final_correct"
+    },
+    "stage_adherence": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.75,
+        0.9375
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.8125,
+      "n": 16,
+      "score_key": "stage_adherent"
+    }
+  },
+  "LU_U_V9": {
+    "by_arm": {
+      "CONTROL": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.0,
+        "n": 4,
+        "score_key": "semantic_nonfinal_update_correct"
+      },
+      "REAL": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 4,
+        "score_key": "semantic_nonfinal_update_correct"
+      },
+      "SHAM": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.0,
+        "n": 4,
+        "score_key": "semantic_nonfinal_update_correct"
+      }
+    },
+    "semantic_update": {
+      "bootstrap": 4000,
+      "ci95": [
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "cluster_key": "task_id",
+      "clusters": 4,
+      "estimate": 0.3333333333333333,
+      "n": 12,
+      "score_key": "semantic_nonfinal_update_correct"
+    }
+  },
+  "Q_V9": {
+    "action_schema": {
+      "bootstrap": 4000,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 8,
+      "estimate": 1.0,
+      "n": 8,
+      "score_key": "action_schema_valid"
+    },
+    "mathematical_state": {
+      "bootstrap": 4000,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "cluster_key": "task_id",
+      "clusters": 8,
+      "estimate": 1.0,
+      "n": 8,
+      "score_key": "state_correct"
+    }
+  }
+}

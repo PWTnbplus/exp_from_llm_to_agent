@@ -1,0 +1,17 @@
+{
+  "arm_counts": {
+    "CONTROL": 4,
+    "REAL": 4,
+    "SHAM": 4
+  },
+  "checkpoint_count": 4,
+  "fork_rows": 12,
+  "protocol": "LU_V9_PROSPECTIVE_SHARED_CHECKPOINT_CONTROL_REAL_SHAM",
+  "semantic_correct": {
+    "CONTROL": 0,
+    "REAL": 4,
+    "SHAM": 0
+  },
+  "shared_checkpoint_hashes_present": true,
+  "truth_key_sent_to_model": false
+}

@@ -1,121 +1,90 @@
 {
-  "schema_version": 1,
-  "generated_at_utc": "2026-10-18T04:49:09+00:00",
-  "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
-  "scientific_release_allowed": false,
-  "mock_is_not_science_evidence": true,
-  "v8_internal_execution": {
-    "run_id": "20261019T094634Z-kimi-v8-real-evidence",
-    "audit_path": "docs/audits/cycle-20261019T094634Z-kimi-v8-real-evidence/V8_STATE_RECONCILIATION.json",
-    "model_id": "kimi-k2.5",
-    "real_provider_calls": 107,
-    "protocol_counts": {
-      "G6_V8": 63,
-      "Q_V8": 8,
-      "LU_U_V8": 16,
-      "G7_V8": 20
-    },
-    "mock": false,
-    "local_usage_cost_usd": 0.120029,
-    "historical_denominators_unchanged": true,
-    "scientific_gate_uplift": false,
-    "note": "Internal execution and audit inventory only. G6/G7 scientific gates remain blocked; no historical result, truth key, or denominator is changed."
-  },
-  "v3_audit": {
-    "cycle": "cycle-20261018T-g6g7-v3",
-    "path": "docs/audits/cycle-20261018T-g6g7-v3",
-    "independent_review": "PASS",
-    "real_v2_formal_runs": 0,
-    "new_paid_api_calls": 13,
-    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; four compatibility requests plus nine Qwen pilot requests; Qwen public price verified, account billing and model identity unresolved; not scientific evidence",
-    "qwen_g7_pilot": "COMPLETED_NON_CONFIRMATORY; 1 frozen case; 4 model calls; 1 tool call; 7314 tokens; local ledger estimate USD 0.0145112; historical denominator unchanged",
-    "protected_source_hashes_unchanged": true
-  },
   "design_reference": "D:/硕士/prj1_ai_cal/writing/实验设计",
   "gates": {
     "G0": {
-      "name": "pinned true simulator and licensing",
-      "status": "PASS",
-      "scope": "scientific_provenance",
+      "checked_at": "2026-10-17T04:10:00+00:00",
       "evidence": [
         "Direct git ls-remote https://github.com/HKUST-KnowComp/NewtonBench.git 912a4ba5f4356ddd06acc16e44460ca30be4abc2 HEAD returned the configured commit as HEAD.",
         "The vendored archive remains pinned as third_party/NewtonBench.zip SHA-256 f69e409e9e9332530dee04ed5c3175c7bba1d083dea4ab02ebffe6733115246e; the local MIT LICENSE SHA-256 47158d3a1eb6cbebe82fab657c11d4959c453f4d803b103a132b4627b63719f0 matches the upstream raw LICENSE at that exact commit (HTTP 200).",
         "G0 is PASS for pinned simulator provenance and licensing only. official_numeric_evaluator=false remains an explicit evaluator caveat; the local evaluator is not treated as the official upstream evaluator."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py",
-      "checked_at": "2026-10-17T04:10:00+00:00",
-      "scientific_release_allowed": false
+      "name": "pinned true simulator and licensing",
+      "scientific_release_allowed": false,
+      "scope": "scientific_provenance",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_gate_attestation.py"
     },
     "G1": {
-      "name": "strict LLM-only nonadaptivity",
-      "status": "PASS",
-      "scope": "engineering_protocol_only",
+      "caveats": [
+        "Engineering contract evidence does not establish a real-provider scientific result."
+      ],
       "evidence": [
         "Frozen-plan, no-tool, no-mid-run-feedback, observation-swap, and plan-hash controls are covered by the G1–G5 policy tests and audit reports.",
         "No formal provider scientific result is claimed; historical formal coverage remains 0/720."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_llm_isolation.py tests/test_reproducibility.py",
+      "name": "strict LLM-only nonadaptivity",
       "scientific_release_allowed": false,
-      "caveats": ["Engineering contract evidence does not establish a real-provider scientific result."]
+      "scope": "engineering_protocol_only",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_llm_isolation.py tests/test_reproducibility.py"
     },
     "G2": {
-      "name": "feedback-dependent Agent action capability",
-      "status": "PASS",
-      "scope": "engineering_protocol_only",
+      "caveats": [
+        "Mock/engineering action capability is not a superiority result."
+      ],
       "evidence": [
         "Agent action branching on public observations, allowed-tool boundaries, and unauthorized-tool failures are covered by the Agent action and policy tests.",
         "No formal provider scientific result is claimed; historical formal coverage remains 0/720."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_experiment_policy.py",
+      "name": "feedback-dependent Agent action capability",
       "scientific_release_allowed": false,
-      "caveats": ["Mock/engineering action capability is not a superiority result."]
+      "scope": "engineering_protocol_only",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_agent_actions.py tests/test_experiment_policy.py"
     },
     "G3": {
-      "name": "shared budget and hidden-answer isolation",
-      "status": "PASS",
-      "scope": "engineering_protocol_only",
+      "caveats": [
+        "G3/G4 matched scientific inference is not released by this engineering gate."
+      ],
       "evidence": [
         "Budget ledger, private-oracle isolation, provider retry policy, and public initial-information handling have passing regression coverage.",
         "The corrected G6 run has structural traces, but independent statistical/provider acceptance remains open."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_budget.py tests/test_no_leakage.py tests/test_provider_trace.py",
+      "name": "shared budget and hidden-answer isolation",
       "scientific_release_allowed": false,
-      "caveats": ["G3/G4 matched scientific inference is not released by this engineering gate."]
+      "scope": "engineering_protocol_only",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_budget.py tests/test_no_leakage.py tests/test_provider_trace.py"
     },
     "G4": {
-      "name": "objective evaluator adversarial cases",
-      "status": "PASS",
-      "scope": "engineering_evaluator_only",
+      "caveats": [
+        "Evaluator tests do not certify upstream simulator provenance or formal model results."
+      ],
       "evidence": [
         "Numeric, structural, OOD, malformed, overfit, and illegal-candidate evaluator cases are covered by the verified evaluator tests.",
         "The evaluator boundary is separate from hidden ground-truth provenance and external scientific review."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_evaluator.py",
+      "name": "objective evaluator adversarial cases",
       "scientific_release_allowed": false,
-      "caveats": ["Evaluator tests do not certify upstream simulator provenance or formal model results."]
+      "scope": "engineering_evaluator_only",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_evaluator.py"
     },
     "G5": {
-      "name": "real simulator plus mock pipeline smoke test",
-      "status": "PASS",
-      "scope": "smoke_and_engineering_only",
+      "caveats": [
+        "Smoke/mock execution is not formal VLDR evidence; upstream provenance remains G0-blocked."
+      ],
       "evidence": [
         "The real simulator smoke path and mock pipeline are persisted and covered by the G0–G5 audit inventory.",
         "The 23/24 corrected source-only family subset and zero dependency edges are retained; no L/U edges are fabricated."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q",
+      "name": "real simulator plus mock pipeline smoke test",
       "scientific_release_allowed": false,
-      "caveats": ["Smoke/mock execution is not formal VLDR evidence; upstream provenance remains G0-blocked."]
+      "scope": "smoke_and_engineering_only",
+      "status": "PASS",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q"
     },
     "G6": {
-      "name": "complete reproducibility, results, statistics, and retry gates",
-      "status": "BLOCKED",
-      "scope": "formal_scientific_release",
-      "evidence": [
-        "The current G6 audit preserves the 552-row normalized response denominator (552/552 structurally accounted; original attempt view 550 completed and 2 provider errors retained) and the 138-row revision denominator (69 G3 plus 69 G4). Independent row-level classification is BAD_DECISION 109 and VERIFIER_INCONCLUSIVE 29; secondary revised-claim-null count is 61.",
-        "The independent math verifier classifies the 138 revision rows as PASS 18, INCONCLUSIVE 59, and NOT_SCORED 61; this is a fail-closed audit result, not a private-oracle accuracy claim. Statistical output is descriptive only, and the handoff is metadata-only rather than a scientific release.",
-        "V3 re-audit preserves these counts and writes the derived acceptance artifacts to docs/audits/cycle-20261018T-g6g7-v3/G6_138_MATH_CLASSIFICATION.csv, G6_INDEPENDENT_VERIFIER_RESULT.jsonl, and G6_CLUSTER_DESCRIPTIVE_STATS.json; scientific release remains false."
-      ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_statistics.py tests/test_g7_corrected_metrics.py (engineering checks only)",
       "blocking_issues": [
         "ISSUE-ff97c7c89112",
         "ISSUE-000000000002",
@@ -123,26 +92,472 @@
         "ISSUE-ad61f025976a",
         "ISSUE-000000000003"
       ],
-      "scientific_release_allowed": false
+      "evidence": [
+        "The current G6 audit preserves the 552-row normalized response denominator (552/552 structurally accounted; original attempt view 550 completed and 2 provider errors retained) and the 138-row revision denominator (69 G3 plus 69 G4). Independent row-level classification is BAD_DECISION 109 and VERIFIER_INCONCLUSIVE 29; secondary revised-claim-null count is 61.",
+        "The independent math verifier classifies the 138 revision rows as PASS 18, INCONCLUSIVE 59, and NOT_SCORED 61; this is a fail-closed audit result, not a private-oracle accuracy claim. Statistical output is descriptive only, and the handoff is metadata-only rather than a scientific release.",
+        "V3 re-audit preserves these counts and writes the derived acceptance artifacts to docs/audits/cycle-20261018T-g6g7-v3/G6_138_MATH_CLASSIFICATION.csv, G6_INDEPENDENT_VERIFIER_RESULT.jsonl, and G6_CLUSTER_DESCRIPTIVE_STATS.json; scientific release remains false."
+      ],
+      "name": "complete reproducibility, results, statistics, and retry gates",
+      "scientific_release_allowed": false,
+      "scope": "formal_scientific_release",
+      "status": "BLOCKED",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_statistics.py tests/test_g7_corrected_metrics.py (engineering checks only)"
     },
     "G7": {
-      "name": "frozen preregistration before costly formal testing and V/L/U/Q diagnosis",
-      "status": "BLOCKED",
-      "scope": "formal_scientific_release",
+      "blocking_issues": [
+        "ISSUE-3d7a9c1e5b20",
+        "ISSUE-1f8c2b6a4d90",
+        "ISSUE-000000000002"
+      ],
+      "caveats": [
+        "All failures and invalid Q rows remain in the denominator; no provider/Q or L/U claim is made."
+      ],
       "evidence": [
         "Kimi K2.5 strict preflight passed without provider calls: 1288/1288 plan rows, 184/184 checkpoints, seven arms per checkpoint, exact corrected input hashes, and zero protocol/lineage/privacy errors.",
         "The V3 state/attempt matrix preserves the full 1288/1288 frozen denominator, 184/184 checkpoints, and state accounting of 1150 completed, 137 checkpoint_missing, and 1 provider_error. It independently recomputes provider request and genuine response counts from immutable selected traces. Canonical trace-valid selection is 1123/1288; the separate trace-qualified sensitivity view is 1138/1288 completed attempts. The 138 missing states require real provider responses and were not paid for or fabricated. A separate one-case Qwen pilot completed under explicit non-confirmatory override and is not pooled into this denominator.",
         "The independent Q audit reports 0 verified PASS, 0 FAIL, 0 INCONCLUSIVE, 1150 NOT_SCORED, and 138 INELIGIBLE; private labels and private oracle were not read. No confirmatory reuse or scientific accuracy claim is made.",
         "The historical 28 trace defects reconcile exactly to 15 attempt-boundary artifacts plus 13 genuine final-attempt inconsistencies; raw history is preserved and the append-safe writer fix is covered by adversarial tests. L/U evidence remains unverified: 0 declared graph edges and 0 scored U rows. Evidence: docs/audits/cycle-20261018T-g6g7-v3/G7_STATE_ATTEMPT_MATRIX.csv, G7_TRACE_15_EXPLAINED_13_INVALID.jsonl, G7_EXECUTOR_REGRESSION.json, and 18_INDEPENDENT_READ_ONLY_REVIEW_V3.json."
       ],
-      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_q_audit.py tests/test_g7_corrected_metrics.py",
-      "blocking_issues": [
-        "ISSUE-3d7a9c1e5b20",
-        "ISSUE-1f8c2b6a4d90",
-        "ISSUE-000000000002"
-      ],
+      "name": "frozen preregistration before costly formal testing and V/L/U/Q diagnosis",
       "scientific_release_allowed": false,
-      "caveats": ["All failures and invalid Q rows remain in the denominator; no provider/Q or L/U claim is made."]
+      "scope": "formal_scientific_release",
+      "status": "BLOCKED",
+      "verification_command": "E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_g7_protocol.py tests/test_g7_q_audit.py tests/test_g7_corrected_metrics.py"
     }
+  },
+  "generated_at_utc": "2026-10-18T04:49:09+00:00",
+  "mock_is_not_science_evidence": true,
+  "schema_version": 1,
+  "scientific_release_allowed": false,
+  "status": "BLOCKED_PENDING_EXTERNAL_REVIEW_AND_PROVIDER_FAILURES",
+  "v3_audit": {
+    "cycle": "cycle-20261018T-g6g7-v3",
+    "independent_review": "PASS",
+    "new_paid_api_calls": 13,
+    "paid_compatibility_preflight": "PASS; qwen3.5-plus and glm-5.2; four compatibility requests plus nine Qwen pilot requests; Qwen public price verified, account billing and model identity unresolved; not scientific evidence",
+    "path": "docs/audits/cycle-20261018T-g6g7-v3",
+    "protected_source_hashes_unchanged": true,
+    "qwen_g7_pilot": "COMPLETED_NON_CONFIRMATORY; 1 frozen case; 4 model calls; 1 tool call; 7314 tokens; local ledger estimate USD 0.0145112; historical denominator unchanged",
+    "real_v2_formal_runs": 0
+  },
+  "v8_internal_execution": {
+    "audit_path": "docs/audits/cycle-20261019T094634Z-kimi-v8-real-evidence/V8_STATE_RECONCILIATION.json",
+    "historical_denominators_unchanged": true,
+    "local_usage_cost_usd": 0.120029,
+    "mock": false,
+    "model_id": "kimi-k2.5",
+    "note": "Internal execution and audit inventory only. G6/G7 scientific gates remain blocked; no historical result, truth key, or denominator is changed.",
+    "protocol_counts": {
+      "G6_V8": 63,
+      "G7_V8": 20,
+      "LU_U_V8": 16,
+      "Q_V8": 8
+    },
+    "real_provider_calls": 107,
+    "run_id": "20261019T094634Z-kimi-v8-real-evidence",
+    "scientific_gate_uplift": false
+  },
+  "v9_internal_execution": {
+    "g6_new_machine_verifiable": {
+      "by_arm": {
+        "G6_A_G3_GIVEN": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5,
+            0.875
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.6875,
+          "n": 16,
+          "score_key": "action_correct"
+        },
+        "G6_B_G4_GIVEN": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.75,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.875,
+          "n": 16,
+          "score_key": "action_correct"
+        }
+      },
+      "by_cf": {
+        "CF1": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF2": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.75,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF3": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.75
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 0.375,
+          "n": 8,
+          "score_key": "action_correct"
+        },
+        "CF4": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 8,
+          "score_key": "action_correct"
+        }
+      },
+      "strict_action": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.65625,
+          0.9375
+        ],
+        "cluster_key": "family_id",
+        "clusters": 4,
+        "estimate": 0.78125,
+        "n": 32,
+        "score_key": "action_correct"
+      }
+    },
+    "g7_primary_and_repair": {
+      "primary": {
+        "by_stage": {
+          "D0": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              0.75
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.25,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D1_V": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.5,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D2_VL": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D3_VLU": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          }
+        },
+        "final_accuracy_all_planned_semantic": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_semantic_correct"
+        },
+        "final_accuracy_all_planned_strict": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_correct"
+        },
+        "stage_adherence": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.5625,
+            0.75
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.6875,
+          "n": 16,
+          "score_key": "stage_adherent"
+        }
+      },
+      "repair": {
+        "by_stage": {
+          "D0": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.5,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D1_V": {
+            "bootstrap": 4000,
+            "ci95": [
+              0.25,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 0.75,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D2_VL": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          },
+          "D3_VLU": {
+            "bootstrap": 4000,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "cluster_key": "task_id",
+            "clusters": 4,
+            "estimate": 1.0,
+            "n": 4,
+            "score_key": "stage_adherent"
+          }
+        },
+        "final_accuracy_all_planned_semantic": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.25,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.75,
+          "n": 4,
+          "score_key": "final_semantic_correct"
+        },
+        "final_accuracy_all_planned_strict": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "final_correct"
+        },
+        "stage_adherence": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.75,
+            0.9375
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.8125,
+          "n": 16,
+          "score_key": "stage_adherent"
+        }
+      }
+    },
+    "historical_denominators_unchanged": {
+      "g6_formal": 552,
+      "g6_machine_rows": 276,
+      "g7_frozen": 1288,
+      "g7_historical_defects": 13,
+      "g7_recovery": 150,
+      "lu_legacy_pairs": 6,
+      "q92": 92
+    },
+    "local_usage_cost_usd": 0.07614800000000005,
+    "lu_u_new_control_real_sham": {
+      "by_arm": {
+        "CONTROL": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        },
+        "REAL": {
+          "bootstrap": 4000,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 1.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        },
+        "SHAM": {
+          "bootstrap": 4000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "semantic_nonfinal_update_correct"
+        }
+      },
+      "review_summary": {
+        "arm_counts": {
+          "CONTROL": 4,
+          "REAL": 4,
+          "SHAM": 4
+        },
+        "checkpoint_count": 4,
+        "fork_rows": 12,
+        "protocol": "LU_V9_PROSPECTIVE_SHARED_CHECKPOINT_CONTROL_REAL_SHAM",
+        "semantic_correct": {
+          "CONTROL": 0,
+          "REAL": 4,
+          "SHAM": 0
+        },
+        "shared_checkpoint_hashes_present": true,
+        "truth_key_sent_to_model": false
+      },
+      "semantic_update": {
+        "bootstrap": 4000,
+        "ci95": [
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "cluster_key": "task_id",
+        "clusters": 4,
+        "estimate": 0.3333333333333333,
+        "n": 12,
+        "score_key": "semantic_nonfinal_update_correct"
+      }
+    },
+    "model_id": "kimi-k2.5",
+    "note": "V9 internal evidence is appended. Existing historical G6/G7 gates and denominators are not rewritten; provider external attestation remains separate.",
+    "protocol_counts": {
+      "AGENT_COMPARISON_V9": 16,
+      "G6_V9": 32,
+      "G7_V9_PRIMARY": 16,
+      "G7_V9_REPAIR": 16,
+      "LU_U_V9": 16,
+      "Q_V9": 8
+    },
+    "q_new_truth_first": {
+      "action_schema": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 8,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_schema_valid"
+      },
+      "mathematical_state": {
+        "bootstrap": 4000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "clusters": 8,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "state_correct"
+      },
+      "review_summary": {
+        "private_truth_read_after_model_calls": true,
+        "protocol": "Q_KIMI_V9_TRUTH_FIRST_INDEPENDENT_REVIEW",
+        "rows": 8,
+        "schema_valid": 8,
+        "state_correct": 8,
+        "sympy_status_counts": {
+          "PROVEN_FALSE": 3,
+          "PROVEN_TRUE": 5,
+          "UNKNOWN": 0
+        },
+        "truth_key_sent_to_model": false
+      }
+    },
+    "real_provider_calls": 104,
+    "run_id": "20261019T-kimi-v9-prospective",
+    "scientific_hypothesis_supported": "NO_OVERALL_SUPPORT_CLAIM",
+    "scientific_release_allowed": false,
+    "status": "INTERNAL_RUN_COMPLETE_SCIENTIFIC_GATES_RETAINED_BLOCKED"
   }
 }
