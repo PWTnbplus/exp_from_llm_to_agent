@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-19T02:35:43+00:00
+生成时间（UTC）：2026-10-19T02:42:20+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -17,13 +17,13 @@
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
 - 阻塞原因：One-case Qwen G7 execution pilot completed under provider-public Qwen pricing after a local token-limit configuration fix; the pilot is non-confirmatory and separate from the historical denominator. Account-level billing/invoice, historic provider-charge reconciliation, and immutable model identity remain unavailable, so the scientific release gate remains closed.
 
-### ISSUE-000000000003 — P1 — BLOCKED
+### ISSUE-000000000003 — P1 — RESOLVED_UNVERIFIED
 - 描述：Upstream provenance and GitHub delivery are externally blocked
-- 证据：The local branch contains the completed work, but push verification still fails through the configured proxy at 127.0.0.1:443. No remote push success is claimed.
+- 证据：docs/audits/cycle-20261019T-v5-execution/REMOTE_SHA_AND_PROVENANCE_REVIEW.json; docs/state/gates.json G0 evidence; remote refs/heads/autopilot/scientific-law-discovery=22f47609079e1a782d12b1f11364cb505b20dbc7
 - 必需修复：Restore an authorized network path or publish the local commit through an independently verified upstream channel; do not claim remote delivery until git ls-remote confirms it.
 - 尝试次数：2
 - 来源：legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md
-- 阻塞原因：After local commit 37e6e02, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local repair commits are present, but remote delivery is not verified.
+- 阻塞原因：未记录
 
 ### ISSUE-000000000004 — P1 — BLOCKED
 - 描述：Formal statistical validity is not established

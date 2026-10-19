@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-19T02:35:43+00:00",
+  "updated_at": "2026-10-19T02:42:20+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -173,14 +173,14 @@
       "id": "ISSUE-000000000003",
       "severity": "P1",
       "title": "Upstream provenance and GitHub delivery are externally blocked",
-      "status": "BLOCKED",
-      "evidence": "The local branch contains the completed work, but push verification still fails through the configured proxy at 127.0.0.1:443. No remote push success is claimed.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "docs/audits/cycle-20261019T-v5-execution/REMOTE_SHA_AND_PROVENANCE_REVIEW.json; docs/state/gates.json G0 evidence; remote refs/heads/autopilot/scientific-law-discovery=22f47609079e1a782d12b1f11364cb505b20dbc7",
       "remediation": "Restore an authorized network path or publish the local commit through an independently verified upstream channel; do not claim remote delivery until git ls-remote confirms it.",
       "first_seen": "2026-10-08T05:48:38+00:00",
-      "last_seen": "2026-10-18T14:07:28+00:00",
+      "last_seen": "2026-10-19T02:42:20+00:00",
       "source": "legacy:docs/audits/2026-10-08_supervisor_report_autopilot_cycle_01.md",
       "attempts": 2,
-      "blocked_reason": "After local commit 37e6e02, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local repair commits are present, but remote delivery is not verified.",
+      "blocked_reason": null,
       "verification": null,
       "history": [
         {
@@ -553,6 +553,12 @@
           "event": "BLOCKED",
           "reason": "After local commit 37e6e02, git push and independent git ls-remote verification were retried; both failed to connect to github.com:443 through 127.0.0.1. The local repair commits are present, but remote delivery is not verified.",
           "evidence": "git push origin autopilot/scientific-law-discovery; git ls-remote origin refs/heads/autopilot/scientific-law-discovery; local commit 37e6e02"
+        },
+        {
+          "time": "2026-10-19T02:42:20+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "Authorized branch push succeeded and exact proxy-disabled ls-remote returned the same SHA; pinned NewtonBench provenance is independently recorded in G0 evidence.",
+          "evidence": "docs/audits/cycle-20261019T-v5-execution/REMOTE_SHA_AND_PROVENANCE_REVIEW.json; docs/state/gates.json G0 evidence; remote refs/heads/autopilot/scientific-law-discovery=22f47609079e1a782d12b1f11364cb505b20dbc7"
         }
       ]
     },

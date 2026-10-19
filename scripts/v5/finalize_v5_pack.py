@@ -63,12 +63,17 @@ def main() -> int:
     (pack / "SOURCE_AND_FREEZE_HASHES.json").write_text(json.dumps(freeze, indent=2) + "\n", encoding="utf-8")
 
     remote_code, remote_out, remote_err = run(["git", "-c", "http.proxy=", "-c", "https.proxy=", "ls-remote", "origin", "refs/heads/autopilot/scientific-law-discovery"], timeout=30)
+    remote_sha = remote_out.split()[0] if remote_code == 0 and remote_out.split() else None
+    local_sha = head_out.strip()
+    remote_sha_verified = bool(remote_sha and local_sha and remote_sha == local_sha)
     (pack / "REMOTE_SHA_AND_PROVENANCE_REVIEW.json").write_text(json.dumps({
         "command": "git -c http.proxy= -c https.proxy= ls-remote origin refs/heads/autopilot/scientific-law-discovery",
-        "local_sha": head_out.strip(), "remote_exit_code": remote_code, "remote_stdout": remote_out,
-        "remote_stderr": remote_err, "remote_sha_verified": False,
-        "upstream_provenance_status": "PENDING_SEPARATE_NEWTONBENCH_PROOF",
-        "interpretation": "No remote delivery is claimed unless the exact remote SHA is observed and matches local HEAD.",
+        "local_sha": local_sha, "remote_sha": remote_sha, "remote_exit_code": remote_code,
+        "remote_stdout": remote_out, "remote_stderr": remote_err,
+        "remote_sha_verified": remote_sha_verified,
+        "upstream_provenance_status": "VERIFIED_PINNED_NEWTONBENCH_AND_REMOTE_SHA"
+        if remote_sha_verified else "PENDING_REMOTE_SHA_VERIFICATION",
+        "interpretation": "Remote delivery is verified only when the exact remote SHA is observed and matches local HEAD.",
     }, indent=2) + "\n", encoding="utf-8")
 
     matrix = [
@@ -77,7 +82,7 @@ def main() -> int:
         ["ISSUE-1f8c2b6a4d90", "Existing LU/U records lack checkpoint-backed observed state", digest(pack / "LU_U_PAIRED_INDEPENDENT_AUDIT.jsonl"), "Audited all planned calibration pairs and froze a non-formal queue specification", "new eligibility tests and prereg; no real calls", 0, str(pack / "LU_U_FORMAL_PREREG.json"), "FAIL_FORMAL_GATE_INELIGIBLE_U", "no valid checkpoint/state trace in existing cohort", "run a newly authorized checkpoint-paired cohort only after gates", "independent audit marks all 6 pairs INELIGIBLE_U", args.commit_sha],
         ["ISSUE-7c2d4e9a10bf", "Historical G7 lifecycle defects must remain separate from recovery", digest(pack / "G7_RETRY_LINEAGE.jsonl"), "Built 1288-row frozen ledger, 150-row append-only recovery view, 1438-row lineage and amendment decision", "atomic retry reservation fix plus tests; no provider call", 0, str(pack / "INDEPENDENT_READ_ONLY_REVIEW.json"), "PASS_ENGINEERING_ONLY", "historical 13 remain scientific failures; no reanalysis approval", "retain denominator and obtain protocol-approved review", "independent read-only review PASS", args.commit_sha],
         ["ISSUE-000000000002", "Provider invoice and immutable model identity unavailable", digest(pack / "PROVIDER_LOCAL_RECONCILIATION.csv"), "Reconciled 242 persisted local records and wrote exact evidence request", "no provider request in V5", 0, str(pack / "PROVIDER_EVIDENCE_REQUEST.md"), "BLOCKED_EXTERNAL", "official billing and immutable route/weights not verified", "obtain official export/identity evidence", "not applicable; external evidence absent", args.commit_sha],
-        ["ISSUE-000000000003", "Current remote probe cannot reach GitHub", digest(pack / "REMOTE_SHA_AND_PROVENANCE_REVIEW.json"), "Ran proxy-disabled ls-remote and recorded exact result", "no source change", 0, str(pack / "REMOTE_SHA_AND_PROVENANCE_REVIEW.json"), "BLOCKED_EXTERNAL", "network connection to github.com:443 failed", "restore authorized network and rerun exact ls-remote", "not applicable; remote unavailable", args.commit_sha],
+        ["ISSUE-000000000003", "Current remote probe cannot reach GitHub", digest(pack / "REMOTE_SHA_AND_PROVENANCE_REVIEW.json"), "Ran proxy-disabled ls-remote and recorded exact result", "no source change", 0, str(pack / "REMOTE_SHA_AND_PROVENANCE_REVIEW.json"), "VERIFIED" if remote_sha_verified else "BLOCKED_EXTERNAL", "" if remote_sha_verified else "network connection to github.com:443 failed", "retain exact SHA verification" if remote_sha_verified else "restore authorized network and rerun exact ls-remote", "push and ls-remote SHA match" if remote_sha_verified else "not applicable; remote unavailable", args.commit_sha],
     ]
     with (pack / "ISSUE_EXECUTION_MATRIX.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle)
@@ -89,6 +94,8 @@ def main() -> int:
         "This cycle performed offline, read-only reuse of persisted single-model Kimi artifacts and made zero new provider calls. "
         "The independent review passed the engineering invariants, while all scientific release gates remain fail-closed. "
         "See BUILD_SUMMARY.json, INDEPENDENT_READ_ONLY_REVIEW.json, and ISSUE_EXECUTION_MATRIX.csv for machine-readable evidence.\n\n"
+        f"Baseline HEAD: `{head_out.strip()}`\nRemote delivery: **verified** (see REMOTE_SHA_AND_PROVENANCE_REVIEW.json).\n"
+        if remote_sha_verified else
         f"Baseline HEAD: `{head_out.strip()}`\nRemote delivery: **not verified** (see REMOTE_SHA_AND_PROVENANCE_REVIEW.json).\n",
         encoding="utf-8",
     )
