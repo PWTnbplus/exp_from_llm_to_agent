@@ -1,0 +1,27 @@
+{
+  "cycle": "20261019T-scientific-acceptance",
+  "provider_calls": 0,
+  "commands": [
+    {
+      "scope": "G0-G5 engineering and protocol preconditions",
+      "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_experiment_policy.py tests/test_llm_isolation.py tests/test_no_leakage.py tests/test_agent_actions.py tests/test_budget.py tests/test_cost_ledger.py tests/test_provider_trace.py tests/test_evaluator.py tests/test_theory_benchmark.py tests/test_gate_attestation.py",
+      "result": "49 passed in 6.45s"
+    },
+    {
+      "scope": "G6-G7, LU/U eligibility, and V5 audit invariants",
+      "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 E:/resources/python/python.exe -X utf8 -m pytest -q tests/test_analyze_g6_clustered.py tests/test_g6_input_collision_guards.py tests/test_g6_resume_sequence.py tests/test_g6_runner_contract.py tests/test_g7_protocol.py tests/test_g7_protocol_preflight.py tests/test_g7_label_contract.py tests/test_g7_failure_taxonomy.py tests/test_g7_q_audit.py tests/test_g7_scientific_selection.py tests/test_g7_terminal_retry.py tests/test_g7_trace_q_consistency.py tests/test_lu_u_state_intervention_v5.py tests/test_v5_audit_tools.py",
+      "result": "145 passed in 4.25s"
+    },
+    {
+      "scope": "independent read-only evidence review",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/v5/independent_read_only_review.py --pack docs/audits/cycle-20261019T-v5-execution",
+      "result": "engineering_review_pass=true; failures=[]; scientific_release_allowed=false"
+    },
+    {
+      "scope": "fail-closed G0-G7 scientific acceptance arbiter",
+      "command": "E:/resources/python/python.exe -X utf8 scripts/v5/scientific_acceptance.py --pack docs/audits/cycle-20261019T-v5-execution --output docs/audits/cycle-20261019T-scientific-acceptance/G0_G7_SCIENTIFIC_ACCEPTANCE_MATRIX.json",
+      "result": "engineering_or_protocol_pass_count=6; formal_scientific_gate_pass_count=0; scientific_release_allowed=false"
+    }
+  ],
+  "interpretation": "The software and protocol checks passed. The scientific release decision remains blocked by explicit evidence requirements, not by a test failure."
+}
