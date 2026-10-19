@@ -1,0 +1,17 @@
+{
+  "protocol_id": "V8_G6_PROSPECTIVE",
+  "created_utc": "2026-10-19T09:55:16.849241Z",
+  "public_cases": 32,
+  "public_sha256": "f67b8cd6b72d355d21c9a503a6c97ff224b3c72857eacc2d8981427b933875cb",
+  "truth_key_sha256": "269d83779c2869926a6ef1cc28a8e8e3013cfa10a532de99bceafab8b537ee51",
+  "truth_key_created_before_provider_calls": true,
+  "truth_key_sent_to_model": false,
+  "private_truth_isolation": true,
+  "model_id": "kimi-k2.5",
+  "families": 4,
+  "cases": 32,
+  "arms": [
+    "G6_A_G3_GIVEN",
+    "G6_B_G4_GIVEN"
+  ]
+}

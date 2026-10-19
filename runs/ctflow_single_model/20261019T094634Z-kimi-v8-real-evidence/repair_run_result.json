@@ -1,0 +1,28 @@
+{
+  "g6_repair": {
+    "protocol": "V8_G6_PROSPECTIVE_REPAIRED",
+    "rows": 32,
+    "provider_calls": 32,
+    "successful_provider_rows": 32,
+    "structured_rows": 30,
+    "score_key": "action_correct",
+    "score_numerator": 10,
+    "score_denominator": 32,
+    "real_model_id": "kimi-k2.5",
+    "mock": false
+  },
+  "total_provider_calls": 107,
+  "model_id": "kimi-k2.5",
+  "ledger_snapshot": {
+    "global_cap_usd": 200.0,
+    "g7_cap_usd": 60.0,
+    "worker_cap_usd": 20.0,
+    "historical_entered_usd": 0.0,
+    "historical_confirmed_usd": 0.0,
+    "historical_unbilled_conservative_ceiling_usd": 0.0,
+    "historical_g7_subcap_usd": 0.0,
+    "settled_new_usd": 0.12002900000000001,
+    "inflight_reserved_usd": 0.001783,
+    "safe_remaining_if_all_reservations_settle_usd": 199.87818800000002
+  }
+}

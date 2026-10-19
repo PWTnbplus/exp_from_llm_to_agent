@@ -1,0 +1,9 @@
+{
+  "protocol": "V8_LEGACY_G6_INDEPENDENT_MATH_REPLAY",
+  "rows": 276,
+  "counts": {
+    "PROVEN_TRUE": 276
+  },
+  "truth_key_read": false,
+  "historical_data_modified": false
+}

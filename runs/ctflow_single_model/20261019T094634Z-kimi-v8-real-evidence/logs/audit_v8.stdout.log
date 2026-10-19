@@ -1,0 +1,306 @@
+﻿{
+  "accounting": {
+    "raw_trace_rows": 107,
+    "call_numbers_contiguous": true,
+    "unique_call_numbers": 107,
+    "model_ids": [
+      "kimi-k2.5"
+    ],
+    "only_kimi_k25": true,
+    "protocol_counts": {
+      "G6_V8": 63,
+      "Q_V8": 8,
+      "LU_U_V8": 16,
+      "G7_V8": 20
+    },
+    "provider_usage_cost_sum_usd": 0.12002900000000001,
+    "mock": false,
+    "request_private_marker_hits": []
+  },
+  "stats": {
+    "G6_V8_REPAIRED": {
+      "strict": {
+        "n": 32,
+        "clusters": 4,
+        "estimate": 0.3125,
+        "ci95": [
+          0.25,
+          0.375
+        ],
+        "cluster_key": "family_id",
+        "score_key": "action_correct",
+        "bootstrap": 4000
+      },
+      "by_arm": {
+        "G6_A_G3_GIVEN": {
+          "n": 16,
+          "clusters": 4,
+          "estimate": 0.3125,
+          "ci95": [
+            0.25,
+            0.4375
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        },
+        "G6_B_G4_GIVEN": {
+          "n": 16,
+          "clusters": 4,
+          "estimate": 0.3125,
+          "ci95": [
+            0.25,
+            0.4375
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        }
+      },
+      "by_cf": {
+        "CF1": {
+          "n": 8,
+          "clusters": 4,
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        },
+        "CF2": {
+          "n": 8,
+          "clusters": 4,
+          "estimate": 0.125,
+          "ci95": [
+            0.0,
+            0.375
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        },
+        "CF3": {
+          "n": 8,
+          "clusters": 4,
+          "estimate": 0.125,
+          "ci95": [
+            0.0,
+            0.375
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        },
+        "CF4": {
+          "n": 8,
+          "clusters": 4,
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "family_id",
+          "score_key": "action_correct",
+          "bootstrap": 4000
+        }
+      }
+    },
+    "G6_V8_PILOT_BUGGED_CASE_ID": {
+      "strict": {
+        "n": 31,
+        "clusters": 4,
+        "estimate": 0.3225806451612903,
+        "ci95": [
+          0.26666666666666666,
+          0.375
+        ],
+        "cluster_key": "family_id",
+        "score_key": "action_correct",
+        "bootstrap": 4000
+      },
+      "rows": 31,
+      "case_id_arm_collision_preserved": true
+    },
+    "Q_V8": {
+      "strict_pre_registered_status": {
+        "n": 8,
+        "clusters": 8,
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_key": "task_id",
+        "score_key": "candidate_status_matches",
+        "bootstrap": 4000
+      },
+      "independent_semantic_action": {
+        "n": 8,
+        "clusters": 8,
+        "estimate": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "task_id",
+        "score_key": "semantic_action_valid",
+        "bootstrap": 4000
+      },
+      "strict_inconclusive_count": 0
+    },
+    "LU_U_V8": {
+      "strict_runner_label": {
+        "n": 12,
+        "clusters": 4,
+        "estimate": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "cluster_key": "task_id",
+        "score_key": "nonfinal_update_correct",
+        "bootstrap": 4000
+      },
+      "independent_semantic_nonfinal_update": {
+        "n": 12,
+        "clusters": 4,
+        "estimate": 0.5833333333333334,
+        "ci95": [
+          0.4166666666666667,
+          0.6666666666666666
+        ],
+        "cluster_key": "task_id",
+        "score_key": "semantic_nonfinal_update_correct",
+        "bootstrap": 4000
+      },
+      "by_arm_semantic": {
+        "CONTROL": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.5,
+          "ci95": [
+            0.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "semantic_nonfinal_update_correct",
+          "bootstrap": 4000
+        },
+        "REAL": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.75,
+          "ci95": [
+            0.25,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "semantic_nonfinal_update_correct",
+          "bootstrap": 4000
+        },
+        "SHAM": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.5,
+          "ci95": [
+            0.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "semantic_nonfinal_update_correct",
+          "bootstrap": 4000
+        }
+      },
+      "checkpoint_ids": 4,
+      "arm_counts": {
+        "CONTROL": 4,
+        "REAL": 4,
+        "SHAM": 4
+      }
+    },
+    "G7_V8": {
+      "stage_protocol_adherence": {
+        "n": 16,
+        "clusters": 4,
+        "estimate": 0.5625,
+        "ci95": [
+          0.375,
+          0.75
+        ],
+        "cluster_key": "task_id",
+        "score_key": "stage_protocol_adherent",
+        "bootstrap": 4000
+      },
+      "by_stage": {
+        "D0": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.75,
+          "ci95": [
+            0.25,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "stage_protocol_adherent",
+          "bootstrap": 4000
+        },
+        "D1_V": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "stage_protocol_adherent",
+          "bootstrap": 4000
+        },
+        "D2_VL": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.5,
+          "ci95": [
+            0.0,
+            1.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "stage_protocol_adherent",
+          "bootstrap": 4000
+        },
+        "D3_VLU": {
+          "n": 4,
+          "clusters": 4,
+          "estimate": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "task_id",
+          "score_key": "stage_protocol_adherent",
+          "bootstrap": 4000
+        }
+      },
+      "private_Y_injected_false": true
+    },
+    "truth_replay": {
+      "rows": 80,
+      "all_non_q_replays_match_frozen": true,
+      "q_frozen_conservative_mismatches": [
+        "Q07",
+        "Q08"
+      ],
+      "q_stronger_replay_true": 8,
+      "truth_key_read_by_model": false
+    }
+  },
+  "privacy": {
+    "request_private_marker_hits": [],
+    "all_record_truth_key_sent_flags_false": true,
+    "g7_private_Y_injected_false": true,
+    "only_model": true
+  }
+}

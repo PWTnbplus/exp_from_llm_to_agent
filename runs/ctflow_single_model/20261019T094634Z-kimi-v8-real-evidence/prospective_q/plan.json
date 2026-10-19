@@ -1,0 +1,13 @@
+{
+  "protocol_id": "Q_V8_TRUTH_FIRST_PROSPECTIVE",
+  "created_utc": "2026-10-19T09:55:16.915858Z",
+  "public_cases": 8,
+  "public_sha256": "b90bb7f383b5f182f14cc6b7bf7b4f824ddb55589a53c676bda696204e4e5b6e",
+  "truth_key_sha256": "63f67c4c84527a0baca1a138ec87592e240511b62a304caaec16335c2f379ffb",
+  "truth_key_created_before_provider_calls": true,
+  "truth_key_sent_to_model": false,
+  "private_truth_isolation": true,
+  "model_id": "kimi-k2.5",
+  "tasks": 8,
+  "truth_process_before_provider": true
+}

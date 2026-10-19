@@ -1,0 +1,10 @@
+{
+  "reservation_id": "v8-single-kimi:3:1:1792403876448223300",
+  "previous": {
+    "reserved": 0.001783,
+    "settled": 0.000748,
+    "status": "settled"
+  },
+  "reconciled_settled": 0.0,
+  "reason": "orphaned reservation created by interrupted process; no matching provider trace or model response"
+}

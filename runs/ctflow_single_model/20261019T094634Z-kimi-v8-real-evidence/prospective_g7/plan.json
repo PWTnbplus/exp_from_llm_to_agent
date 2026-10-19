@@ -1,0 +1,19 @@
+{
+  "protocol_id": "G7_V8_NEW_PROSPECTIVE_VLLUQ",
+  "created_utc": "2026-10-19T09:55:17.027807Z",
+  "public_cases": 4,
+  "public_sha256": "00014619842d410e3bcf498c859b30d15c8634e93cf9b8e3af088f6f02308843",
+  "truth_key_sha256": "9c9ce6a01936568d503e95857e5d2017b98cecbbad659142a50d585755c4ded4",
+  "truth_key_created_before_provider_calls": true,
+  "truth_key_sent_to_model": false,
+  "private_truth_isolation": true,
+  "model_id": "kimi-k2.5",
+  "tasks": 4,
+  "diagnostic_stages": [
+    "D0",
+    "D1_V",
+    "D2_VL",
+    "D3_VLU"
+  ],
+  "not_retroactive": true
+}

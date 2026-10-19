@@ -1,0 +1,65 @@
+{
+    "schema_version":  "v8-source-manifest-1",
+    "run_id":  "20261019T094634Z-kimi-v8-real-evidence",
+    "created_at_utc":  "2026-10-19T09:46:35.6312084Z",
+    "git_head_before":  "502dcad32aff29e77075cd9846f432e842802fb9",
+    "git_branch":  "autopilot/scientific-law-discovery",
+    "origin_fetch_url":  "https://github.com/PWTnbplus/exp_from_llm_to_agent.git",
+    "model_id":  "kimi-k2.5",
+    "model_route_label":  "CTFlow https://token.ctflow.cn/v1",
+    "research_profile":  "theory_benchmark",
+    "protocol_identity":  "PROTOCOL_IDENTITY.md",
+    "source_files_sha256":  {
+                                "docs/state/issues.json":  "e09a687fdf4779aaeb5d7acc3c9d265752d4b2923e2c27a87905c258f7e7d99c",
+                                "docs/state/HANDOFF_V7_20261019.md":  "67c62cfe29054a345c969e0d6269266eb7dd570f609fd1c9894300d3fe20710c",
+                                "PROTOCOL_IDENTITY.md":  "f5c336b1f6c197e9717c0d3502ac327668cb8356fa584c0cc4e6e0ee5d98c1cb",
+                                "runs/ctflow_single_model/20261019T085725Z-kimi-machine-v7/g6/G6_MACHINE_SUMMARY.json":  "2fd05c835974425a6fa3150d617060fa4cb3e7c149a9be01f3db57db961e1636",
+                                "runs/ctflow_single_model/20261019T085725Z-kimi-machine-v7/machine_config.json":  "e42e2ba029ade981112f1f9910269b5e8e749523cd972f96175b39459160a1b6",
+                                "AGENTS.md":  "80d415efb558e289cad005cc37b3f96f0f49b753648b11ec80d1cd02179365b2",
+                                "runs/ctflow_single_model/20261019T085725Z-kimi-machine-v7/lu/pairs.jsonl":  "d1afda19fced5f47d8152a0d3d62e0ea4269ee1b0eef4331b019787df1412a75",
+                                "runs/ctflow_single_model/20261019T085725Z-kimi-machine-v7/g7/attempt_dag.jsonl":  "7e0189b360c20fd0f8421ce694fa1559f5692b0d36e068866d02ee14ee8ee3ff",
+                                "docs/state/gates.json":  "468a47558cc7cc4b8f0b79a4d238819689f78589f819869c2c4b5edec91d111a",
+                                "runs/ctflow_single_model/20261019T085725Z-kimi-machine-v7/q92/obligations.jsonl":  "11b321135d3f6ad44969e71804f3604be7e788887d87331b60c84dbfb7950767"
+                            },
+    "protected_preexisting_status":  [
+                                         "?? docs/audits/cycle-20261018T-v4-g6g7-execution/LU_V2_PROOFS_ALL/",
+                                         "?? docs/audits/cycle-20261018T-v4-g6g7-execution/LU_V2_PUBLIC_GRAPHS_ALL.jsonl",
+                                         "?? docs/audits/cycle-20261018T-v4-g6g7-execution/LU_V2_PUBLIC_GRAPHS_ALL_MANIFEST.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_FORMAL_VS_PROSPECTIVE_COUNTS.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_HISTORICAL_1288_AUDIT.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_MACHINE_CANONICAL_VIEW.jsonl",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_NEW_ATTEMPT_LINEAGE.jsonl",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_REANALYSIS_SENSITIVITY.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/G7_RECOVERY_150_AUDIT.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_CERTIFIED_DERIVATION_GRAPHS/",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_PROSPECTIVE_VS_LEGACY.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_PUBLIC_CHECKPOINTS.jsonl",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_RANDOMIZED_PAIR_MANIFEST.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_RAW_SINGLE_KIMI_ATTEMPTS/",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/LU_TRUE_NONFINAL_UPDATES.jsonl",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/Q92_55_11_AUTOMATED_TRIAGE.csv",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/Q92_ALL_92_MACHINE_COUNTS.json",
+                                         "?? docs/audits/cycle-20261019T085725Z-kimi-machine-v7/Q92_RETROSPECTIVE_MACHINE_REVIEW.jsonl",
+                                         "?? research_data_summary_G0_G7/"
+                                     ],
+    "legacy_denominators":  {
+                                "g6_formal_rows":  552,
+                                "g6_machine_rows":  276,
+                                "g7_frozen":  1288,
+                                "g7_recovery":  150,
+                                "g7_historical_defects":  13,
+                                "q92":  {
+                                            "PASS":  18,
+                                            "FAIL":  8,
+                                            "INCONCLUSIVE":  55,
+                                            "NOT_SCORED":  11
+                                        },
+                                "lu_u_pairs":  6
+                            },
+    "privacy":  {
+                    "private_truth_never_in_model_context":  true,
+                    "raw_history_append_only":  true,
+                    "credentials_excluded":  true
+                },
+    "notes":  "V8 append-only cohort; this manifest is the first audit artifact and does not alter legacy data."
+}

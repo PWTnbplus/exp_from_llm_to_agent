@@ -1,0 +1,78 @@
+{
+  "g6": {
+    "protocol": "G6_V8",
+    "rows": 31,
+    "provider_calls": 31,
+    "successful_provider_rows": 31,
+    "structured_rows": 30,
+    "score_key": "action_correct",
+    "score_numerator": 10,
+    "score_denominator": 31,
+    "real_model_id": "kimi-k2.5",
+    "mock": false
+  },
+  "q": {
+    "protocol": "Q_V8",
+    "rows": 8,
+    "provider_calls": 8,
+    "successful_provider_rows": 8,
+    "structured_rows": 8,
+    "score_key": "candidate_status_matches",
+    "score_numerator": 0,
+    "score_denominator": 8,
+    "real_model_id": "kimi-k2.5",
+    "mock": false
+  },
+  "lu": {
+    "protocol": "LU_U_V8",
+    "rows": 12,
+    "provider_calls": 12,
+    "successful_provider_rows": 12,
+    "structured_rows": 10,
+    "score_key": "nonfinal_update_correct",
+    "score_numerator": 0,
+    "score_denominator": 12,
+    "real_model_id": "kimi-k2.5",
+    "mock": false,
+    "shared_checkpoint_count": 4,
+    "fork_count": 12,
+    "arms": {
+      "CONTROL": 4,
+      "REAL": 4,
+      "SHAM": 4
+    }
+  },
+  "g7": {
+    "protocol": "G7_V8",
+    "rows": 16,
+    "provider_calls": 16,
+    "successful_provider_rows": 16,
+    "structured_rows": 9,
+    "score_key": "final_action_correct",
+    "score_numerator": 0,
+    "score_denominator": 16,
+    "real_model_id": "kimi-k2.5",
+    "mock": false,
+    "checkpoint_count": 4,
+    "rows_by_stage": {
+      "D0": 4,
+      "D1_V": 4,
+      "D2_VL": 4,
+      "D3_VLU": 4
+    }
+  },
+  "total_provider_calls": 75,
+  "model_id": "kimi-k2.5",
+  "ledger_snapshot": {
+    "global_cap_usd": 200.0,
+    "g7_cap_usd": 60.0,
+    "worker_cap_usd": 20.0,
+    "historical_entered_usd": 0.0,
+    "historical_confirmed_usd": 0.0,
+    "historical_unbilled_conservative_ceiling_usd": 0.0,
+    "historical_g7_subcap_usd": 0.0,
+    "settled_new_usd": 0.08883,
+    "inflight_reserved_usd": 0.001783,
+    "safe_remaining_if_all_reservations_settle_usd": 199.909387
+  }
+}

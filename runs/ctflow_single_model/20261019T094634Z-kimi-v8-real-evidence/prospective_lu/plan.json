@@ -1,0 +1,18 @@
+{
+  "protocol_id": "LU_U_V8_SHARED_CHECKPOINT_RANDOMIZED",
+  "created_utc": "2026-10-19T09:55:16.982729Z",
+  "public_cases": 4,
+  "public_sha256": "be523d8b5edfa43156a4dd5717d08578f340fc5e570e669e67d05bc1f0bf1893",
+  "truth_key_sha256": "6cffaa8559beef74dac110ecfa8eb9b6e7e41b875ad265452e61a15ceb96ed0b",
+  "truth_key_created_before_provider_calls": true,
+  "truth_key_sent_to_model": false,
+  "private_truth_isolation": true,
+  "model_id": "kimi-k2.5",
+  "tasks": 4,
+  "arms": [
+    "CONTROL",
+    "REAL",
+    "SHAM"
+  ],
+  "random_seed": 20261019
+}

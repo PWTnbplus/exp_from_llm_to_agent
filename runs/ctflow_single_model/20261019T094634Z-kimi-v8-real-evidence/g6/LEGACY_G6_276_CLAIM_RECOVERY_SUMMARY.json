@@ -1,0 +1,12 @@
+{
+  "protocol": "V8_LEGACY_G6_CLAIM_RECOVERY",
+  "input_units": "runs\\ctflow_single_model\\20261019T085725Z-kimi-machine-v7\\g6\\units.jsonl",
+  "historical_units": 276,
+  "trace_case_count": 92,
+  "counts": {
+    "SOURCE_RECOVERED_UNPARSEABLE": 276
+  },
+  "historical_data_modified": false,
+  "source_synthesized": false,
+  "output_sha256": "ebc559ed29442e3fb0929e160bd985bbf3a4f99f8247630c0ee3993163e5b66c"
+}

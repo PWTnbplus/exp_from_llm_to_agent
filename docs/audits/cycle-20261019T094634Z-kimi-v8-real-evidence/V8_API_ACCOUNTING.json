@@ -1,0 +1,18 @@
+{
+  "raw_trace_rows": 107,
+  "call_numbers_contiguous": true,
+  "unique_call_numbers": 107,
+  "model_ids": [
+    "kimi-k2.5"
+  ],
+  "only_kimi_k25": true,
+  "protocol_counts": {
+    "G6_V8": 63,
+    "Q_V8": 8,
+    "LU_U_V8": 16,
+    "G7_V8": 20
+  },
+  "provider_usage_cost_sum_usd": 0.12002900000000001,
+  "mock": false,
+  "request_private_marker_hits": []
+}

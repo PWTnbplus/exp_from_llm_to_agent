@@ -1,0 +1,69 @@
+{
+  "g6": {
+    "protocol_id": "V8_G6_PROSPECTIVE",
+    "created_utc": "2026-10-19T09:55:16.849241Z",
+    "public_cases": 32,
+    "public_sha256": "f67b8cd6b72d355d21c9a503a6c97ff224b3c72857eacc2d8981427b933875cb",
+    "truth_key_sha256": "269d83779c2869926a6ef1cc28a8e8e3013cfa10a532de99bceafab8b537ee51",
+    "truth_key_created_before_provider_calls": true,
+    "truth_key_sent_to_model": false,
+    "private_truth_isolation": true,
+    "model_id": "kimi-k2.5",
+    "families": 4,
+    "cases": 32,
+    "arms": [
+      "G6_A_G3_GIVEN",
+      "G6_B_G4_GIVEN"
+    ]
+  },
+  "q": {
+    "protocol_id": "Q_V8_TRUTH_FIRST_PROSPECTIVE",
+    "created_utc": "2026-10-19T09:55:16.915858Z",
+    "public_cases": 8,
+    "public_sha256": "b90bb7f383b5f182f14cc6b7bf7b4f824ddb55589a53c676bda696204e4e5b6e",
+    "truth_key_sha256": "63f67c4c84527a0baca1a138ec87592e240511b62a304caaec16335c2f379ffb",
+    "truth_key_created_before_provider_calls": true,
+    "truth_key_sent_to_model": false,
+    "private_truth_isolation": true,
+    "model_id": "kimi-k2.5",
+    "tasks": 8,
+    "truth_process_before_provider": true
+  },
+  "lu": {
+    "protocol_id": "LU_U_V8_SHARED_CHECKPOINT_RANDOMIZED",
+    "created_utc": "2026-10-19T09:55:16.982729Z",
+    "public_cases": 4,
+    "public_sha256": "be523d8b5edfa43156a4dd5717d08578f340fc5e570e669e67d05bc1f0bf1893",
+    "truth_key_sha256": "6cffaa8559beef74dac110ecfa8eb9b6e7e41b875ad265452e61a15ceb96ed0b",
+    "truth_key_created_before_provider_calls": true,
+    "truth_key_sent_to_model": false,
+    "private_truth_isolation": true,
+    "model_id": "kimi-k2.5",
+    "tasks": 4,
+    "arms": [
+      "CONTROL",
+      "REAL",
+      "SHAM"
+    ],
+    "random_seed": 20261019
+  },
+  "g7": {
+    "protocol_id": "G7_V8_NEW_PROSPECTIVE_VLLUQ",
+    "created_utc": "2026-10-19T09:55:17.027807Z",
+    "public_cases": 4,
+    "public_sha256": "00014619842d410e3bcf498c859b30d15c8634e93cf9b8e3af088f6f02308843",
+    "truth_key_sha256": "9c9ce6a01936568d503e95857e5d2017b98cecbbad659142a50d585755c4ded4",
+    "truth_key_created_before_provider_calls": true,
+    "truth_key_sent_to_model": false,
+    "private_truth_isolation": true,
+    "model_id": "kimi-k2.5",
+    "tasks": 4,
+    "diagnostic_stages": [
+      "D0",
+      "D1_V",
+      "D2_VL",
+      "D3_VLU"
+    ],
+    "not_retroactive": true
+  }
+}
