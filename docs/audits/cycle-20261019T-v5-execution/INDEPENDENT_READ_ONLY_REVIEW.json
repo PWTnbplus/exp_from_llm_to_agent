@@ -1,0 +1,26 @@
+{
+  "review_version": "v5-independent-read-only-review-v1",
+  "review_scope": "derived evidence invariants only; no provider call; no human domain verdict",
+  "input_pack": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261019T-v5-execution",
+  "counts": {
+    "g7_frozen": 1288,
+    "g7_recovery": 150,
+    "g7_lineage": 1438,
+    "g6_review": 276,
+    "q92_review": 92,
+    "lu_u_review": 6
+  },
+  "q92_status_counts": {
+    "FAIL": 8,
+    "INCONCLUSIVE": 55,
+    "NOT_SCORED": 11,
+    "PASS": 18
+  },
+  "g6_verdict_counts": {
+    "INCONCLUSIVE_OR_NOT_SCORABLE": 253,
+    "PROVEN_EQUIVALENT": 23
+  },
+  "failures": [],
+  "engineering_review_pass": true,
+  "scientific_release_allowed": false
+}

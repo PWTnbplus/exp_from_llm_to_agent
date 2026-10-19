@@ -1,7 +1,5 @@
 # 下一位 Codex Agent 的交接说明
 
-> 离任版完整交接请先阅读 [`HANDOFF_20261019_DEPARTURE.md`](HANDOFF_20261019_DEPARTURE.md)。本文件保留为状态脚本维护的短摘要；完整文档按困难分级记录未完成工作、证据路径、复现命令和科学发布验收条件。
-
 ## 从这里开始——不要重复最初的实现过程
 
 1. 检查 `git status`、分支、远程仓库和最近提交；保留用户未提交的工作。
@@ -12,7 +10,7 @@
 6. 将已审查更新提交并推送到获授权的特性分支；报告推送失败。
 7. 仅当没有遗留问题时，才继续下一个未验证的原始项目门禁。
 
-**下一问题（Next issue:）：** ISSUE-7c2d4e9a10bf / P1 / G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
+**下一问题（Next issue:）：** ISSUE-000000000002 / P1 / Real-provider pilot and retry/cost behavior are unverified
 
 ## 当前状态摘要
 
@@ -20,7 +18,6 @@
 不要在没有回归证据的情况下重复已验证工作。
 不要把审查报告中的沉默视为问题已解决。
 下一优先级问题：
-- ISSUE-7c2d4e9a10bf P1 IN_PROGRESS 尝试次数=2：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.
 - ISSUE-000000000002 P1 BLOCKED 尝试次数=3：Real-provider pilot and retry/cost behavior are unverified；修复=Obtain provider-verifiable billing/usage reconciliation and immutable route or weight identity; keep scientific release closed until independently verified.
 - ISSUE-000000000003 P1 BLOCKED 尝试次数=2：Upstream provenance and GitHub delivery are externally blocked；修复=Restore an authorized network path or publish the local commit through an independently verified upstream channel; do not claim remote delivery until git ls-remote confirms it.
 - ISSUE-000000000004 P1 BLOCKED 尝试次数=1：Formal statistical validity is not established；修复=Retain the 24/24 public calibration as supplementary evidence and obtain an independent domain-grade blinded review for the frozen 92-case cohort before scientific release.
@@ -29,6 +26,7 @@
 - ISSUE-1f8c2b6a4d90 P1 BLOCKED 尝试次数=3：All eligible G6 public proof graphs have no dependency edges for G7 localization；修复=Retain the paired calibration and obtain protocol-approved causal validation on the formal LU/U population; do not pool the calibration into the historical G7 denominator.
 - ISSUE-3d7a9c1e5b20 P1 BLOCKED 尝试次数=22：G7 provider execution has terminal failures and low independently valid Q coverage；修复=Keep new execution evidence separate from the frozen historical denominator and obtain independent scientific review before changing the formal gate.
 - ISSUE-f9171bb760b1 P1 RESOLVED_UNVERIFIED 尝试次数=0：No frozen, auditable G8 real/sham/off/extra adapter is present；修复=Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
+- ISSUE-7c2d4e9a10bf P1 RESOLVED_UNVERIFIED 尝试次数=2：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery；修复=Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.
 - ISSUE-000000000005 P2 OPEN 尝试次数=0：Classical baseline is only an extension interface；修复=Implement only if a classical comparison is added to the study; otherwise keep it explicitly out of the claims.
 已验证的已完成工作（避免重复）：
 - G1-G5 execution policy and theory contamination controls：Policy boundary tests, provider retry rejection, strict answer isolation, 100-task validation, and 40/30/30 contamination audit are implemented. Full host suite passed 80 tests.

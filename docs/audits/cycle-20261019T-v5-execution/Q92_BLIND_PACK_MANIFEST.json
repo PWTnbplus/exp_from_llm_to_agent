@@ -1,0 +1,25 @@
+{
+  "pack_version": "q92-v5-blind-review-manifest-v1",
+  "created_at_utc": "2026-10-19T02:09:44.658081+00:00",
+  "case_count": 92,
+  "review_row_count": 92,
+  "records_sha256": "bc0c5a45fc6a64bafb7f68fbec997017f32893e1242e6d5b5f276dc5e643897f",
+  "software_review_sha256": "9197103e48b9baad734e193066f543d7fe8c85673febc2c3e94a158d6ed6f64c",
+  "included": [
+    "anonymous case_id",
+    "public candidate claim",
+    "public assumptions",
+    "independent software status"
+  ],
+  "excluded": [
+    "model_id",
+    "private oracle",
+    "hidden law",
+    "answer key",
+    "existing production score labels"
+  ],
+  "truth_first_human_review": "NOT_AVAILABLE",
+  "candidate_check_human_review": "NOT_AVAILABLE",
+  "domain_grade_review_complete": false,
+  "scientific_release_allowed": false
+}

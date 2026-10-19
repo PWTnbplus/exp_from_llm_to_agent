@@ -1,0 +1,20 @@
+{
+  "purpose": "Record the six bounded full-suite invocations used to avoid the host PTY cumulative-timeout behavior.",
+  "total_tests_passed": 295,
+  "batches": [
+    {"batch": 1, "passed": 67, "duration_seconds": 9.94, "pytest_result": "passed", "tool_exit_code": 0},
+    {"batch": 2, "passed": 37, "duration_seconds": 5.12, "pytest_result": "passed", "tool_exit_code": 0},
+    {"batch": 3, "passed": 106, "duration_seconds": 4.55, "pytest_result": "passed", "tool_exit_code": 1, "tool_exit_note": "Host wrapper returned 1 despite clean pytest output."},
+    {"batch": 4, "passed": 35, "duration_seconds": 6.34, "pytest_result": "passed", "tool_exit_code": 0},
+    {"batch": 5, "passed": 39, "duration_seconds": 13.37, "pytest_result": "passed", "tool_exit_code": 0},
+    {"batch": 6, "passed": 11, "duration_seconds": 1.96, "pytest_result": "passed", "tool_exit_code": 0}
+  ],
+  "reconciliation": {
+    "sum_of_batch_passes": 295,
+    "monolithic_run_observation": "The host interrupted monolithic runs after 227 and 256 tests; the affected files passed when run separately.",
+    "matrix_scientific_runner_separate_result": "4 passed",
+    "single_model_pilot_separate_result": "3 passed",
+    "new_v5_focused_result": "38 passed with pytest internal exit code 0",
+    "interpretation": "All collected tests in the six bounded batches passed; one outer wrapper exit anomaly is retained rather than normalized away."
+  }
+}

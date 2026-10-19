@@ -1,0 +1,31 @@
+{
+  "pack_version": "g6-v5-public-domain-review-pack-v1",
+  "created_at_utc": "2026-10-19T02:09:44.649058+00:00",
+  "record_count": 23,
+  "source_audits": [
+    {
+      "path": "docs\\audits\\cycle-20261018T-g6g7-v3\\03_G6_INDEPENDENT_MATH_AUDIT.jsonl",
+      "sha256": "2f90cbeecbd4acc0ce0df2c400166f24965985d604f32bb169b8666e66521798"
+    },
+    {
+      "path": "docs\\audits\\cycle-20261018T-v4-g6g7-execution\\G6_CF3_RETRY_PUBLIC_MATH_AUDIT.jsonl",
+      "sha256": "028d9f4f984154735e034b9210fa5ff84d4a039119da785a33f741845437ed12"
+    }
+  ],
+  "included_fields": [
+    "case_id",
+    "cf_type",
+    "quantifier",
+    "candidate_claim_sha256",
+    "public_witness_token_hits"
+  ],
+  "excluded_fields": [
+    "model_id",
+    "group_id",
+    "private_oracle",
+    "hidden_truth",
+    "pass_fail_label"
+  ],
+  "external_domain_reviewer_signature": "NOT_AVAILABLE",
+  "scientific_release_allowed": false
+}

@@ -1,0 +1,2 @@
+formal_denominator,available_input_rows,status,reason
+552,138,NOT_RECONSTRUCTED_FROM_THIS_CF3_ONLY_INPUT,CF3 retry is a separate 138-row recovery view; no 552-row frozen plan was changed

@@ -1,0 +1,19 @@
+{
+  "audit_version": "lu-u-v5-independent-eligibility-v1",
+  "task_count": 6,
+  "record_count": 12,
+  "trace_count": 16,
+  "pair_type_counts": {
+    "truth_flip": 2,
+    "ambiguous_or_no_update": 1,
+    "irrelevant_or_sham": 3
+  },
+  "u_eligible_count": 0,
+  "validated_causal_contrast_count": 0,
+  "new_provider_calls": 0,
+  "graphs_sha256": "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9",
+  "cohort_sha256": "61c5da3ff773b60f1415edd0b6adaee2001ad1dcbd7a638a4eee73f43bc8c65a",
+  "truth_key_read": false,
+  "pooled_with_formal_g7": false,
+  "scientific_release_allowed": false
+}

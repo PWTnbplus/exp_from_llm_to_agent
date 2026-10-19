@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "cohort_id": "LU_U_V5_FORMAL_PROSPECTIVE_QUEUE",
+  "status": "NOT_FORMALIZED_FROM_RETROSPECTIVE_CALIBRATION",
+  "model_route_label": "kimi-k2.5_named_route_only_identity_unverified",
+  "task_family_ids": [
+    "LUCT-004-identity_neg_to_pos",
+    "LUCT-005-zero_nondec_to_neg",
+    "LUCT-008-square_neg_to_pos",
+    "LUCT-010-intercept_only_neg",
+    "LUCT-011-constant_nondec",
+    "LUCT-012-constant_noninc"
+  ],
+  "random_seed": null,
+  "treatment_arms": [
+    "control",
+    "intervention"
+  ],
+  "pair_type_definitions": [
+    "truth_flip",
+    "irrelevant_or_sham",
+    "ambiguous_or_no_update"
+  ],
+  "observed_pair_type_counts": {
+    "truth_flip": 2,
+    "ambiguous_or_no_update": 1,
+    "irrelevant_or_sham": 3
+  },
+  "primary_outcome": "all-planned ITT correct/noncorrect intermediate-state update",
+  "exclusion_rules": [
+    "no checkpoint",
+    "no observed nonfinal state",
+    "missing response",
+    "invalid trace"
+  ],
+  "budget": "no new provider calls in this V5 offline cycle",
+  "output_schema": "MODEL_REQUEST, MODEL_RESPONSE, INJECTION_APPLIED, STATE_BEFORE, STATE_AFTER, MODEL_CALL_USAGE, RUN_END",
+  "graphs_sha256": "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9",
+  "cohort_sha256": "61c5da3ff773b60f1415edd0b6adaee2001ad1dcbd7a638a4eee73f43bc8c65a",
+  "missing_required_pair_types": [],
+  "scientific_release_allowed": false
+}

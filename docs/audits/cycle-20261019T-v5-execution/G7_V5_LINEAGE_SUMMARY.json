@@ -1,0 +1,19 @@
+{
+  "audit_version": "g7-v5-lineage-v1",
+  "created_at_utc": "2026-10-19T02:09:44.543931+00:00",
+  "historical_rows": 1288,
+  "historical_unique_states": 1288,
+  "historical_genuine_lifecycle_failures_retained": 13,
+  "recovery_rows": 150,
+  "recovery_unique_states": 150,
+  "recovery_unique_attempts": 150,
+  "recovery_trace_backed": 150,
+  "denominator_changed": false,
+  "scientific_release_allowed": false,
+  "source_hashes": {
+    "historical_csv": "be5244402478e660c2a644977782dcf465a08380ad363c69e1580ec8d787cca3",
+    "incidents": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018",
+    "recovery_plan": "b47c52334e5fcce9413d6a2282907197b988bbde1ded912a3af9941086fd6ebd",
+    "recovery_states": "32122f1fa9c02190218b32067c82d873251a872526b9527ef02977d0839f00a9"
+  }
+}

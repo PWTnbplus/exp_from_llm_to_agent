@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated_at": "2026-10-19T01:02:43+00:00",
+  "updated_at": "2026-10-19T02:14:05+00:00",
   "issues": [
     {
       "id": "ISSUE-000000000001",
@@ -2015,11 +2015,11 @@
       "id": "ISSUE-7c2d4e9a10bf",
       "severity": "P1",
       "title": "G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery",
-      "status": "IN_PROGRESS",
-      "evidence": "The v7 state remains 150/150 states and 72/72 checkpoints with 13/13 valid new retries, while all 13 historical lifecycle errors remain preserved. No v8 cohort edits or deletes those historical rows.",
+      "status": "RESOLVED_UNVERIFIED",
+      "evidence": "docs/audits/cycle-20261019T-v5-execution/G7_FROZEN_ORIGINAL_FULL_LEDGER.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_APPEND_ONLY_RECOVERY_VIEW.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_RETRY_LINEAGE.jsonl; docs/audits/cycle-20261019T-v5-execution/INDEPENDENT_READ_ONLY_REVIEW.json; tests/test_g7_trace_q_consistency.py concurrent reservation regression",
       "remediation": "Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.",
       "first_seen": "2026-10-17T16:10:11+00:00",
-      "last_seen": "2026-10-18T16:00:15+00:00",
+      "last_seen": "2026-10-19T02:14:05+00:00",
       "source": "docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json",
       "attempts": 2,
       "blocked_reason": null,
@@ -2040,6 +2040,12 @@
           "event": "IN_PROGRESS",
           "reason": "V3 offline writer regression and trace audit pass, but 13 historical genuine final-attempt inconsistencies remain retained; no new retry was authorized because provider gates are unavailable.",
           "evidence": "docs/audits/cycle-20261018T-g6g7-v3/G7_EXECUTOR_REGRESSION.json; docs/audits/cycle-20261018T-g6g7-v3/G7_TRACE_15_EXPLAINED_13_INVALID.jsonl; docs/audits/cycle-20261018T-g6g7-v3/18_INDEPENDENT_READ_ONLY_REVIEW_V3.json"
+        },
+        {
+          "time": "2026-10-19T02:14:05+00:00",
+          "event": "RESOLVED_UNVERIFIED",
+          "reason": "V5 engineering repair and independent read-only recheck pass; historical 13 lifecycle failures remain preserved in frozen ledger and no formal denominator change was made.",
+          "evidence": "docs/audits/cycle-20261019T-v5-execution/G7_FROZEN_ORIGINAL_FULL_LEDGER.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_APPEND_ONLY_RECOVERY_VIEW.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_RETRY_LINEAGE.jsonl; docs/audits/cycle-20261019T-v5-execution/INDEPENDENT_READ_ONLY_REVIEW.json; tests/test_g7_trace_q_consistency.py concurrent reservation regression"
         }
       ]
     }

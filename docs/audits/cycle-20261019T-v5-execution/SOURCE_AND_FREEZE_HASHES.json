@@ -1,0 +1,40 @@
+{
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261018T-g6g7-v3\\G7_STATE_ATTEMPT_MATRIX.csv": {
+    "exists": true,
+    "sha256": "be5244402478e660c2a644977782dcf465a08380ad363c69e1580ec8d787cca3"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261018T-g6g7-v3\\G7_TRACE_15_EXPLAINED_13_INVALID.jsonl": {
+    "exists": true,
+    "sha256": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261018T-v4-g6g7-execution\\G7_RESUME_TARGETS.jsonl": {
+    "exists": true,
+    "sha256": "b47c52334e5fcce9413d6a2282907197b988bbde1ded912a3af9941086fd6ebd"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261018T-v4-g7-kimi-resume\\states.worker-1-0.jsonl": {
+    "exists": true,
+    "sha256": "32122f1fa9c02190218b32067c82d873251a872526b9527ef02977d0839f00a9"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261018T-g6g7-v3\\03_G6_INDEPENDENT_MATH_AUDIT.jsonl": {
+    "exists": true,
+    "sha256": "2f90cbeecbd4acc0ce0df2c400166f24965985d604f32bb169b8666e66521798"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261018T-v4-g6g7-execution\\G6_CF3_RETRY_PUBLIC_MATH_AUDIT.jsonl": {
+    "exists": true,
+    "sha256": "028d9f4f984154735e034b9210fa5ff84d4a039119da785a33f741845437ed12"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\cycle-20261019T-v9-targeted-recovery\\Q_FROZEN_PUBLIC_REVIEW.json": {
+    "exists": true,
+    "sha256": "9197103e48b9baad734e193066f543d7fe8c85673febc2c3e94a158d6ed6f64c"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261019T-v9-targeted-recovery\\lu-u-run\\records.jsonl": {
+    "exists": true,
+    "sha256": "f632a8028bb022aa15a3fd66f49ddba4e1044f4b41f80d4128e91bdc23fe79af"
+  },
+  "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261019T-v9-targeted-recovery\\lu-u-run\\provider_traces.jsonl": {
+    "exists": true,
+    "sha256": "baf7203d513c0c36d770be914012d0dd053c5c1fffb4600d7db5d3d259161427"
+  },
+  "historical_denominator_modified": false,
+  "recovery_pooled": false
+}

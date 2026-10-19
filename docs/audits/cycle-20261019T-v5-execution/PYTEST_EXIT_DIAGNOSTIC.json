@@ -1,0 +1,25 @@
+{
+  "commands": [
+    {
+      "kind": "python_internal",
+      "command": "pytest.main([...])",
+      "internal_exit_code": 0
+    },
+    {
+      "kind": "python_internal_no_plugins",
+      "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest.main([...])",
+      "internal_exit_code": 0
+    }
+  ],
+  "tests": [
+    "tests/test_v5_audit_tools.py",
+    "tests/test_lu_u_state_intervention_v5.py",
+    "tests/test_g7_trace_q_consistency.py"
+  ],
+  "interpretation": "Pytest's internal result is recorded separately from the outer host wrapper.",
+  "shell_exit_code_anomaly": true,
+  "pytest_internal_exit_code": 0,
+  "shell_direct_observed_exit_code": 1,
+  "shell_direct_output_summary": "38 passed; host tool returned 1",
+  "pytest_internal_exit_code_no_plugins": 0
+}

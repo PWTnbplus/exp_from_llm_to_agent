@@ -446,11 +446,37 @@ def trace_path_for_retry(path: Path) -> tuple[Path, int]:
     """
     if not path.is_file() or path.stat().st_size == 0:
         return path, 0
-    for attempt in range(1, 100):
-        retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
-        retry_path = retry_dir / path.name
-        if not retry_path.exists():
+
+    # Path selection happens before the worker's state claim in the normal
+    # runner.  Protect the check-and-reserve operation itself, otherwise two
+    # processes can both select retry-1 and later write competing attempts to
+    # the same path.  Reserving the directory (not the events file) keeps the
+    # returned file absent for callers while making the allocation atomic.
+    lock_path = path.parent.parent / f".{path.parent.name}.retry-selection.lock"
+    lock_fd: int | None = None
+    for _ in range(600):
+        try:
+            lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.005)
+    if lock_fd is None:
+        raise RuntimeError(f"retry trace path selection lock timeout: {path}")
+    try:
+        os.close(lock_fd)
+        for attempt in range(1, 100):
+            retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
+            retry_path = retry_dir / path.name
+            try:
+                retry_dir.mkdir(parents=True, exist_ok=False)
+            except FileExistsError:
+                continue
             return retry_path, 0
+    finally:
+        try:
+            lock_path.unlink()
+        except FileNotFoundError:
+            pass
     raise RuntimeError(f"could not find an append-safe retry trace path for {path}")
 
 

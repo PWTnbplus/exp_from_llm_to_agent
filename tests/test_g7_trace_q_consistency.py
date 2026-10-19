@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from scripts.audit_g7_trace_q_consistency import (
@@ -401,6 +402,21 @@ def test_g7_retry_trace_path_skips_existing_retry_history(tmp_path: Path) -> Non
     assert retry_path.parent.name == "run-1.retry-2"
     assert retry_seq == 0
     assert retry_one.read_text(encoding="utf-8") == retry_one_contents
+
+
+def test_g7_retry_trace_path_concurrent_reservations_are_distinct(tmp_path: Path) -> None:
+    path = tmp_path / "traces" / "run-1" / "events.jsonl"
+    seq = emit(path, 0, "run-1", "RUN_START", "RUNNING", {})
+    emit(path, seq, "run-1", "MODEL_REQUEST", "RUNNING", {})
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        results = list(executor.map(lambda _: trace_path_for_retry(path), range(2)))
+
+    paths = [result[0] for result in results]
+    assert len({candidate.parent.name for candidate in paths}) == 2
+    assert {candidate.parent.name for candidate in paths} == {"run-1.retry-1", "run-1.retry-2"}
+    assert all(result[1] == 0 for result in results)
+    assert path.read_text(encoding="utf-8").count("MODEL_REQUEST") == 1
 
 
 def test_g7_derived_view_splits_every_run_start_without_pooling(tmp_path: Path) -> None:

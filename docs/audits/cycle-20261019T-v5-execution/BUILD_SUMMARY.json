@@ -1,0 +1,143 @@
+{
+  "g7": {
+    "audit_version": "g7-v5-lineage-v1",
+    "created_at_utc": "2026-10-19T02:09:44.543931+00:00",
+    "historical_rows": 1288,
+    "historical_unique_states": 1288,
+    "historical_genuine_lifecycle_failures_retained": 13,
+    "recovery_rows": 150,
+    "recovery_unique_states": 150,
+    "recovery_unique_attempts": 150,
+    "recovery_trace_backed": 150,
+    "denominator_changed": false,
+    "scientific_release_allowed": false,
+    "source_hashes": {
+      "historical_csv": "be5244402478e660c2a644977782dcf465a08380ad363c69e1580ec8d787cca3",
+      "incidents": "1d6bf552bef3b91b9dd4a723961932c33436706afb30d901424eb9abfd0fb018",
+      "recovery_plan": "b47c52334e5fcce9413d6a2282907197b988bbde1ded912a3af9941086fd6ebd",
+      "recovery_states": "32122f1fa9c02190218b32067c82d873251a872526b9527ef02977d0839f00a9"
+    }
+  },
+  "g6": {
+    "audit_version": "g6-v5-independent-boundary-review-v1",
+    "created_at_utc": "2026-10-19T02:09:44.653068+00:00",
+    "input_rows": 276,
+    "case_level_rows": 23,
+    "verdict_counts": {
+      "INCONCLUSIVE_OR_NOT_SCORABLE": 253,
+      "PROVEN_EQUIVALENT": 23
+    },
+    "formal_552_denominator_modified": false,
+    "external_domain_review_complete": false,
+    "source_hashes": {
+      "docs\\audits\\cycle-20261018T-g6g7-v3\\03_G6_INDEPENDENT_MATH_AUDIT.jsonl": "2f90cbeecbd4acc0ce0df2c400166f24965985d604f32bb169b8666e66521798",
+      "docs\\audits\\cycle-20261018T-v4-g6g7-execution\\G6_CF3_RETRY_PUBLIC_MATH_AUDIT.jsonl": "028d9f4f984154735e034b9210fa5ff84d4a039119da785a33f741845437ed12",
+      "docs\\audits\\cycle-20261018T-v4-g6g7-execution\\G6_CF3_REVISION_RETRY_PLAN.jsonl": "6db2816dbc00e9ff2eae6a29f3910386fd28071ec7c639b6693b8779d600ff51",
+      "docs\\audits\\cycle-20261018T-v8-scientific-resolution\\G6_PUBLIC_MISMATCH_AUDIT.json": "6a514ccd7f0bba5c3bbc2ccf4b4f0d3d9660b12f722cd862d19f1312d11e97c0"
+    },
+    "scientific_release_allowed": false
+  },
+  "q92": {
+    "case_count": 92,
+    "review_row_count": 92,
+    "status_counts": {
+      "FAIL": 8,
+      "INCONCLUSIVE": 55,
+      "NOT_SCORED": 11,
+      "PASS": 18
+    },
+    "domain_grade_review_complete": false,
+    "scientific_release_allowed": false
+  },
+  "lu_u": {
+    "audit_version": "lu-u-v5-independent-eligibility-v1",
+    "task_count": 6,
+    "record_count": 12,
+    "trace_count": 16,
+    "pair_type_counts": {
+      "truth_flip": 2,
+      "ambiguous_or_no_update": 1,
+      "irrelevant_or_sham": 3
+    },
+    "u_eligible_count": 0,
+    "validated_causal_contrast_count": 0,
+    "new_provider_calls": 0,
+    "graphs_sha256": "9370f84b797da7c40596213a4078bf852355766bbb33ccdfd7b1eb287dd48db9",
+    "cohort_sha256": "61c5da3ff773b60f1415edd0b6adaee2001ad1dcbd7a638a4eee73f43bc8c65a",
+    "truth_key_read": false,
+    "pooled_with_formal_g7": false,
+    "scientific_release_allowed": false
+  },
+  "statistics": {
+    "analysis_version": "formal-statistics-v5-readonly-v1",
+    "created_at_utc": "2026-10-19T02:09:44.778714+00:00",
+    "analysis_plan_status": "RETROSPECTIVE_LOCKED_AFTER_RESULTS",
+    "cohort_separation": {
+      "g6": "CF3/recovery only; not 552 formal denominator",
+      "q92": "frozen 92",
+      "lu_u": "public calibration; not formal U",
+      "g7": "frozen 1288; recovery 150 separate"
+    },
+    "g6_recovery": {
+      "all_planned": 276,
+      "verified_pass": 23,
+      "validity_rate_conservative": 0.08333333333333333,
+      "wilson_95": [
+        0.056169511435815715,
+        0.1219365455820959
+      ],
+      "cluster_bootstrap_95": [
+        0.021739130434782608,
+        0.15579710144927536
+      ],
+      "status": "EXPLORATORY_NOT_FORMAL_552"
+    },
+    "q92": {
+      "all_planned": 92,
+      "verified_pass": 18,
+      "validity_rate_conservative": 0.1956521739130435,
+      "missingness_bounds": {
+        "lower": 0.1956521739130435,
+        "upper_if_all_inconclusive_pass": 1.0
+      },
+      "wilson_95": [
+        0.12749843174966963,
+        0.2882032834676653
+      ],
+      "cluster_bootstrap_95": [
+        0.09782608695652174,
+        0.29347826086956524
+      ],
+      "status": "PROVISIONAL_SOFTWARE_REVIEW_ONLY"
+    },
+    "lu_u": {
+      "all_planned": 6,
+      "u_eligible": 0,
+      "validated_causal_contrast": 0,
+      "status": "INELIGIBLE_U_OR_NOT_FORMAL"
+    },
+    "g7": {
+      "all_planned": 1288,
+      "trace_or_scientific_valid": 0,
+      "coverage_all_planned": 1.0,
+      "status": "DIAGNOSTIC_TRACE_LEDGER_ONLY"
+    },
+    "pooled_p_value_or_agent_superiority": null,
+    "scientific_release_allowed": false,
+    "limitations": [
+      "no human domain-grade blind review",
+      "no immutable provider weight identity",
+      "recovery rows not pooled",
+      "technical trace validity is not law validity"
+    ]
+  },
+  "provider": {
+    "trace_rows": 242,
+    "ledger_paths": [
+      "runs\\ctflow_single_model\\20261018T-v5-qv2-kimi-format-retry\\cost_ledger.json",
+      "runs\\ctflow_single_model\\20261018T-v4-g7-kimi-resume\\cost_ledger.json"
+    ],
+    "official_billing_verified": false,
+    "immutable_route_or_weight_verified": false
+  }
+}

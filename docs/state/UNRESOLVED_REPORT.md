@@ -1,6 +1,6 @@
 # 科学定律自动驾驶——未解决问题报告
 
-生成时间（UTC）：2026-10-19T01:02:43+00:00
+生成时间（UTC）：2026-10-19T02:14:05+00:00
 
 - 开放/阻塞/未验证：**10**
 - 已验证修复：**29**
@@ -8,14 +8,6 @@
 - 未验证科学门禁：**G6, G7**
 
 ## 未解决和阻塞问题
-
-### ISSUE-7c2d4e9a10bf — P1 — IN_PROGRESS
-- 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
-- 证据：The v7 state remains 150/150 states and 72/72 checkpoints with 13/13 valid new retries, while all 13 historical lifecycle errors remain preserved. No v8 cohort edits or deletes those historical rows.
-- 必需修复：Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.
-- 尝试次数：2
-- 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
-- 阻塞原因：未记录
 
 ### ISSUE-000000000002 — P1 — BLOCKED
 - 描述：Real-provider pilot and retry/cost behavior are unverified
@@ -79,6 +71,14 @@
 - 必需修复：Retain the adapter and audit artifacts; obtain independently verifiable immutable model-weight/gateway fingerprint and billing evidence before treating the paid run as fully verified.
 - 尝试次数：0
 - 来源：docs/audits/cycle-20261015T000000Z-21/audit.json
+- 阻塞原因：未记录
+
+### ISSUE-7c2d4e9a10bf — P1 — RESOLVED_UNVERIFIED
+- 描述：G7 revalidation has trace lifecycle inconsistencies after append-only retry recovery
+- 证据：docs/audits/cycle-20261019T-v5-execution/G7_FROZEN_ORIGINAL_FULL_LEDGER.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_APPEND_ONLY_RECOVERY_VIEW.jsonl; docs/audits/cycle-20261019T-v5-execution/G7_RETRY_LINEAGE.jsonl; docs/audits/cycle-20261019T-v5-execution/INDEPENDENT_READ_ONLY_REVIEW.json; tests/test_g7_trace_q_consistency.py concurrent reservation regression
+- 必需修复：Keep historical lifecycle failures and corrected retry evidence in separate append-only views; require protocol-approved reanalysis for any formal denominator change.
+- 尝试次数：2
+- 来源：docs/audits/cycle-20261018T-g7-trace-repair/G0_G7_FINAL_AUDIT.json
 - 阻塞原因：未记录
 
 ### ISSUE-000000000005 — P2 — OPEN

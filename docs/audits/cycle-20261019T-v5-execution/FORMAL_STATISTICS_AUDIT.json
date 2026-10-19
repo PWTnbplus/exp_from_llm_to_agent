@@ -1,0 +1,63 @@
+{
+  "analysis_version": "formal-statistics-v5-readonly-v1",
+  "created_at_utc": "2026-10-19T02:09:44.778714+00:00",
+  "analysis_plan_status": "RETROSPECTIVE_LOCKED_AFTER_RESULTS",
+  "cohort_separation": {
+    "g6": "CF3/recovery only; not 552 formal denominator",
+    "q92": "frozen 92",
+    "lu_u": "public calibration; not formal U",
+    "g7": "frozen 1288; recovery 150 separate"
+  },
+  "g6_recovery": {
+    "all_planned": 276,
+    "verified_pass": 23,
+    "validity_rate_conservative": 0.08333333333333333,
+    "wilson_95": [
+      0.056169511435815715,
+      0.1219365455820959
+    ],
+    "cluster_bootstrap_95": [
+      0.021739130434782608,
+      0.15579710144927536
+    ],
+    "status": "EXPLORATORY_NOT_FORMAL_552"
+  },
+  "q92": {
+    "all_planned": 92,
+    "verified_pass": 18,
+    "validity_rate_conservative": 0.1956521739130435,
+    "missingness_bounds": {
+      "lower": 0.1956521739130435,
+      "upper_if_all_inconclusive_pass": 1.0
+    },
+    "wilson_95": [
+      0.12749843174966963,
+      0.2882032834676653
+    ],
+    "cluster_bootstrap_95": [
+      0.09782608695652174,
+      0.29347826086956524
+    ],
+    "status": "PROVISIONAL_SOFTWARE_REVIEW_ONLY"
+  },
+  "lu_u": {
+    "all_planned": 6,
+    "u_eligible": 0,
+    "validated_causal_contrast": 0,
+    "status": "INELIGIBLE_U_OR_NOT_FORMAL"
+  },
+  "g7": {
+    "all_planned": 1288,
+    "trace_or_scientific_valid": 0,
+    "coverage_all_planned": 1.0,
+    "status": "DIAGNOSTIC_TRACE_LEDGER_ONLY"
+  },
+  "pooled_p_value_or_agent_superiority": null,
+  "scientific_release_allowed": false,
+  "limitations": [
+    "no human domain-grade blind review",
+    "no immutable provider weight identity",
+    "recovery rows not pooled",
+    "technical trace validity is not law validity"
+  ]
+}
