@@ -20,6 +20,9 @@ def write(path: Path, value: Any) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--prospective-root", type=Path)
+    parser.add_argument("--history-root", type=Path)
+    parser.add_argument("--history-repair-root", type=Path)
     args = parser.parse_args()
     root = args.root
     pre = load(root / "G85_PREFLIGHT.json")
@@ -30,6 +33,20 @@ def main() -> int:
     repair_manifest = load(root / "plans/g85_engineering_adapter_repair1_plan.jsonl.manifest.json")
     repair_execution = load(root / "run_adapter_repair1/execution_summary.json")
     repair_scores = load(root / "results_adapter_repair1/g85_results_manifest.json")
+    prospective = None
+    if args.prospective_root is not None:
+        prospective = {
+            "execution": load(args.prospective_root / "execution_summary.json"),
+            "scores": load(args.prospective_root.parent / "prospective_results/g85_results_manifest.json"),
+            "audit": load(args.prospective_root.parent / "prospective_results/g85_private_truth_audit.json"),
+        }
+    history_calls = 0
+    history_cost = 0.0
+    for history_root in (args.history_root, args.history_repair_root):
+        if history_root is not None:
+            history_summary = load(history_root / "execution_summary.json")
+            history_calls += int(history_summary.get("real_provider_calls", 0))
+            history_cost += float(history_summary.get("total_cost_usd", 0.0))
     hypotheses = {
         "freeze_time": "before provider calls; engineering pilot only",
         "H_S": {"name": "state sufficient", "prediction": "A/B/C/D should agree when canonical state and evidence are identical"},
@@ -54,8 +71,11 @@ def main() -> int:
         "anomaly_registry": anomalies,
         "pilot": {"plan": plan_manifest, "execution": execution, "scores": scores, "audit": audit},
         "adapter_repair": {"plan": repair_manifest, "execution": repair_execution, "scores": repair_scores},
-        "real_provider_calls_total": execution["real_provider_calls"] + repair_execution["real_provider_calls"],
-        "cost_usd_total": execution["total_cost_usd"] + repair_execution["total_cost_usd"],
+        "prospective_pilot": prospective,
+        "g7_history_pair_calls": history_calls,
+        "g7_history_pair_cost_usd": history_cost,
+        "real_provider_calls_total": execution["real_provider_calls"] + repair_execution["real_provider_calls"] + (prospective["execution"]["real_provider_calls"] if prospective else 0),
+        "cost_usd_total": execution["total_cost_usd"] + repair_execution["total_cost_usd"] + (prospective["execution"]["total_cost_usd"] if prospective else 0),
         "private_truth_policy": "machine truth is separate and loaded only by scorer; model_requests_private_truth_scan_hits=0",
         "confirmatory_claims": [],
         "next_valid_step": "obtain real provenance-linked clean/recovered history pairs and an independently verified G8 scientific GO before any G8.5 confirmation plan",
@@ -63,8 +83,9 @@ def main() -> int:
     write(root / "G85_HYPOTHESES_PREREGISTER.json", hypotheses)
     write(root / "G85_ANOMALY_REGISTRY.json", {"protocol": "G8_5_SINGLE_KIMI_V1", "anomalies": anomalies})
     write(root / "G85_FINAL_MANIFEST.json", report)
-    write(root / "G85_HANDOFF.json", {"protocol": "G8_5_SINGLE_KIMI_V1", "science_status": "SCIENCE_BLOCKED_UPSTREAM", "engineering_status": "REAL_KIMI_ENGINEERING_PILOT_COMPLETE", "candidate_g9_edges": [], "supported_hypotheses": [], "real_provider_calls": report["real_provider_calls_total"], "cost_usd": report["cost_usd_total"], "upstream_preflight": str(root / "G85_PREFLIGHT.json"), "confirmatory_data_available": False})
+    write(root / "G85_HANDOFF.json", {"protocol": "G8_5_SINGLE_KIMI_V1", "science_status": "SCIENCE_BLOCKED_UPSTREAM", "engineering_status": "REAL_KIMI_ENGINEERING_PILOT_COMPLETE", "candidate_g9_edges": [], "supported_hypotheses": [], "real_provider_calls": report["real_provider_calls_total"], "cost_usd": report["cost_usd_total"], "g7_history_pair_calls": history_calls, "g7_history_pair_cost_usd": history_cost, "upstream_preflight": str(root / "G85_PREFLIGHT.json"), "confirmatory_data_available": False, "prospective_not_historical": bool(prospective)})
     md = [
+        *([f"Prospective controlled G8.5 pilot: {prospective['execution']['planned']} planned, PASS={prospective['execution']['new_result_status_counts'].get('PASS', 0)}, calls={prospective['execution']['real_provider_calls']}, cost=${prospective['execution']['total_cost_usd']:.6f}; not historical confirmation."] if prospective else []),
         "# G8.5 单一 Kimi 工程验收报告",
         "",
         "## 结论",

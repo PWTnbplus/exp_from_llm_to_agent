@@ -196,6 +196,60 @@ def build_plan(out: Path, preflight_path: Path) -> dict[str, Any]:
     return manifest
 
 
+def build_prospective_plan(source_plan: Path, history_root: Path, supplemental_root: Path | None, out: Path) -> dict[str, Any]:
+    source = {row["pair_id"]: row for row in load_jsonl(source_plan)}
+    records = {(row["pair_id"], row["history_kind"]): row for row in load_jsonl(history_root / "history_records.jsonl")}
+    if supplemental_root is not None:
+        for row in load_jsonl(supplemental_root / "history_records.jsonl"):
+            records[(row["pair_id"], row["history_kind"])] = row
+    rows: list[dict[str, Any]] = []
+    for pair_id, case in sorted(source.items()):
+        clean = records.get((pair_id, "H_CLEAN"))
+        recovered = records.get((pair_id, "H_RECOVERED"))
+        if not clean or not recovered or not clean.get("candidate") or not recovered.get("candidate"):
+            raise RuntimeError(f"pair {pair_id} lacks two structured histories")
+        for arm in ARMS:
+            visible_history = clean["candidate"] if arm == "A_CLEAN_FULL" else recovered["candidate"] if arm == "B_RECOVERED_FULL" else {}
+            public = {
+                "case": {"problem": case["problem"], "canonical_state_id": case["canonical_state_id"], "evidence_id": case["evidence_id"], "new_evidence": case["evidence"]},
+                "history_visibility": "full" if arm in {"A_CLEAN_FULL", "B_RECOVERED_FULL"} else "state_only",
+                "visible_history": visible_history,
+                "instruction": "Return JSON only with decision, state_after, evidence_use, and history_role. Decision must be exactly ACCEPT, REJECT, or UNCERTAIN. Use only the public state, evidence, and visible history.",
+            }
+            leaked = forbidden_paths(public)
+            if leaked:
+                raise RuntimeError(f"forbidden prospective public fields: {leaked}")
+            rows.append({
+                "run_id": f"g85-prospective-{pair_id.lower()}-{arm.lower()}",
+                "phase": "PROSPECTIVE_PILOT",
+                "protocol": PROTOCOL,
+                "model_id": MODEL_ID,
+                "model_snapshot": MODEL_SNAPSHOT,
+                "base_url": BASE_URL,
+                "family_id": pair_id,
+                "evidence_id": case["evidence_id"],
+                "arm_id": arm,
+                "history_provenance": "prospective_controlled",
+                "scientific_use": "PROSPECTIVE_NOT_HISTORICAL_CONFIRMATION",
+                "public_messages": [
+                    {"role": "system", "content": "You are a scientific state-update participant. Use only public state, public evidence, and visible history. Never access hidden answers, files, network, or private truth."},
+                    {"role": "user", "content": json.dumps(public, ensure_ascii=False, sort_keys=True)},
+                ],
+                "public_input_sha256": jhash(public),
+                "source_history_pair": pair_id,
+                "status": "PLANNED",
+            })
+    for family in {row["family_id"] for row in rows}:
+        c = next(row for row in rows if row["family_id"] == family and row["arm_id"] == "C_CLEAN_STATE_ONLY")
+        d = next(row for row in rows if row["family_id"] == family and row["arm_id"] == "D_RECOVERED_STATE_ONLY")
+        if c["public_messages"] != d["public_messages"]:
+            raise AssertionError("prospective C/D public request is not byte-equivalent")
+    write_jsonl(out, rows)
+    manifest = {"protocol": PROTOCOL, "model_id": MODEL_ID, "only_model": True, "phase": "PROSPECTIVE_PILOT", "n_rows": len(rows), "families": sorted(source), "arms": list(ARMS), "history_provenance": "prospective_controlled", "scientific_use": "PROSPECTIVE_NOT_HISTORICAL_CONFIRMATION", "source_plan": str(source_plan), "history_root": str(history_root), "supplemental_root": str(supplemental_root) if supplemental_root else None, "private_truth_in_plan": False, "plan_sha256": sha_file(out)}
+    write_json(out.with_suffix(out.suffix + ".manifest.json"), manifest)
+    return manifest
+
+
 def _extract_json(text: str) -> dict[str, Any]:
     from scripts.run_g6_counterfactual import extract_json
     value = extract_json(text)
@@ -250,7 +304,9 @@ def run(plan_path: Path, run_root: Path, key_file: Path, rps: float) -> dict[str
         counts[status] = counts.get(status, 0) + 1
         calls += len(trace)
         cost += float(usage.get("cost_usd", 0.0))
-    summary = {"protocol": PROTOCOL, "model_id": MODEL_ID, "only_model": True, "planned": len(plan), "new_result_status_counts": counts, "real_provider_calls": calls, "total_cost_usd": cost, "scientific_use": "FORBIDDEN", "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED"}
+    provenance = sorted({str(row.get("history_provenance", "unknown")) for row in plan})
+    scientific_use = sorted({str(row.get("scientific_use", "unknown")) for row in plan})
+    summary = {"protocol": PROTOCOL, "model_id": MODEL_ID, "only_model": True, "planned": len(plan), "new_result_status_counts": counts, "real_provider_calls": calls, "total_cost_usd": cost, "history_provenance": provenance, "scientific_use": scientific_use, "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED"}
     write_json(run_root / "execution_summary.json", summary)
     return summary
 
@@ -279,9 +335,11 @@ def score(plan_path: Path, run_root: Path, private_truth_path: Path, out: Path) 
         arm_rows.append({"arm_id": arm, "planned": len(subset), "correct": sum(x["correct"] for x in subset), "all_planned_accuracy": sum(x["correct"] for x in subset) / len(subset) if subset else 0.0, "technical_failures": sum(x["execution_status"] != "PASS" for x in subset)})
     with (out / "g85_arm_scores.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(arm_rows[0])); writer.writeheader(); writer.writerows(arm_rows)
-    audit = {"protocol": PROTOCOL, "planned": len(plan), "result_files": sum(1 for row in plan if (run_root / "raw" / row["run_id"] / "result.json").exists()), "private_truth_loaded_only_in_scorer": True, "model_requests_private_truth_scan_hits": private_scan_hits, "scientific_use": "FORBIDDEN", "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED", "history_provenance": "synthetic_engineering_only"}
+    provenance = sorted({str(row.get("history_provenance", "unknown")) for row in plan})
+    scientific_use = sorted({str(row.get("scientific_use", "unknown")) for row in plan})
+    audit = {"protocol": PROTOCOL, "planned": len(plan), "result_files": sum(1 for row in plan if (run_root / "raw" / row["run_id"] / "result.json").exists()), "private_truth_loaded_only_in_scorer": True, "model_requests_private_truth_scan_hits": private_scan_hits, "scientific_use": scientific_use, "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED", "history_provenance": provenance}
     write_json(out / "g85_private_truth_audit.json", audit)
-    write_json(out / "g85_results_manifest.json", {"protocol": PROTOCOL, "model_id": MODEL_ID, "only_model": True, "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED", "arm_scores": arm_rows, "private_truth_sha256": sha_file(private_truth_path), "private_truth_scan_hits": private_scan_hits})
+    write_json(out / "g85_results_manifest.json", {"protocol": PROTOCOL, "model_id": MODEL_ID, "only_model": True, "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED", "history_provenance": provenance, "scientific_use": scientific_use, "arm_scores": arm_rows, "private_truth_sha256": sha_file(private_truth_path), "private_truth_scan_hits": private_scan_hits})
     return audit
 
 
@@ -317,6 +375,7 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("preflight"); p.add_argument("--g8-manifest", type=Path, required=True); p.add_argument("--g7-root", type=Path, action="append", required=True); p.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("plan"); p.add_argument("--preflight", type=Path, required=True); p.add_argument("--out", type=Path, required=True)
+    p = sub.add_parser("prospective-plan"); p.add_argument("--source-plan", type=Path, required=True); p.add_argument("--history-root", type=Path, required=True); p.add_argument("--supplemental-root", type=Path); p.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("truth"); p.add_argument("--plan", type=Path, required=True); p.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("repair-plan"); p.add_argument("--plan", type=Path, required=True); p.add_argument("--run-root", type=Path, required=True); p.add_argument("--out", type=Path, required=True)
     p = sub.add_parser("run"); p.add_argument("--plan", type=Path, required=True); p.add_argument("--run-root", type=Path, required=True); p.add_argument("--key-file", type=Path, required=True); p.add_argument("--rps", type=float, default=2.0)
@@ -324,6 +383,7 @@ def main() -> int:
     args = parser.parse_args()
     if args.command == "preflight": result = preflight(args.g8_manifest, args.g7_root, args.out)
     elif args.command == "plan": result = build_plan(args.out, args.preflight)
+    elif args.command == "prospective-plan": result = build_prospective_plan(args.source_plan, args.history_root, args.supplemental_root, args.out)
     elif args.command == "truth": result = make_truth(args.plan, args.out)
     elif args.command == "repair-plan": result = build_repair_plan(args.plan, args.run_root, args.out)
     elif args.command == "run": result = run(args.plan, args.run_root, args.key_file, args.rps)

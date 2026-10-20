@@ -13,7 +13,7 @@ from .common import append_jsonl, read_jsonl
 
 
 class SingleKimiProvider:
-    def __init__(self, run: Path, key_file: Path, base_url: str, model_id: str, max_cost: float, timeout: float) -> None:
+    def __init__(self, run: Path, key_file: Path, base_url: str, model_id: str, max_cost: float, timeout: float, max_output_tokens: int = 512) -> None:
         if model_id != "kimi-k2.5":
             raise ValueError("V9 permits only the single base model kimi-k2.5")
         key = key_file.read_text(encoding="utf-8").strip()
@@ -27,7 +27,7 @@ class SingleKimiProvider:
         self.provider = OpenAICompatibleProvider(
             api_key=key, base_url=base_url, model_name=model_id, timeout=timeout,
             max_retries=0, input_cost_per_1k=0.001, output_cost_per_1k=0.003,
-            max_cost_usd=max_cost, max_output_tokens=512, reservation_output_tokens=512,
+            max_cost_usd=max_cost, max_output_tokens=max_output_tokens, reservation_output_tokens=max_output_tokens,
             cost_ledger=self.ledger, ledger_scope="g7", ledger_worker="v9-single-kimi",
             ledger_ref_prefix="v9-single-kimi", require_cost_ledger=True,
         )

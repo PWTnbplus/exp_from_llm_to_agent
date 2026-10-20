@@ -63,3 +63,16 @@ def test_g85_repair_does_not_replace_primary_failure():
     assert primary["execution_status"] == "TECHNICAL_FAILURE"
     assert repaired["execution_status"] == "PASS"
     assert source["run_id"] != repair_rows[0]["run_id"]
+
+
+def test_g85_prospective_history_pair_and_consumer_are_non_confirmatory():
+    pair_audit = json.loads((ROOT / "runs/ctflow_single_model/20261020T-kimi-g7-history-pairs-v1/G7_HISTORY_PAIR_COMBINED_AUDIT.json").read_text(encoding="utf-8"))
+    assert pair_audit["all_structural_checks_pass"] is True
+    assert pair_audit["confirmatory_eligibility"] == "NO_PROSPECTIVE_NOT_HISTORICAL"
+    plan = read_jsonl(G85 / "plans/g85_prospective_pilot_plan.jsonl")
+    assert len(plan) == 8
+    assert {row["history_provenance"] for row in plan} == {"prospective_controlled"}
+    assert all("expected_decision" not in json.dumps(row["public_messages"], ensure_ascii=False) for row in plan)
+    scores = json.loads((G85 / "prospective_results/g85_private_truth_audit.json").read_text(encoding="utf-8"))
+    assert scores["model_requests_private_truth_scan_hits"] == 0
+    assert scores["scientific_use"] == ["PROSPECTIVE_NOT_HISTORICAL_CONFIRMATION"]
