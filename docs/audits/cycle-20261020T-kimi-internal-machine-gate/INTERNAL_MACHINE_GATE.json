@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-20T03:50:20.721058+00:00",
+  "gate_id": "V9_INTERNAL_MACHINE_EVIDENCE_GATE_V1",
+  "model_id": "kimi-k2.5",
+  "only_model": true,
+  "internal_machine_status": "UNLOCKED",
+  "internal_checks": {
+    "V9_G6_Q_LU_G7": true,
+    "G7_PROSPECTIVE_HISTORY_PAIR": true,
+    "G8_SINGLE_KIMI": true,
+    "G8_5_PROSPECTIVE": true,
+    "ENGINEERING_LEDGER_LOCK": true
+  },
+  "v9": {
+    "source": "docs\\audits\\cycle-20261019T-kimi-v9\\V9_COMBINED_RUN_RESULT.json",
+    "checks": [
+      {
+        "name": "single model",
+        "status": "PASS",
+        "detail": {
+          "cost_ledger": {
+            "g7_cap_usd": 60.0,
+            "global_cap_usd": 200.0,
+            "historical_confirmed_usd": 0.0,
+            "historical_entered_usd": 0.0,
+            "historical_g7_subcap_usd": 0.0,
+            "historical_unbilled_conservative_ceiling_usd": 0.0,
+            "inflight_reserved_usd": 0.0,
+            "safe_remaining_if_all_reservations_settle_usd": 199.923852,
+            "settled_new_usd": 0.07614800000000001,
+            "worker_cap_usd": 20.0
+          },
+          "local_usage_cost_usd": 0.07614800000000005,
+          "mock": false,
+          "model_id": "kimi-k2.5",
+          "only_model": true,
+          "protocol_counts": {
+            "AGENT_COMPARISON_V9": 16,
+            "G6_V9": 32,
+            "G7_V9_PRIMARY": 16,
+            "G7_V9_REPAIR": 16,
+            "LU_U_V9": 16,
+            "Q_V9": 8
+          },
+          "provider_errors": [],
+          "real_provider_calls": 104
+        }
+      },
+      {
+        "name": "real non-mock provider",
+        "status": "PASS",
+        "detail": {
+          "mock": false,
+          "provider_errors": []
+        }
+      },
+      {
+        "name": "historical denominators unchanged",
+        "status": "PASS",
+        "detail": {
+          "g6_formal": 552,
+          "g6_machine_rows": 276,
+          "g7_frozen": 1288,
+          "g7_historical_defects": 13,
+          "g7_recovery": 150,
+          "lu_legacy_pairs": 6,
+          "q92": 92
+        }
+      },
+      {
+        "name": "planned V9 calls terminal",
+        "status": "PASS",
+        "detail": 104
+      },
+      {
+        "name": "G6 independent numeric certificates",
+        "status": "PASS",
+        "detail": {
+          "rows": 32,
+          "matches": 32
+        }
+      },
+      {
+        "name": "Q truth-first independent review",
+        "status": "PASS",
+        "detail": {
+          "private_truth_read_after_model_calls": true,
+          "protocol": "Q_KIMI_V9_TRUTH_FIRST_INDEPENDENT_REVIEW",
+          "rows": 8,
+          "schema_valid": 8,
+          "state_correct": 8,
+          "sympy_status_counts": {
+            "PROVEN_FALSE": 3,
+            "PROVEN_TRUE": 5,
+            "UNKNOWN": 0
+          },
+          "truth_key_sent_to_model": false
+        }
+      },
+      {
+        "name": "LU/U shared checkpoint and three arms",
+        "status": "PASS",
+        "detail": {
+          "arm_counts": {
+            "CONTROL": 4,
+            "REAL": 4,
+            "SHAM": 4
+          },
+          "checkpoint_count": 4,
+          "fork_rows": 12,
+          "protocol": "LU_V9_PROSPECTIVE_SHARED_CHECKPOINT_CONTROL_REAL_SHAM",
+          "semantic_correct": {
+            "CONTROL": 0,
+            "REAL": 4,
+            "SHAM": 0
+          },
+          "shared_checkpoint_hashes_present": true,
+          "truth_key_sent_to_model": false
+        }
+      },
+      {
+        "name": "LU/U arm result retained",
+        "status": "PASS",
+        "detail": {
+          "CONTROL": 0,
+          "REAL": 4,
+          "SHAM": 0
+        }
+      },
+      {
+        "name": "G7 repair provider/privacy trace",
+        "status": "PASS",
+        "detail": {
+          "rows": 16,
+          "clean": true
+        }
+      },
+      {
+        "name": "G7 D3 semantic diagnostic available",
+        "status": "PASS",
+        "detail": {
+          "d3_rows": 4,
+          "semantic_correct": 3,
+          "strict_correct": 0
+        }
+      }
+    ],
+    "g7_d3": {
+      "rows": 4,
+      "semantic_correct": 3,
+      "strict_correct": 0,
+      "interpretation": "partial semantic diagnostic; strict status-token metric remains zero"
+    },
+    "status": "PASS"
+  },
+  "history_pair": {
+    "source": "runs\\ctflow_single_model\\20261020T-kimi-g7-history-pairs-v1\\G7_HISTORY_PAIR_COMBINED_AUDIT.json",
+    "checks": [
+      {
+        "name": "two prospective pairs",
+        "status": "PASS",
+        "detail": {
+          "pair_count": 2,
+          "record_count": 4
+        }
+      },
+      {
+        "name": "same-state/same-evidence structural audit",
+        "status": "PASS",
+        "detail": {
+          "all_structural_checks_pass": true,
+          "base_run_root": "runs\\ctflow_single_model\\20261020T-kimi-g7-history-pairs-v1\\run",
+          "confirmatory_eligibility": "NO_PROSPECTIVE_NOT_HISTORICAL",
+          "model_id": "kimi-k2.5",
+          "only_model": true,
+          "pair_count": 2,
+          "pair_findings": [
+            {
+              "audit_status": "PASS",
+              "both_structured": true,
+              "eligible_for_confirmatory_history_claim": false,
+              "history_provenance": "prospective_controlled",
+              "pair_id": "HP-AFFINE",
+              "private_truth_injected": false,
+              "same_evidence": true,
+              "same_state": true
+            },
+            {
+              "audit_status": "PASS",
+              "both_structured": true,
+              "eligible_for_confirmatory_history_claim": false,
+              "history_provenance": "prospective_controlled",
+              "pair_id": "HP-QUADRATIC",
+              "private_truth_injected": false,
+              "same_evidence": true,
+              "same_state": true
+            }
+          ],
+          "private_truth_injected": false,
+          "protocol": "G7_PROSPECTIVE_HISTORY_PAIR_V1",
+          "record_count": 4,
+          "supplemental_run_root": "runs\\ctflow_single_model\\20261020T-kimi-g7-history-pairs-v1\\repair_run"
+        }
+      },
+      {
+        "name": "private truth not injected",
+        "status": "PASS",
+        "detail": false
+      },
+      {
+        "name": "not historical confirmation",
+        "status": "PASS",
+        "detail": "NO_PROSPECTIVE_NOT_HISTORICAL"
+      }
+    ],
+    "status": "PASS",
+    "confirmatory_eligibility": "NO_PROSPECTIVE_NOT_HISTORICAL"
+  },
+  "g8": {
+    "source": "runs\\ctflow_single_model\\20261020T-kimi-g8-v1\\g8_single_kimi_final_manifest.json",
+    "checks": [
+      {
+        "name": "G8 single Kimi manifest",
+        "status": "PASS",
+        "detail": {
+          "model_id": "kimi-k2.5",
+          "only_model": true
+        }
+      },
+      {
+        "name": "G8 public truth boundary",
+        "status": "PASS",
+        "detail": "all three audit sections pass process audit"
+      },
+      {
+        "name": "G8 technical failures retained",
+        "status": "PASS",
+        "detail": {
+          "PASS": 156,
+          "TECHNICAL_FAILURE": 24
+        }
+      },
+      {
+        "name": "G8 private request scan clean",
+        "status": "PASS",
+        "detail": "all sections scan=0"
+      }
+    ],
+    "status": "PASS",
+    "calls": 622,
+    "cost_usd": 0.8923889999999999
+  },
+  "g8_5": {
+    "source": "runs\\ctflow_single_model\\20261020T-kimi-g8-5-v1",
+    "checks": [
+      {
+        "name": "G8.5 prospective only Kimi",
+        "status": "PASS",
+        "detail": {
+          "model_id": "kimi-k2.5",
+          "only_model": true
+        }
+      },
+      {
+        "name": "G8.5 prospective complete",
+        "status": "PASS",
+        "detail": {
+          "history_provenance": [
+            "prospective_controlled"
+          ],
+          "model_requests_private_truth_scan_hits": 0,
+          "planned": 8,
+          "private_truth_loaded_only_in_scorer": true,
+          "protocol": "G8_5_SINGLE_KIMI_V1",
+          "result_files": 8,
+          "scientific_use": [
+            "PROSPECTIVE_NOT_HISTORICAL_CONFIRMATION"
+          ],
+          "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED"
+        }
+      },
+      {
+        "name": "G8.5 private truth scorer boundary",
+        "status": "PASS",
+        "detail": {
+          "history_provenance": [
+            "prospective_controlled"
+          ],
+          "model_requests_private_truth_scan_hits": 0,
+          "planned": 8,
+          "private_truth_loaded_only_in_scorer": true,
+          "protocol": "G8_5_SINGLE_KIMI_V1",
+          "result_files": 8,
+          "scientific_use": [
+            "PROSPECTIVE_NOT_HISTORICAL_CONFIRMATION"
+          ],
+          "status": "ENGINEERING_ONLY_SCIENCE_BLOCKED"
+        }
+      },
+      {
+        "name": "G8.5 public plan has no private fields",
+        "status": "PASS",
+        "detail": {
+          "rows": 8,
+          "forbidden_key_hits": []
+        }
+      },
+      {
+        "name": "G8.5 prospective arms all correct",
+        "status": "PASS",
+        "detail": [
+          {
+            "all_planned_accuracy": 1.0,
+            "arm_id": "A_CLEAN_FULL",
+            "correct": 2,
+            "planned": 2,
+            "technical_failures": 0
+          },
+          {
+            "all_planned_accuracy": 1.0,
+            "arm_id": "B_RECOVERED_FULL",
+            "correct": 2,
+            "planned": 2,
+            "technical_failures": 0
+          },
+          {
+            "all_planned_accuracy": 1.0,
+            "arm_id": "C_CLEAN_STATE_ONLY",
+            "correct": 2,
+            "planned": 2,
+            "technical_failures": 0
+          },
+          {
+            "all_planned_accuracy": 1.0,
+            "arm_id": "D_RECOVERED_STATE_ONLY",
+            "correct": 2,
+            "planned": 2,
+            "technical_failures": 0
+          }
+        ]
+      }
+    ],
+    "status": "PASS",
+    "prospective": {
+      "calls": 8,
+      "cost_usd": 0.006214,
+      "arm_scores": [
+        {
+          "all_planned_accuracy": 1.0,
+          "arm_id": "A_CLEAN_FULL",
+          "correct": 2,
+          "planned": 2,
+          "technical_failures": 0
+        },
+        {
+          "all_planned_accuracy": 1.0,
+          "arm_id": "B_RECOVERED_FULL",
+          "correct": 2,
+          "planned": 2,
+          "technical_failures": 0
+        },
+        {
+          "all_planned_accuracy": 1.0,
+          "arm_id": "C_CLEAN_STATE_ONLY",
+          "correct": 2,
+          "planned": 2,
+          "technical_failures": 0
+        },
+        {
+          "all_planned_accuracy": 1.0,
+          "arm_id": "D_RECOVERED_STATE_ONLY",
+          "correct": 2,
+          "planned": 2,
+          "technical_failures": 0
+        }
+      ]
+    }
+  },
+  "engineering_lock": {
+    "status": "PASS",
+    "lock_free_read_only_integrity_checks": [
+      {
+        "path": "runs\\ctflow_single_model\\20261019T-kimi-v9-prospective\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-v1\\pilot\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-v1\\formal\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-v1\\formal_adapter_repair1\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-5-v1\\run\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-5-v1\\run_adapter_repair1\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g8-5-v1\\prospective_run\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g7-history-pairs-v1\\run\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      },
+      {
+        "path": "runs\\ctflow_single_model\\20261020T-kimi-g7-history-pairs-v1\\repair_run\\cost_ledger.sqlite",
+        "exists": true,
+        "status": "PASS",
+        "integrity": "ok",
+        "tables": [
+          "ledger_meta",
+          "entries",
+          "sqlite_sequence",
+          "reservations"
+        ]
+      }
+    ]
+  },
+  "historical_denominators_unchanged": {
+    "g6_formal": 552,
+    "g6_machine_rows": 276,
+    "g7_frozen": 1288,
+    "g7_recovery": 150,
+    "g7_historical_defects": 13,
+    "q92": 92,
+    "lu_legacy_pairs": 6
+  },
+  "formal_scientific_release": {
+    "status": "RETAINED_BLOCKED",
+    "scientific_release_allowed": false,
+    "overridden": false,
+    "blocking_reasons": [
+      "historical G6/G7 denominators and historical trace defects remain unchanged and are not replaced by prospective evidence",
+      "provider billing/immutable route or weight attestation remains unavailable",
+      "G7 repair is semantically partial (3/4) and strict status-token accuracy is 0/4",
+      "prospective G7 history pairs and G8.5 data are not historical confirmation"
+    ]
+  },
+  "interpretation": "Internal prospective machine work may continue automatically; this artifact is not a formal historical scientific release or an overall Agent-superiority claim."
+}
