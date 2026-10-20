@@ -60,7 +60,8 @@
     "LU_PAIR_PLAN.jsonl": "b540ed88ce4bf4ea3e0e8c2933b021a1608d03537e341dfa446a525df470d32d",
     "LU_REAL_SHAM_CONTROL_RAW.jsonl": "0e916e6df1a79cd1e5e1e62c3a13fa9c9d782fafb5184779bb337a9e231fbcea",
     "LU_SHARED_CHECKPOINTS.jsonl": "9618af8974d1cd4ed51220b2e6ec2d8d46e2949fe9a7f3d3af90b4360b0820f6",
-    "MACHINE_ACCEPTANCE.json": "86a5366a7c5ccaae333050577e2c702cdf22fd3f5155cd68729a6f87a1953cb8",
+    "MACHINE_ACCEPTANCE.json": "b2c409fafd9167ffbc682ce514c464704b8e7095acf44902d0709614c740829e",
+    "MATH_ALTERNATE_VERIFICATION.json": "3863058b952cea9c5fefb3aa456c1a8154d30dc51903cbf06e649758263be4b7",
     "PROTOCOL_NAMESPACE_MATRIX.json": "5682bea03c91933cf210069682aebbd7ea1307e09ad3d4c9e1d1dad18d8fdcba",
     "Q_INDEPENDENT_REVIEW.jsonl": "e8dd7fb69183cdc8f0e7c2ade88c95e3ea2d4b154c31497e60219056cf3eef09",
     "Q_MACHINE_FIRST_TRUTH_CERTS/V10-Q01.json": "49ce371aee98b7dd4d135bcf0ee8074bac31b143dd4eb9b769efd90805dad326",
@@ -74,9 +75,10 @@
     "Q_METRICS.json": "aa07747d80d33625175eb3d1eca079b37dfd950d8309c4853c6e9b07d2899110",
     "TEST_RESULTS.json": "c5787b565de9f0a6f414a31237dd8f0759c46b5ac20e650ad054efffa1721f54"
   },
-  "generated_at_utc": "2026-10-20T05:40:00.235488+00:00",
+  "generated_at_utc": "2026-10-20T05:42:23.935427+00:00",
   "source_files": {
-    "scripts/v10/finalize_v10.py": "3c00a8b553955a41c57df5bc53074b268cce8e45090e20397141d7717077cb20",
+    "scripts/v10/alternate_math_audit.py": "c8183f0bc4228133760ba700f3f5210f94ad380ffcfdd033b1f5e5918cbce19d",
+    "scripts/v10/finalize_v10.py": "3f36c877a74dbe810fdfcd1edea0fa014e62abd3a1b5a96656296ff142c0d295",
     "scripts/v10/independent_audit.py": "89b2c47912ba5791d17be232b081df15f4e653ce0efbf922356eabb095fac0ad",
     "scripts/v10/machine_truth.py": "5dc6ab643f1d8be53049551451435b68fdd632be69f0e7d4e2c22382374649d7",
     "scripts/v10/run_single_kimi_autonomous.py": "32bb1d3e723fadff6e55162035090a6d21fd1fef1ffbe992b08f74cc56ba9a8f"

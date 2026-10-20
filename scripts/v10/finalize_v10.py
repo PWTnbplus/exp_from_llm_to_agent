@@ -39,6 +39,8 @@ def finalize(repo: Path, run_root: Path, audit_root: Path, test_exit_code: int |
     else:
         test_result = json.loads(test_path.read_text(encoding="utf-8")) if test_path.exists() else {"exit_code": None, "recorded": False}
     scores = summary.get("scores", {})
+    alternate_path = audit_root / "MATH_ALTERNATE_VERIFICATION.json"
+    alternate = json.loads(alternate_path.read_text(encoding="utf-8")) if alternate_path.exists() else None
     machine_execution_accepted = bool(audit.get("audit_pass")) and (test_result.get("exit_code") in (None, 0))
     acceptance = {
         "acceptance_type": "MACHINE_EXECUTION_ACCEPTANCE",
@@ -62,12 +64,13 @@ def finalize(repo: Path, run_root: Path, audit_root: Path, test_exit_code: int |
         "g7": scores.get("g7"),
         "lu": scores.get("lu"),
         "agent": scores.get("agent"),
+        "alternate_math_verification": alternate,
         "run_root": str(run_root),
         "audit_root": str(audit_root),
     }
     write_json(audit_root / "MACHINE_ACCEPTANCE.json", acceptance)
     source_files = {}
-    for path in [repo / "scripts" / "v10" / "machine_truth.py", repo / "scripts" / "v10" / "run_single_kimi_autonomous.py", repo / "scripts" / "v10" / "independent_audit.py", repo / "scripts" / "v10" / "finalize_v10.py"]:
+    for path in [repo / "scripts" / "v10" / "machine_truth.py", repo / "scripts" / "v10" / "run_single_kimi_autonomous.py", repo / "scripts" / "v10" / "independent_audit.py", repo / "scripts" / "v10" / "alternate_math_audit.py", repo / "scripts" / "v10" / "finalize_v10.py"]:
         if path.exists():
             source_files[str(path.relative_to(repo)).replace("\\", "/")] = sha256_file(path)
     write_json(audit_root / "SOURCE_AND_ARTIFACT_SHA256.json", {"generated_at_utc": now_utc(), "source_files": source_files, "audit_artifacts": _hash_files(audit_root, {"SOURCE_AND_ARTIFACT_SHA256.json"})})
@@ -82,6 +85,7 @@ def finalize(repo: Path, run_root: Path, audit_root: Path, test_exit_code: int |
         "",
         "## Scientific outcomes",
         "",
+        f"- Alternate exact math diagnostic (primary frozen truth unchanged): `{json.dumps(alternate, ensure_ascii=False, sort_keys=True) if alternate else 'not_run'}`",
         f"- G6: `{json.dumps(scores.get('g6'), ensure_ascii=False, sort_keys=True)}`",
         f"- Q: `{json.dumps(scores.get('q'), ensure_ascii=False, sort_keys=True)}`",
         f"- G7: `{json.dumps(scores.get('g7'), ensure_ascii=False, sort_keys=True)}`",
