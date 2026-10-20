@@ -1,0 +1,7 @@
+{
+  "command": "pytest -q tests/test_v10_contract.py tests/test_internal_machine_gate.py tests/test_g6_input_collision_guards.py tests/test_g6_runner_contract.py tests/test_g7_protocol.py tests/test_v4_q_lu.py tests/test_v9_q_lu_stats.py tests/test_v9_agent_comparison.py",
+  "exit_code": 0,
+  "failed": 0,
+  "passed": 70,
+  "recorded_from_actual_process": true
+}

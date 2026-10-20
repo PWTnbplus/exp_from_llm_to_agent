@@ -1,0 +1,224 @@
+{
+  "acceptance_type": "MACHINE_EXECUTION_ACCEPTANCE",
+  "agent": {
+    "action_valid": 15,
+    "planned": 16,
+    "stats": {
+      "AGENT": {
+        "bootstrap": 2000,
+        "ci95": [
+          0.625,
+          1.0
+        ],
+        "cluster_key": "theory_family_id",
+        "clusters": 4,
+        "estimate": 0.875,
+        "n": 8,
+        "score_key": "action_valid"
+      },
+      "LLM_ONLY": {
+        "bootstrap": 2000,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "cluster_key": "theory_family_id",
+        "clusters": 4,
+        "estimate": 1.0,
+        "n": 8,
+        "score_key": "action_valid"
+      }
+    }
+  },
+  "audit_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\20261020T045840Z-kimi-v10-machine",
+  "g6": {
+    "action_correct": 11,
+    "planned": 32,
+    "revision_valid": 3,
+    "stats": {
+      "all_planned_action": {
+        "bootstrap": 2000,
+        "ci95": [
+          0.21875,
+          0.46875
+        ],
+        "cluster_key": "theory_family_id",
+        "clusters": 4,
+        "estimate": 0.34375,
+        "n": 32,
+        "score_key": "model_action_correct"
+      },
+      "by_arm": {
+        "G6_A_G3_GIVEN": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.125,
+            0.5
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.3125,
+          "n": 16,
+          "score_key": "model_action_correct"
+        },
+        "G6_B_G4_GIVEN": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.25,
+            0.5
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.375,
+          "n": 16,
+          "score_key": "model_action_correct"
+        }
+      },
+      "by_cf": {
+        "CF1": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.625,
+            1.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.875,
+          "n": 8,
+          "score_key": "model_action_correct"
+        },
+        "CF2": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 8,
+          "score_key": "model_action_correct"
+        },
+        "CF3": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.25,
+            0.875
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.5,
+          "n": 8,
+          "score_key": "model_action_correct"
+        },
+        "CF4": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 8,
+          "score_key": "model_action_correct"
+        }
+      }
+    }
+  },
+  "g7": {
+    "d3_rows": 4,
+    "d3_semantic_correct": 1,
+    "d3_strict_token_correct": 0,
+    "d3_strict_token_invalid": 4,
+    "planned_stage_rows": 16,
+    "private_Y_injected": false,
+    "q_proof_valid": 4,
+    "q_rows": 4
+  },
+  "generated_at_utc": "2026-10-20T05:40:00.195473+00:00",
+  "historical_denominators_unchanged": {
+    "g6_formal": 552,
+    "g6_machine_rows": 276,
+    "g7_frozen": 1288,
+    "g7_historical_defects": 13,
+    "g7_recovery": 150,
+    "lu_legacy_pairs": 6,
+    "q92": 92
+  },
+  "hypothesis_supported": false,
+  "independent_audit_pass": true,
+  "interpretation": "Acceptance means the frozen machine protocol ran to terminal states and passed independent integrity checks; it does not turn model predictions into proofs.",
+  "ledger_status_counts": {
+    "COMPLETED": 96
+  },
+  "local_usage_cost_usd": 0.11182000000000007,
+  "lu": {
+    "correct_update": 0,
+    "planned": 12,
+    "stats": {
+      "planned_fork_rows": 12,
+      "shared_checkpoint": true,
+      "u_correct_by_arm": {
+        "CONTROL": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "correct_update"
+        },
+        "REAL": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "correct_update"
+        },
+        "SHAM": {
+          "bootstrap": 2000,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "cluster_key": "theory_family_id",
+          "clusters": 4,
+          "estimate": 0.0,
+          "n": 4,
+          "score_key": "correct_update"
+        }
+      },
+      "u_correct_real_minus_sham": 0.0,
+      "y_correct_real_minus_sham": 0.0
+    }
+  },
+  "machine_execution_accepted": true,
+  "model_id": "kimi-k2.5",
+  "planned_units": 96,
+  "private_truth_injected": false,
+  "q": {
+    "action_schema_valid": 8,
+    "final_Y_correct": 1,
+    "machine_truth_first": true,
+    "planned": 8,
+    "q_proof_valid": 8,
+    "q_state_match": 2,
+    "truth_key_sent_to_model": false
+  },
+  "real_provider_calls": 96,
+  "run_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261020T045840Z-kimi-v10-machine",
+  "scientific_claim_release": "NOT_ASSERTED",
+  "test_exit_code": 0,
+  "unique_base_language_models": [
+    "kimi-k2.5"
+  ]
+}

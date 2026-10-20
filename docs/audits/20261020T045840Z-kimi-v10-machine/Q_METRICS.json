@@ -1,0 +1,9 @@
+{
+  "action_schema_valid": 8,
+  "final_Y_correct": 1,
+  "machine_truth_first": true,
+  "planned": 8,
+  "q_proof_valid": 8,
+  "q_state_match": 2,
+  "truth_key_sent_to_model": false
+}

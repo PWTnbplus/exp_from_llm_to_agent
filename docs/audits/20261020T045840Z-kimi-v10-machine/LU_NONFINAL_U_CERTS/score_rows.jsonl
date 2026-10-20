@@ -1,0 +1,12 @@
+{"arm":"CONTROL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-01","theory_family_id":"V10-F01","y_correct":false}
+{"arm":"REAL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-01","theory_family_id":"V10-F01","y_correct":false}
+{"arm":"SHAM","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-01","theory_family_id":"V10-F01","y_correct":false}
+{"arm":"CONTROL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-02","theory_family_id":"V10-F02","y_correct":false}
+{"arm":"REAL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-02","theory_family_id":"V10-F02","y_correct":false}
+{"arm":"SHAM","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-02","theory_family_id":"V10-F02","y_correct":false}
+{"arm":"CONTROL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-03","theory_family_id":"V10-F03","y_correct":false}
+{"arm":"REAL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-03","theory_family_id":"V10-F03","y_correct":false}
+{"arm":"SHAM","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-03","theory_family_id":"V10-F03","y_correct":false}
+{"arm":"CONTROL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-04","theory_family_id":"V10-F04","y_correct":false}
+{"arm":"REAL","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-04","theory_family_id":"V10-F04","y_correct":false}
+{"arm":"SHAM","correct_update":false,"private_truth_injected":false,"state_update_detected":true,"task_id":"V10-LU-04","theory_family_id":"V10-F04","y_correct":false}

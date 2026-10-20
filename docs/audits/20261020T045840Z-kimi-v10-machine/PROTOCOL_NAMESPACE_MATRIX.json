@@ -1,0 +1,13 @@
+{
+  "experiment_id": "V10-G6-G7-MACHINE",
+  "model_id": "kimi-k2.5",
+  "namespaces": {
+    "Agent": "AGENT-VS-LLM-ONLY",
+    "G6": "G6-MACHINE-FINAL",
+    "G7": "G7-MACHINE-VLUQ",
+    "LU": "LU-U-MACHINE-CAUSAL",
+    "Q": "Q92-MACHINE-FIRST"
+  },
+  "only_model": true,
+  "protocol_profile": "theory_benchmark"
+}

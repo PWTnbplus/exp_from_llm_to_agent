@@ -1,0 +1,10 @@
+{
+  "d3_rows": 4,
+  "d3_semantic_correct": 1,
+  "d3_strict_token_correct": 0,
+  "d3_strict_token_invalid": 4,
+  "planned_stage_rows": 16,
+  "private_Y_injected": false,
+  "q_proof_valid": 4,
+  "q_rows": 4
+}

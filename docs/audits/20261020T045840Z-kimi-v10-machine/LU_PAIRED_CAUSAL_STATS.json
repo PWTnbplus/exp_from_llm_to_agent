@@ -1,0 +1,44 @@
+{
+  "planned_fork_rows": 12,
+  "shared_checkpoint": true,
+  "u_correct_by_arm": {
+    "CONTROL": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "correct_update"
+    },
+    "REAL": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "correct_update"
+    },
+    "SHAM": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 4,
+      "score_key": "correct_update"
+    }
+  },
+  "u_correct_real_minus_sham": 0.0,
+  "y_correct_real_minus_sham": 0.0
+}

@@ -1,0 +1,16 @@
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":false,"task_id":"V10-AGENT-01","theory_family_id":"V10-F01","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":2,"target_action_correct":true,"task_id":"V10-AGENT-01","theory_family_id":"V10-F01","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":false,"task_id":"V10-AGENT-01","theory_family_id":"V10-F01","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":true,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-01","theory_family_id":"V10-F01","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":false,"task_id":"V10-AGENT-02","theory_family_id":"V10-F02","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-02","theory_family_id":"V10-F02","workflow":"LLM_ONLY"}
+{"action_valid":false,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":false,"task_id":"V10-AGENT-02","theory_family_id":"V10-F02","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":true,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-02","theory_family_id":"V10-F02","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":true,"task_id":"V10-AGENT-03","theory_family_id":"V10-F03","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-03","theory_family_id":"V10-F03","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":true,"task_id":"V10-AGENT-03","theory_family_id":"V10-F03","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":true,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-03","theory_family_id":"V10-F03","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":false,"task_id":"V10-AGENT-04","theory_family_id":"V10-F04","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":2,"target_action_correct":true,"task_id":"V10-AGENT-04","theory_family_id":"V10-F04","workflow":"LLM_ONLY"}
+{"action_valid":true,"adaptive_feedback_recorded":false,"provider_error":null,"step":1,"target_action_correct":true,"task_id":"V10-AGENT-04","theory_family_id":"V10-F04","workflow":"AGENT"}
+{"action_valid":true,"adaptive_feedback_recorded":true,"provider_error":null,"step":2,"target_action_correct":false,"task_id":"V10-AGENT-04","theory_family_id":"V10-F04","workflow":"AGENT"}

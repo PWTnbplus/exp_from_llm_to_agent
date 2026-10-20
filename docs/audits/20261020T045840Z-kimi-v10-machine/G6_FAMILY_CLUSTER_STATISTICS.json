@@ -1,0 +1,90 @@
+{
+  "all_planned_action": {
+    "bootstrap": 2000,
+    "ci95": [
+      0.21875,
+      0.46875
+    ],
+    "cluster_key": "theory_family_id",
+    "clusters": 4,
+    "estimate": 0.34375,
+    "n": 32,
+    "score_key": "model_action_correct"
+  },
+  "by_arm": {
+    "G6_A_G3_GIVEN": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.125,
+        0.5
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.3125,
+      "n": 16,
+      "score_key": "model_action_correct"
+    },
+    "G6_B_G4_GIVEN": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.25,
+        0.5
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.375,
+      "n": 16,
+      "score_key": "model_action_correct"
+    }
+  },
+  "by_cf": {
+    "CF1": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.625,
+        1.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.875,
+      "n": 8,
+      "score_key": "model_action_correct"
+    },
+    "CF2": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 8,
+      "score_key": "model_action_correct"
+    },
+    "CF3": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.25,
+        0.875
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.5,
+      "n": 8,
+      "score_key": "model_action_correct"
+    },
+    "CF4": {
+      "bootstrap": 2000,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "cluster_key": "theory_family_id",
+      "clusters": 4,
+      "estimate": 0.0,
+      "n": 8,
+      "score_key": "model_action_correct"
+    }
+  }
+}

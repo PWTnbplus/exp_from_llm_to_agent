@@ -1,0 +1,275 @@
+{
+  "artifact_requirements": {
+    "G6_CLAIM_IR.jsonl": true,
+    "G6_LEGACY_LINEAGE_276.jsonl": true,
+    "G6_MACHINE_CERTS": true,
+    "G6_NEW_FROZEN_PLAN.jsonl": true,
+    "G6_NEW_RAW_EVENTS": true,
+    "G7_CHECKPOINTS.jsonl": true,
+    "G7_FORK_PLAN.jsonl": true,
+    "G7_TRACE_LINEAGE.jsonl": true,
+    "LU_PAIR_PLAN.jsonl": true,
+    "Q_MACHINE_FIRST_TRUTH_CERTS": true
+  },
+  "audit_pass": true,
+  "audit_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\docs\\audits\\20261020T045840Z-kimi-v10-machine",
+  "audit_type": "INDEPENDENT_READ_ONLY_AUDIT",
+  "certificate_checks": {
+    "all_match": true,
+    "matched": 16,
+    "n": 16,
+    "rows": [
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-Q01",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "1",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-Q02",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "-2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-Q03",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-Q04",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "-2",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      },
+      {
+        "certificate_status": "PROVEN_FALSE",
+        "id": "V10-Q05",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "1",
+          "replay": "independent_rational_counterexample_path",
+          "status": "PROVEN_FALSE",
+          "witness": {
+            "delta": "1",
+            "x1": "-3",
+            "x2": "-2"
+          }
+        },
+        "replay_status": "PROVEN_FALSE"
+      },
+      {
+        "certificate_status": "PROVEN_FALSE",
+        "id": "V10-Q06",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "-2*x",
+          "replay": "independent_rational_counterexample_path",
+          "status": "PROVEN_FALSE",
+          "witness": {
+            "delta": "-1",
+            "x1": "0",
+            "x2": "1"
+          }
+        },
+        "replay_status": "PROVEN_FALSE"
+      },
+      {
+        "certificate_status": "PROVEN_FALSE",
+        "id": "V10-Q07",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "2*x",
+          "replay": "independent_rational_counterexample_path",
+          "status": "PROVEN_FALSE",
+          "witness": {
+            "delta": "1",
+            "x1": "0",
+            "x2": "1"
+          }
+        },
+        "replay_status": "PROVEN_FALSE"
+      },
+      {
+        "certificate_status": "PROVEN_FALSE",
+        "id": "V10-Q08",
+        "match": true,
+        "namespace": "q",
+        "replay": {
+          "derivative": "-2",
+          "replay": "independent_rational_counterexample_path",
+          "status": "PROVEN_FALSE",
+          "witness": {
+            "delta": "-2",
+            "x1": "-3",
+            "x2": "-2"
+          }
+        },
+        "replay_status": "PROVEN_FALSE"
+      },
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-G7-01",
+        "match": true,
+        "namespace": "g7",
+        "replay": {
+          "derivative": "1",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-G7-02",
+        "match": true,
+        "namespace": "g7",
+        "replay": {
+          "derivative": "-2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-G7-03",
+        "match": true,
+        "namespace": "g7",
+        "replay": {
+          "derivative": "2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-G7-04",
+        "match": true,
+        "namespace": "g7",
+        "replay": {
+          "derivative": "-2",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      },
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-LU-01",
+        "match": true,
+        "namespace": "lu",
+        "replay": {
+          "derivative": "1",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-LU-02",
+        "match": true,
+        "namespace": "lu",
+        "replay": {
+          "derivative": "-2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "UNKNOWN",
+        "id": "V10-LU-03",
+        "match": true,
+        "namespace": "lu",
+        "replay": {
+          "derivative": "2*x",
+          "replay": "independent_path_exhausted",
+          "status": "UNKNOWN"
+        },
+        "replay_status": "UNKNOWN"
+      },
+      {
+        "certificate_status": "PROVEN_TRUE",
+        "id": "V10-LU-04",
+        "match": true,
+        "namespace": "lu",
+        "replay": {
+          "derivative": "-2",
+          "replay": "independent_sympy_path",
+          "status": "PROVEN_TRUE"
+        },
+        "replay_status": "PROVEN_TRUE"
+      }
+    ]
+  },
+  "checks": {
+    "all_plan_units_have_final_response": true,
+    "all_plan_units_in_ledger": true,
+    "all_plan_units_terminal": true,
+    "attempt_bounds": true,
+    "machine_certificates_replay": true,
+    "no_duplicate_final_response_ids": true,
+    "no_forbidden_public_keys": true,
+    "no_private_prompt_markers": true,
+    "plan_hash": true,
+    "public_hash": true,
+    "required_v10_artifacts": true,
+    "single_model": true
+  },
+  "duplicate_response_ids": [],
+  "forbidden_public_keys": [],
+  "generated_at_utc": "2026-10-20T05:39:46.834149+00:00",
+  "historical_denominators_unchanged": {
+    "g6_formal": 552,
+    "g6_machine_rows": 276,
+    "g7_frozen": 1288,
+    "g7_historical_defects": 13,
+    "g7_recovery": 150,
+    "lu_legacy_pairs": 6,
+    "q92": 92
+  },
+  "ledger_status_counts": {
+    "COMPLETED": 96
+  },
+  "model_ids_observed": [
+    "kimi-k2.5"
+  ],
+  "plan_units": 96,
+  "prompt_markers": [],
+  "provider_call_rows": 96,
+  "raw_event_rows": 96,
+  "repo": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent",
+  "response_rows": 96,
+  "run_root": "E:\\master_exp\\nature_prj1_cal\\from_llm_to_agent\\runs\\ctflow_single_model\\20261020T045840Z-kimi-v10-machine"
+}
