@@ -1,0 +1,2 @@
+[console_scripts]
+scientific-discovery = scientific_discovery.cli:main

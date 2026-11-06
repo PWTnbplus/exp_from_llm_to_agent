@@ -1,0 +1,1758 @@
+#!/usr/bin/env python3
+"""Real-provider G7 checkpoint/fork runner.
+
+The runner is intentionally separate from ``g7_offline.py``.  It reads public
+cases and the independently reviewed G7 local labels only to apply the
+diagnostic intervention; it never sends the G6 private oracle or prior G6
+model answers to the provider.  Checkpoints are actual new provider calls and
+are never backfilled from G6.
+
+The response contract below is deliberately explicit because malformed stage
+objects are recorded as invalid provider attempts, not silently repaired.
+"""
+from __future__ import annotations
+
+import argparse
+import ctypes
+from contextlib import contextmanager
+import hashlib
+import json
+import math
+import os
+import re
+import sys
+import time
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from src.scientific_discovery.models.provider import OpenAICompatibleProvider, ProviderResponse
+from run_g6_counterfactual import TOOLS, execute_tool, parse_tool_args, extract_json
+from scripts.audit_repair.cost_ledger import CostLedger
+
+
+DECISIONS = {"MAINTAIN", "REJECT", "REVISE", "UNDETERMINED"}
+CHECKPOINT_OUTPUT_KEYS = frozenset({
+    "decision", "affected_claim_ids", "revised_claim", "supporting_evidence",
+})
+DIAGNOSTIC_OUTPUT_KEYS = frozenset({
+    "decision", "affected_claim_ids", "revised_claim", "supporting_evidence", "stages",
+})
+FORBIDDEN_MODEL_KEYS = (
+    "expected_decision",
+    "affected_claim_ids",
+    "oracle_affected_claim_ids",
+    "oracle_reason",
+    "correct_revised_claim",
+    "counterexample",
+    "private_oracle",
+    "g6_private_oracle",
+    "source_g6_oracle",
+    "ground_truth",
+    "answer_key",
+    "verification_code",
+    "verification_status",
+    "verification_grade",
+    "verifier_ref",
+    "u_ineligibility_reason",
+    "eligible_u",
+    "verifier_status",
+    "V_true",
+    "L_true_impacted_nodes",
+    "U_true_node_changes",
+)
+ROUTING_METADATA_KEYS = ("cf_type", "theory_family_id")
+CHECKPOINT_FORMAT_RETRY_INSTRUCTION = (
+    "The previous response failed the checkpoint JSON contract. Return only one JSON object with exactly these four "
+    "top-level fields: decision, affected_claim_ids, revised_claim, supporting_evidence. Do not include a stages "
+    "field, diagnostic labels, hidden information, prose outside the JSON object, or tool calls. decision must be "
+    "MAINTAIN, REJECT, REVISE, or UNDETERMINED; affected_claim_ids must be an array; revised_claim must be a string "
+    "or null; supporting_evidence must be a non-empty string."
+)
+FORMAT_RETRY_INSTRUCTION = (
+    "The previous response failed the required JSON contract. Return only one JSON object with the required fields; "
+    "do not call tools or add hidden information. For a diagnostic fork, put V, L, U, and Q as objects in the "
+    "top-level stages field (not inside supporting_evidence): stages must contain stages.V={verdict}, "
+    "L={nodes,edges}, U={node_changes}, and stages.Q={verdict,reason}; use empty arrays for genuinely empty L/U fields."
+)
+G7_GROUPS = {"G3", "G4"}
+G7_SOURCE_G6_ARM_BY_GROUP = {
+    "G3": "G6_A_G3_GIVEN",
+    "G4": "G6_B_G4_GIVEN",
+}
+G7_EXPERIMENT_ID = "g7_failure_localization"
+G7_PROFILE = "theory_benchmark"
+G7_PROTOCOL_VERSION = "g7-public-case-format-retry-v1"
+G7_FORMAL_RETRY_SCOPE = "all_original_rows_protocol_corrected"
+G7_RETRY_PROTOCOL = "separate_frozen_retry_not_pooled"
+G7_CF_TYPES = frozenset({"CF1", "CF2", "CF3", "CF4"})
+G7_FORMAL_SPLIT = "final_test"
+# The formal G7 input is the frozen corrected 23-family denominator.  Keep
+# the exact family set here so a replacement family cannot preserve only the
+# superficial 23 x CF1-CF4 shape while changing the audited population.
+G7_FORMAL_THEORY_FAMILIES = frozenset({
+    "G6F-TB-L1-001", "G6F-TB-L1-002", "G6F-TB-L1-003", "G6F-TB-L1-004",
+    "G6F-TB-L1-005", "G6F-TB-L1-006", "G6F-TB-L1-007", "G6F-TB-L1-008",
+    "G6F-TB-L1-009", "G6F-TB-L1-011", "G6F-TB-L1-012",
+    "G6F-TC-L1-001", "G6F-TC-L1-002", "G6F-TC-L1-003", "G6F-TC-L1-004",
+    "G6F-TC-L1-005", "G6F-TC-L1-006", "G6F-TC-L1-007", "G6F-TC-L1-008",
+    "G6F-TC-L1-009", "G6F-TC-L1-010", "G6F-TC-L1-011", "G6F-TC-L1-012",
+})
+# The public case IDs are also frozen: preserving only the family/CF layout is
+# insufficient if a row is silently replaced by another case.
+G7_FORMAL_CASE_IDS = frozenset(
+    f"{family}-{cf_type}"
+    for family in G7_FORMAL_THEORY_FAMILIES
+    for cf_type in sorted(G7_CF_TYPES)
+)
+# Canonical hashes freeze the complete public/label/retry inputs, including
+# source_task_id and model-visible content, instead of relying on a growing
+# list of individually checked metadata fields.  The canonical form is one
+# sorted-key compact JSON object per input row, in file order, with a final LF.
+G7_FORMAL_INPUT_CANONICAL_SHA256 = {
+    "public": "b0ff3d3c9178cc068b0399f073981f990e313677536b6791cc170ecd2c6db597",
+    "labels": "bd34b7087e04810208baeb1cbfa4b9d0b207b3d7066dec2817debe9112d44f70",
+    "plan": "a99e44f5e4edbc959284993714a0a460e8c83b30b07a261c938b14b0d916aec3",
+}
+G7_STAGES = {"V", "L", "U"}
+G7_ARM_CONTRACT = {
+    "D0": (),
+    "D1": ("V",),
+    "D2": ("V", "L"),
+    "D3": ("V", "L", "U"),
+    "L_ONLY": ("L",),
+    "U_ONLY": ("U",),
+    "V_ONLY": ("V",),
+}
+G7_PUBLIC_METADATA_FIELDS = (
+    "paired_set_id", "source_task_id", "theory_family_id", "domain", "cf_type",
+    "split", "quantifier", "source_g5_graph_sha256", "verification_grade",
+)
+G7_LABEL_METADATA_FIELDS = (
+    "source_public_case_sha256", "verification_grade", "verification_method",
+    "verifier_ref",
+)
+G7_PLAN_METADATA_FIELDS = (
+    "experiment_id", "paired_set_id", "theory_family_id", "cf_type", "split", "source_g6_arm_id",
+    "source_run_id", "source_checkpoint_id", "profile", "protocol_version",
+    "retry_scope", "retry_protocol",
+)
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def readl(path: Path) -> list[dict[str, Any]]:
+    if not path.is_file():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            value = json.loads(line)
+            if not isinstance(value, dict):
+                raise ValueError(f"{path}: expected JSON object")
+            rows.append(value)
+    return rows
+
+
+def append_jsonl(path: Path, value: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = path.with_name(path.name + ".writer-lock")
+    lock_fd: int | None = None
+    for _ in range(600):
+        try:
+            lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.005)
+    if lock_fd is None:
+        raise RuntimeError(f"trace writer lock timeout: {path}")
+    try:
+        os.close(lock_fd)
+        with path.open("a", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(value, ensure_ascii=False, separators=(",", ":")) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+    finally:
+        try:
+            lock_path.unlink()
+        except FileNotFoundError:
+            pass
+
+
+@contextmanager
+def state_claim(root: Path, run_id: str):
+    """Atomically claim one state across cooperating worker processes."""
+    claim_path = root / "claims" / f"{run_id}.claim"
+    claim_path.parent.mkdir(parents=True, exist_ok=True)
+    fd: int | None = None
+    for _ in range(2):
+        try:
+            fd = os.open(claim_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(fd, json.dumps({"pid": os.getpid(), "run_id": run_id}).encode("utf-8"))
+            os.close(fd)
+            fd = None
+            break
+        except FileExistsError:
+            try:
+                owner = json.loads(claim_path.read_text(encoding="utf-8"))
+                owner_pid = owner.get("pid")
+                if not isinstance(owner_pid, int) or owner_pid <= 0:
+                    yield False
+                    return
+                try:
+                    if not _process_is_alive(owner_pid):
+                        raise ProcessLookupError(owner_pid)
+                except PermissionError:
+                    # The process exists but this worker cannot inspect it.
+                    yield False
+                    return
+                except (ProcessLookupError, OSError, SystemError):
+                    # Windows can surface an invalid/stale PID as WinError
+                    # 87 or SystemError rather than ProcessLookupError after
+                    # the owning process is interrupted.  Treat that claim as
+                    # reclaimable; historical traces and states are untouched.
+                    claim_path.unlink(missing_ok=True)
+                    continue
+                yield False
+                return
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                yield False
+                return
+        finally:
+            if fd is not None:
+                os.close(fd)
+    if fd is not None:
+        yield False
+        return
+    try:
+        yield True
+    finally:
+        claim_path.unlink(missing_ok=True)
+
+
+def _process_is_alive(pid: int) -> bool:
+    """Check claim-owner liveness without Windows ``os.kill(pid, 0)``.
+
+    CPython's Windows signal probe can leave the native process exit status
+    non-zero even when the probe succeeds.  That makes a completed pytest
+    process look failed to the supervisor.  A process-handle query is
+    side-effect-free and preserves stale-claim recovery.
+    """
+    if os.name != "nt":
+        try:
+            os.kill(pid, 0)
+            return True
+        except (PermissionError, ProcessLookupError, OSError, SystemError):
+            return False
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    process_query_limited_information = 0x1000
+    handle = kernel32.OpenProcess(process_query_limited_information, False, pid)
+    if not handle:
+        return False
+    try:
+        exit_code = ctypes.c_ulong()
+        if not kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code)):
+            # Retain an uninspectable live claim rather than reclaiming it.
+            raise PermissionError(ctypes.get_last_error(), "GetExitCodeProcess")
+        return exit_code.value == 259  # STILL_ACTIVE
+    finally:
+        kernel32.CloseHandle(handle)
+
+
+def write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # Multiple workers write the shared preflight artifact concurrently. A
+    # fixed sibling temp name lets one worker replace/delete another worker's
+    # temp file on Windows. Keep the replace atomic while making each temp
+    # path process-unique.
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.{time.time_ns()}.tmp")
+    tmp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def sha256_file(path: Path) -> str | None:
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+def validate_paid_evidence(model_id: str, snapshot_manifest: Path | None,
+                            billing_export: Path | None) -> dict[str, Any]:
+    """Validate local evidence required before any real G7 provider call.
+
+    This is a fail-closed machine gate, not an external attestation. The raw
+    manifest/export contents are never copied into the run report; only
+    structural checks and file hashes are retained. Structurally valid local
+    files remain explicitly marked as PRESENT_UNVERIFIED_EXTERNAL until an
+    independent reviewer verifies them.
+    """
+
+    def load_object(path: Path | None, kind: str) -> tuple[dict[str, Any] | None, list[str], str | None]:
+        errors: list[str] = []
+        if path is None:
+            errors.append(f"{kind}_required")
+            return None, errors, None
+        if not path.is_file():
+            errors.append(f"{kind}_not_found")
+            return None, errors, None
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            errors.append(f"{kind}_invalid_json")
+            return None, errors, sha256_file(path)
+        if not isinstance(value, dict):
+            errors.append(f"{kind}_must_be_object")
+            return None, errors, sha256_file(path)
+        return value, errors, sha256_file(path)
+
+    snapshot, snapshot_errors, snapshot_file_sha256 = load_object(snapshot_manifest, "model_snapshot_manifest")
+    billing, billing_errors, billing_file_sha256 = load_object(billing_export, "billing_export")
+    errors = [*snapshot_errors, *billing_errors]
+
+    snapshot_checks = {
+        "file_sha256": snapshot_file_sha256,
+        "model_id_matches": False,
+        "gateway_weight_fingerprint_present": False,
+        "snapshot_sha256_valid": False,
+    }
+    if snapshot is not None:
+        snapshot_checks["model_id_matches"] = snapshot.get("model_id") == model_id
+        if not snapshot_checks["model_id_matches"]:
+            errors.append("model_snapshot_model_id_mismatch")
+        fingerprint = snapshot.get("gateway_weight_fingerprint")
+        false_like = {"", "false", "none", "null", "n/a", "na", "unknown", "missing"}
+        snapshot_checks["gateway_weight_fingerprint_present"] = (
+            isinstance(fingerprint, str) and fingerprint.strip().casefold() not in false_like
+        )
+        if not snapshot_checks["gateway_weight_fingerprint_present"]:
+            errors.append("model_snapshot_gateway_weight_fingerprint_missing")
+        snapshot_checks["snapshot_sha256_valid"] = _valid_sha256(snapshot.get("snapshot_sha256"))
+        if not snapshot_checks["snapshot_sha256_valid"]:
+            errors.append("model_snapshot_sha256_invalid")
+
+    billing_checks = {
+        "file_sha256": billing_file_sha256,
+        "receipt_id_present": False,
+        "currency_usd": False,
+        "total_cost_usd_valid": False,
+        "exported_at_utc_valid": False,
+    }
+    if billing is not None:
+        receipt_id = billing.get("receipt_id")
+        billing_checks["receipt_id_present"] = isinstance(receipt_id, str) and bool(receipt_id.strip())
+        if not billing_checks["receipt_id_present"]:
+            errors.append("billing_receipt_id_missing")
+        currency = billing.get("currency")
+        billing_checks["currency_usd"] = isinstance(currency, str) and currency.upper() == "USD"
+        if not billing_checks["currency_usd"]:
+            errors.append("billing_currency_must_be_usd")
+        total_cost = billing.get("total_cost_usd")
+        billing_checks["total_cost_usd_valid"] = (
+            isinstance(total_cost, (int, float))
+            and not isinstance(total_cost, bool)
+            and math.isfinite(float(total_cost))
+            and float(total_cost) >= 0
+        )
+        if not billing_checks["total_cost_usd_valid"]:
+            errors.append("billing_total_cost_invalid")
+        exported_at = billing.get("exported_at_utc")
+        try:
+            parsed_exported_at = datetime.fromisoformat(exported_at) if isinstance(exported_at, str) else None
+        except ValueError:
+            parsed_exported_at = None
+        billing_checks["exported_at_utc_valid"] = (
+            parsed_exported_at is not None
+            and parsed_exported_at.tzinfo is not None
+            and parsed_exported_at.utcoffset() == timezone.utc.utcoffset(parsed_exported_at)
+        )
+        if not billing_checks["exported_at_utc_valid"]:
+            errors.append("billing_exported_at_utc_invalid")
+
+    return {
+        "required": True,
+        "evidence_status": "PRESENT_UNVERIFIED_EXTERNAL" if not errors else "MISSING_OR_INVALID",
+        "local_evidence_schema_valid": not errors,
+        "errors": errors,
+        "model_snapshot_manifest": {
+            "path": str(snapshot_manifest) if snapshot_manifest is not None else None,
+            "checks": snapshot_checks,
+        },
+        "billing_export": {
+            "path": str(billing_export) if billing_export is not None else None,
+            "checks": billing_checks,
+        },
+        "external_verification_claimed": False,
+        "scientific_truth_decision_made": False,
+    }
+
+
+def validate_pricing_evidence(model_id: str, base_url: str, pricing_file: Path | None,
+                              input_rate: float, output_rate: float) -> dict[str, Any]:
+    """Require an external, hash-linked price record before paid dispatch.
+
+    Local proxy rates are not a spending authorization.  The V3 protocol
+    therefore requires a separate machine-readable pricing artifact whose
+    verification status, model/base URL, USD rates, and effective interval
+    agree with the runner arguments.  The artifact is only a gate; its raw
+    contents are never sent to the model.
+    """
+    errors: list[str] = []
+    value: dict[str, Any] | None = None
+    file_hash = None
+    if pricing_file is None:
+        errors.append("pricing_evidence_required")
+    elif not pricing_file.is_file():
+        errors.append("pricing_evidence_not_found")
+    else:
+        file_hash = sha256_file(pricing_file)
+        try:
+            parsed = json.loads(pricing_file.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            parsed = None
+            errors.append("pricing_evidence_invalid_json")
+        if isinstance(parsed, dict):
+            value = parsed
+        elif parsed is not None:
+            errors.append("pricing_evidence_must_be_object")
+    if value is not None:
+        if value.get("verification_status") != "PROVIDER_VERIFIED":
+            errors.append("pricing_evidence_not_provider_verified")
+        if value.get("model_id") != model_id:
+            errors.append("pricing_model_id_mismatch")
+        if value.get("base_url", "").rstrip("/") != base_url.rstrip("/"):
+            errors.append("pricing_base_url_mismatch")
+        if str(value.get("currency", "")).upper() != "USD":
+            errors.append("pricing_currency_must_be_usd")
+        for field, observed in (("input_cost_per_1k", input_rate), ("output_cost_per_1k", output_rate)):
+            expected = value.get(field)
+            if not isinstance(expected, (int, float)) or isinstance(expected, bool) or not math.isfinite(float(expected)) or float(expected) <= 0:
+                errors.append(f"pricing_{field}_invalid")
+            elif abs(float(expected) - float(observed)) > 1e-12:
+                errors.append(f"pricing_{field}_argument_mismatch")
+        if not isinstance(value.get("source_url"), str) or not value["source_url"].strip():
+            errors.append("pricing_source_url_missing")
+        if not _valid_sha256(value.get("source_sha256")):
+            errors.append("pricing_source_sha256_invalid")
+        if not isinstance(value.get("effective_from_utc"), str) or not value["effective_from_utc"].strip():
+            errors.append("pricing_effective_from_missing")
+    return {
+        "required": True,
+        "file_sha256": file_hash,
+        "evidence_status": "PROVIDER_VERIFIED" if not errors else "MISSING_OR_INVALID",
+        "errors": errors,
+        "model_id": model_id,
+        "base_url": base_url,
+        "scientific_truth_decision_made": False,
+    }
+
+
+def existing_trace_sequence(path: Path) -> int:
+    """Return the last persisted sequence for an append-only retry trace."""
+    if not path.is_file():
+        return 0
+    values = readl(path)
+    sequences: list[int] = []
+    for index, value in enumerate(values, 1):
+        sequence = value.get("seq")
+        if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence < 1:
+            raise RuntimeError(f"existing trace has invalid sequence at line {index}: {path}")
+        sequences.append(sequence)
+    if len(sequences) != len(set(sequences)):
+        raise RuntimeError(f"existing trace has duplicate sequence values: {path}")
+    return max(sequences, default=0)
+
+
+def trace_path_for_retry(path: Path) -> tuple[Path, int]:
+    """Choose an append-safe trace path for a terminal retry.
+
+    Every non-empty trace is an immutable attempt, regardless of whether its
+    last event is ``RUN_END`` or whether its sequence values are valid. A
+    retry must therefore start in a fresh deterministic sibling directory;
+    appending to an interrupted/terminal history or reusing an older retry
+    would merge lifecycle attempts and make the resulting trace ambiguous.
+    Empty files are safe to initialize in place.
+    """
+    if not path.is_file() or path.stat().st_size == 0:
+        return path, 0
+
+    # Path selection happens before the worker's state claim in the normal
+    # runner.  Protect the check-and-reserve operation itself, otherwise two
+    # processes can both select retry-1 and later write competing attempts to
+    # the same path.  Reserving the directory (not the events file) keeps the
+    # returned file absent for callers while making the allocation atomic.
+    lock_path = path.parent.parent / f".{path.parent.name}.retry-selection.lock"
+    lock_fd: int | None = None
+    for _ in range(600):
+        try:
+            lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            time.sleep(0.005)
+    if lock_fd is None:
+        raise RuntimeError(f"retry trace path selection lock timeout: {path}")
+    try:
+        os.close(lock_fd)
+        for attempt in range(1, 100):
+            retry_dir = path.parent.parent / f"{path.parent.name}.retry-{attempt}"
+            retry_path = retry_dir / path.name
+            try:
+                retry_dir.mkdir(parents=True, exist_ok=False)
+            except FileExistsError:
+                continue
+            return retry_path, 0
+    finally:
+        try:
+            lock_path.unlink()
+        except FileNotFoundError:
+            pass
+    raise RuntimeError(f"could not find an append-safe retry trace path for {path}")
+
+
+def emit(path: Path, seq: int, run_id: str, event_type: str, status: str,
+         payload: dict[str, Any], *, parent_step_id: str | None = None) -> int:
+    seq += 1
+    if parent_step_id is None and event_type in {"MODEL_RESPONSE", "TOOL_RESULT", "TOOL_ERROR"}:
+        # Compatibility for direct callers/tests. Production call sites pass
+        # the exact request/call parent explicitly below.
+        parent_step_id = f"{run_id}:step-{seq - 1:06d}"
+    event = {
+        "seq": seq,
+        "event_id": f"{run_id}:event-{seq:06d}",
+        "step_id": f"{run_id}:step-{seq:06d}",
+        "attempt_id": path.parent.name,
+        "parent_step_id": parent_step_id,
+        "ts_utc": utc_now(),
+        "run_id": run_id,
+        "event_type": event_type,
+        "status": status,
+        "payload": payload,
+    }
+    append_jsonl(path, event)
+    return seq
+
+
+def parse_payload(content: str) -> dict[str, Any]:
+    value = extract_json(content)
+    if not isinstance(value, dict):
+        raise ValueError("provider response did not contain a JSON object")
+    decision = str(value.get("decision", value.get("final_decision", ""))).upper().strip()
+    if decision not in DECISIONS:
+        raise ValueError(f"invalid decision {decision!r}")
+    value["decision"] = decision
+    return value
+
+
+def validate_model_output_contract(value: dict[str, Any], *, checkpoint: bool) -> None:
+    expected_keys = CHECKPOINT_OUTPUT_KEYS if checkpoint else DIAGNOSTIC_OUTPUT_KEYS
+    if set(value) != expected_keys:
+        arm = "checkpoint" if checkpoint else "diagnostic"
+        raise ValueError(f"invalid {arm} output contract")
+    affected_claim_ids = value.get("affected_claim_ids")
+    if (
+        not isinstance(affected_claim_ids, list)
+        or any(not isinstance(claim_id, str) or not claim_id.strip()
+               for claim_id in affected_claim_ids)
+    ):
+        raise ValueError("invalid affected_claim_ids")
+    revised_claim = value.get("revised_claim")
+    if revised_claim is not None and not isinstance(revised_claim, str):
+        raise ValueError("invalid revised_claim")
+    supporting_evidence = value.get("supporting_evidence")
+    if not isinstance(supporting_evidence, str) or not supporting_evidence.strip():
+        raise ValueError("invalid supporting_evidence")
+    if not checkpoint and not isinstance(value.get("stages"), dict):
+        raise ValueError("invalid diagnostic stages")
+
+
+def normalize_stages(value: dict[str, Any]) -> dict[str, Any]:
+    stages = value.get("stages")
+    if not isinstance(stages, dict):
+        raise ValueError("missing stages object")
+    for stage in ("V", "L", "U", "Q"):
+        if stage not in stages or not isinstance(stages[stage], dict):
+            raise ValueError(f"missing stage {stage}")
+    if (
+        set(stages["V"]) != {"verdict"}
+        or stages["V"].get("verdict") not in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}
+    ):
+        raise ValueError("invalid V verdict")
+    l_stage = stages["L"]
+    if (
+        set(l_stage) != {"nodes", "edges"}
+        or not isinstance(l_stage.get("nodes"), list)
+        or not all(isinstance(node, str) and bool(node.strip()) for node in l_stage["nodes"])
+        or not isinstance(l_stage.get("edges"), list)
+        or not all(
+            isinstance(edge, dict)
+            and set(edge) == {"from", "to"}
+            and isinstance(edge["from"], str)
+            and bool(edge["from"].strip())
+            and isinstance(edge["to"], str)
+            and bool(edge["to"].strip())
+            for edge in l_stage["edges"]
+        )
+    ):
+        raise ValueError("invalid L stage")
+    u_stage = stages["U"]
+    if (
+        set(u_stage) != {"node_changes"}
+        or not isinstance(u_stage.get("node_changes"), list)
+        or not all(
+            isinstance(change, dict)
+            and set(change) == {"claim_id", "to_status"}
+            and isinstance(change["claim_id"], str)
+            and bool(change["claim_id"].strip())
+            and change["to_status"] in {"supported", "rejected", "uncertain"}
+            for change in u_stage["node_changes"]
+        )
+    ):
+        raise ValueError("invalid U stage")
+    q_stage = stages["Q"]
+    if set(q_stage) != {"verdict", "reason"}:
+        raise ValueError("invalid Q stage")
+    q_verdict = q_stage.get("verdict")
+    q_reason = q_stage.get("reason")
+    if (not isinstance(q_verdict, str) or not q_verdict.strip()
+            or not isinstance(q_reason, str) or not q_reason.strip()):
+        raise ValueError("invalid Q stage")
+    return stages
+
+
+def system_prompt(group: str) -> str:
+    if group == "G3":
+        protocol = ("You are the frozen G3 Tools+Iteration checkpoint/fork arm. Use only the bounded public-expression tools, "
+                    "and use a fixed second synthesis pass. Do not change the workflow based on hidden information.")
+    else:
+        protocol = ("You are the adaptive G4 checkpoint/fork arm. You may use only the bounded public-expression tools "
+                    "and may condition later public tool calls on their observable outputs.")
+    return f"""You are a real-provider participant in experiment g7_failure_localization, profile theory_benchmark.
+{protocol}
+The case is public and contains a scientific problem, claim, intervention, and public proof graph.
+Never access files, network, hidden answers, G6 private oracle records, prior G6 responses, or answer keys.
+For a checkpoint, reason from the public case only and return exactly one JSON object with exactly these four
+top-level fields: decision, affected_claim_ids, revised_claim, supporting_evidence. Do not include a stages field
+in a checkpoint response. For a diagnostic fork, the user message may contain staged V/L/U
+diagnostic information. Apply only the stages explicitly supplied, then return JSON with exactly:
+decision, affected_claim_ids, revised_claim, supporting_evidence, stages. stages must contain:
+V={{"verdict":"SUPPORTED|CONTRADICTED|INDETERMINATE"}},
+L={{"nodes":[claim_id strings],"edges":[{{"from":claim_id,"to":claim_id}}]}},
+U={{"node_changes":[{{"claim_id":claim_id,"to_status":"supported|rejected|uncertain"}}]}},
+and Q={{"verdict":string,"reason":string}}. Use empty arrays when there are no edges or
+node changes. Do not use decision labels such as REJECT in V.verdict, do not use arrow strings
+for L edges, and do not use an object/map for U.node_changes. decision values are MAINTAIN,
+REJECT, REVISE, or UNDETERMINED. Do not reveal hidden chain-of-thought."""
+
+
+def case_prompt(case: dict[str, Any]) -> str:
+    # cf_type and theory_family_id are runner/statistical metadata.  They are
+    # intentionally not exposed in the model-facing prompt: the G7 protocol
+    # allows them for routing and stratification, but not as predictive hints.
+    model_visible = case.get("model_visible")
+    if not isinstance(model_visible, dict):
+        raise ValueError("case model_visible must be an object")
+    return json.dumps({"g7_public_case": model_visible, "case_id": case["case_id"]},
+                      ensure_ascii=False)
+
+
+def _key_hits(text: str, keys: tuple[str, ...]) -> dict[str, int]:
+    folded = text.casefold()
+    return {key: folded.count(key.casefold()) for key in keys if key.casefold() in folded}
+
+
+def _valid_identifier(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _valid_sha256(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"[0-9a-fA-F]{64}", value))
+
+
+def _row_identifier(value: Any, index: int) -> str:
+    return value if isinstance(value, str) and value else f"row-{index}"
+
+
+def _label_contract_valid(row: dict[str, Any]) -> bool:
+    """Validate private V/L/U label shape before any provider can be called."""
+    v = row.get("v")
+    l = row.get("l")
+    u = row.get("u")
+    if not (
+        isinstance(v, dict)
+        and set(v) == {"verdict"}
+        and v.get("verdict") in {"SUPPORTED", "CONTRADICTED", "INDETERMINATE"}
+        and isinstance(l, dict)
+        and set(l) == {"nodes", "edges"}
+        and isinstance(l.get("nodes"), list)
+        and all(isinstance(node, str) and bool(node.strip()) for node in l["nodes"])
+        and isinstance(l.get("edges"), list)
+        and all(
+            isinstance(edge, dict)
+            and set(edge) == {"from", "to"}
+            and isinstance(edge["from"], str)
+            and bool(edge["from"].strip())
+            and isinstance(edge["to"], str)
+            and bool(edge["to"].strip())
+            for edge in l["edges"]
+        )
+        and isinstance(u, dict)
+        and set(u) == {"node_changes"}
+        and isinstance(u.get("node_changes"), list)
+        and all(
+            isinstance(change, dict)
+            and set(change) == {"claim_id", "to_status"}
+            and isinstance(change["claim_id"], str)
+            and bool(change["claim_id"].strip())
+            and change["to_status"] in {"supported", "rejected", "uncertain"}
+            for change in u["node_changes"]
+        )
+    ):
+        return False
+    return (
+        isinstance(row.get("eligible_u"), bool)
+        and isinstance(row.get("verifier_ref"), str)
+        and bool(row.get("verifier_ref"))
+    )
+
+
+def _formal_public_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        all(_valid_identifier(row.get(field)) for field in G7_PUBLIC_METADATA_FIELDS[:-2])
+        and _valid_sha256(row.get("source_g5_graph_sha256"))
+        and row.get("cf_type") in G7_CF_TYPES
+        and row.get("split") == G7_FORMAL_SPLIT
+        and row.get("verification_grade") in {"A", "B", "C"}
+        and isinstance(row.get("model_visible"), dict)
+    )
+
+
+def _formal_label_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        _label_contract_valid(row)
+        and all(_valid_identifier(row.get(field)) for field in G7_LABEL_METADATA_FIELDS[1:])
+        and _valid_sha256(row.get("source_public_case_sha256"))
+        and row.get("verification_grade") in {"A", "B", "C"}
+        and row.get("independent_verified") is True
+        and row.get("synthetic_demo") is False
+        and isinstance(row.get("verification_method"), str)
+        and bool(row.get("verification_method"))
+    )
+
+
+def _formal_plan_contract_valid(row: dict[str, Any]) -> bool:
+    return (
+        all(_valid_identifier(row.get(field)) for field in G7_PLAN_METADATA_FIELDS)
+        and row.get("experiment_id") == G7_EXPERIMENT_ID
+        and row.get("profile") == G7_PROFILE
+        and row.get("protocol_version") == G7_PROTOCOL_VERSION
+        and row.get("retry_protocol") == G7_RETRY_PROTOCOL
+        and isinstance(row.get("replicate"), int)
+        and not isinstance(row.get("replicate"), bool)
+        and row.get("replicate") >= 0
+        and isinstance(row.get("arm_eligible_for_diagnostic"), bool)
+    )
+
+
+def _public_case_sha256(row: dict[str, Any]) -> str:
+    return hashlib.sha256(
+        json.dumps(row, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+
+
+def _canonical_rows_sha256(rows: list[dict[str, Any]]) -> str:
+    payload = "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+        for row in rows
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def protocol_preflight(
+    public_rows: list[dict[str, Any]],
+    label_rows: list[dict[str, Any]],
+    plan_rows: list[dict[str, Any]],
+    worker_count: int,
+    require_complete_plan: bool = False,
+    require_formal_input_contract: bool = False,
+) -> dict[str, Any]:
+    """Validate the exact model-facing G7 contract before provider creation."""
+
+    public = {row.get("case_id"): row for row in public_rows if _valid_identifier(row.get("case_id"))}
+    labels = {row.get("case_id"): row for row in label_rows if _valid_identifier(row.get("case_id"))}
+    prompt_parts: list[str] = []
+    diagnostic_prompt_parts: list[str] = []
+    invalid_model_visible: list[Any] = []
+    for index, row in enumerate(plan_rows):
+        case_id = row.get("case_id")
+        if not _valid_identifier(case_id) or case_id not in public:
+            continue
+        try:
+            prompt_parts.append(case_prompt(public[case_id]))
+        except (KeyError, TypeError, ValueError):
+            invalid_model_visible.append(_row_identifier(case_id, index))
+            continue
+        if case_id in labels and _label_contract_valid(labels[case_id]):
+            try:
+                injection = injection_for(row, labels[case_id])
+                diagnostic_prompt_parts.append(json.dumps({
+                    "diagnostic_arm": row.get("diagnostic_arm"),
+                    "inject_stages": row.get("inject_stages"),
+                    "diagnostic_information": model_visible_diagnostic_information(injection),
+                }, ensure_ascii=False))
+            except (KeyError, TypeError, ValueError):
+                pass
+    prompt_text = "\n".join(prompt_parts)
+    model_visible_text = "\n".join(prompt_parts + diagnostic_prompt_parts)
+    missing_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _valid_identifier(row.get("case_id")) or row.get("case_id") not in public
+    })
+    missing_labels = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _valid_identifier(row.get("case_id")) or row.get("case_id") not in labels
+    })
+    required_plan_fields = ("run_id", "checkpoint_id", "case_id")
+    missing_required_plan_fields = sorted(
+        field for field in required_plan_fields if any(not row.get(field) for row in plan_rows)
+    )
+    invalid_plan_rows: list[str] = []
+    for index, row in enumerate(plan_rows):
+        run_id = _row_identifier(row.get("run_id"), index)
+        stages = row.get("inject_stages")
+        stages_valid = (
+            isinstance(stages, list)
+            and all(isinstance(stage, str) for stage in stages)
+            and len(stages) == len(set(stages))
+            and set(stages).issubset(G7_STAGES)
+        )
+        arm_name = row.get("diagnostic_arm")
+        arm_contract = G7_ARM_CONTRACT.get(arm_name) if isinstance(arm_name, str) else None
+        arm_matches = (
+            arm_contract is not None
+            and isinstance(row.get("group_id"), str)
+            and row.get("group_id") in G7_GROUPS
+            and stages_valid
+            and tuple(stages) == arm_contract
+        )
+        if (
+            any(field in row and not _valid_identifier(row.get(field))
+                for field in ("run_id", "checkpoint_id", "case_id"))
+            or
+            not isinstance(row.get("group_id"), str)
+            or row.get("group_id") not in G7_GROUPS
+            or not isinstance(row.get("diagnostic_arm"), str)
+            or not stages_valid
+            or not arm_matches
+        ):
+            invalid_plan_rows.append(run_id)
+    invalid_label_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(label_rows)
+        if not _valid_identifier(row.get("case_id")) or not _label_contract_valid(row)
+    })
+    invalid_design_public_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(public_rows)
+        if not _valid_identifier(row.get("case_id")) or not _formal_public_contract_valid(row)
+    })
+    invalid_design_label_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(label_rows)
+        if not _valid_identifier(row.get("case_id")) or not _formal_label_contract_valid(row)
+    })
+    invalid_design_plan_rows = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if not _formal_plan_contract_valid(row)
+    })
+    formal_retry_scope_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if row.get("retry_scope") != G7_FORMAL_RETRY_SCOPE
+    })
+    design_plan_mapping_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            _valid_identifier(row.get("case_id"))
+            and row.get("case_id") in public
+            and any(row.get(field) != public[row["case_id"]].get(field)
+                    for field in ("paired_set_id", "theory_family_id", "cf_type", "split"))
+        )
+    })
+    design_plan_group_arm_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            isinstance(row.get("group_id"), str)
+            and row.get("group_id") in G7_SOURCE_G6_ARM_BY_GROUP
+            and row.get("source_g6_arm_id")
+                != G7_SOURCE_G6_ARM_BY_GROUP[row["group_id"]]
+        )
+    })
+    design_label_public_hash_mismatches = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(label_rows)
+        if (
+            _valid_identifier(row.get("case_id"))
+            and row.get("case_id") in public
+            and row.get("source_public_case_sha256") != _public_case_sha256(public[row["case_id"]])
+        )
+    })
+    ineligible_u_diagnostic_rows = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            isinstance(row.get("inject_stages"), list)
+            and "U" in row.get("inject_stages", [])
+            and _valid_identifier(row.get("case_id"))
+            and row.get("case_id") in labels
+            and labels[row["case_id"]].get("eligible_u") is not True
+            and row.get("arm_eligible_for_diagnostic") is not False
+        )
+    })
+    plan_label_eligibility_mismatches = sorted({
+        _row_identifier(row.get("run_id"), index)
+        for index, row in enumerate(plan_rows)
+        if (
+            _valid_identifier(row.get("case_id"))
+            and row.get("case_id") in labels
+            and isinstance(labels[row["case_id"]].get("eligible_u"), bool)
+            and isinstance(row.get("inject_stages"), list)
+            and row.get("arm_eligible_for_diagnostic") is not (
+                "U" not in row.get("inject_stages", [])
+                or labels[row["case_id"]]["eligible_u"] is True
+            )
+        )
+    })
+    checkpoint_arms: dict[str, set[str]] = {}
+    checkpoint_bindings: dict[str, set[str]] = {}
+    case_group_arms: dict[tuple[str, str], list[str]] = {}
+    case_group_checkpoints: dict[tuple[str, str], set[str]] = {}
+    case_group_source_checkpoints: dict[tuple[str, str], set[str]] = {}
+    for row in plan_rows:
+        checkpoint_id = row.get("checkpoint_id")
+        case_id = row.get("case_id")
+        group_id = row.get("group_id")
+        arm = row.get("diagnostic_arm")
+        if (
+            _valid_identifier(checkpoint_id)
+            and _valid_identifier(case_id)
+            and isinstance(group_id, str)
+            and group_id in G7_GROUPS
+            and isinstance(arm, str)
+            and arm in G7_ARM_CONTRACT
+        ):
+            checkpoint_arms.setdefault(checkpoint_id, set()).add(arm)
+            # A source checkpoint may be shared by the G3/G4 diagnostic forks
+            # of one public case, but never by two different public cases.
+            checkpoint_bindings.setdefault(checkpoint_id, set()).add(case_id)
+            case_group = (case_id, group_id)
+            case_group_arms.setdefault(case_group, []).append(arm)
+            case_group_checkpoints.setdefault(case_group, set()).add(checkpoint_id)
+            source_checkpoint_id = row.get("source_checkpoint_id")
+            if _valid_identifier(source_checkpoint_id):
+                case_group_source_checkpoints.setdefault(case_group, set()).add(
+                    source_checkpoint_id
+                )
+    expected_arms = sorted(G7_ARM_CONTRACT)
+    incomplete_arm_checkpoints = sorted(
+        checkpoint_id for checkpoint_id, arms in checkpoint_arms.items()
+        if sorted(arms) != expected_arms
+    )
+    expected_case_groups = {
+        (row.get("case_id"), group)
+        for row in public_rows
+        if _valid_identifier(row.get("case_id"))
+        for group in sorted(G7_GROUPS)
+    }
+    incomplete_case_group_coverage = sorted(
+        f"{case_id}/{group_id}"
+        for case_id, group_id in expected_case_groups
+        if (
+            len(case_group_checkpoints.get((case_id, group_id), set())) != 1
+            or sorted(case_group_arms.get((case_id, group_id), [])) != expected_arms
+        )
+    )
+    duplicate_case_group_checkpoints = sorted(
+        f"{case_id}/{group_id}"
+        for (case_id, group_id), checkpoints in case_group_checkpoints.items()
+        if len(checkpoints) > 1
+    )
+    source_checkpoint_case_groups = sorted(
+        f"{case_id}/{group_id}"
+        for (case_id, group_id), checkpoints in case_group_source_checkpoints.items()
+        if len(checkpoints) > 1
+    )
+    checkpoint_identity_collisions = sorted(
+        checkpoint_id
+        for checkpoint_id, bindings in checkpoint_bindings.items()
+        if len(bindings) > 1
+    )
+    invalid_public_cases = sorted({
+        _row_identifier(row.get("case_id"), index)
+        for index, row in enumerate(public_rows)
+        if not _valid_identifier(row.get("case_id"))
+    })
+    run_ids = [row.get("run_id") for row in plan_rows if _valid_identifier(row.get("run_id"))]
+    duplicate_plan_ids = len(run_ids) - len(set(run_ids))
+    source_run_ids = [
+        row.get("source_run_id") for row in plan_rows
+        if _valid_identifier(row.get("source_run_id"))
+    ]
+    duplicate_source_run_ids = sorted({
+        source_run_id for source_run_id in source_run_ids
+        if source_run_ids.count(source_run_id) > 1
+    })
+    public_case_ids = [row.get("case_id") for row in public_rows if _valid_identifier(row.get("case_id"))]
+    label_case_ids = [row.get("case_id") for row in label_rows if _valid_identifier(row.get("case_id"))]
+    duplicate_public_case_ids = len(public_case_ids) - len(set(public_case_ids))
+    duplicate_label_case_ids = len(label_case_ids) - len(set(label_case_ids))
+    public_case_id_set = set(public_case_ids)
+    label_case_id_set = set(label_case_ids)
+    formal_public_label_missing = sorted(public_case_id_set - label_case_id_set)
+    formal_public_label_extra = sorted(label_case_id_set - public_case_id_set)
+    family_case_counts: dict[str, int] = {}
+    family_cf_types: dict[str, set[str]] = {}
+    family_paired_sets: dict[str, set[str]] = {}
+    paired_set_families: dict[str, set[str]] = {}
+    for row in public_rows:
+        family = row.get("theory_family_id")
+        paired_set = row.get("paired_set_id")
+        cf_type = row.get("cf_type")
+        if not (_valid_identifier(family) and _valid_identifier(paired_set)):
+            continue
+        family_case_counts[family] = family_case_counts.get(family, 0) + 1
+        family_cf_types.setdefault(family, set()).add(cf_type)
+        family_paired_sets.setdefault(family, set()).add(paired_set)
+        paired_set_families.setdefault(paired_set, set()).add(family)
+    formal_family_cf_coverage_mismatches = sorted(
+        family for family, cf_types in family_cf_types.items()
+        if cf_types != set(G7_CF_TYPES)
+    )
+    formal_family_case_count_mismatches = sorted(
+        family for family, count in family_case_counts.items()
+        if count != len(G7_CF_TYPES)
+    )
+    formal_family_paired_set_mismatches = sorted(
+        family for family, paired_sets in family_paired_sets.items()
+        if len(paired_sets) != 1
+    )
+    formal_paired_set_family_mismatches = sorted(
+        paired_set for paired_set, families in paired_set_families.items()
+        if len(families) != 1
+    )
+    formal_family_ids = {
+        row.get("theory_family_id")
+        for row in public_rows
+        if _valid_identifier(row.get("theory_family_id"))
+    }
+    formal_family_set_missing = sorted(G7_FORMAL_THEORY_FAMILIES - formal_family_ids)
+    formal_family_set_extra = sorted(formal_family_ids - G7_FORMAL_THEORY_FAMILIES)
+    formal_case_ids = {
+        row.get("case_id")
+        for row in public_rows
+        if _valid_identifier(row.get("case_id"))
+    }
+    formal_case_set_missing = sorted(G7_FORMAL_CASE_IDS - formal_case_ids)
+    formal_case_set_extra = sorted(formal_case_ids - G7_FORMAL_CASE_IDS)
+    formal_input_hashes = {
+        "public": _canonical_rows_sha256(public_rows),
+        "labels": _canonical_rows_sha256(label_rows),
+        "plan": _canonical_rows_sha256(plan_rows),
+    }
+    formal_input_hash_mismatches = sorted(
+        name for name, expected in G7_FORMAL_INPUT_CANONICAL_SHA256.items()
+        if formal_input_hashes[name] != expected
+    )
+    errors: list[str] = []
+    if not public_rows or not label_rows or not plan_rows:
+        errors.append("public_labels_plan_must_be_nonempty")
+    if invalid_public_cases:
+        errors.append("invalid_public_case_ids")
+    if missing_cases:
+        errors.append("plan_case_missing_from_public")
+    if missing_labels:
+        errors.append("plan_case_missing_from_labels")
+    if missing_required_plan_fields:
+        errors.append("plan_required_fields_missing")
+    if invalid_plan_rows:
+        errors.append("invalid_plan_contract")
+    if invalid_label_cases:
+        errors.append("invalid_label_contract")
+    if require_complete_plan and invalid_design_public_cases:
+        errors.append("invalid_g7_public_metadata")
+    if require_complete_plan and invalid_design_label_cases:
+        errors.append("invalid_g7_label_metadata")
+    if require_complete_plan and invalid_design_plan_rows:
+        errors.append("invalid_g7_plan_metadata")
+    if require_complete_plan and design_plan_mapping_mismatches:
+        errors.append("g7_plan_public_mapping_mismatch")
+    if require_complete_plan and design_plan_group_arm_mismatches:
+        errors.append("g7_plan_group_arm_mismatch")
+    if require_complete_plan and design_label_public_hash_mismatches:
+        errors.append("g7_label_public_hash_mismatch")
+    if require_complete_plan and ineligible_u_diagnostic_rows:
+        errors.append("ineligible_u_diagnostic_arm")
+    if require_complete_plan and plan_label_eligibility_mismatches:
+        errors.append("g7_plan_label_eligibility_mismatch")
+    if require_complete_plan and incomplete_arm_checkpoints:
+        errors.append("incomplete_arm_coverage")
+    if require_complete_plan and incomplete_case_group_coverage:
+        errors.append("incomplete_case_group_coverage")
+    if require_complete_plan and duplicate_case_group_checkpoints:
+        errors.append("duplicate_case_group_checkpoint")
+    if require_complete_plan and source_checkpoint_case_groups:
+        errors.append("g7_plan_source_checkpoint_mismatch")
+    if require_complete_plan and checkpoint_identity_collisions:
+        errors.append("checkpoint_identity_collision")
+    if require_formal_input_contract and (
+        formal_public_label_missing or formal_public_label_extra
+    ):
+        errors.append("g7_public_label_case_set_mismatch")
+    if require_formal_input_contract and formal_retry_scope_mismatches:
+        errors.append("invalid_g7_plan_metadata")
+    if require_formal_input_contract and duplicate_source_run_ids:
+        errors.append("g7_formal_source_run_id_collision")
+    if require_formal_input_contract and formal_family_cf_coverage_mismatches:
+        errors.append("g7_public_family_cf_coverage_mismatch")
+    if require_formal_input_contract and formal_family_case_count_mismatches:
+        errors.append("g7_public_family_case_count_mismatch")
+    if require_formal_input_contract and (
+        formal_family_paired_set_mismatches or formal_paired_set_family_mismatches
+    ):
+        errors.append("g7_public_pair_lineage_mismatch")
+    if require_formal_input_contract and (
+        formal_family_set_missing or formal_family_set_extra
+    ):
+        errors.append("g7_public_formal_family_set_mismatch")
+    if require_formal_input_contract and (
+        formal_case_set_missing or formal_case_set_extra
+    ):
+        errors.append("g7_public_formal_case_set_mismatch")
+    if require_formal_input_contract and formal_input_hash_mismatches:
+        errors.append("g7_formal_input_hash_mismatch")
+    if duplicate_plan_ids:
+        errors.append("duplicate_run_id")
+    if duplicate_public_case_ids:
+        errors.append("duplicate_public_case_id")
+    if duplicate_label_case_ids:
+        errors.append("duplicate_label_case_id")
+    if invalid_model_visible:
+        errors.append("invalid_model_visible")
+    if worker_count < 1 or worker_count > 16:
+        errors.append("worker_count_out_of_range")
+    routing_hits = _key_hits(model_visible_text, ROUTING_METADATA_KEYS)
+    forbidden_hits = _key_hits(model_visible_text, FORBIDDEN_MODEL_KEYS)
+    if routing_hits:
+        errors.append("routing_metadata_in_model_prompt")
+    if forbidden_hits:
+        errors.append("private_oracle_metadata_in_model_prompt")
+    return {
+        "audit_version": "g7-protocol-preflight-v2",
+        "provider_calls_made": False,
+        "formal_run_allowed_by_protocol": not errors,
+        "errors": errors,
+        "counts": {
+            "public_cases": len(public_rows),
+            "labels": len(label_rows),
+            "plan_rows": len(plan_rows),
+            "missing_cases": len(missing_cases),
+            "missing_labels": len(missing_labels),
+            "missing_required_plan_fields": missing_required_plan_fields,
+            "invalid_plan_rows": sorted(set(invalid_plan_rows)),
+            "invalid_public_case_ids": invalid_public_cases,
+            "invalid_label_cases": invalid_label_cases,
+            "invalid_g7_public_metadata": invalid_design_public_cases,
+            "invalid_g7_label_metadata": invalid_design_label_cases,
+            "invalid_g7_plan_metadata": invalid_design_plan_rows,
+            "g7_plan_public_mapping_mismatches": design_plan_mapping_mismatches,
+            "g7_plan_group_arm_mismatches": design_plan_group_arm_mismatches,
+            "g7_label_public_hash_mismatches": design_label_public_hash_mismatches,
+            "ineligible_u_diagnostic_rows": ineligible_u_diagnostic_rows,
+            "g7_plan_label_eligibility_mismatches": plan_label_eligibility_mismatches,
+            "incomplete_arm_checkpoints": incomplete_arm_checkpoints,
+            "expected_arms_per_checkpoint": expected_arms,
+            "expected_case_group_coverage": sorted(
+                f"{case_id}/{group_id}" for case_id, group_id in expected_case_groups
+            ),
+            "incomplete_case_group_coverage": incomplete_case_group_coverage,
+            "duplicate_case_group_checkpoints": duplicate_case_group_checkpoints,
+            "g7_plan_source_checkpoint_mismatches": source_checkpoint_case_groups,
+            "checkpoint_identity_collisions": checkpoint_identity_collisions,
+            "require_complete_plan": require_complete_plan,
+            "duplicate_run_ids": duplicate_plan_ids,
+            "duplicate_public_case_ids": duplicate_public_case_ids,
+            "duplicate_label_case_ids": duplicate_label_case_ids,
+            "g7_public_label_case_set_mismatch": {
+                "missing_labels_for_public": formal_public_label_missing,
+                "extra_labels_not_in_public": formal_public_label_extra,
+            },
+            "g7_formal_retry_scope_mismatches": formal_retry_scope_mismatches,
+            "g7_formal_source_run_id_collisions": duplicate_source_run_ids,
+            "g7_public_family_cf_coverage_mismatches": formal_family_cf_coverage_mismatches,
+            "g7_public_family_case_count_mismatches": formal_family_case_count_mismatches,
+            "g7_public_family_paired_set_mismatches": formal_family_paired_set_mismatches,
+            "g7_public_paired_set_family_mismatches": formal_paired_set_family_mismatches,
+            "g7_public_formal_family_set_mismatch": {
+                "missing": formal_family_set_missing,
+                "extra": formal_family_set_extra,
+            },
+            "g7_public_formal_case_set_mismatch": {
+                "missing": formal_case_set_missing,
+                "extra": formal_case_set_extra,
+            },
+            "g7_formal_input_hashes": formal_input_hashes,
+            "g7_formal_input_hash_mismatches": formal_input_hash_mismatches,
+            "require_formal_input_contract": require_formal_input_contract,
+            "invalid_model_visible_cases": sorted(set(invalid_model_visible)),
+            "unique_checkpoint_ids": len({
+                row.get("checkpoint_id") for row in plan_rows
+                if _valid_identifier(row.get("checkpoint_id"))
+            }),
+        },
+        "routing_metadata_model_prompt_hits": routing_hits,
+        "forbidden_model_prompt_hits": forbidden_hits,
+        "scientific_truth_decision_made": False,
+    }
+
+
+def public_tool_loop(provider: OpenAICompatibleProvider, messages: list[dict[str, Any]],
+                     group: str, limits: "Limits", event_path: Path, trace_id: str,
+                     seq: int, checkpoint: bool) -> tuple[dict[str, Any], int]:
+    max_calls = 2 if group == "G3" else 8
+    tools = TOOLS
+    parsed = None
+    normal_calls = 0
+    request_calls = 0
+    format_retry_used = False
+    format_retry_pending = False
+    pending_model_request_step: str | None = None
+    pending_tool_call_step: str | None = None
+    retry_instruction = CHECKPOINT_FORMAT_RETRY_INSTRUCTION if checkpoint else FORMAT_RETRY_INSTRUCTION
+    while normal_calls < max_calls or format_retry_pending:
+        is_format_retry = format_retry_pending
+        format_retry_pending = False
+        if not is_format_retry:
+            normal_calls += 1
+        request_calls += 1
+        if group == "G3" and normal_calls == 2 and not is_format_retry:
+            messages.append({"role": "user", "content": "Perform the fixed second synthesis pass. Return only the required JSON."})
+        limits.before_model()
+        seq = emit(event_path, seq, trace_id, "MODEL_REQUEST", "RUNNING",
+                   {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
+                    "messages": messages, "tools": tools})
+        pending_model_request_step = f"{trace_id}:step-{seq:06d}"
+        response = provider.complete(messages, tools=tools)
+        limits.consume(response)
+        seq = emit(event_path, seq, trace_id, "MODEL_RESPONSE", "COMPLETED",
+                   {"call_index": request_calls, "checkpoint": checkpoint, "format_retry": is_format_retry,
+                    "content": response.content,
+                    "tool_calls": response.tool_calls, "usage": response.usage.__dict__,
+                    "metadata": response.metadata}, parent_step_id=pending_model_request_step)
+        pending_model_request_step = None
+        if response.tool_calls:
+            messages.append({"role": "assistant", "content": response.content, "tool_calls": response.tool_calls})
+            for tool_call in response.tool_calls:
+                fn = tool_call.get("function", tool_call)
+                name = str(fn.get("name", ""))
+                args = parse_tool_args(fn.get("arguments", {}))
+                limits.before_tool()
+                seq = emit(event_path, seq, trace_id, "TOOL_CALL", "RUNNING",
+                           {"tool_name": name, "tool_arguments": args})
+                pending_tool_call_step = f"{trace_id}:step-{seq:06d}"
+                try:
+                    result = execute_tool(name, args)
+                    tool_status = "COMPLETED"
+                except Exception as exc:
+                    result = {"error_type": type(exc).__name__, "error": str(exc)}
+                    tool_status = "FAILED"
+                seq = emit(event_path, seq, trace_id, "TOOL_RESULT", tool_status,
+                           {"tool_name": name, "tool_result": result}, parent_step_id=pending_tool_call_step)
+                pending_tool_call_step = None
+                messages.append({"role": "tool", "tool_call_id": tool_call.get("id", f"tool-{limits.tool_calls}"),
+                                 "name": name, "content": json.dumps(result, ensure_ascii=False)})
+            if normal_calls >= max_calls and not format_retry_used:
+                format_retry_used = True
+                messages.append({"role": "user", "content": retry_instruction})
+                seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
+                           {"reason": "tool_loop_reached_workflow_call_limit"})
+                format_retry_pending = True
+            continue
+
+        try:
+            candidate = parse_payload(response.content)
+            validate_model_output_contract(candidate, checkpoint=checkpoint)
+            if not checkpoint:
+                normalize_stages(candidate)
+            parsed = candidate
+        except ValueError as exc:
+            if format_retry_used:
+                raise
+            format_retry_used = True
+            messages.append({"role": "user", "content": retry_instruction})
+            seq = emit(event_path, seq, trace_id, "FORMAT_RETRY_SCHEDULED", "COMPLETED",
+                       {"reason": str(exc)})
+            format_retry_pending = True
+            continue
+
+        if group == "G3" and normal_calls < 2:
+            continue
+        if checkpoint or normal_calls >= 2:
+            break
+    if parsed is None:
+        raise ValueError("no valid JSON response")
+    return parsed, seq
+
+
+@dataclass
+class Limits:
+    max_model_calls: int
+    max_tool_calls: int
+    max_total_tokens: int
+    max_cost_usd: float
+    model_calls: int = 0
+    tool_calls: int = 0
+    total_tokens: int = 0
+    cost_usd: float = 0.0
+
+    def before_model(self) -> None:
+        if self.model_calls >= self.max_model_calls:
+            raise RuntimeError("global model-call hard limit exceeded")
+        if self.total_tokens >= self.max_total_tokens or self.cost_usd >= self.max_cost_usd:
+            raise RuntimeError("G7 hard budget exceeded before model call")
+        self.model_calls += 1
+
+    def before_tool(self) -> None:
+        if self.tool_calls >= self.max_tool_calls:
+            raise RuntimeError("global tool-call hard limit exceeded")
+        self.tool_calls += 1
+
+    def consume(self, response: ProviderResponse) -> None:
+        self.total_tokens += int(response.usage.input_tokens) + int(response.usage.output_tokens)
+        self.cost_usd += float(response.usage.cost_usd)
+        if self.total_tokens > self.max_total_tokens or self.cost_usd > self.max_cost_usd:
+            raise RuntimeError("G7 hard budget exceeded")
+
+
+def effective_worker_cost_cap(worker_count: int, worker_cap_usd: float,
+                              aggregate_cap_usd: float | None) -> float:
+    """Return a worker cap whose sum cannot exceed the declared aggregate cap.
+
+    A multi-worker paid run must state its aggregate ceiling explicitly.  The
+    historical runner only enforced ``worker_cap_usd`` independently, which
+    could multiply the intended ceiling by the worker count.
+    """
+    if worker_count < 1:
+        raise ValueError("worker_count must be positive")
+    if not math.isfinite(worker_cap_usd) or worker_cap_usd <= 0:
+        raise ValueError("worker cost cap must be a finite positive number")
+    if worker_count > 1 and aggregate_cap_usd is None:
+        raise ValueError("multi-worker G7 requires an explicit aggregate cost cap")
+    if aggregate_cap_usd is None:
+        return worker_cap_usd
+    if not math.isfinite(aggregate_cap_usd) or aggregate_cap_usd <= 0:
+        raise ValueError("aggregate cost cap must be a finite positive number")
+    return min(worker_cap_usd, aggregate_cap_usd / worker_count)
+
+
+def persisted_usage(out: Path, input_rate: float, output_rate: float, max_output_tokens: int,
+                    trace_ids: set[str] | None = None) -> dict[str, float | int]:
+    usage = {"model_calls": 0, "tool_calls": 0, "total_tokens": 0, "cost_usd": 0.0, "reserved_cost_usd": 0.0}
+    for path in out.glob("**/*.jsonl"):
+        for event in readl(path):
+            if trace_ids is not None and str(event.get("run_id", "")) not in trace_ids:
+                continue
+            typ = event.get("event_type")
+            if typ == "MODEL_REQUEST":
+                usage["model_calls"] += 1
+                messages = event.get("payload", {}).get("messages", [])
+                usage["reserved_cost_usd"] += (max(1, len(json.dumps(messages, ensure_ascii=False).split())) / 1000) * input_rate
+                usage["reserved_cost_usd"] += (max_output_tokens / 1000) * output_rate
+            elif typ == "TOOL_CALL":
+                usage["tool_calls"] += 1
+            elif typ == "MODEL_RESPONSE":
+                u = event.get("payload", {}).get("usage", {})
+                usage["total_tokens"] += int(u.get("input_tokens", 0)) + int(u.get("output_tokens", 0))
+                usage["cost_usd"] += float(u.get("cost_usd", 0.0))
+    return usage
+
+
+def injection_for(row: dict[str, Any], label: dict[str, Any]) -> dict[str, Any]:
+    stages = row["inject_stages"]
+    injection: dict[str, Any] = {
+        "applied_stages": [],
+        "source": "ORACLE_ASSISTED_DIAGNOSIS" if stages else "D0_NEUTRAL_PLACEHOLDER",
+    }
+    if stages:
+        injection["label_source"] = "independently_verified_g7_local_labels"
+    if "V" in stages:
+        injection["V"] = {"verdict": label["v"]["verdict"], "verifier_ref": label["verifier_ref"]}
+        injection["applied_stages"].append("V")
+    if "L" in stages:
+        injection["L"] = {"nodes": label["l"]["nodes"], "edges": label["l"]["edges"], "verifier_ref": label["verifier_ref"]}
+        injection["applied_stages"].append("L")
+    if "U" in stages:
+        injection["U"] = {"node_changes": label["u"]["node_changes"], "eligible": label["eligible_u"],
+                           "reason": label.get("u_ineligibility_reason"), "verifier_ref": label["verifier_ref"]}
+        injection["applied_stages"].append("U")
+    return injection
+
+
+def model_visible_diagnostic_information(injection: dict[str, Any]) -> dict[str, Any]:
+    """Return only the preregistered V/L/U labels for the model-facing message.
+
+    Provenance, eligibility, and source markers are retained in the append-only
+    ``INJECTION_APPLIED`` audit event, but are not experimental information
+    supplied to the model. This keeps oracle-assisted diagnosis limited to the
+    requested intermediate labels rather than exposing audit metadata.
+    """
+    visible: dict[str, Any] = {}
+    if isinstance(injection.get("V"), dict):
+        visible["V"] = {"verdict": injection["V"].get("verdict")}
+    if isinstance(injection.get("L"), dict):
+        visible["L"] = {
+            "nodes": injection["L"].get("nodes", []),
+            "edges": injection["L"].get("edges", []),
+        }
+    if isinstance(injection.get("U"), dict):
+        visible["U"] = {"node_changes": injection["U"].get("node_changes", [])}
+    return visible
+
+
+def main() -> int:
+    p = argparse.ArgumentParser()
+    p.add_argument("--public", type=Path, required=True)
+    p.add_argument("--labels", type=Path, required=True)
+    p.add_argument("--plan", type=Path, required=True)
+    p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--model-id", required=True)
+    p.add_argument("--key-file", type=Path, required=True)
+    p.add_argument("--base-url", default="https://token.ctflow.cn/v1")
+    p.add_argument("--allow-paid", action="store_true")
+    p.add_argument(
+        "--allow-unverified-paid-evidence",
+        action="store_true",
+        help=(
+            "explicitly authorize a non-confirmatory paid pilot when external "
+            "model-weight and billing evidence is unavailable; scientific release remains closed"
+        ),
+    )
+    p.add_argument(
+        "--allow-user-authorized-unverified-pricing",
+        action="store_true",
+        help=(
+            "explicit user authorization to dispatch a non-confirmatory pilot "
+            "with local proxy rates when provider pricing evidence is unavailable"
+        ),
+    )
+    p.add_argument("--model-snapshot-manifest", type=Path)
+    p.add_argument("--billing-export", type=Path)
+    p.add_argument("--pricing-evidence", type=Path,
+                   help="required provider-verified price artifact; local proxy rates alone are rejected")
+    p.add_argument("--worker-index", type=int, default=0)
+    p.add_argument("--worker-count", type=int, default=1)
+    p.add_argument(
+        "--run-ids-file", type=Path,
+        help="optional newline-delimited run_id/JSONL target list; reruns only these states",
+    )
+    p.add_argument("--limit", type=int, default=0)
+    p.add_argument("--provider-retries", type=int, default=0)
+    p.add_argument("--provider-timeout", type=float, default=60)
+    p.add_argument("--input-cost-per-1k", type=float, default=0.001)
+    p.add_argument("--output-cost-per-1k", type=float, default=0.003)
+    p.add_argument("--max-model-calls", type=int, default=4608)
+    p.add_argument("--max-tool-calls", type=int, default=3456)
+    p.add_argument("--max-total-tokens", type=int, default=4608000)
+    p.add_argument("--max-cost-usd", type=float, default=200.0)
+    p.add_argument("--aggregate-max-cost-usd", type=float)
+    p.add_argument("--cost-ledger", type=Path,
+                   help="required atomic ledger for every paid worker request")
+    p.add_argument("--historic-cost-usd", type=float,
+                   help="explicit provider-proven historical cost entered once in the ledger")
+    p.add_argument("--historic-g7-cost-usd", type=float,
+                   help="explicit provider-proven historical G7 cost entered once in the ledger")
+    p.add_argument(
+        "--prospective-cohort",
+        action="store_true",
+        help=(
+            "run a newly sealed append-only cohort with the same structural "
+            "G7 contract; do not require the historical formal family/case/hash set"
+        ),
+    )
+    args = p.parse_args()
+    if not args.allow_paid:
+        raise SystemExit("real G7 requires explicit --allow-paid")
+    if args.worker_count < 1 or args.worker_count > 16 or not 0 <= args.worker_index < args.worker_count:
+        raise SystemExit("worker_count must be between 1 and 16 and worker_index must be in range")
+    try:
+        effective_max_cost_usd = effective_worker_cost_cap(
+            args.worker_count, args.max_cost_usd, args.aggregate_max_cost_usd
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    public_rows = readl(args.public)
+    label_rows = readl(args.labels)
+    plan = readl(args.plan)
+    preflight = protocol_preflight(
+        public_rows,
+        label_rows,
+        plan,
+        args.worker_count,
+        require_complete_plan=True,
+        require_formal_input_contract=not args.prospective_cohort,
+    )
+    paid_evidence = validate_paid_evidence(args.model_id, args.model_snapshot_manifest, args.billing_export)
+    pricing_evidence = validate_pricing_evidence(
+        args.model_id, args.base_url, args.pricing_evidence,
+        args.input_cost_per_1k, args.output_cost_per_1k,
+    )
+    out = args.out
+    out.mkdir(parents=True, exist_ok=True)
+    # The preflight is a shared immutable input report. Only worker 0 writes
+    # it; concurrent workers must not race on the same destination on Windows.
+    if args.worker_index == 0:
+        write_json(out / "g7_protocol_preflight.json", {
+            **preflight,
+            "paid_evidence": paid_evidence,
+            "pricing_evidence": pricing_evidence,
+            "input_hashes": {
+                "public": sha256_file(args.public),
+                "labels": sha256_file(args.labels),
+                "plan": sha256_file(args.plan),
+            },
+            "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+            "prospective_cohort": args.prospective_cohort,
+            "budget_policy": {
+                "worker_count": args.worker_count,
+                "configured_worker_max_cost_usd": args.max_cost_usd,
+                "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                "effective_worker_max_cost_usd": effective_max_cost_usd,
+                "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+            },
+        })
+    if preflight["errors"]:
+        raise SystemExit("G7 protocol preflight failed: " + ", ".join(preflight["errors"]))
+    if paid_evidence["errors"]:
+        if not args.allow_unverified_paid_evidence:
+            raise SystemExit("G7 paid-evidence preflight failed: " + ", ".join(paid_evidence["errors"]))
+        paid_evidence["execution_mode"] = "AUTHORIZED_PILOT_UNVERIFIED_EXTERNAL"
+        paid_evidence["formal_scientific_run_allowed"] = False
+        paid_evidence["override_used"] = True
+    else:
+        paid_evidence["execution_mode"] = "PAID_INPUT_EVIDENCE_PRESENT_EXTERNAL_REVIEW_PENDING"
+        paid_evidence["formal_scientific_run_allowed"] = False
+        paid_evidence["override_used"] = False
+    if pricing_evidence["errors"]:
+        if not args.allow_user_authorized_unverified_pricing:
+            raise SystemExit("G7 pricing preflight failed: " + ", ".join(pricing_evidence["errors"]))
+        pricing_evidence["execution_mode"] = "USER_AUTHORIZED_UNVERIFIED_PRICING_NONCONFIRMATORY"
+        pricing_evidence["override_used"] = True
+        pricing_evidence["formal_scientific_run_allowed"] = False
+    else:
+        pricing_evidence["execution_mode"] = "PROVIDER_VERIFIED_PRICING"
+        pricing_evidence["override_used"] = False
+    cost_ledger = None
+    if args.cost_ledger is not None:
+        cost_ledger = CostLedger(args.cost_ledger, global_cap=200.0, g7_cap=args.aggregate_max_cost_usd or 60.0, worker_cap=args.max_cost_usd)
+        if args.historic_cost_usd is not None or args.historic_g7_cost_usd is not None:
+            if args.historic_cost_usd is None or args.historic_g7_cost_usd is None:
+                raise SystemExit("--historic-cost-usd and --historic-g7-cost-usd must be supplied together")
+            cost_ledger.add_historical(args.historic_cost_usd, ref="historic-global-provider-cost-v1", scope="all", worker="all")
+            cost_ledger.add_historical(args.historic_g7_cost_usd, ref="historic-g7-provider-cost-v1", scope="g7", worker="all")
+    # Rewrite the preflight after the explicit evidence decision so the durable
+    # report records whether this was a non-confirmatory pilot override.
+    if args.worker_index == 0:
+        write_json(out / "g7_protocol_preflight.json", {
+            **preflight,
+            "paid_evidence": paid_evidence,
+            "pricing_evidence": pricing_evidence,
+            "input_hashes": {
+                "public": sha256_file(args.public),
+                "labels": sha256_file(args.labels),
+                "plan": sha256_file(args.plan),
+            },
+            "runner_contract": "scripts/run_g7_failure_localization.py::case_prompt",
+            "prospective_cohort": args.prospective_cohort,
+            "budget_policy": {
+                "worker_count": args.worker_count,
+                "configured_worker_max_cost_usd": args.max_cost_usd,
+                "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                "effective_worker_max_cost_usd": effective_max_cost_usd,
+                "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count,
+            },
+        })
+    public = {x["case_id"]: x for x in public_rows}
+    labels = {x["case_id"]: x for x in label_rows}
+    for row in plan:
+        if row["case_id"] not in public or row["case_id"] not in labels:
+            raise SystemExit(f"plan row lacks public case or G7 label: {row.get('run_id')}")
+    state_path = out / f"states.worker-{args.worker_count}-{args.worker_index}.jsonl"
+    checkpoint_path = out / f"checkpoints.worker-{args.worker_count}-{args.worker_index}.jsonl"
+    requested_run_ids: set[str] | None = None
+    if args.run_ids_file is not None:
+        if not args.run_ids_file.is_file():
+            raise SystemExit(f"run-ids file not found: {args.run_ids_file}")
+        requested_run_ids = set()
+        for line in args.run_ids_file.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            value: Any = line.strip()
+            if line.lstrip().startswith("{"):
+                parsed = json.loads(line)
+                value = parsed.get("run_id") if isinstance(parsed, dict) else None
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit("run-ids file contains a row without run_id")
+            requested_run_ids.add(value.strip())
+        plan_ids = {str(row["run_id"]) for row in plan}
+        unknown = sorted(requested_run_ids - plan_ids)
+        if unknown:
+            raise SystemExit("run-ids file contains unknown frozen state IDs: " + ", ".join(unknown[:10]))
+        if not requested_run_ids:
+            raise SystemExit("run-ids file is empty")
+    selected = plan if args.limit <= 0 else plan[:args.limit]
+    if requested_run_ids is not None:
+        selected = [row for row in selected if row["run_id"] in requested_run_ids]
+        if not selected:
+            raise SystemExit("run-ids file selected no rows after --limit")
+    checkpoints: dict[str, dict[str, Any]] = {}
+    for row in selected:
+        checkpoints.setdefault(row["checkpoint_id"], row)
+    selected_cps = {cp: row for cp, row in checkpoints.items()
+                    if int(hashlib.sha256(cp.encode()).hexdigest(), 16) % args.worker_count == args.worker_index}
+    trace_ids = {"checkpoint_" + cp_id for cp_id in selected_cps}
+    trace_ids.update(row["run_id"] for row in selected if row["checkpoint_id"] in selected_cps)
+    prior_states = {x["run_id"]: x for x in readl(state_path)}
+    prior_cp = {x["checkpoint_id"]: x for x in readl(checkpoint_path) if x.get("status") == "completed"}
+    usage = persisted_usage(out, args.input_cost_per_1k, args.output_cost_per_1k, 1024, trace_ids)
+    limits = Limits(args.max_model_calls, args.max_tool_calls, args.max_total_tokens, effective_max_cost_usd,
+                    int(usage["model_calls"]), int(usage["tool_calls"]), int(usage["total_tokens"]), float(usage["cost_usd"]))
+    provider = OpenAICompatibleProvider(api_key=args.key_file.read_text(encoding="utf-8").strip(), base_url=args.base_url,
+                                        model_name=args.model_id, timeout=args.provider_timeout, max_retries=args.provider_retries,
+                                        input_cost_per_1k=args.input_cost_per_1k, output_cost_per_1k=args.output_cost_per_1k,
+                                        max_cost_usd=effective_max_cost_usd, max_output_tokens=1024,
+                                        cost_ledger=cost_ledger, ledger_scope="g7",
+                                        ledger_worker=str(args.worker_index),
+                                        ledger_ref_prefix=f"g7:{args.worker_index}",
+                                        require_cost_ledger=True)
+    # Checkpoints are assigned as units, so all diagnostic forks from one
+    # checkpoint remain on exactly one worker and have one immutable initial answer.
+    for cp_id, row in selected_cps.items():
+        if cp_id in prior_cp:
+            continue
+        trace_id = "checkpoint_" + cp_id
+        event_path = out / "checkpoint_traces" / trace_id / "events.jsonl"
+        event_path, seq = trace_path_for_retry(event_path)
+        started = time.monotonic()
+        try:
+            seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
+                       {"checkpoint_id": cp_id, "case_id": row["case_id"], "group_id": row["group_id"],
+                        "model_id": args.model_id, "public_only": True})
+            messages = [{"role": "system", "content": system_prompt(row["group_id"])},
+                        {"role": "user", "content": case_prompt(public[row["case_id"]])}]
+            payload, seq = public_tool_loop(provider, messages, row["group_id"], limits, event_path, trace_id, seq, True)
+            record = {"checkpoint_id": cp_id, "case_id": row["case_id"], "group_id": row["group_id"],
+                      "initial_decision": payload["decision"], "checkpoint_payload": payload,
+                      "trace_ref": str(event_path.relative_to(out)), "status": "completed",
+                      "elapsed_seconds": round(time.monotonic() - started, 3), "public_only": True}
+            emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
+            append_jsonl(checkpoint_path, record)
+            prior_cp[cp_id] = record
+        except Exception as exc:
+            # ``public_tool_loop`` owns its local sequence variable. If the
+            # provider raises after emitting MODEL_REQUEST, the caller's
+            # value still points to the preceding event. Recover the actual
+            # persisted tail before writing terminal failure events.
+            seq = existing_trace_sequence(event_path)
+            seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
+            seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
+            append_jsonl(checkpoint_path, {"checkpoint_id": cp_id, "case_id": row["case_id"], "group_id": row["group_id"],
+                                            "status": "provider_error", "trace_ref": str(event_path.relative_to(out))})
+            continue
+    rows_for_worker = [row for row in selected if row["checkpoint_id"] in selected_cps]
+    for index, row in enumerate(rows_for_worker, 1):
+        explicitly_requested = requested_run_ids is not None and row["run_id"] in requested_run_ids
+        if (not explicitly_requested and row["run_id"] in prior_states
+                and prior_states[row["run_id"]].get("status") == "completed"):
+            continue
+        cp = prior_cp.get(row["checkpoint_id"])
+        if not cp or cp.get("status") != "completed":
+            state = {"run_id": row["run_id"], "checkpoint_id": row["checkpoint_id"], "status": "checkpoint_missing",
+                     "trace_ref": cp.get("trace_ref") if cp else None, "injection_audit": {"applied_stages": row["inject_stages"]}}
+            append_jsonl(state_path, state)
+            prior_states[row["run_id"]] = state
+            continue
+        trace_id = row["run_id"]
+        event_path = out / "traces" / trace_id / "events.jsonl"
+        event_path, seq = trace_path_for_retry(event_path)
+        injection: dict[str, Any] = {"applied_stages": row["inject_stages"]}
+        with state_claim(out, trace_id) as claimed:
+            if not claimed:
+                state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "claim_skipped",
+                         "trace_ref": str(event_path.relative_to(out)), "claim_skipped": True}
+            else:
+                try:
+                    seq = emit(event_path, seq, trace_id, "RUN_START", "RUNNING",
+                               {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "case_id": row["case_id"],
+                                "diagnostic_arm": row["diagnostic_arm"], "group_id": row["group_id"], "public_only": True})
+                    case = public[row["case_id"]]
+                    label = labels[row["case_id"]]
+                    injection = injection_for(row, label)
+                    seq = emit(event_path, seq, trace_id, "INJECTION_APPLIED", "COMPLETED", injection)
+                    messages = [{"role": "system", "content": system_prompt(row["group_id"])},
+                                {"role": "user", "content": case_prompt(case)},
+                                {"role": "assistant", "content": json.dumps(cp["checkpoint_payload"], ensure_ascii=False)},
+                                {"role": "user", "content": json.dumps({"diagnostic_arm": row["diagnostic_arm"],
+                                   "inject_stages": row["inject_stages"],
+                                   "diagnostic_information": model_visible_diagnostic_information(injection),
+                                   "instruction": "Re-evaluate the case with only these supplied diagnostic stages. Return the required JSON."}, ensure_ascii=False)}]
+                    payload, seq = public_tool_loop(provider, messages, row["group_id"], limits, event_path, trace_id, seq, False)
+                    stages = normalize_stages(payload)
+                    state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "completed",
+                             "initial_decision": cp["initial_decision"], "final_decision": payload["decision"],
+                             "stages": stages, "trace_ref": str(event_path.relative_to(out)),
+                             "checkpoint_trace_ref": cp["trace_ref"], "injection_audit": injection,
+                             "usage": {"model_calls": limits.model_calls, "tool_calls": limits.tool_calls,
+                                       "total_tokens": limits.total_tokens, "cost_usd": limits.cost_usd},
+                             "public_only_checkpoint": True}
+                    # The trace is the source of truth for lifecycle validity;
+                    # persist the completed state only after RUN_END is durable.
+                    emit(event_path, seq, trace_id, "RUN_END", "COMPLETED", {"status": "completed"})
+                    append_jsonl(state_path, state)
+                    prior_states[trace_id] = state
+                except Exception as exc:
+                    seq = existing_trace_sequence(event_path)
+                    seq = emit(event_path, seq, trace_id, "ERROR", "FAILED", {"error_type": type(exc).__name__, "error": str(exc)})
+                    seq = emit(event_path, seq, trace_id, "RUN_END", "FAILED", {"status": "provider_error"})
+                    state = {"run_id": trace_id, "checkpoint_id": row["checkpoint_id"], "status": "provider_error",
+                             "trace_ref": str(event_path.relative_to(out)), "injection_audit": injection}
+                    append_jsonl(state_path, state)
+                    prior_states[trace_id] = state
+        if index % 10 == 0 or state.get("status") != "completed":
+            print(f"G7 progress {index}/{len(rows_for_worker)}: {state.get('status')} calls={limits.model_calls} tools={limits.tool_calls} tokens={limits.total_tokens}", flush=True)
+    summary = {"experiment_id": "g7_failure_localization", "worker_index": args.worker_index,
+               "worker_count": args.worker_count, "plan_count": len(plan), "selected_rows": len(rows_for_worker),
+               "states_count": len(readl(state_path)), "checkpoints_count": len(readl(checkpoint_path)),
+               "limits": limits.__dict__, "model_id": args.model_id, "base_url": args.base_url,
+               "scientific_release_allowed": False,
+               "confirmatory_inference_allowed": False,
+               "paid_evidence_execution_mode": paid_evidence["execution_mode"],
+               "paid_evidence_override_used": paid_evidence["override_used"],
+               "budget_policy": {"configured_worker_max_cost_usd": args.max_cost_usd,
+                                 "aggregate_max_cost_usd": args.aggregate_max_cost_usd,
+                                 "effective_worker_max_cost_usd": effective_max_cost_usd,
+                                 "sum_of_worker_caps_usd": effective_max_cost_usd * args.worker_count},
+               "public_sha256": sha256_file(args.public), "labels_sha256": sha256_file(args.labels),
+               "plan_sha256": sha256_file(args.plan), "completed_at_utc": utc_now()}
+    write_json(out / f"runner_summary.worker-{args.worker_count}-{args.worker_index}.json", summary)
+    print(f"G7 RUN COMPLETE: states={summary['states_count']} checkpoints={summary['checkpoints_count']} worker={args.worker_index}/{args.worker_count}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
