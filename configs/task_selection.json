@@ -1,0 +1,7 @@
+{
+  "manifest_seed": 42,
+  "pilot_limit": 12,
+  "formal_target": 72,
+  "supported_systems": ["vanilla_equation"],
+  "selection_uses_outcomes": false
+}

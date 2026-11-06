@@ -1,0 +1,7 @@
+{
+  "project": "AI Scientific Reasoning",
+  "default_mode": "offline",
+  "model_policy": "new_paid_runs require explicit credentials, budget and human authorization",
+  "default_output_root": "results/engineering_smoke",
+  "private_data_env": "AI_SCIENTIFIC_REASONING_DATA_ROOT"
+}

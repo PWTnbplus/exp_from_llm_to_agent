@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","required":["schema_version","experiment_id","run_id","mode","mock","status","scientific_result"]}
