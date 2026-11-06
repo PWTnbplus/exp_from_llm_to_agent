@@ -1,0 +1,36 @@
+name: offline reproducibility and security
+
+on:
+  push:
+    branches: [main, 'autopilot/**', 'engineering/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_RELEASE_ROOT: .
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install locked development dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Environment and public-boundary check
+        run: python scripts/check_environment.py
+      - name: Offline full experiment smoke
+        run: |
+          python scripts/reproduce.py --all --resume
+          python scripts/verify_results.py --all
+      - name: Unit, integration and security tests
+        run: python -m pytest -q
+      - name: Ensure CI does not have provider credentials
+        shell: bash
+        run: |
+          test -z "${AI_SCIENTIFIC_REASONING_API_KEY:-}"
+          test -z "${OPENAI_API_KEY:-}"

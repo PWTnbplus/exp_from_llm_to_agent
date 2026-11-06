@@ -1,0 +1,9 @@
+{
+  "source": "NewtonBench",
+  "upstream_commit": "912a4ba5f4356ddd06acc16e44460ca30be4abc2",
+  "split": "test",
+  "seed": 42,
+  "default_runner": "llm_only",
+  "real_api_enabled": false,
+  "formal_batch_requires_explicit_flag": true
+}
